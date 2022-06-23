@@ -18,5 +18,25 @@ export const projects: Project[] = [
             'A live train map of Melbourne designed with FastAPI and React.',
         img: 'https://github.com/weLoveTrainz/MiniMelbourne/raw/main/images/bullet-train.png',
         link: 'https://github.com/weLoveTrainz/MiniMelbourne'
+    },
+    {
+        id: 'uwucode',
+        name: 'uwucode',
+        tags: ['Rust', 'Language Design'],
+        feature: 'Rust',
+        description:
+            'A toy programming language designed in Rust.',
+        img: 'https://github.com/saikumarmk/uwucode/raw/main/images/uwucode_logo.svg',
+        link: 'https://github.com/saikumarmk/uwucode'
+    },
+    {
+        id: 'setools',
+        name: 'SETools',
+        tags: ['Python', 'Dash', 'Scraping', 'Heroku'],
+        feature: 'Dash',
+        description:
+            'A visualisation tool for unit scores.',
+        img: 'https://github.com/saikumarmk/SETool/raw/main/assets/logo.png',
+        link: 'https://github.com/saikumarmk/SETool'
     }
 ]
