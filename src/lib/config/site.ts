@@ -1,10 +1,13 @@
 import type { SiteConfig } from '$lib/types/site'
 
 const bio = ['Probably napping',
-  'Software engineer',
-  'Data scientist',
-  'Learning Graph Theory',
-  'Watching a video about pokemon glitches']
+  'Software engineer!',
+  'Data scientist!',
+  'Learning Graph Theory!',
+  'Watching a video about pokemon glitches',
+  'Computing homology groups of dunce caps',
+  'Playing around with data'
+]
 
 export const site: SiteConfig = {
   protocol: 'https://',

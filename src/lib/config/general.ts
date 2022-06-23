@@ -129,11 +129,11 @@ export const header: HeaderConfig = {
     },
     {
       text: 'Projects',
-      link: '/hello-world'
+      link: '/projects'
     },
     {
       text: 'Résumé',
-      link: '/hello-world'
+      link: '/assets/resume.pdf'
     },
   ]
 }
