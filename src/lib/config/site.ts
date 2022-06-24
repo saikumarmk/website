@@ -11,7 +11,7 @@ const bio = ['Probably napping',
 
 export const site: SiteConfig = {
   protocol: 'https://',
-  domain: (import.meta.env.URARA_SITE_DOMAIN as string) ?? 'urara-demo.netlify.app',
+  domain: (import.meta.env.URARA_SITE_DOMAIN as string) ?? 'saikumarmk.com',
   title: 'saikumarmk.com',
   subtitle: '',
   lang: 'en-US',
