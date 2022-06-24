@@ -13,7 +13,7 @@ export const site: SiteConfig = {
   protocol: 'https://',
   domain: (import.meta.env.URARA_SITE_DOMAIN as string) ?? 'urara-demo.netlify.app',
   title: 'saikumarmk.com',
-  subtitle: 'Sweet & Powerful SvelteKit Blog Template',
+  subtitle: '',
   lang: 'en-US',
   author: {
     name: 'Sai kumar Murali krishnan',
@@ -27,5 +27,5 @@ export const site: SiteConfig = {
         link: 'https://github.com/saikumarmk'
       }]
   },
-  themeColor: '#3D4451'
+  themeColor: '#F0F6FF'
 }
