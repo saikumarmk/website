@@ -38,5 +38,15 @@ export const projects: Project[] = [
             'A visualisation tool for unit scores.',
         img: 'https://github.com/saikumarmk/SETool/raw/main/assets/logo.png',
         link: 'https://github.com/saikumarmk/SETool'
+    },
+    {
+        id: 'voltchip',
+        name: 'voltchip',
+        tags: ['WebAssembly', 'C', 'Emsripten', 'SDL'],
+        feature: 'Dash',
+        description:
+            'A CHIP-8 emulator designed in C that can be targetted for the web',
+        img: 'https://github.com/saikumarmk/web-voltchip/raw/main/assets/logo.png',
+        link: 'https://github.com/saikumarmk/web-voltchip'
     }
 ]
