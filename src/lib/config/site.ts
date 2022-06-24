@@ -27,5 +27,5 @@ export const site: SiteConfig = {
         link: 'https://github.com/saikumarmk'
       }]
   },
-  themeColor: '#F0F6FF'
+  themeColor: '#252732'
 }
