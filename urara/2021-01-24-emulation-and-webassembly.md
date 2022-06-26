@@ -3,7 +3,7 @@ title: Combining WebAssembly and Emulation
 author: Sai kumar Murali Krishnan
 date: 2021-01-24 
 categories: [C]
-tags: [webassembly,emulation,C,tutorial]
+tags: [webassembly,emulation,C,tutorial,blog-post]
 ---
 
 # WebAssembly and Emulation - Chip 8
