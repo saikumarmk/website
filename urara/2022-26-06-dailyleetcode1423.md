@@ -9,7 +9,7 @@ tags: [daily-leetcode]
 
 ## Problem Summary
 
-This is a primarily self-imposed challenge to see how often I can post daily leetcode solutions. Today's problem is 1423: Maximum Points You Can Obtain from Cards. In essence, 
+This is a primarily self-imposed challenge to see how often I can post daily leetcode solutions. [Today's problem is 1423: Maximum Points You Can Obtain from Cards.](https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/) In essence, 
 our goal is to pick `k` elements from the start or end and maximise said sum. So, we could take 2 elements from the left, and `k-2` elements from the right, or take `k` elements from the left, and none from the right.
 
 
