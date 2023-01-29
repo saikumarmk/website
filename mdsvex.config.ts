@@ -13,6 +13,7 @@ import { parse, join } from 'path'
 import { visit } from 'unist-util-visit'
 import { toString } from 'mdast-util-to-string'
 import Slugger from 'github-slugger'
+import remarkFFF from 'remark-fff'
 import remarkFootnotes from 'remark-footnotes'
 
 // highlighter
@@ -24,17 +25,15 @@ type VALUE = { [key in string | number]: VALUE } | Array<VALUE> | string | boole
 const remarkUraraFm =
   () =>
   (tree: Node<Data>, { data, filename }: { data: { fm?: Record<string, unknown> }; filename?: string }) => {
-    const filepath = (filename as string).split('/src/routes')[1]
-    let { dir, name } = parse(filepath)
+    const filepath = filename ? filename.split('/src/routes')[1] : 'unknown'
+    const { dir, name } = parse(filepath)
     if (!data.fm) data.fm = {}
     // Generate slug & path
     data.fm.slug = filepath
-    data.fm.path = join(dir, `/${name}`.replace('/index', '').replace('.svelte', ''))
-    // Auto-set layout as article
-    if (!data.fm.layout) data.fm.layout = 'article'
+    data.fm.path = join(dir, `/${name}`.replace('/+page', '').replace('.svelte', ''))
     // Generate ToC
     if (data.fm.toc !== false) {
-      let [slugs, toc]: [slugs: Slugger, toc: { depth: number; title: string; slug: string }[]] = [new Slugger(), []]
+      const [slugs, toc]: [slugs: Slugger, toc: { depth: number; title: string; slug: string }[]] = [new Slugger(), []]
       visit(tree, 'heading', (node: { depth: number }) => {
         toc.push({
           depth: node.depth,
@@ -42,18 +41,8 @@ const remarkUraraFm =
           slug: slugs.slug(toString(node), false)
         })
       })
-      data.fm.toc = toc
-    }
-    // Rename
-    if (data.fm.date) data.fm.created = data.fm.date
-    if (data.fm.lastmod) data.fm.updated = data.fm.lastmod
-    if (data.fm.cover) data.fm.photo = data.fm.cover
-    if (data.fm.descr) data.fm.summary = data.fm.descr
-    // Auto-read created & updated
-    if (!data.fm.created || !data.fm.updated) {
-      const { ctime, mtime } = statSync(new URL(`./urara${filepath}`, import.meta.url))
-      if (!data.fm.created) data.fm.created = ctime
-      if (!data.fm.updated) data.fm.updated = mtime
+      if (toc.length > 0) data.fm.toc = toc
+      else data.fm.toc = false
     }
   }
 
@@ -78,11 +67,7 @@ export default defineConfig({
     dashes: 'oldschool'
   },
   layout: {
-    article: './src/lib/components/layouts/article.svelte',
-    note: './src/lib/components/layouts/note.svelte',
-    photo: './src/lib/components/layouts/photo.svelte',
-    reply: './src/lib/components/layouts/reply.svelte',
-    _: './src/lib/components/layouts/article.svelte'
+    _: './src/lib/components/post_layout.svelte'
   },
   highlight: {
     highlighter: async (code, lang, meta) => {
@@ -106,9 +91,24 @@ export default defineConfig({
       )}\` }`
     }
   },
-  remarkPlugins: [remarkUraraFm, remarkUraraSpoiler, [remarkFootnotes, { inlineNotes: true }]],
+  remarkPlugins: [
+    [
+      remarkFFF as any,
+      {
+        presets: ['hugo'],
+        target: 'mdsvex',
+        autofill: {
+          provider: 'fs',
+          path: (path: string) => path.replace('/src/routes/', '/urara/')
+        }
+      }
+    ],
+    remarkUraraFm,
+    remarkUraraSpoiler,
+    [remarkFootnotes, { inlineNotes: true }]
+  ],
   rehypePlugins: [
-    rehypeSlug,
+    rehypeSlug as any,
     [rehypeAutolinkHeadings, { behavior: 'wrap' }],
     [
       rehypeExternalLinks,
