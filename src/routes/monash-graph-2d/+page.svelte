@@ -1,7 +1,7 @@
 <script type="module">
   // Random tree
   import ForceGraph from 'force-graph'
-  import * as data from '/assets/network.json'
+  import * as data from './network.json'
   import { onMount } from 'svelte'
 
   let Graph
