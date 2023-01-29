@@ -4,8 +4,7 @@
 
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
-  import Tree from '$lib/components/post_toc_tree.svelte'
-  export let toc: Urara.Post.Article.Toc[]
+  export let toc: Urara.Post.Toc[]
 
   let intersecting: string[] = []
   let intersectingArticle: boolean = true
@@ -34,14 +33,14 @@
     // @ts-ignore: Cannot find name 'headingsObserver'
     if (typeof headingsObserver !== 'undefined') headingsObserver.disconnect()
     // @ts-ignore: Cannot find name 'articleObserver'
-    if (typeof headingsObserver !== 'undefined') articleObserver.disconnect()
+    if (typeof articleObserver !== 'undefined') articleObserver.disconnect()
   })
 
   $: if (intersecting.length > 0) bordered = intersecting
   $: if (intersectingArticle === false) bordered = []
   $: if (bordered)
     toc.forEach(heading =>
-      bordered.includes(heading.slug)
+      bordered.includes(heading.slug!)
         ? document.getElementById(`toc-link-${heading.slug}`)?.classList.add('!border-accent')
         : document.getElementById(`toc-link-${heading.slug}`)?.classList.remove('!border-accent')
     )
@@ -53,15 +52,29 @@
     aria-label="TableOfContent"
     dir="rtl"
     class="max-h-[calc(100vh-12rem)] overflow-y-hidden hover:overflow-y-auto">
-    <Tree
-      toc={toc.reduce(
-        (acc, heading) => {
-          let parent = acc
-          while (parent.depth + 1 < heading.depth) parent = parent.children.at(-1)
-          parent.children = [...(parent.children ?? []), { ...heading, children: [] }]
-          return acc
-        },
-        { depth: toc[0].depth - 1, children: [] }
-      )} />
+    <ul dir="ltr" id="toc-list-root">
+      {#each toc as { depth, title, slug }}
+        <li id={`toc-item-${slug}`} class="flex flex-col">
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <span
+            dir="ltr"
+            on:click={() =>
+              // @ts-ignore Object is possibly 'null'. ts(2531)
+              document.getElementById(slug).scrollIntoView({ behavior: 'smooth' })}
+            id={`toc-link-${slug}`}
+            class="cursor-pointer border-l-4 border-transparent transition-all hover:border-primary hover:bg-base-content hover:bg-opacity-10 active:bg-primary active:text-primary-content active:font-bold pr-4 {depth <=
+            2
+              ? 'py-3'
+              : 'py-2'}"
+            class:pl-4={depth <= 2}
+            class:pl-8={depth === 3}
+            class:pl-12={depth === 4}
+            class:pl-16={depth === 5}
+            class:pl-20={depth === 6}>
+            {title}
+          </span>
+        </li>
+      {/each}
+    </ul>
   </nav>
 </aside>

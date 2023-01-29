@@ -6,24 +6,24 @@ const bio = ['Probably napping',
   'Learning Graph Theory!',
   'Watching a video about pokemon glitches',
   'Computing homology groups of dunce caps',
-  'Playing around with data'
+  'Playing around with data',
+  'Finetuning a GPT model'
 ]
 
 export const site: SiteConfig = {
   protocol: 'https://',
-  domain: (import.meta.env.URARA_SITE_DOMAIN as string) ?? 'saikumarmk.com',
+  domain: import.meta.env.URARA_SITE_PROTOCOL ?? import.meta.env.DEV ? 'http://' : 'https://',
   title: 'saikumarmk.com',
   subtitle: '',
   lang: 'en-US',
   author: {
     name: 'Sai kumar Murali krishnan',
-    photo: '/assets/maskable@192.png',
+    avatar: '/assets/maskable@192.png',
     status: '🔱',
     bio: bio[~~(Math.random() * bio.length)],
     metadata: [
       {
-        text: 'saikumarmk',
-        icon: 'i-simple-icons-github',
+        text: 'GitHub',
         link: 'https://github.com/saikumarmk'
       }]
   },

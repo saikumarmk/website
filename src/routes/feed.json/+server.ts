@@ -1,10 +1,11 @@
-import type { RequestHandler } from '@sveltejs/kit'
+import type { RequestHandler } from './$types'
+import { json } from '@sveltejs/kit'
 import { site } from '$lib/config/site'
 import { feed } from '$lib/config/general'
 import { favicon, any } from '$lib/config/icon'
 import { genPosts } from '$lib/utils/posts'
 
-const render = async (posts = genPosts({ postHtml: true, postLimit: feed.limit, filterUnlisted: true })) => ({
+const render = (posts = genPosts({ postHtml: true, postLimit: feed.limit, filterUnlisted: true })) => ({
   version: 'https://jsonfeed.org/version/1.1',
   title: site.title,
   home_page_url: site.protocol + site.domain,
@@ -16,7 +17,7 @@ const render = async (posts = genPosts({ postHtml: true, postLimit: feed.limit, 
     {
       name: site.author.name,
       url: site.protocol + site.domain,
-      avatar: site.author.photo
+      avatar: site.author.avatar
     }
   ],
   language: site.lang ?? 'en',
@@ -30,19 +31,22 @@ const render = async (posts = genPosts({ postHtml: true, postLimit: feed.limit, 
     title: post.title,
     content_html: post.html,
     summary: post['summary'],
-    image: post['photo'],
+    image: post['image'],
     date_published: post.published ?? post.created,
     date_modified: post.updated ?? post.published ?? post.created,
     tags: post.tags,
     _indieweb: {
-      type: post.layout ?? 'article'
+      type: post.type,
+      'in-reply-to': post.in_reply_to
     }
   }))
 })
 
-export const get: RequestHandler = async () => ({
-  headers: {
-    'Content-Type': 'application/feed+json; charset=utf-8'
-  },
-  body: JSON.stringify(await render(), null, 2)
-})
+export const prerender = true
+export const trailingSlash = 'never'
+export const GET: RequestHandler = async () =>
+  json(render(), {
+    headers: {
+      'content-type': 'application/feed+json; charset=utf-8'
+    }
+  })

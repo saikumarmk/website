@@ -1,7 +1,7 @@
 <script lang="ts">
   import { site } from '$lib/config/site'
   import { footer as footerConfig } from '$lib/config/general'
-  let className: string = undefined
+  let className: string | undefined = undefined
   export { className as class }
   export let sticky: boolean = false
   export let rounded: boolean = false
@@ -16,7 +16,7 @@
     <p>
       {#if footerConfig.nav}
         {#each footerConfig.nav as { text, link }, i}
-          <a href={link} rel="noopener external" target="_blank">{text}</a>
+          <a href={link} rel="noopener noreferrer external" target="_blank">{text}</a>
           {#if i + 1 < footerConfig.nav.length}
             <span class="mr-1">·</span>
           {/if}
@@ -30,10 +30,10 @@
       <br />
       Powered by
       <a
-        rel="noopener external"
+        rel="noopener noreferrer external"
         target="_blank"
         class="tooltip tooltip-secondary hover:text-secondary"
-        data-tip="🌸 [γ] - Based on MDsveX & SvelteKit 🌸"
+        data-tip="🌸 [δ] - Based on MDsveX & SvelteKit 🌸"
         href="https://github.com/importantimport/urara">
         Urara
       </a>
