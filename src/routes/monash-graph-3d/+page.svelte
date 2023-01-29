@@ -1,0 +1,19 @@
+<script type="module">
+  // Random tree
+  import ForceGraph3D from '3d-force-graph'
+  import * as data from '/src/resources/network.json'
+  import { onMount } from 'svelte'
+
+  let Graph
+
+  function GraphAction(component) {
+    ForceGraph3D()(component)
+      .graphData(data)
+      .nodeLabel(node => `${node.id}: ${node.unit_name}`)
+      .nodeAutoColorBy(node => `${node.id.slice(0, 3)}`)
+      .warmupTicks(100)
+      .cooldownTicks(0)
+  }
+</script>
+
+<div use:GraphAction />

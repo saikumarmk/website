@@ -67,6 +67,19 @@ export const header: HeaderConfig = {
       text: 'Résumé',
       link: '/assets/resume.pdf'
     },
+    {
+      text: 'Monash Unit Graph',
+      children: [
+        {
+          text: '2D Graph',
+          link: '/monash-graph-2d'
+        },
+        {
+          text: '3D Graph',
+          link: '/monash-graph-3d'
+        }
+      ]
+    }
   ]
 }
 
