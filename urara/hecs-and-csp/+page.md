@@ -36,7 +36,7 @@ A commonwealth-supported position, or CSP for short, is a spot at a university w
 | Band 2: Computing, other health, allied health, visual and performing arts, built environment, engineering, science, environmental studies, surveying, professional pathway psychology, professional pathway social work, pathology | $8,021 | $1,002.63 |
 | Band 1: Agriculture, English, mathematics, statistics, education, clinical psychology, foreign languages, nursing | $3,985 | $498.13 |
 
-In case you think mathematics is the least employable major, traders at Jane Street start with a salary that is at least AUD 600K. 
+In case you think mathematics is the least employable major, traders at Jane Street start with a ~~salary~~ total compensation that is at least AUD 600K. 
 
 
 It's worth noting that at an undergraduate level if you're a domestic student, there is a very good (nearly certain) chance that you are in a CSP spot. However, CSP opportunities are limited, especially at the postgraduate level, and not all institutions offer CSP by default, meaning you may have to pay the full domestic fee. This is common for medicine and dentistry students who may have to pay the full fee for their course.
@@ -55,3 +55,8 @@ If you can afford to, take university seriously. If you don't believe you can ta
 - [StudyAssist](https://www.studyassist.gov.au/help-loans/commonwealth-supported-places-csps)
 - [Monash CSP calculator (the fees are broadly the same across unis)](https://www.monash.edu/students/admin/fees/course/domestic-fee/2021-student-contribution-amount-calculator)
 - [Monash domestic full fee calculator](https://www.monash.edu/students/admin/fees/course/domestic-fee)
+
+
+### Changelog
+
+- Changed salary to total compensation (salary + bonuses)
