@@ -100,6 +100,6 @@ Another idea we had was having events trigger on google calendar events. This [p
 As a quick preview for what's to come, here's a cute GIF of a Pikachu dancing on the display.
 
 <video controls>
-  <source src="/assets/neochomp/blog-1/pikachu_dancing.mp4" type="video/mp4">
+  <source src="https://cdn.discordapp.com/attachments/953610508349616138/1015531883985113128/VID_20220903_180049.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
