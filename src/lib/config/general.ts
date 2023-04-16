@@ -64,7 +64,7 @@ export const header: HeaderConfig = {
       link: '/projects'
     },
     {
-      text: 'Résumé',
+      text: 'Rizzume',
       link: '/assets/resume.pdf'
     },
     {
