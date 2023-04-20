@@ -41,6 +41,24 @@
         <br />
         {@html footerConfig.html}
       {/if}
+      <br />
+      <a
+        rel="noopener noreferrer external"
+        target="_blank"
+        class="tooltip tooltip-secondary hover:text-secondary"
+        data-tip="My LinkedIn!"
+        href="https://www.linkedin.com/in/saikumarmk/">
+        LinkedIn
+      </a>
+      <br />
+      <a
+        rel="noopener noreferrer external"
+        target="_blank"
+        class="tooltip tooltip-secondary hover:text-secondary"
+        data-tip="My GitHub!"
+        href="https://github.com/saikumarmk">
+        GitHub
+      </a>
     </p>
   </div>
 </footer>
