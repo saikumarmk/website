@@ -1,7 +1,7 @@
 ---
 title: About
 created: 2022-06-24
-updated: 2023-01-08
+updated: 2023-04-20
 flags:
     - unlisted
 ---
@@ -16,7 +16,7 @@ Monash Association of Coding (MAC for short) and have led a variety of workshops
 
 This is my personal site, where I host information about my personal projects, and blog pieces that I think would be interesting to read. 
 
-If for some reason, you want to contact me, my email is linked in my resume, or alternatively, you can contact me via LinkedIn (My full name) or on Discord, at Theorvolt#6887.
+If for some reason, you want to contact me, my email is linked in my resume, or alternatively, you can contact me via LinkedIn (My full name) or on Discord, at Theorvolt#6887. My GitHub is [saikumarmk](https://github.com/saikumarmk) if you're interested in seeing my other works.
 
 Have fun reading!
 
