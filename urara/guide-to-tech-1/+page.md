@@ -157,7 +157,9 @@ To summarise, you may extend the amount of time you have till you find an intern
 - Pretend that you graduate earlier using an honours year or double degree and say you intend to drop it.
 - I personally don't endorse this, but you can also fake a penultimate year, to stack multiple internships. What you get out of this is beyond me, other than getting a feel for where you want to go.
 
+### Blacklisting
 
+I have seen people mention being "blacklisted" by a company. In practice, the blacklist is more of a cool-down period, where you cannot apply for another role at that company for some time, typically 6 to 12 months. To be blacklisted means you've done something that is likely illegal, not just because you applied to the company and got rejected.
 
 ### First year 
 
@@ -188,7 +190,7 @@ My personal recommendation is to become familiar with clubs/societies at your un
 - MonSec: A cybersecurity club that runs workshops on the cybersecurity field, such as penetration testing, reverse engineering, cryptography, OSINT, and so on. They run weekly workshops and participate in CTFs (Capture The Flag)
 - WIRED (FITS): The faculty's official society, which is concerned with social events, technical events, and various other broadly IT-related activities.
 - Commerce and Computing Association (CCA): A club that blends commerce and computing (with the intersection usually being tech consulting). They run more social/networking-related events.
-- Monash Deep Neuron (MDN): An engineering student team that focuses on deep learning and high-powered computing. Student teams are more involved, as you'll be trained in deep learning or high-power-computing, and then work on a project during your time there.
+- Monash Deep Neuron (MDN): An engineering student team that focuses on deep learning and high-powered computing. Student teams are more involved, as you'll be trained in deep learning or high-power computing, and then work on a project during your time there.
 - Monash Algorithms and Problem Solving Society (MAPS): A student team focused on competitive programming, with weekly workshops on various competitive programming topics. I'd recommend this if you have an interest in the more competitive companies.
 
 As for how much involvement you should aim for, that's a matter of choice. You can rock up to most of the events/workshops these clubs run, and talk to the regulars/committee members to learn more, or you could become a committee member yourself, which is definitely a positive on a resume.
