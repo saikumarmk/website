@@ -1,5 +1,5 @@
 ---
-title: "The Grad/Intern Playbook: Navigating Australia's Software Engineering Industry - Part 1"
+title: "The Grad/Intern Playbook: Part 1 - Australia's Software Engineering Industry and the Timeline"
 author: Sai kumar Murali Krishnan
 created: 2023-05-06 
 categories: [University, Career]
@@ -8,7 +8,6 @@ tags: [university, career]
 
 
 
-# Companies and the timeline
 
 ## Introduction
 
@@ -74,7 +73,7 @@ This list is nowhere near exhaustive as well and is a curation of some I have ta
 
 ### Quantitative trading firms
 
-A list of firms that I'm aware of includes Optiver **(I,G)**, IMC **(I,G)**, Akuna Capital **(I,G)**, SIG **(I,G)**, Jump Trading **(?)**, VivCourt **(G)**, Citadel Securities **(I,G)**, and Tibra Capital **(I)**. Jane Street is based in Hong Kong but also takes students from Australian universities. To my knowledge, all of these firms pay over $100,000 for a graduate developer role.
+A list of firms that I'm aware of includes Optiver **(I,G)**, IMC **(I,G)**, Akuna Capital **(I,G)**, SIG **(I,G)**, Jump Trading **(I?)**, VivCourt **(G)**, Citadel Securities **(I,G)**, and Tibra Capital **(I)**. Jane Street is based in Hong Kong but also takes students from Australian universities. To my knowledge, all of these firms pay over $100,000 for a graduate developer role.
 
 The general consensus with these firms is that you're more confident with your coding skills, perhaps after a stint in competitive programming. Some, but not all of these firms also prefer people with Java/C++ experience, so for more flexibility, consider looking into learning one of these languages. There's also conflicting word about whether these firms want a high WAM/ATAR student. From my own experience, these get asked for at the application stage, and I've seen events where having a high WAM/ATAR is a requirement, but I've also heard of students with one, or neither of them who've got through, so your mileage may vary.
 
@@ -103,6 +102,7 @@ Many of these companies will post their intern/graduate applications on job boar
 - LinkedIn, especially using [Boolean Search](https://www.linkedin.com/help/linkedin/answer/a524335/using-boolean-search-on-linkedin?lang=en)
 - [GradAustralia](https://gradaustralia.com.au/)
 - [GradConnection](https://au.gradconnection.com/)
+- [MAC's Internship/Graduate Board](https://monashcoding.notion.site/MAC-x-Tech-Internships-ca8d669bec6249b99f5b41cd68e83027)
 
 I'd recommend keeping a note of companies, and what they do, so that you can apply in future years. Sometimes, you may find a company that asks that you be a penultimate student.
 
