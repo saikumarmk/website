@@ -1,17 +1,21 @@
 ---
-title: "The Grad/Intern Playbook: Navigating Australia's Software Engineering Industry - Part 2.5"
+title: "The Grad/Intern Playbook: Part 2.5 Final Mix - Curating your résumé"
 author: Sai kumar Murali Krishnan
-created: 2023-06-25
+created: 2023-06-24
 categories: [University, Career]
 tags: [university, career]
 ---
 
 
-# Curating your résumé, ~~Final Mix edition~~
+## Introduction
 
-When it comes to first impressions for your application, it's nearly always the résumé that gets you to the next round. While the document you pen with all your accomplishments or feats may be an irritating write, I recommend sticking to [Jake's Resume](https://www.overleaf.com/latex/templates/jakes-resume/syzfjbzwjncs), which is written in LaTeX. It's not particularly time-consuming to learn LaTeX, as you'll primarily be editing cells with your own entries, instead of creating new elements. I also advise against using online Resume makers, as they can take your information, and provide resumes that aren't always optimal.
+When it comes to first impressions for your application, it's nearly always the résumé that gets you to the next round. While the document you pen with all your accomplishments or feats may be an irritating write, I recommend sticking to [Jake's Resume](https://www.overleaf.com/latex/templates/jakes-resume/syzfjbzwjncs), which is written in LaTeX. It's not particularly time-consuming to learn LaTeX, as you'll primarily be editing cells with your own entries, instead of creating new elements. I also advise against using online Resume makers, as they can take your information, and provide resumes that aren't always optimal. As for the resume looking bland with computer modern, that's a given, but the format is also straight and to the point. You may find that a more artistic/creative resume works too, however, I have opted to stick to a resume that delivers information ~~despite having interned at Canva~~.
 
 So, what is the goal of creating a perfect resume? Well, creating a resume past a point is very subjective, and you should lend yourself to a variety of opinions, and adapt the advice in the industry you're applying to. Our goal here is the tech industry. But there are some key bits of terminology for you to know about.
+
+### What are recruiters looking for?
+
+A lot of advice you'll receive is often anecdotal and comes from people who've found what works for them. You can ask recruiters what they look for, but it's important to note that recruitment can vary across companies, and recruiters can look for different attributes on a resume. As I suggest below, your best option is to aggregate the advice you receive.
 
 ### The Applicant Tracking System
  
