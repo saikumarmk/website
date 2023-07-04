@@ -92,7 +92,7 @@ In place of prior experience, many students opt for the tried and tested approac
 
 ### Hackathons
 
-Hackathons are competitions, where you and a teamwork to build and pitch a product, typically over a short time frame, such as 48 hours.
+Hackathons are competitions, where you and a team work to build and pitch a product, typically over a short time frame, such as 48 hours.
 
 
 Some of the hackathons that run include:
@@ -115,6 +115,12 @@ Another reason I suggest embarking on a personal project is that you learn faste
 
 - [Build Your Own X](https://github.com/codecrafters-io/build-your-own-x)
 - [App Ideas](https://github.com/florinpop17/app-ideas)
+
+My quick and fast tips for personal projects would be:
+
+- Do it on something you're interested in, that way it feels more natural, and you're not forcing yourself to work on it
+- Start simple, and build on features incrementally to avoid scope creep
+- Document what you do, and make the repository easy to read
 
 
 ## Leetcode / Competitive Programming
