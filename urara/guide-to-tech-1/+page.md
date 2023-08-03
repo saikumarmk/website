@@ -24,21 +24,22 @@ There already exist articles on getting a grad/intern role in the tech industry,
 
 - [Getting That Grad/Intern Role](https://blog.ndl.im/getting-that-grad-or-intern-position/) - An article written by Nick Lambourne, a Canvanaut who inspired me to join Canva. As an article, this is very thorough.
 - [How to Land a Software Engineering Role](https://blog.ndl.im/getting-that-grad-or-intern-position/) and [The Best of Australia's Software Engineering Graduate Scene](https://rohyl.io/blog/australia-software-engineering-graduate-scene) by Rohyl, a current engineer at Optiver.
-
+- [MAC x Guide](https://drive.google.com/file/d/1XNoKWgI9Uav6YYXimIAMQRfniC2gA3Gv/view), which was written by MAC in 2021, and contains tips for Monash IBL, a variety of stories from past MAC members and more.
 
 
 ### Preface
-Before you read further, this will be an extremely opinionated article that will be somewhat to the point and won't be vague. So, if you've got an eye for making real big bucks out of university (in Australia), here's my guide to software engineering as a university student in Australia. This will also be split into multiple parts, with the first part being an introduction to some of the bigger companies in Australia, and the timeline for when you apply to these companies.
+Before you read further, this will be an extremely opinionated article that won't shy away from making concrete points. So, if you've got an eye for making real big bucks out of university (in Australia), here's my guide to software engineering as a university student in Australia. This will also be split into multiple parts, with the first part being an introduction to some of the bigger companies in Australia, and the timeline for when you apply to these companies.
 
 ### What do you want out of tech?
 
-While a lot of people are interested in the tech industry, or technical roles because it pays handsomely out of university, there are quite a few intermediate steps to getting a coveted role that pays over $100,000 fresh out of university, and that the number of people who do make this much are a small minority. Sure, it may be possible for someone who does no self-guided work in their spare time to get one of these roles, but it's not likely, especially when countless candidates are actively maximising their probability of getting in. Realistically, you won't stand as much of a chance if you don't enjoy the process of programming, and it would be wise to consider what you want out of the degree you're doing.
+While a lot of people are interested in the tech industry, or technical roles because it pays handsomely out of university, there are quite a few intermediate steps to getting a coveted role that pays over $100,000 fresh out of university, and that the number of people who do make this much are a small minority. Sure, it may be possible for someone who does no self-guided work in their spare time to get one of these roles, but it's not as likely, especially when countless candidates are actively maximising their probability of getting in. There's a discourse on the concept of being passionate about programming versus treating it as a role, but my personal opinion is that you do need some sort of interest in programming to get far, at least from the start. The rest of what I'll outline will seem very boring if you're not invested in different aspects of computer science. 
+
 
 ## The targets
 
-Before you get ahead of yourself and aim for the Big 4 consulting firms because you've heard they're prestigious, let's discuss technical roles. Technology companies are driven primarily by their software and usually pay the most, but there are also quantitative trading firms, that hire software engineers to work, which are classified as finance. Companies whose primary product isn't tech, such as banks, accounting firms, supermarket chains, and so on generally don't pay as much, but have more lenient technical processes (on average).
+Before you get ahead of yourself and aim for the Big 4 consulting firms because you've heard they're prestigious, let's discuss technical roles. Technology companies are driven primarily by their software and usually pay the most, but there are also quantitative trading firms, that hire software engineers to work, which are classified as finance. Companies whose primary product isn't tech, such as banks, accounting firms, supermarket chains, and so on generally don't pay as much, but have more lenient technical processes (on average). We'll be examining software engineer/developer roles, which can also include similar roles like data science/machine learning.
 
-- Tech and quantitative trading firms have harder interviews on average but usually pay more.
+- Tech and quantitative trading firms have harder interviews on average but usually pay more. Quantitative trading companies tend to be on the high end for interview difficulty.
 - Non-tech companies who hire developers may have interviews completely unrelated to what you have studied, e.g psychometric testing, case studies, etc
 
 Technical companies usually have processes for training their engineers, and better guidance from mentors, who may have decades of experience with different companies. That's not to say that non-technical companies can't compare; banks typically pay for certifications or anything to upskill yourself, but when there's a focus on the technology, you are in a good position to learn a lot. 
@@ -50,11 +51,15 @@ More information on the interview processes will be covered in article three.
 Unfortunately, Australia doesn't have as many options when it comes to big tech companies that have an office here. Nonetheless, there are a few companies that have an office in Sydney or are expanding out with satellite offices in other states. These companies are considered tech because their primary function is selling tech-based products. At the end of each company is **I** for an internship, and **G** for graduate roles, with **?** indicating uncertainty.
 
 
+A common occurrence I've seen with many students and posts on Reddit is the consensus of an Australian FAANG, which consists of the four companies listed below. I am not as invested in ranking companies, however, these companies do have very good engineers, pay well, and pamper their employees.
 
 - Atlassian: A software company that develops collaboration and productivity software, including Jira and Confluence. **(I,G)**
 - Canva: An online graphic design platform that allows users to create a variety of designs, from social media posts to business cards. I interned here as an MLE! **(I,G)**
 - Google: While not an Australian company, Google has a significant presence in Australia and employs many software developers in the country. **(I,G?)**
 - Amazon: Consists of Amazon, and AWS, a subsidiary that hires software engineers. **(I,G)**
+
+The companies listed below also are reputable, and I believe most of them are rumoured to pay very well.
+
 - Airwallex: A fintech company providing cross-border payment solutions for businesses. **(I,G)**
 - Rokt: A marketing tech company specializing in personalized offers at the point of transaction to improve e-commerce customer engagement and conversion rates. **(I??,G)**
 - Afterpay: A payment platform that allows users to buy now and pay later, with no interest or fees. **(?)**
@@ -62,18 +67,18 @@ Unfortunately, Australia doesn't have as many options when it comes to big tech 
 - SEEK: A job search website that allows users to search for jobs in a variety of industries and locations. **(G?)**
 - WiseTech Global: A logistics software company that provides solutions for the logistics industry. **(I?,G)**
 - REA Group: A digital advertising company that operates property websites such as realestate.com.au and realcommercial.com.au. **(G)**
+- IBM: A technology company that offers a range of solutions in areas such as artificial intelligence, cloud computing, blockchain, and data analytics. **(G)**
 - Snap Inc.: A camera and social media company that operates the popular Snapchat app, as well as other products like Spectacles (smart glasses) and Bitmoji (personalized avatar app). **(I,G)**
 - TikTok: A social media platform that allows users to create and share short-form videos set to music or audio snippets. The app has become increasingly popular in recent years, particularly among younger generations, and has spawned many viral trends and challenges. **(G)**
 
 
-
-This list is nowhere near exhaustive as well and is a curation of some I have taken note of. As for the pay, you'll have to find that yourself, as it will vary from year to year, and from company to company. But some of the top companies here pay a minimum of 100K, so it is definitely good money. And yes, I used ChatGPT to generate those descriptions.
+This list is nowhere near exhaustive as well and is a curation of some I have taken note of. There may also be mistakes, in which case, please contact me! As for the pay, you'll have to find that yourself, as it will vary from year to year, and from company to company. But some of the top companies here pay a minimum of 100K, so it is definitely good money. And yes, I used ChatGPT to generate those descriptions.
 
 
 
 ### Quantitative trading firms
 
-A list of firms that I'm aware of includes Optiver **(I,G)**, IMC **(I,G)**, Akuna Capital **(I,G)**, SIG **(I,G)**, Jump Trading **(I?)**, VivCourt **(G)**, Citadel Securities **(I,G)**, and Tibra Capital **(I)**. Jane Street is based in Hong Kong but also takes students from Australian universities. To my knowledge, all of these firms pay over $100,000 for a graduate developer role.
+A list of firms that I'm aware of includes Optiver **(I,G)**, IMC **(I,G)**, ~~Akuna Capital **(I,G)**,~~ SIG **(I,G)**, Jump Trading **(I?)**, VivCourt **(G)**, Citadel Securities **(I,G)**, and Tibra Capital **(I)**. Jane Street is based in Hong Kong but also takes students from Australian universities. To my knowledge, all of these firms pay over $100,000 for a graduate developer role.
 
 The general consensus with these firms is that you're more confident with your coding skills, perhaps after a stint in competitive programming. Some, but not all of these firms also prefer people with Java/C++ experience, so for more flexibility, consider looking into learning one of these languages. There's also conflicting word about whether these firms want a high WAM/ATAR student. From my own experience, these get asked for at the application stage, and I've seen events where having a high WAM/ATAR is a requirement, but I've also heard of students with one, or neither of them who've got through, so your mileage may vary.
 
@@ -83,14 +88,14 @@ These firms also place a heavy emphasis on not requiring a background in finance
 
 Then there are more companies below, that may be worth considering. This list will likely be continually updated.
 
-- Quantium: A data analytics and AI company serving finance, retail, and healthcare industries. Offers advanced analytics for data-driven decisions. **(G)**
+- Quantium: A data analytics and AI company serving finance, retail, and healthcare industries. Offers advanced analytics for data-driven decisions. **(I?,G)**
 - Carsales.com.au: A digital advertising company that operates automotive classifieds websites such as carsales.com.au and bikesales.com.au. **(G)**
 - Telstra: A telecommunications and media company that provides a range of services, including mobile and internet services, television, and streaming. **(I,G)**
 - Macquarie: An Australian investment bank that offers a range of financial services including asset management, advisory, and banking. Their technology division works on developing innovative solutions to support the bank's operations and services.
 - Big 4 banks: This would be Westpac, CBA, ANZ and NAB. The experience varies wildly from team to team.
+- CSIRO: Australia's research agency. They do a lot of work on a range of topics and offer internships in computing, data science and similar fields.
 
-
-The big 4 consulting firms (KPMG, EY, Deloitte, PwC) are also options to consider if you don't have many other options. There are many things people say about them; high churn rate, low pay in exchange for a lot of training, not the best if you're interested in tech, and so on.
+The big 4 consulting firms (KPMG, EY, Deloitte, PwC) are also options to consider if you don't have many other options. There are many things people say about them; high churn rate, low pay in exchange for a lot of training, not the best if you're interested in tech, and so on. Common advice I've heard regarding these firms is that they're a good option during the Monash IBL program as a stepping stone onto bigger places.
 
 - It's often common to renege (go back on) on a company if you've received a better offer. While I don't endorse reneging constantly, as you may be blacklisted for doing so, it's important to not feel locked down by a company whose offer you accepted early on, this is your career after all.
 
@@ -168,7 +173,9 @@ There are a few places that offer pre-penultimate internships but are not common
 Some other programs that may be of note include:
 
 - IMC launchpad: A short experience that could get you fast-tracked to the final round of an IMC internship in the following year
-- Akuna's winter internship
+- Optiver FutureFocus: A similar thing to IMC Launchpad but Optiver themed
+- SIG Discovery Day: Same as above, but SIG
+- ~~Akuna's winter internship~~
 - Big 4 insight programs
 
 Nonetheless, you shouldn't be concerned if you haven't found an internship in your first year. It's pretty exceptional if you do! It's also common to not know that these internships even exist, as they sometimes open at the start of the year, when you may not have even begun classes.
@@ -210,6 +217,8 @@ Overall, I'd recommend doing the following:
 
 So, by the end of the year, you're comfortable writing code in two languages, have experiences to discuss in interviews, and can nail a coding assessment. I personally did this through the second year and did leetcode every day for a month straight, in the summer leading up to the third year. I also did a research program in deep learning over the summer to continually hone my skills. You also don't need to do everything on this list, they are recommendations for immersing yourself and becoming familiar with development, and also being able to nail a behavioural interview through your own experiences.
 
+As for potential internship outlets, if you're still considered pre-penultimate, refer to the year one pre-penultimate program. Additionally, CSIRO has internships through Data61 which take "exceptional" second years, regardless of whether you're penultimate. Remember, there's no harm in applying, as you'll get better with each attempt. NAB also offers its technology program throughout the semester, if that would be something you're interested in.
+
 ### Third year /  Penultimate year
 
 By the time you've reached your penultimate year, you will have had quite an amount of experience from clubs, writing code in your own time, hackathons, research, tutoring, or perhaps a pre-penultimate internship. The goal is now to smash your internship interviews so that you'll be set for the summer. The big tech companies release their internship applications between January and March, and quantitative trading firms follow a similar timeline. Non-technical companies tend to open up later on, for instance, the banks open around mid-year. It is worth noting that for ML at Canva, they only opened in September, so there are always exceptions to the rule of thumb.
@@ -237,8 +246,9 @@ As for each of the interviews, I'll be covering that in the third article.
 Congrats! You've landed a summer internship, but it's not quite over. Typically, companies hire interns as a cheap method to scout out graduate talent and give them return offers to get them on board early. However, in recent years, with a rough market, the headcount at various companies in some teams has shrunk, or frozen, meaning that you may have to work to impress during your internship. As a result, the intern-to-graduate conversion offers have decreased. Some of my tips during the internship would include:
 
 - Establishing a good relationship between you, and your host/supervisor, which includes regular communication on the project, participating in standups and so on
-- Try to finish your project, or get it to a state that you can talk about.
-
+- Try to finish your project, or get it to a state that you can talk about
+- Don't work over the required hours, this may seem like a no-brainer, but don't buy into the corporate grind mindset, IMO it's unhealthy
+- Get to know your peers! If they've ended up in the same place you have, there's always going to be something you can learn from them, whether it's about other companies or just gossip.
 
 #### Addendum B - Course Placements
 
@@ -270,3 +280,5 @@ There is so much to note regarding landing a role in the tech industry as a univ
 - Part 3 - Tackling the interview process
 
 To summarise this article, actively work to learn more about the industry, and programming, talk to many people, and participate in events throughout the university. But most importantly, push your own limits, challenge your beliefs by trying, and if that isn't enough, remember [Gojo's words,](https://youtu.be/zgMYPTa_1G8?t=195) and [imagine a future version of yourself who's freely surpassed your limits.](https://youtu.be/Hk_xBxYmIqY?t=68) If you're interested in learning more, you can always reach out to me :)
+
+![A future me (Domain Expansion) can surpass his limit](/assets/guide-to-tech/surpass.jpg)

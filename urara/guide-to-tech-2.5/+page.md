@@ -9,17 +9,17 @@ tags: [university, career]
 
 ## Introduction
 
-When it comes to first impressions for your application, it's nearly always the résumé that gets you to the next round. While the document you pen with all your accomplishments or feats may be an irritating write, I recommend sticking to [Jake's Resume](https://www.overleaf.com/latex/templates/jakes-resume/syzfjbzwjncs), which is written in LaTeX. It's not particularly time-consuming to learn LaTeX, as you'll primarily be editing cells with your own entries, instead of creating new elements. I also advise against using online Resume makers, as they can take your information, and provide resumes that aren't always optimal. As for the resume looking bland with computer modern, that's a given, but the format is also straight and to the point. You may find that a more artistic/creative resume works too, however, I have opted to stick to a resume that delivers information ~~despite having interned at Canva~~.
+When it comes to first impressions for your application, it's nearly always the résumé that gets you to the next round. While the document you pen with all your accomplishments or feats may be an irritating write, I recommend sticking to [Jake's Resume](https://www.overleaf.com/latex/templates/jakes-resume/syzfjbzwjncs), which is written in LaTeX. It's not particularly time-consuming to learn LaTeX, as you'll primarily be editing cells with your own entries, instead of creating new elements. I also advise against using online Resume makers, as they can take your information, and provide resumes that aren't always optimal. As for the resume looking bland with computer modern, that's a given, but the format is also straight and to the point. You may find that a more artistic/creative resume works too, however, I have opted to stick to a resume that delivers information ~~despite having interned at Canva~~. This article will also be opinionated, so you don't have to follow every bit of advice listed here, and you could certainly adopt another style of resume writing, but this is what has worked for a wide range of people.
 
 So, what is the goal of creating a perfect resume? Well, creating a resume past a point is very subjective, and you should lend yourself to a variety of opinions, and adapt the advice in the industry you're applying to. Our goal here is the tech industry. But there are some key bits of terminology for you to know about.
 
-### What are recruiters looking for?
+### What recruiters look for (The Black Box Problem)
 
-A lot of advice you'll receive is often anecdotal and comes from people who've found what works for them. You can ask recruiters what they look for, but it's important to note that recruitment can vary across companies, and recruiters can look for different attributes on a resume. As I suggest below, your best option is to aggregate the advice you receive.
+A lot of advice you'll receive is often anecdotal and comes from people who've found what works for them. You can ask recruiters what they look for, but it's important to note that recruitment can vary across companies, and recruiters can look for different attributes on a resume. As I suggest below, your best option is to aggregate the advice you receive. My personal frustrations with resumes are how the whole process of recruiting, or at least vetting resumes can seem like a black box, with the strongest resumes surviving into the next generation, but carrying potentially pointless artefacts.
 
 ### The Applicant Tracking System
  
-The ATS (Applicant Tracking System) is software, typically used by companies to track the progression of applicants for a role. But you may commonly hear terms such as ATS-friendly for a resume. Many companies will scan your resume, and the software will then rip out keywords and try to make sense of your resume. For this reason, sticking to **one column** is one of the most important things you can do when writing your resume.
+The ATS (Applicant Tracking System) is software, typically used by companies to track the progression of applicants for a role. But you may commonly hear terms such as ATS-friendly for a resume. Many companies will scan your resume, and the software will then rip out keywords and try to make sense of your resume. For this reason, sticking to **one column** is one of the most important things you can do when writing your resume. Whether a place uses an ATS depends, though larger companies typically use them.
 
 ### Word or PDF?
 
@@ -33,11 +33,15 @@ While you may be tempted to fill your resume with a bunch of random leadership r
 
 - Don't put in the full link for something, hyperlink it instead, so you have [Google](https://www.google.com) instead of [https://www.google.com](https://www.google.com).
 - Don't use skill rankings for your technical skills, there's no way to quantify your expertise, and the upper limit of expertise for a skill in general.
-- One page, one column.
+- Stick to one page, one column resumes.
 - Don't add your face in, it takes up space and can lead to unintentional discrimination.
 - Don't add your personal hobbies or interests. 
 
 These are short and fast rules that I'd stick to.
+
+### An Objective?
+
+Some resumes have a short blurb describing the candidate and any information about them. I'm on the fence with these, you can include them, and it could be useful, however, you could also argue that it's a waste of space. Up to you.
 
 ### References
 
@@ -58,7 +62,7 @@ There should not be too much ambiguity here. Put your degree on there, with any 
 
 ### Experience 
 
-When ordering your experiences, ensure it's ordered in chronological order, that is the most recent role at the top. When you start university, it's fine to have unrelated work experience listed, however as you progress and gain new material, you can remove those experiences. The golden rule for mentioning what you did during each experience is to mention frameworks, libraries and languages, and also signify the impact of the work you did. Google mentions the "X by Y by Z" formula, where you "accomplished X as measured by Y, by doing Z" and I highly recommend doing this where possible. Also, prefer using dot-points over sentences, they convey meaning faster (assuming you format them properly). You don't need to use the X-Y-Z formula for every dot point, but ensuring its presence helps a recruiter understand what work you did.
+When ordering your experiences, ensure it's ordered in chronological order, that is the most recent role at the top. When you start university, it's fine to have unrelated work experience listed, however as you progress and gain new material, you can remove those experiences. The golden rule for mentioning what you did during each experience is to mention frameworks, libraries and languages, and also signify the impact of the work you did. Google mentions the "X by Y by Z" formula, where you "accomplished X as measured by Y, by doing Z" and I highly recommend doing this where possible. Also, prefer using dot points over sentences, they convey meaning faster (assuming you format them properly). You don't need to use the X-Y-Z formula for every dot point, but ensuring its presence helps a recruiter understand what work you did.
 
 
 ### Volunteering / Leadership
@@ -85,7 +89,7 @@ This article was split off from the other articles, as it doesn't really belong 
 
 ### More Resume Advice
 
-As I previously mentioned, writing a resume inevitably becomes subjective, and you should consult a variety of sources on what your resume could include. I have listed some resources below. Some of these articles may provide advice that contradicts each other, but that's inevitable when you scrutinise a resume.
+As I previously mentioned, writing a resume inevitably becomes subjective, and you should consult a variety of sources on what your resume could include. I have listed some resources below. Some of these articles may provide advice that contradicts each other, but that's inevitable when you scrutinise a resume. Alternatively, you could disregard all of my advice, and try your hand at tailoring a resume from scratch!
 
 - [Google Recruiters Say Using the X-Y-Z Formula on Your Resume Will Improve Your Odds of Getting Hired at Google](https://www.inc-aus.com/bill-murphy-jr/google-recruiters-say-these-5-resume-tips-including-x-y-z-formula-will-improve-your-odds-of-getting-hired-at-google.html)
 - [How to write a good resume by levels.fyi](https://www.levels.fyi/blog/how-to-write-a-good-resume.html)
