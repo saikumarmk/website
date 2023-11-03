@@ -3,7 +3,7 @@ title: "The Grad/Intern Playbook: Part 2 - Becoming a better candidate"
 author: Sai Kumar Murali Krishnan
 created: 2023-06-24
 categories: [University, Career]
-tags: [university, career]
+tags: [university, career, playbook]
 ---
 
 
