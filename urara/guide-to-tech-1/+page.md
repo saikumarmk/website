@@ -65,7 +65,7 @@ The listed companies are reputable, and most are rumoured to pay well.
 - Afterpay: A payment platform that allows users to buy now and pay later, with no interest or fees. **(?,⭐)**
 - Bukalapak: An Indonesian e-commerce company that operates an online marketplace connecting buyers and sellers of various products, from electronics to fashion to home goods. **(G)**
 - SEEK: A job search website that allows users to search for jobs in various industries and locations. **(G?)**
-- WiseTech Global: A logistics software company that provides solutions for the logistics industry. **(I?,G,⭐)**
+- WiseTech Global: A logistics software company that provides solutions for the logistics industry. **(I, G,⭐)**
 - REA Group: A digital advertising company that operates property websites such as realestate.com.au and realcommercial.com.au. **(G)**
 - IBM: A technology company that offers a range of solutions in areas such as artificial intelligence, cloud computing, blockchain, and data analytics. **(G)**
 - Snap Inc.: A camera and social media company that operates the popular Snapchat app, as well as other products like Spectacles (smart glasses) and Bitmoji (personalised avatar app). **(I,G,⭐)**
