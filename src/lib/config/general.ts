@@ -68,6 +68,25 @@ export const header: HeaderConfig = {
       link: '/assets/resume.pdf'
     },
     {
+      text: 'Grad/Intern Playbook',
+      children: [
+        {
+          text: 'Part 1. Timeline',
+          link: '/guide-to-tech-1'
+        },
+        {
+          text: 'Part 2. Improving',
+          link: '/guide-to-tech-2'
+        },
+        {
+          text: 'Part 3. Résumé',
+          link: '/guide-to-tech-2.5'
+        }
+
+      ]
+    },
+
+    {
       text: 'Monash Unit Graph',
       children: [
         {

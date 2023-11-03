@@ -1,13 +1,16 @@
 import type { SiteConfig } from '$lib/types/site'
 
 const bio = ['Probably napping',
-  'Software engineer!',
-  'Data scientist!',
+  'Software Engineer!',
+  'Machine Learning Engineer!',
   'Learning Graph Theory!',
   'Watching a video about pokemon glitches',
-  'Computing homology groups of dunce caps',
+  'Writing about coding',
+  'Messing around with a Latent Diffusion Model',
   'Playing around with data',
-  'Finetuning a GPT model'
+  'Finetuning a GPT model',
+  'Listening to an Ado song',
+  'Listening to  踊'
 ]
 
 export const site: SiteConfig = {
@@ -17,7 +20,7 @@ export const site: SiteConfig = {
   subtitle: '',
   lang: 'en-US',
   author: {
-    name: 'Sai kumar Murali krishnan',
+    name: 'Sai',
     avatar: '/assets/maskable@192.png',
     status: '🔱',
     bio: bio[~~(Math.random() * bio.length)],
