@@ -3,7 +3,7 @@ title: "The Grad/Intern Playbook: Part 1 - Australia's Software Engineering Indu
 author: Sai Kumar Murali Krishnan
 created: 2023-05-06 
 categories: [University, Career]
-tags: [university, career]
+tags: [university, career, playbook]
 ---
 
 
