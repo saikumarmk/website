@@ -217,7 +217,7 @@ So we get an error telling us what our course plan fails on and how to fix it. T
 
 - Have yet to pass enough units: This is the normal message if you lack the prerequisites for a unit. Appears in most places.
 
-- Not enough passed credit points: Some units require `x` credit points before you can enrol in them. Some mandate `y' credit points from faculty `z`. This appears less often, but there are 360 occurrences.
+- Not enough passed credit points: Some units require `x` credit points before you can enrol in them. Some mandate `y` credit points from faculty `z`. This appears less often, but there are 360 occurrences.
 
 - Not enough enrolled credit points: Only appears once, but seems to be similar to the above, EDF5019
 
