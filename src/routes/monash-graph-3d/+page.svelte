@@ -1,7 +1,7 @@
 <script type="module">
   // Random tree
   import ForceGraph3D from '3d-force-graph'
-  import * as data from './network.json'
+  import * as data from '../../resources/network2024.json'
   let searchBoxValue
   let Graph
 
