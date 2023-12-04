@@ -64,9 +64,19 @@ export const header: HeaderConfig = {
       link: '/projects'
     },
     {
-      text: 'Rizzume',
-      link: '/assets/resume.pdf'
+      text: 'Documents',
+      children: [
+        {
+          text: 'Rizzume',
+          link: '/assets/resume.pdf'
+        },
+        {
+          text: 'Thesis',
+          link: '/assets/honours_thesis.pdf'
+        }
+      ]
     },
+
     {
       text: 'Grad/Intern Playbook',
       children: [
