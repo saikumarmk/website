@@ -78,8 +78,12 @@ export const header: HeaderConfig = {
     },
 
     {
-      text: 'Grad/Intern Playbook',
+      text: 'The Playbook',
       children: [
+        {
+          text: 'FAQ',
+          link: '/guide-to-tech-faq'
+        },
         {
           text: 'Part 1. Timeline',
           link: '/guide-to-tech-1'
@@ -89,7 +93,7 @@ export const header: HeaderConfig = {
           link: '/guide-to-tech-2'
         },
         {
-          text: 'Part 3. Résumé',
+          text: 'Part 2.5. Résumé',
           link: '/guide-to-tech-2.5'
         }
 
