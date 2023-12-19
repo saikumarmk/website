@@ -87,6 +87,7 @@
   },
   "dependencies": {
     "3d-force-graph": "^1.71.5",
-    "force-graph": "^1.43.2"
+    "force-graph": "^1.43.2",
+    "sharp": "^0.33.1"
   }
 }
