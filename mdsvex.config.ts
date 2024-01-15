@@ -15,6 +15,8 @@ import { toString } from 'mdast-util-to-string'
 import Slugger from 'github-slugger'
 import remarkFFF from 'remark-fff'
 import remarkFootnotes from 'remark-footnotes'
+import rehypeKatexSvelte from "rehype-katex-svelte";
+import remarkMath from 'remark-math'
 
 // highlighter
 import { escapeSvelte } from 'mdsvex'
@@ -24,27 +26,27 @@ type VALUE = { [key in string | number]: VALUE } | Array<VALUE> | string | boole
 
 const remarkUraraFm =
   () =>
-  (tree: Node<Data>, { data, filename }: { data: { fm?: Record<string, unknown> }; filename?: string }) => {
-    const filepath = filename ? filename.split('/src/routes')[1] : 'unknown'
-    const { dir, name } = parse(filepath)
-    if (!data.fm) data.fm = {}
-    // Generate slug & path
-    data.fm.slug = filepath
-    data.fm.path = join(dir, `/${name}`.replace('/+page', '').replace('.svelte', ''))
-    // Generate ToC
-    if (data.fm.toc !== false) {
-      const [slugs, toc]: [slugs: Slugger, toc: { depth: number; title: string; slug: string }[]] = [new Slugger(), []]
-      visit(tree, 'heading', (node: { depth: number }) => {
-        toc.push({
-          depth: node.depth,
-          title: toString(node),
-          slug: slugs.slug(toString(node), false)
+    (tree: Node<Data>, { data, filename }: { data: { fm?: Record<string, unknown> }; filename?: string }) => {
+      const filepath = filename ? filename.split('/src/routes')[1] : 'unknown'
+      const { dir, name } = parse(filepath)
+      if (!data.fm) data.fm = {}
+      // Generate slug & path
+      data.fm.slug = filepath
+      data.fm.path = join(dir, `/${name}`.replace('/+page', '').replace('.svelte', ''))
+      // Generate ToC
+      if (data.fm.toc !== false) {
+        const [slugs, toc]: [slugs: Slugger, toc: { depth: number; title: string; slug: string }[]] = [new Slugger(), []]
+        visit(tree, 'heading', (node: { depth: number }) => {
+          toc.push({
+            depth: node.depth,
+            title: toString(node),
+            slug: slugs.slug(toString(node), false)
+          })
         })
-      })
-      if (toc.length > 0) data.fm.toc = toc
-      else data.fm.toc = false
+        if (toc.length > 0) data.fm.toc = toc
+        else data.fm.toc = false
+      }
     }
-  }
 
 // Better type definitions needed
 const remarkUraraSpoiler = () => (tree: Node<Data>) =>
@@ -105,7 +107,8 @@ export default defineConfig({
     ],
     remarkUraraFm,
     remarkUraraSpoiler,
-    [remarkFootnotes, { inlineNotes: true }]
+    [remarkFootnotes, { inlineNotes: true }],
+    remarkMath
   ],
   rehypePlugins: [
     rehypeSlug as any,
@@ -116,6 +119,15 @@ export default defineConfig({
         rel: ['nofollow', 'noopener', 'noreferrer', 'external'],
         target: '_blank'
       }
-    ]
+    ],
+    [
+      rehypeKatexSvelte,
+      {
+        macros: {
+          "\\CC": "\\mathbb{C}",
+          "\\vec": "\\mathbf",
+        },
+      },
+    ],
   ]
 })
