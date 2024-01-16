@@ -25,9 +25,13 @@ The ATS (Applicant Tracking System) is software typically used by companies to t
 
 There's always a debate about whether you should be submitting your resume as a `docx` file or as a `pdf` file. This depends on whether they ask you for a `pdf` file or a `docx` file, but if they don't, use a `pdf` file. In the past, resume parsers would struggle with `pdf` files, but times have caught up, and `pdf` files don't vary as much from computer to computer. 
 
+### Curriculum Vitae, Cover Letter, Resume, What's the difference?
+
+A Curriculum Vitae (CV) is typically a long-form record of your professional journey, and is often a comprehensive document detailing all your achievements, publications, experiences and so on. They can range from two to ten pages. A resume, on the other hand is a concise document detailing relevant experiences to the job you're applying for. For this reason, a resume is usually kept to one or two pages. A cover letter is a separate document detailing why you'd be a fit for the role in particular, and is usually composed by expanding on your experiences and relating them to the qualifications for the job. I recommend just throwing your resume, and the job description into ChatGPT, and asking it to draft up a cover letter for you.
+
 ### The importance of one-page resumes
 
-While you may be tempted to fill your resume with a bunch of random leadership roles from high school to make your resume longer, note that you're only making it harder for a recruiter to pick up valuable insights about the type of candidate you are. While you're a student, ensure that your resume is at most one page; anything more and a recruiter may miss additional content. 
+While you may be tempted to fill your resume with a bunch of random leadership roles from high school to make your resume longer, note that you're only making it harder for a recruiter to pick up valuable insights about the type of candidate you are. While you're a student, ensure that your resume is at most one page; anything more and a recruiter may miss additional content. Most students won't have anything meaningful that stretches beyond one page, and if your resume goes beyond two pages, consider re-evaluating the importance of each dot-point on your record.
 
 ### Common Nit-picks
 
