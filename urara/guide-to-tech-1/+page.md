@@ -11,7 +11,7 @@ tags: [university, career, playbook]
 
 ## Introduction
 
-Welcome to The Grad/Intern Playbook! This is a set of articles I wrote documenting my thoughts on how to make it through the technology industry in Australia as a university student. I'm Sai, the ~~current~~former president of the [Monash Association of Coding (MAC)](https://www.monashcoding.com/), and a future Machine Learning Engineer at [Canva](https://www.canva.com/), a [unicorn web design company](https://www.smartcompany.com.au/startupsmart/news/canva-92-5-million-raise-unicorn-19-5-billion/). Throughout university, I discovered the many, many details of the technical interview process, and how to best prepare for it. Regarding the technology scene in Australia, students from NSW dominate the industry. In contrast, students from Melbourne/Monash are more scarce, partially because I suspect the culture behind sharing the many secrets of the process is too well hidden. I want to document the specifics of the process.
+Welcome to The Grad/Intern Playbook! This is a set of articles I wrote documenting my thoughts on how to make it through the technology industry in Australia as a university student. I'm Sai, the ~~current~~ former president of the [Monash Association of Coding (MAC)](https://www.monashcoding.com/), and a future Machine Learning Engineer at [Canva](https://www.canva.com/), a [unicorn web design company](https://www.smartcompany.com.au/startupsmart/news/canva-92-5-million-raise-unicorn-19-5-billion/). Throughout university, I discovered the many, many details of the technical interview process, and how to best prepare for it. Regarding the technology scene in Australia, students from NSW dominate the industry. In contrast, students from Melbourne/Monash are more scarce, partially because I suspect the culture behind sharing the many secrets of the process is too well hidden. I want to document the specifics of the process.
 
 
 ![The MAC committee of 2023](/assets/guide-to-tech/mac_committee_2023.png)
@@ -81,7 +81,7 @@ This list is incomplete as well and is a curation of some I have taken note of. 
 
 A list of firms that I'm aware of includes Optiver **(I, G,⭐)**, IMC **(I, G,⭐)**, ~~Akuna Capital **(I, G,⭐)**,~~ SIG **(I, G,⭐)**, Jump Trading **(I?,⭐)**, VivCourt **(G,⭐)**, Citadel Securities **(I, G,⭐)**, and Tibra Capital **(I,⭐)**. Jane Street is based in Hong Kong but also takes students from Australian universities. All of these firms pay over $100,000 for a graduate developer role.
 
-The general consensus with these firms is that you're more confident with your coding skills, perhaps after a stint in competitive programming. Some, but not all, of these firms also prefer people with Java/C++ experience, so for more flexibility, consider looking into learning one of these languages. Often, some of the companies listed may ask for your WAM or ATAR. From my own experience, these get asked for at the application stage. I've seen events where having a high WAM/ATAR is a requirement, but I've also heard of students with one or neither of them who've got through, so your mileage may vary.
+The consensus with these firms is that you're more confident with your coding skills, perhaps after a stint in competitive programming. Some, but not all, of these firms also prefer people with Java/C++ experience, so for more flexibility, consider looking into learning one of these languages. Often, some of the companies listed may ask for your WAM or ATAR. From my own experience, these get asked for at the application stage. I've seen events where having a high WAM/ATAR is a requirement, but I've also heard of students with one or neither of them who've got through, so your mileage may vary.
 
 These firms also place a heavy emphasis on not requiring a background in finance. However, it helps to have a basic idea of financial instruments, which many places have videos detailing. Suppose you intend to make as much money out of university. In that case, you should highly consider these companies, as Jane Street touts a first-year graduate total compensation of $700,000. However, the amount of people from Monash who intern/work at Jane Street is approximately in the single digits...
 
@@ -110,9 +110,13 @@ Many companies will post their intern/graduate applications on job boards. Some 
 - [GradAustralia](https://gradaustralia.com.au/)
 - [GradConnection](https://au.gradconnection.com/)
 - [MAC's Internship/Graduate Board](https://monashcoding.notion.site/MAC-x-Tech-Internships-ca8d669bec6249b99f5b41cd68e83027)
+- [AusJobs/Australia-Tech-Internship](https://github.com/AusJobs/Australia-Tech-Internship)
 
 I'd recommend noting companies and what they do so that you can apply in future years. Sometimes, you may find a company that asks that you be a penultimate student.
 
+### Paid and Unpaid Internships
+
+In Australia, unpaid internships are considered [unlawful if the intern is considered to be doing "productive" work](https://www.fairwork.gov.au/tools-and-resources/fact-sheets/unpaid-work/unpaid-work-unpaid-work), or if you are on a vocational placement, such as a university experience. In the case of some universities that offer internships through a Co-op program, or a similar industry-based learning experience, these are legal. So, internships that you seek out should be paid, and some of the previously mentioned companies pay their interns a good amount. Some services require you to pay for internship experience; these are predatory and should be avoided.
 
 ## The timeline
 
@@ -132,7 +136,7 @@ Yes and no. Some places have tiers for universities for hiring, which are common
 - University of Western Australia (UWA)
 - University of Adelaide (UA)
 
-But as to whether it truly matters? It may matter, but there are other considerations for many companies. I've seen people work at previously mentioned big tech companies who did not come from the above universities, so it is definitely possible to break into the field.
+But as to whether it truly matters? It may matter, but there are other considerations for many companies. I've seen people work at previously mentioned big tech companies who did not come from the above universities, so it is possible to break into the field.
 
 
 ### Degree differences
@@ -149,13 +153,13 @@ It's worth noting that your degree doesn't matter to a recruiter so long as it's
 
 - A double degree in science/computer science majoring in mathematics will have more space for math as opposed to computer science on its own 
 
-There are many intricacies to what your degree is, but the end result isn't too significant as long you put the effort in your spare time. This guide will follow a four-year course, but you can still follow the advice as usual anyway, as the timeline would just be a year shorter. 
+There are many intricacies to what your degree is, but the result isn't too significant as long you put the effort in your spare time. This guide will follow a four-year course, but you can still follow the advice as usual anyway, as the timeline would just be a year shorter. 
 
 ### Getting more chances/University progression
 
 Some students utilise more extended degrees to get more chances for internships. A typical example would be doing a double degree, where you have two penultimate years, by first considering an alternative exit where you drop a degree or finish both degrees. Underloading is also a viable option, as there's no rush to complete your degree. Some companies will auto-reject you based on your prospective graduation date, so you could change this to account for dropping a degree/honours year. 
 
-Three years is awfully short for someone with no prior coding ability to become competent enough. However, it's possible, assuming you do a bunch of development in your spare time. I've heard advice from others regarding underloading/overloading, and the general consensus is that it's okay to underload, as 4 units while managing other commitments or working towards a career can be very daunting. There's genuinely no rush to finish early, as you'll be less prepared for whatever comes after.
+Three years is short for someone with no prior coding ability to become competent enough. However, it's possible, assuming you do a bunch of development in your spare time. I've heard advice from others regarding underloading/overloading, and the consensus is that it's okay to underload, as 4 units while managing other commitments or working towards a career can be very daunting. There's genuinely no rush to finish early, as you'll be less prepared for whatever comes after.
 
 To summarise, you may extend the amount of time you have till you find an internship by:
 
@@ -193,7 +197,7 @@ I suggest drilling down on your programming classes, as they will evolve in diff
 
 If your goal is to aim for the big leagues, you can maximise your odds by doing this sort of stuff early on. The things you'll need to focus on are covered in the second article. An understated part of the internship/graduate grind is talking to other people, as you'll get a better idea of what you want to do, what you want to aim for, and what you should be doing.
 
-My personal recommendation is to become familiar with clubs/societies at your university. For Monash, this would be:
+My recommendation is to become familiar with clubs/societies at your university. For Monash, this would be:
 
 - Monash Association of Coding (MAC): We run technical events on upskilling yourself and getting into the industry, for instance, topics in Machine Learning, building an application, or learning about frameworks.
 - MonSec: A cybersecurity club that runs workshops on the cybersecurity field, such as penetration testing, reverse engineering, cryptography, OSINT, and so on. They run weekly workshops and participate in CTFs (Capture The Flag)
