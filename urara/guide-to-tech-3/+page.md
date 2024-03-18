@@ -61,11 +61,11 @@ Beyond general problem-solving preparation, you should also be able to code in o
 - **Stack**:
     - Python: `list` with `pop()`
     - Java: `java.util.Stack`
-    - C++: use `std::vector`
+    - C++: `std::deque`
 - **Queue**:
     - Python: `collections.deque`
     - Java: `java.util.Queue`
-    - C++: `std::queue`
+    - C++: `std::deque`
 - **Hash Maps**:
     - Python: `dict`
     - Java: `java.util.HashMap`
@@ -406,6 +406,7 @@ This was a MASSIVE undertaking, and I've basically poured away many hours of my 
 
 - The Monash Association of Coding, committees past, present and future. Most of my knowledge, and drive to record all this information and make it accessible came from MAC.
 - My friends in the HFT and Big Tech space, who've told me about their journey and what worked for them.
+    - In particular, Josh, Lauren, William, Jim, Madison, Eric J, Sung Ho, Alex M, and Nick L, all of you have helped shape part of this series in one way or another.
 - The AusDevs server, for being a massive hub of information that has helped shape this article in particular.
 
 
