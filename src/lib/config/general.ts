@@ -95,6 +95,10 @@ export const header: HeaderConfig = {
         {
           text: 'Part 2.5. Résumé',
           link: '/guide-to-tech-2.5'
+        },
+        {
+          text: 'Part 3. Interviews',
+          link: '/guide-to-tech-3'
         }
 
       ]

@@ -1,7 +1,7 @@
 ---
 title: "The Grad/Intern Playbook: Part 3 - Acing the Interviews"
 author: Sai kumar Murali Krishnan
-created: 2024-01-20
+created: 2024-03-18
 categories: [University, Career]
 tags: [university, career, playbook]
 ---
@@ -106,18 +106,9 @@ One of my less preferred assessment items, the psychometric test baffles me. I d
 - Logical Reasoning
 - Personality tests 
 
-Not much can be said about these tests, and there's not much I can suggest to prepare for them. They're relatively basic and are often employed by **the banks**, or other non-tech organisations. Prosple has a [guide](https://au.prosple.com/interviews/top-5-tips-for-surviving-psychometric-testing) on how to survive a psychometric test and outlines what you may expect from a test. If you feel the need to brush up on this type of test, the [Careervidz'](https://www.youtube.com/watch?v=vowwzQx-fGY&list=PLCcteVWYyBts9bff--pGdSAGs8UeExjlF) link on the guide covers a variety of questions. You are often allowed a scientific calculator and are recommended to make use of it whenever possible.
+Not much can be said about these tests, and there's not much I can suggest to prepare for them. They're relatively basic and are often employed by **the banks**, or other non-tech organisations. Prosple has a [guide](https://au.prosple.com/interviews/top-5-tips-for-surviving-psychometric-testing) on how to survive a psychometric test and outlines what you may expect from a test. If you feel the need to brush up on this type of test, the [Careervidz'](https://www.youtube.com/watch?v=vowwzQx-fGY&list=PLCcteVWYyBts9bff--pGdSAGs8UeExjlF) link on the guide covers a variety of questions. You are often allowed a scientific calculator and are recommended to make use of it whenever possible. However, there are more interesting assessments ahead, that test applicants with games as well.
 
-### Companies that use this assessment
-
-It would honestly be easier to list the companies that don't start with psychometric tests... 
-
-- The Big 4 banks (+Macquarie) and accounting firms are known for starting with psychometric tests
-- Amazon and Xero also incorporate some personality tests in their initial assessments
-- Telstra and Optus use psychometric tests
-- Various government roles also use psychometric tests
-
-## Esoteric Tests
+### Esoteric Tests (Cognitive Tests/Games)
 
 Zap-N thought it would be funny to turn [Cooking Mama](https://youtu.be/DtZtbDA1wSY?t=160) into an assessment that tests your reaction time. Or better yet, how about [that game where you can pump it as many times as you want, but you lose if it pops](https://www.youtube.com/watch?v=UcLrdhGBQ9M). In case you're completely lost on what I'm talking about, **Optiver**, [and some other companies](https://www.tiktok.com/@jamesleonidas2/video/7283692043765894442) use more esoteric assessments such as Grill Master and the Balloon Game to measure your reaction time, how you approach risk tolerance, and so on.
 
@@ -125,7 +116,19 @@ Zap-N thought it would be funny to turn [Cooking Mama](https://youtu.be/DtZtbDA1
 
 To me, these assessments are similar to pymetrics assessments, which consist of vague tasks that seem to be easier the more you possess skills that are required for a variety of video games. [Trading Interview](https://www.tradinginterview.com/courses/company-preparations-course/lessons/optiver/topic/first-round-zap-n-test/) lists some strategies for the balloon popping game, where you should discern around when the balloon pops, and plan accordingly. Grill Master being compared to [Overcooked](https://store.steampowered.com/app/448510/Overcooked/) should tell you that playing some reaction-based video games would be a good idea. As an aside, these games are reminiscent of flash games, and would not be hard to recreate. A potential side-project could entail recreating these mini-games to practice on.
 
-This section will also be updated as I'm informed of any other strange assessment items, though it's also worth noting anyone applying for a trader role (IMC and Optiver specifically) will likely experience these games at some point. I also consider some of the games you get here to be psychometric testing as well, just in a more unusual form.
+This section will also be updated as I'm informed of any other strange assessment items, though it's also worth noting anyone applying for a trader role (IMC and Optiver specifically) will likely experience these games at some point. I also consider some of the games you get here to be psychometric testing as well, just in a more unusual form. The [Human Benchmark](https://humanbenchmark.com/) covers some games that may be similar to what you may find in a pymetrics assessment.
+
+### Companies that use this assessment
+
+It would honestly be easier to list the companies that don't start with psychometric tests... The below list is definitely not exhaustive (like all the other lists). 
+
+- The Big 4 banks (+Macquarie) and accounting firms are known for starting with psychometric tests
+    - ANZ has a game-based assessment consisting of 16 games
+- Amazon and Xero also incorporate some personality tests in their initial assessments
+- Telstra and Optus use psychometric tests
+- Various government roles also use psychometric tests
+- Optiver is known to utilise Zap-N as part of their software engineer OA
+
 
 
 ## One-way Video Interviews (Vieple, HireVue)
@@ -274,7 +277,7 @@ Many companies have a page dedicated to their company values; it is a good idea 
 
 ### Vibes
 
-As mentioned before, behavioural interviews attempt to determine whether you're a cultural fit for the company. Some interviews may grill your responses more, intending to see how you perform under pressure, and if you respond with honesty. Being able to navigate all sorts of challenges during an interview, and being able to adapt to the vibes of a company is a skill that comes with experience in interviews. Be mentally prepared to think on the fly, since you may be given a question you've never prepared for.
+As mentioned before, behavioural interviews attempt to determine whether you're a cultural fit for the company. Some interviews may grill your responses more, intending to see how you perform under pressure, and if you respond with honesty. Being able to navigate all sorts of challenges during an interview, and being able to adapt to the vibes of a company is a skill that comes with experience in interviews. Be mentally prepared to think on the fly, since you may be given a question you've never prepared for or have to justify your reasoning for an answer. If you're particularly interested in a company, ensure you research what the company does so you can appear informed and knowledgeable in the interview. 
 
 ### Resources
 
@@ -367,7 +370,7 @@ So you're done with your interviews; now what? Resist the urge to let the potent
 
 ### Failure
 
-Failure is very common at an intern/graduate level; this is unfortunately because there are too many applicants to interview and too few roles for everyone. You shouldn't take it personally if you're rejected from a place, or many places, it's just a natural aspect of interviewing. Rejections build resilience, and you'll get a better idea on how to interview effectively each time till you finally get where you want. In my case, I got rejected from a place after a month of doing a final interview with no feedback, and later found an even better opportunity. There's always another place, and another year if you don't get in this time.
+Failure is very common at an intern/graduate level; this is unfortunately because there are too many applicants to interview and too few roles for everyone. You shouldn't take it personally if you're rejected from a place, or many places, it's just a natural aspect of interviewing. Rejections build resilience, and you'll get a better idea of how to interview effectively each time till you finally get where you want. In my case, I got rejected from a place after a month of doing a final interview with no feedback, and later found an even better opportunity. There's always another place, and another year if you don't get in this time.
 
 
 ### Tackling Applications
@@ -376,11 +379,11 @@ When it comes to applying to companies, apply early on, and keep track of your a
 
 ### Places to Practice
 
-Practice, practice, practice! I cannot stress how important it is to do mock interviews with your friends or people in the industry. The best practice is the real thing, which is why I usually advise applying everywhere and using places that you're not as invested in as practice runs for the roles you're gunning for. Below are some places you can look to find people to prepare with.
+Practice, practice, practice! I cannot stress how important it is to do mock interviews with your friends or people in the industry. The best practice is the real thing, which is why I usually advise applying everywhere and using places that you're not as invested in as practice runs for the roles you're gunning for. Below are some places (in no particular order) you can look to find people to prepare with.
 
 - [Pramp](https://www.pramp.com/#/) (Worth noting that sometimes your interviewer may not show up)
 - [interviewing.io](https://interviewing.io)
-- Ravi's Study Program - As a whole, this is a bootcamp that gets your technical and behavioural skills up to scratch. The program is an interesting way of keeping yourself accountable
+- Ravi's Study Program - As a whole, this is a **free** boot camp that gets your technical and behavioural skills up to scratch. The program is a good way of keeping yourself accountable, and the people involved are passionate about it.
 - Your local university society
 - Your friends
 - Random people on the right Discord servers such as [AusDevs 2.0.0](https://discord.gg/mmrQxzDSC8)
@@ -391,6 +394,7 @@ There are countless really amazing interview guides on the internet, the guide I
 
 - [The Tech Interview Handbook](https://www.techinterviewhandbook.org/software-engineering-interview-guide/)
 - [interviewing.io](https://interviewing.io), has a range of videos and guides if you scroll to the bottom of the page
+- Cracking the Coding Interview - while it may be on the older end, it has a lot of advice for the entire process, and I absolutely recommend reading it.
 
 ## Conclusion
 
@@ -406,7 +410,7 @@ This was a MASSIVE undertaking, and I've basically poured away many hours of my 
 
 
 
-Thank you so much for reading till the end! My final words to anyone who doesn't feel they're ready for an internship would be the line from Spider-Man: Into the Spider-Verse. [When will I know I'm ready? You won't, it's a leap of faith.](https://youtu.be/BmFbczWrVUw?t=184) Good luck with your journey.
+Thank you so much for reading till the end! My final words to anyone who doesn't feel they're ready for an internship would be the line from Spider-Man: Into the Spider-Verse. ["When will I know I'm ready? You won't, it's a leap of faith."](https://youtu.be/BmFbczWrVUw?t=184) Good luck with your journey.
 
 ![](/assets/guide-to-tech/spiderman-when.gif)
 
