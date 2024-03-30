@@ -1,7 +1,7 @@
 <!-- YourComponent.svelte -->
 <script>
   import ForceGraph from 'force-graph'
-  import * as data from '../../resources/network_full.json'
+  import * as data from '../../resources/network2024.json'
   let searchBoxValue
   let Graph
   let showLeftTab = true
