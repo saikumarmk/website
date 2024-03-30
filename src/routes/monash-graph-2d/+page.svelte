@@ -1,30 +1,64 @@
-<!-- YourComponent.svelte -->
 <script>
+  // Constants
+  const NODE_R = 8
+
+  // Data
   import ForceGraph from 'force-graph'
   import * as data from '../../resources/network2024.json'
-  let searchBoxValue
-  let Graph
+
+  // State
   let showLeftTab = true
   let schoolTags = []
+  let searchBoxValue
   let filteredData
+  let highlightNodes = new Set()
+  const highlightLinks = new Set()
+  let hoverNode = null
+  let showUnlocks = true
+  let showRequirements = true
+  let Graph
 
-  function searchNode(idToFind) {
+  // Highlight nodes and links
+  const highlightNode = node => {
+    let highlightUnlockNodes = new Set()
+    let highlightRequireNodes = new Set()
+
+    highlightLinks.clear()
+    if (node) {
+      highlightUnlockNodes.add(node)
+      // need to build a map for this
+      if (showUnlocks) {
+        node.unlocks.forEach(neighbor => highlightUnlockNodes.add(data.nodes[data.index_map[neighbor]]))
+        //node.unlock_link.forEach(link => highlightLinks.add(link))
+      }
+      if (showRequirements) {
+        node.requires.forEach(neighbor => highlightRequireNodes.add(data.nodes[data.index_map[neighbor]]))
+        //node.require_link.forEach(link => highlightLinks.add(link))
+      }
+    }
+
+    hoverNode = node || null
+    highlightNodes = new Set([...highlightUnlockNodes, ...highlightRequireNodes])
+  }
+
+  // Search for a node by its ID
+  const searchNode = idToFind => {
     const node = data.nodes.find(n => n.id.toUpperCase() === idToFind)
     if (node) {
       Graph.centerAt(node.x, node.y, 1000)
       Graph.zoom(1, 1000)
+      highlightNode(node)
       populateUnitInfo(data.general_info[idToFind])
     } else {
       alert(`Node with id "${idToFind}" not found.`)
     }
   }
 
-  function applyFilter() {
+  // Apply filters based on selected tags
+  const applyFilter = () => {
     if (schoolTags.length === 0) {
-      // If no tags are selected, show all nodes
       filteredData = data
     } else {
-      // Filter nodes based on selected tags
       filteredData = {
         nodes: data.nodes.filter(node => schoolTags.includes(node.id.slice(0, 3))),
         links: data.links.filter(link => {
@@ -34,11 +68,11 @@
         })
       }
     }
-    // Update the graph with the filtered data
     Graph.graphData(filteredData)
   }
 
-  function addSchoolTag(event) {
+  // Add a school tag
+  const addSchoolTag = event => {
     if (event.key === 'Enter') {
       const value = event.target.value.trim()
       if (value && !schoolTags.includes(value)) {
@@ -49,30 +83,37 @@
     }
   }
 
-  function removeSchoolTag(tag) {
+  // Remove a school tag
+  const removeSchoolTag = tag => {
     schoolTags = schoolTags.filter(t => t !== tag)
     applyFilter()
   }
 
-  function handleSearchKeyPress(event) {
+  // Handle key press event for searching
+  const handleSearchKeyPress = event => {
     if (event.key === 'Enter') {
-      searchNode(searchBoxValue)
+      //event.preventDefault()
+      searchNode(event.target.value.trim().toUpperCase())
     }
   }
 
-  function toggleLeftTab() {
+  // Toggle the left tab
+  const toggleLeftTab = () => {
     showLeftTab = !showLeftTab
   }
 
-  function toggleRequirements() {
+  // Toggle the display of requirements
+  const toggleRequirements = () => {
     showRequirements = !showRequirements
   }
 
-  function toggleUnlocks() {
+  // Toggle the display of unlocks
+  const toggleUnlocks = () => {
     showUnlocks = !showUnlocks
   }
 
-  function preprocessRequisites(requisites) {
+  // Preprocess requisites data
+  const preprocessRequisites = requisites => {
     let formattedRequisites = ''
 
     // Add permission
@@ -116,76 +157,43 @@
     return formattedRequisites
   }
 
-  const costData = {
-    '4': 14630,
-    '3': 11401,
-    '2': 8021,
-    '1': 3985
-  }
+  // Calculate unit cost
+  const calculateUnitCost = (creditPoints, band) => {
+    const costData = {
+      '4': 14630,
+      '3': 11401,
+      '2': 8021,
+      '1': 3985
+    }
 
-  function calculateUnitCost(creditPoints, band) {
     // Get the cost from the cost data based on the band
     const costPer48CP = costData[band]
 
     // Calculate the total cost of the unit
     const totalCost = (Number(creditPoints) * costPer48CP) / 48
 
-    return totalCost
+    return totalCost.toFixed(2)
   }
 
-  function populateUnitInfo(unitData) {
+  // Populate unit information
+  const populateUnitInfo = unitData => {
     const unitInfoSection = document.getElementById('unit-info')
-    unitInfoSection.innerHTML = '' // Clear existing content
-
-    // Create title for unit name with code
     const title = `<strong ><a href="https://handbook.monash.edu/current/units/${unitData.code}" target="_blank">${unitData.code} - ${unitData.title}</a></strong><br>`
-
-    // Create HTML elements to display unit information
     const unitInfoHTML = `
-      ${title}
-      CSP Cost:$${calculateUnitCost(unitData['credit_points'], unitData['sca_band'])}
-      ${unitData.academic_org}<br>
+      ${title}<br>
+      CSP Cost: $${calculateUnitCost(unitData['credit_points'], unitData['sca_band'])}<br>
       ${unitData.school === unitData.academic_org ? '' : unitData.school + '<br>'}
+      ${unitData.academic_org}<br>
       <br>
-      ${unitData.requisites ? preprocessRequisites(unitData.requisites) : 'No Requisites'}
+      ${unitData.requisites ? preprocessRequisites(unitData.requisites) : 'No Requisites'}<br>
     `
 
     // Append HTML elements to unit information section
     unitInfoSection.innerHTML = unitInfoHTML
   }
 
-  let highlightNodes = new Set()
-  const highlightLinks = new Set()
-  let hoverNode = null
-  let NODE_R = 8
-  let showUnlocks = true
-  let showRequirements = true
-
-  const highlightNode = node => {
-    let highlightUnlockNodes = new Set()
-    let highlightRequireNodes = new Set()
-
-    highlightLinks.clear()
-    if (node) {
-      highlightUnlockNodes.add(node)
-      // need to build a map for this
-      if (showUnlocks) {
-        node.unlocks.forEach(neighbor => highlightUnlockNodes.add(data.nodes[data.index_map[neighbor]]))
-        //node.unlock_link.forEach(link => highlightLinks.add(link))
-      }
-      if (showRequirements) {
-        node.requires.forEach(neighbor => highlightRequireNodes.add(data.nodes[data.index_map[neighbor]]))
-        //node.require_link.forEach(link => highlightLinks.add(link))
-      }
-    }
-
-    hoverNode = node || null
-    highlightNodes = new Set([...highlightUnlockNodes, ...highlightRequireNodes])
-  }
-  /* adding arrows to links slows down the graph a bit 
-  
-  */
-  function GraphActionOriginal(component) {
+  // Graph Actions
+  const GraphAction = component => {
     Graph = ForceGraph()(component)
       .graphData(data)
       .nodeLabel(node => `${node.id}: ${node.unit_name}`)
@@ -279,7 +287,7 @@
   </div>
 
   <div class="graph-column">
-    <div id="graph-container" use:GraphActionOriginal />
+    <div id="graph-container" use:GraphAction />
   </div>
 </div>
 
