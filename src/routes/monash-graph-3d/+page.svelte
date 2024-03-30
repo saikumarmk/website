@@ -6,7 +6,7 @@
   let Graph
 
   function searchNode(idToFind) {
-    const node = data.nodes.find(n => n.id === idToFind)
+    const node = data.nodes.find(n => n.id.toUpperCase() === idToFind)
     if (node) {
       Graph.cameraPosition({ x: node.x - 50, y: node.y - 50, z: node.z - 50 }, node, 1000)
     } else {
