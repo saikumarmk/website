@@ -179,13 +179,40 @@
   const populateUnitInfo = unitData => {
     const unitInfoSection = document.getElementById('unit-info')
     const title = `<strong ><a href="https://handbook.monash.edu/current/units/${unitData.code}" target="_blank">${unitData.code} - ${unitData.title}</a></strong><br>`
+
+    let requisitesHTML = ''
+    if (unitData.requisites) {
+      requisitesHTML = `
+      <details>
+        <summary><strong>Requisites</strong></summary>
+        ${preprocessRequisites(unitData.requisites)}
+      </details><br>
+    `
+    } else {
+      requisitesHTML = '<strong>Requisites:</strong> No Requisites<br><br>'
+    }
+
+    let unlocksHTML = ''
+    let unlockedUnits = data.nodes[data.index_map[unitData.code]].unlocks
+    if (unlockedUnits.length > 0) {
+      unlocksHTML = `
+      <details>
+        <summary><strong>Unlocks</strong></summary>
+        ${unlockedUnits.join('<br>')}
+      </details><br>
+      `
+    } else {
+      unlocksHTML = `<strong>Unlocks:</strong> Does not unlock any unit.<br><br>`
+    }
+
     const unitInfoHTML = `
       ${title}<br>
       CSP Cost: $${calculateUnitCost(unitData['credit_points'], unitData['sca_band'])}<br>
       ${unitData.school === unitData.academic_org ? '' : unitData.school + '<br>'}
       ${unitData.academic_org}<br>
       <br>
-      ${unitData.requisites ? preprocessRequisites(unitData.requisites) : 'No Requisites'}<br>
+      ${requisitesHTML}<br>
+      ${unlocksHTML}
     `
 
     // Append HTML elements to unit information section
@@ -229,25 +256,30 @@
       <div class="left-tab-content">
         <div class="left-tab-title">Search for a unit</div>
         <div class="left-tab-item">
-          <input
-            id="search-box"
-            type="text"
-            bind:value={searchBoxValue}
-            on:keypress={handleSearchKeyPress}
-            placeholder="Unit Code"
-            class="input input-ghost input-bordered xl:bg-base-100 xl:text-base-content transition-all w-full h-8" />
+          <form>
+            <input
+              id="search-box"
+              type="text"
+              bind:value={searchBoxValue}
+              on:keypress={handleSearchKeyPress}
+              placeholder="Unit Code"
+              class="input input-ghost input-bordered xl:bg-base-100 xl:text-base-content transition-all w-full h-8" />
+            <button type="submit" class="invis-button"></button>
+          </form>
         </div>
 
         <div class="left-tab-title">Filter by School</div>
         <div class="left-tab-item">
           <label for="school-input"></label>
-          <input
-            id="school-input"
-            type="text"
-            placeholder="School"
-            on:keypress={addSchoolTag}
-            class="input input-ghost input-bordered xl:bg-base-100 xl:text-base-content transition-all w-full h-8" />
-
+          <form>
+            <input
+              id="school-input"
+              type="text"
+              placeholder="School"
+              on:keypress={addSchoolTag}
+              class="input input-ghost input-bordered xl:bg-base-100 xl:text-base-content transition-all w-full h-8" />
+            <button type="submit" class="invis-button"></button>
+          </form>
           <!-- Display school tags -->
           <div>
             {#each schoolTags as tag}
@@ -304,6 +336,10 @@
 
   #button {
     border: 2px;
+  }
+
+  .invis-button {
+    display: none;
   }
 
   /* Style the buttons when hovered over */
