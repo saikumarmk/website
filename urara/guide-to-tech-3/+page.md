@@ -104,7 +104,7 @@ One of my less preferred assessment items, the psychometric test baffles me. I d
 - Verbal Reasoning
 - Inductive Reasoning
 - Logical Reasoning
-- Personality tests 
+- Personality tests (On a related note I found [an answer key to one sort of personality test](https://www.timothyhorrigan.com/documents/unicru-personality-test.answer-key.html) )
 
 Not much can be said about these tests, and there's not much I can suggest to prepare for them. They're relatively basic and are often employed by **the banks**, or other non-tech organisations. Prosple has a [guide](https://au.prosple.com/interviews/top-5-tips-for-surviving-psychometric-testing) on how to survive a psychometric test and outlines what you may expect from a test. If you feel the need to brush up on this type of test, the [Careervidz'](https://www.youtube.com/watch?v=vowwzQx-fGY&list=PLCcteVWYyBts9bff--pGdSAGs8UeExjlF) link on the guide covers a variety of questions. You are often allowed a scientific calculator and are recommended to make use of it whenever possible. However, there are more interesting assessments ahead, that test applicants with games as well.
 
@@ -406,7 +406,7 @@ This was a MASSIVE undertaking, and I've basically poured away many hours of my 
 
 - The Monash Association of Coding, committees past, present and future. Most of my knowledge, and drive to record all this information and make it accessible came from MAC.
 - My friends in the HFT and Big Tech space, who've told me about their journey and what worked for them.
-    - In particular, Josh, Lauren, William, Jim, Madison, Eric J, Sung Ho, Alex M, and Nick L, all of you have helped shape part of this series in one way or another.
+    - In particular, Josh, Lauren, Indra, William, Jim, Madison, Eric J, Sung Ho, Alex M, and Nick L, all of you have helped shape part of this series in one way or another.
 - The AusDevs server, for being a massive hub of information that has helped shape this article in particular.
 
 
