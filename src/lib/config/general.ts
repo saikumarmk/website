@@ -48,6 +48,10 @@ export const theme: ThemeConfig = [
   {
     name: 'black',
     text: '🖤 Black'
+  },
+  {
+    name: 'nord',
+    text: '❄️ Nord'
   }
 ]
 

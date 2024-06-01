@@ -60,10 +60,12 @@
       filteredData = data
     } else {
       filteredData = {
-        nodes: data.nodes.filter(node => schoolTags.includes(node.id.slice(0, 3))),
+        nodes: data.nodes.filter(node => schoolTags.includes(node.id.slice(0, 4)) || schoolTags.includes(node.id.slice(0, 3))),
         links: data.links.filter(link => {
-          const sourceInFilter = schoolTags.includes(link.source.id.slice(0, 3))
-          const targetInFilter = schoolTags.includes(link.target.id.slice(0, 3))
+          const sourceInFilter =
+            schoolTags.includes(link.source.id.slice(0, 3)) || schoolTags.includes(link.source.id.slice(0, 4))
+          const targetInFilter =
+            schoolTags.includes(link.target.id.slice(0, 3)) || schoolTags.includes(link.target.id.slice(0, 4))
           return sourceInFilter && targetInFilter
         })
       }
