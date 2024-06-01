@@ -40,7 +40,7 @@ While a lot of people are interested in the tech industry or technical roles bec
 Before you get ahead of yourself and aim for the Big 4 consulting firms because you've heard they're prestigious, let's discuss technical roles. Technology companies are driven primarily by their software and usually pay the most. Still, there are also quantitative trading firms that hire software engineers to work, which are classified as finance. Companies whose primary product isn't tech, such as banks, accounting firms, supermarket chains, and so on, generally pay less but have more lenient technical processes (on average). We'll be examining software engineer/developer roles, which can also include similar roles like data science/machine learning.
 
 - Tech and quantitative trading firms have more challenging interviews on average but usually pay more. Quantitative trading companies are on the high end for interview difficulty.
-- Non-tech companies who hire developers may have interviews  unrelated to what you have studied, e.g. psychometric testing, case studies, etc
+- Non-tech companies who hire developers may have interviews unrelated to what you have studied, e.g. psychometric testing, case studies, etc
 
 Technical companies usually have processes for training their engineers and better guidance from mentors who may have decades of experience with different companies. That's not to say that non-technical companies can't compare; banks typically pay for certifications or anything to upskill yourself. However, when focusing on technology, you are in an excellent position to learn a lot. 
 
@@ -61,15 +61,15 @@ A common occurrence I've seen with many students and posts on Reddit is the cons
 The listed companies are reputable, and most are rumoured to pay well.
 
 - Airwallex: A fintech company providing cross-border payment solutions for businesses. **(I,G)**
-- Rokt: A marketing tech company specialising in personalised offers at the point of transaction to improve e-commerce customer engagement and conversion rates. **(I??,G,⭐)**
+- Rokt: A marketing tech company specialising in personalised offers at the point of transaction to improve e-commerce customer engagement and conversion rates. **(G,⭐)**
 - Afterpay: A payment platform that allows users to buy now and pay later, with no interest or fees. **(?,⭐)**
 - Bukalapak: An Indonesian e-commerce company that operates an online marketplace connecting buyers and sellers of various products, from electronics to fashion to home goods. **(G)**
-- SEEK: A job search website that allows users to search for jobs in various industries and locations. **(G?)**
+- SEEK: A job search website that allows users to search for jobs in various industries and locations. **(G)**
 - WiseTech Global: A logistics software company that provides solutions for the logistics industry. **(I, G,⭐)**
-- REA Group: A digital advertising company that operates property websites such as realestate.com.au and realcommercial.com.au. **(G)**
+- REA Group: A digital advertising company that operates property websites such as realestate.com.au and realcommercial.com.au. **(I*, G)**
 - IBM: A technology company that offers a range of solutions in areas such as artificial intelligence, cloud computing, blockchain, and data analytics. **(G)**
 - Snap Inc.: A camera and social media company that operates the popular Snapchat app, as well as other products like Spectacles (smart glasses) and Bitmoji (personalised avatar app). **(I,G,⭐)**
-- TikTok: A social media platform that allows users to create and share short-form videos set to music or audio snippets. The app has become increasingly popular recently, particularly among younger generations. It has spawned many viral trends and challenges. **(G,⭐)**
+- TikTok: A social media platform that allows users to create and share short-form videos set to music or audio snippets. The app has become increasingly popular recently, particularly among younger generations. It has spawned many viral trends and challenges. **(I, G,⭐)**
 - Adobe: A software company that writes software aimed at designers, such as Photoshop, InDesign, or Illustrator. **(I, G, ⭐)**
 
 
@@ -109,14 +109,14 @@ Many companies will post their intern/graduate applications on job boards. Some 
 - LinkedIn, especially using [Boolean Search](https://www.linkedin.com/help/linkedin/answer/a524335/using-boolean-search-on-linkedin?lang=en)
 - [GradAustralia](https://gradaustralia.com.au/)
 - [GradConnection](https://au.gradconnection.com/)
-- [MAC's Internship/Graduate Board](https://monashcoding.notion.site/MAC-x-Tech-Internships-ca8d669bec6249b99f5b41cd68e83027)
+- [MAC's Internship/Graduate Board](https://monashcoding.notion.site/Opportunities-2024-f0e18b9f8621407fabd34a2c96103d23)
 - [AusJobs/Australia-Tech-Internship](https://github.com/AusJobs/Australia-Tech-Internship)
 
 I'd recommend noting companies and what they do so that you can apply in future years. Sometimes, you may find a company that asks that you be a penultimate student.
 
 ### Paid and Unpaid Internships
 
-In Australia, unpaid internships are considered [unlawful if the intern is considered to be doing "productive" work](https://www.fairwork.gov.au/tools-and-resources/fact-sheets/unpaid-work/unpaid-work-unpaid-work), or if you are on a vocational placement, such as a university experience. In the case of some universities that offer internships through a Co-op program, or a similar industry-based learning experience, these are legal. So, internships that you seek out should be paid, and some of the previously mentioned companies pay their interns a good amount. Some services require you to pay for internship experience; these are predatory and should be avoided.
+In Australia, unpaid internships are considered [unlawful if the intern is considered to be doing "productive" work](https://www.fairwork.gov.au/tools-and-resources/fact-sheets/unpaid-work/unpaid-work-unpaid-work). If you're undertaking work experience that is considered vocational, i.e contributes to your education, the internship is considered lawful. For this reason, teachers and nurses embark on unpaid internships. So, internships that you seek out should be paid, and some of the previously mentioned companies pay their interns a very good amount. Some services require you to pay for internship experience; these are illegal and predatory.
 
 ## The timeline
 
