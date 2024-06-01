@@ -4,11 +4,13 @@
 
   // Data
   import ForceGraph from 'force-graph'
+  import { forceManyBody, forceLink } from 'd3'
   import * as data from '../../resources/network2024.json'
 
   // State
   let showLeftTab = true
   let schoolTags = []
+  let unitCodes = []
   let searchBoxValue
   let filteredData
   let highlightNodes = new Set()
@@ -56,8 +58,47 @@
 
   // Apply filters based on selected tags
   const applyFilter = () => {
-    if (schoolTags.length === 0) {
+    if (unitCodes.length > 0) {
+      filteredData = {
+        nodes: data.nodes.filter(node => unitCodes.includes(node.id) || unitCodes.includes(node.id)),
+        links: data.links.filter(link => {
+          const sourceInFilter = unitCodes.includes(link.source.id) || unitCodes.includes(link.source.id)
+          const targetInFilter = unitCodes.includes(link.target.id) || unitCodes.includes(link.target.id)
+          return sourceInFilter && targetInFilter
+        })
+      }
+      Graph.dagMode('td')
+      Graph.dagLevelDistance(300)
+      Graph.d3Force('charge', forceManyBody().strength(-500))
+      Graph.d3Force('link', forceLink().distance(500))
+
+      Graph.nodeCanvasObject((node, ctx) => {
+        const label = node.id
+        const fontSize = 25
+        ctx.font = `${fontSize}px Sans-Serif`
+        const textWidth = ctx.measureText(label).width
+        const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2) // some padding
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'
+        ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions)
+
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillStyle = 'black'
+        ctx.fillText(label, node.x, node.y)
+
+        node.__bckgDimensions = bckgDimensions // to re-use in nodePointerAreaPaint
+      }).nodeCanvasObjectMode(node => 'replace')
+    } else if (schoolTags.length === 0) {
       filteredData = data
+      Graph.dagMode('null')
+      Graph.nodeCanvasObject((node, ctx) => {
+        // add ring just for highlighted nodes
+        ctx.beginPath()
+        ctx.arc(node.x, node.y, NODE_R * 1.4, 0, 2 * Math.PI, false)
+        ctx.fillStyle = node === hoverNode ? 'red' : 'orange'
+        ctx.fill()
+      }).nodeCanvasObjectMode(node => (highlightNodes.has(node) ? 'before' : undefined))
     } else {
       filteredData = {
         nodes: data.nodes.filter(node => schoolTags.includes(node.id.slice(0, 4)) || schoolTags.includes(node.id.slice(0, 3))),
@@ -85,9 +126,25 @@
     }
   }
 
+  const addUnitCode = event => {
+    if (event.key === 'Enter') {
+      const value = event.target.value.trim()
+      if (value && !unitCodes.includes(value)) {
+        unitCodes = [...unitCodes, value]
+      }
+      event.target.value = '' // Clear the input field
+      applyFilter()
+    }
+  }
+
   // Remove a school tag
   const removeSchoolTag = tag => {
     schoolTags = schoolTags.filter(t => t !== tag)
+    applyFilter()
+  }
+
+  const removeUnitCode = unit => {
+    unitCodes = unitCodes.filter(t => t !== unit)
     applyFilter()
   }
 
@@ -231,6 +288,7 @@
       .nodeRelSize(6)
       .cooldownTicks(0)
       .autoPauseRedraw(false)
+      .dagLevelDistance(300)
       .onNodeHover(node => {
         highlightNode(node)
       })
@@ -292,6 +350,30 @@
             {/each}
           </div>
         </div>
+        <!-- Builder Mode-->
+        <div class="left-tab-title">Build Mode</div>
+        <div class="left-tab-item">
+          <label for="unit-input"></label>
+          <form>
+            <input
+              id="unit-input"
+              type="text"
+              placeholder="Unit Code"
+              on:keypress={addUnitCode}
+              class="input input-ghost input-bordered xl:bg-base-100 xl:text-base-content transition-all w-full h-8" />
+            <button type="submit" class="invis-button"></button>
+          </form>
+          <!-- Display school tags -->
+          <div>
+            {#each unitCodes as tag}
+              <span class="tag">
+                {tag}
+                <button on:click={() => removeUnitCode(tag)}>☒</button>
+              </span>
+            {/each}
+          </div>
+        </div>
+
         <div class="left-tab-item">
           <!-- Toggle button for showing/hiding requirements -->
           <button on:click={toggleRequirements} class="btn btn-sm btn-ghost normal-case gap-2">
