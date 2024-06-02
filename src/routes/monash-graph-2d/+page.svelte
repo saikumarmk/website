@@ -4,7 +4,7 @@
 
   // Data
   import ForceGraph from 'force-graph'
-  import { forceManyBody, forceLink } from 'd3'
+  import { forceManyBody, forceLink, forceCollide } from 'd3'
   import * as data from '../../resources/network2024.json'
 
   // State
@@ -67,10 +67,11 @@
           return sourceInFilter && targetInFilter
         })
       }
-      Graph.dagMode('td')
+      Graph.dagMode('lr')
       Graph.dagLevelDistance(300)
-      Graph.d3Force('charge', forceManyBody().strength(-500))
-      Graph.d3Force('link', forceLink().distance(500))
+      Graph.d3Force('collide', forceCollide(40))
+      // Graph.d3Force('charge', forceManyBody().strength(-500))
+      // Graph.d3Force('link', forceLink().distance(500))
 
       Graph.nodeCanvasObject((node, ctx) => {
         const label = node.id
@@ -89,6 +90,19 @@
 
         node.__bckgDimensions = bckgDimensions // to re-use in nodePointerAreaPaint
       }).nodeCanvasObjectMode(node => 'replace')
+      Graph.cooldownTicks(Infinity)
+      Graph.linkCurvature(
+        d =>
+          0.07 * // max curvature
+          // curve outwards from source, using gradual straightening within a margin of a few px
+          (['td', 'bu'].includes(Graph.dagMode())
+            ? Math.max(-1, Math.min(1, (d.source.x - d.target.x) / 25))
+            : ['lr', 'rl'].includes(Graph.dagMode())
+              ? Math.max(-1, Math.min(1, (d.target.y - d.source.y) / 25))
+              : ['radialout', 'radialin'].includes(Graph.dagMode())
+                ? 0
+                : 1)
+      )
     } else if (schoolTags.length === 0) {
       filteredData = data
       Graph.dagMode('null')
@@ -99,6 +113,8 @@
         ctx.fillStyle = node === hoverNode ? 'red' : 'orange'
         ctx.fill()
       }).nodeCanvasObjectMode(node => (highlightNodes.has(node) ? 'before' : undefined))
+      Graph.cooldownTicks(0)
+      Graph.linkCurvature(d => 0)
     } else {
       filteredData = {
         nodes: data.nodes.filter(node => schoolTags.includes(node.id.slice(0, 4)) || schoolTags.includes(node.id.slice(0, 3))),
@@ -125,12 +141,18 @@
       applyFilter()
     }
   }
-
   const addUnitCode = event => {
     if (event.key === 'Enter') {
       const value = event.target.value.trim()
-      if (value && !unitCodes.includes(value)) {
-        unitCodes = [...unitCodes, value]
+      if (value) {
+        // Split the input by commas, trim whitespace from each unit code, and filter out empty values
+        const newUnitCodes = value
+          .split(',')
+          .map(code => code.trim())
+          .filter(code => code && !unitCodes.includes(code))
+
+        // Add new unit codes to the array
+        unitCodes = [...unitCodes, ...newUnitCodes]
       }
       event.target.value = '' // Clear the input field
       applyFilter()
@@ -164,6 +186,11 @@
   // Toggle the display of requirements
   const toggleRequirements = () => {
     showRequirements = !showRequirements
+  }
+
+  const clearUnitCodes = () => {
+    unitCodes = []
+    applyFilter()
   }
 
   // Toggle the display of unlocks
@@ -375,6 +402,9 @@
         </div>
 
         <div class="left-tab-item">
+          <!-- Delete all items for build mode-->
+          <button on:click={clearUnitCodes} class="btn btn-sm btn-ghost normal-case gap-2">Delete all units</button>
+
           <!-- Toggle button for showing/hiding requirements -->
           <button on:click={toggleRequirements} class="btn btn-sm btn-ghost normal-case gap-2">
             {#if showRequirements}
