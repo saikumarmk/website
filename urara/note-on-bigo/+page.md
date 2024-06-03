@@ -55,7 +55,7 @@ function factorial(n):
     return 1
 ```
 
-Suppose $T(n)$ is our time complexity function for `factorial`, where `n` is the input. If we're counting the number of steps it takes for `factorial(n)`, we'd need to know how many steps it takes `factorial(n-1)` to execute. We do one comparison operation, so we can say that $T(n) = T(n-1)+1$. Remember that $T(n-1)$ is the time complexity function for `factorial(n-1)`. We could keep doing this until we hit the base case, corresponding to $T(1)=1$ since we're doing one operation (returning an integer). Now, all we need is a way to solve this relation.
+Suppose $T(n)$ is our time complexity function for `factorial`, where `n` is the input. If we're counting the number of steps it takes for `factorial(n)`, we'd need to know how many steps it takes `factorial(n-1)` to execute. We do one comparison operation, so we can say that $T(n) = T(n-1)+1$. Remember that $T(n-1)$ is the time complexity function for `factorial(n-1)`. We could keep doing this until we hit the base case, corresponding to $T(0)=1$ since we're doing one operation (returning an integer). Now, all we need is a way to solve this relation.
 
 
 ### Solving recurrence relations via Telescoping
@@ -159,11 +159,11 @@ We may tighten the idea of big Oh by also bounding it from below. We introduce $
 
 ### Omega
 
-Big Omega has two definitions that vary slightly, but we'll be using the definition that indicates an asymptotic lower bound.  For $f(x)\in\Omega(g(x))$, that means there exists $M 0$ and $x_0 \in \mathbb{R}$ such that $|f(x)| > M g(x)$, for all $x \geq x_0$. For example, $\sqrt{n} \in \Omega(\log n)$, because the square root function asymptotically grows faster than $\log n$. For example, we know that comparison-based sorting algorithms take $\Omega(n \log n)$ steps to execute (no optimisations) due to how many comparisons you need to compare a whole list.
+Big Omega has two definitions that vary slightly, but we'll be using the definition that indicates an asymptotic lower bound.  For $f(x)\in\Omega(g(x))$, that means there exists $M 0$ and $x_0 \in \mathbb{R}$ such that $|f(x)| > M g(x)$, for all $x \geq x_0$. For example, $\sqrt{n} \in \Omega(\log n)$, because the square root function asymptotically grows faster than $\log n$. Additionally, comparison-based sorting algorithms take $\Omega(n \log n)$ steps to execute (no optimisations) due to how many comparisons you need to compare a whole list. A sketch of the proof would involve drawing out the tree of comparisons and reasoning about what a lower-bound on the number of comparisons would be.
 
 ### Little Oh
 
-Little Oh is a stronger variant of Big Oh. For $f(x)\in o(g(x))$, that means there exists $M > 0$ and $x_0 \in \mathbb{R}$ such that $|f(x)| < M g(x)$, for all $x \geq x_0$. This means that while $n^2 = O(n^2)$, $n^2 \neq O(n^2)$, though $n \log n = o(n^2)$. If $f \in o(g)$, we say that $f$ is dominated by $g$ asymptotically. You may find this symbol in number theory, or other areas of maths. 
+Little Oh is a stronger variant of Big Oh. For $f(x)\in o(g(x))$, that means there exists $M > 0$ and $x_0 \in \mathbb{R}$ such that $|f(x)| < M g(x)$, for all $x \geq x_0$. This means that while $n^2 = O(n^2)$, $n^2 \neq o(n^2)$, though $n \log n = o(n^2)$. If $f \in o(g)$, we say that $f$ is dominated by $g$ asymptotically. You may find this symbol in number theory, or other areas of maths. 
 
 ### The Master Theorem
 
