@@ -163,7 +163,7 @@ Big Omega has two definitions that vary slightly, but we'll be using the definit
 
 ### Little Oh
 
-Little Oh is a stronger variant of Big Oh. For $f(x)\in o(g(x))$, that means there exists $M > 0$ and $x_0 \in \mathbb{R}$ such that $|f(x)| < M g(x)$, for all $x \geq x_0$. This means that while $n^2 = O(n^2)$, $n^2 \neq o(n^2)$, though $n \log n = o(n^2)$. If $f \in o(g)$, we say that $f$ is dominated by $g$ asymptotically. You may find this symbol in number theory, or other areas of maths. 
+Little Oh is a stronger variant of Big Oh. For $f(x)\in o(g(x))$, that means there exists $M > 0$ and $x_0 \in \mathbb{R}$ such that $|f(x)| < M g(x)$, for all $x \geq x_0$. This means that while $n^2 = O(n^2)$, $n^2 \not\in o(n^2)$, though $n \log n = o(n^2)$. If $f \in o(g)$, we say that $f$ is dominated by $g$ asymptotically. You may find this symbol in number theory, or other areas of maths. 
 
 ### The Master Theorem
 
