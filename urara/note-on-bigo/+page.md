@@ -121,7 +121,7 @@ T(n)=T(n/2)+O(1) =(T(n/4)+a)+a = ((T(n/8)+a)+a)+a = \cdots \\
 T(n) = T(n/2^k)+ak
 $$
 
-We hit the base case when $n/2^k =1 \iff n=2^k$ which yields $k = \log_2 n$. Substituting this back in gives us $T(n) = T(1) + a \log_2 n  = c + a\log_2 n$. That is, $T(n) \in O(\log n)$. Note that the base is irrelevant here due to the change in the base formula.
+We hit the base case when $n/2^k =1 \iff n=2^k$ which yields $k = \log_2 n$. Substituting this back in gives us $T(n) = T(1) + a \log_2 n  = c + a\log_2 n$. That is, $T(n) \in O(\log n)$. Note that the base is irrelevant here due to the change in the base formula. You can also see that it would be very easy to convert the iterative binary search into a recursive binary search because the problem reduces to binary searching on a list half the size of the original list repeatedly till you hit a base case. 
 
 
 ```
@@ -159,7 +159,7 @@ We may tighten the idea of big Oh by also bounding it from below. We introduce $
 
 ### Omega
 
-Big Omega has two definitions that vary slightly, but we'll be using the definition that indicates an asymptotic lower bound.  For $f(x)\in\Omega(g(x))$, that means there exists $M 0$ and $x_0 \in \mathbb{R}$ such that $|f(x)| > M g(x)$, for all $x \geq x_0$. For example, $\sqrt{n} \in \Omega(\log n)$, because the square root function asymptotically grows faster than $\log n$. Additionally, comparison-based sorting algorithms take $\Omega(n \log n)$ steps to execute (no optimisations) due to how many comparisons you need to compare a whole list. A sketch of the proof would involve drawing out the tree of comparisons and reasoning about what a lower-bound on the number of comparisons would be.
+Big Omega has two definitions that vary slightly, but we'll be using the definition that indicates an asymptotic lower bound.  For $f(x)\in\Omega(g(x))$, that means there exists $M > 0$ and $x_0 \in \mathbb{R}$ such that $|f(x)| > M g(x)$, for all $x \geq x_0$. For example, $\sqrt{n} \in \Omega(\log n)$, because the square root function asymptotically grows faster than $\log n$. Additionally, comparison-based sorting algorithms take $\Omega(n \log n)$ steps to execute (no optimisations) due to how many comparisons you need to compare a whole list. A sketch of the proof would involve drawing out the tree of comparisons and reasoning about what a lower-bound on the number of comparisons would be.
 
 ### Little Oh
 
