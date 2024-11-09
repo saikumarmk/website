@@ -6,6 +6,7 @@
   import Reply from '$lib/components/post_reply.svelte'
   import Status from '$lib/components/post_status.svelte'
   import Image from '$lib/components/prose/img.svelte'
+  import RandomPokemonSprite from '$lib/components/pkmn/random_pokemon.svelte'
   import Pagination from '$lib/components/post_pagination.svelte'
   import Comment from '$lib/components/post_comment.svelte'
   export let post: Urara.Post
@@ -90,6 +91,7 @@
             itemprop="name headline"
             class="card-title text-3xl mr-auto bg-[length:100%_0%] bg-[position:0_88%] underline decoration-4 decoration-transparent group-hover:decoration-primary hover:bg-[length:100%_100%] hover:text-primary-content bg-gradient-to-t from-primary to-primary bg-no-repeat transition-all ease-in-out duration-300">
             <a itemprop="url" class="u-url p-name" href={post.path}>{post.title ?? post.path.slice(1)}</a>
+            <RandomPokemonSprite />
           </h2>
         {:else}
           <h1 itemprop="name headline" class="card-title text-3xl mb-8 p-name">{post.title ?? post.path.slice(1)}</h1>

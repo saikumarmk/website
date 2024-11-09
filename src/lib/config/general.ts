@@ -46,10 +46,6 @@ export const theme: ThemeConfig = [
     text: '🌇 Retro'
   },
   {
-    name: 'black',
-    text: '🖤 Black'
-  },
-  {
     name: 'nord',
     text: '❄️ Nord'
   }
