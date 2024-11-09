@@ -1,18 +1,33 @@
 import type { SiteConfig } from '$lib/types/site'
+import pokemonData from '../../resources/pokemonClasses.json'
 
-const bio = ['Probably napping',
-  'Software Engineer!',
-  'Machine Learning Engineer!',
-  'Learning Graph Theory!',
-  'Watching a video about pokemon glitches',
-  'Writing about coding',
-  'Messing around with a Latent Diffusion Model',
-  'Playing around with data',
-  'Finetuning a GPT model',
-  'Listening to an Ado song',
-  'Listening to  踊'
-]
 
+function generateRandomBio(): string {
+  const bioList = [
+    'Probably napping',
+    'Applied Scientist of sorts',
+    'Machine Learning Engineer!',
+    'Learning Graph Theory!',
+    'Watching a video about pokemon glitches',
+    'Writing about coding',
+    'Acquiring drip',
+    'Learning some Measure Theory',
+    'Messing around with a Latent Diffusion Model',
+    'Bouldering (maybe)',
+    'Playing a JRPG',
+    'Finetuning a GPT model',
+    'Listening to an Ado song',
+    'Listening to 踊'
+  ];
+
+  const randomBio = bioList[Math.floor(Math.random() * bioList.length)];
+  const randomPokemon = pokemonData[Math.floor(Math.random() * pokemonData.length)];
+  const isShiny = Math.random() < 0.1; // 10% chance for shiny
+  const shinyClass = isShiny ? 'shiny' : '';
+
+
+  return `${randomBio} <span class="pokesprite pokemon ${shinyClass} ${randomPokemon}"></span>`;
+}
 export const site: SiteConfig = {
   protocol: 'https://',
   domain: import.meta.env.URARA_SITE_PROTOCOL ?? import.meta.env.DEV ? 'http://' : 'https://',
@@ -22,8 +37,8 @@ export const site: SiteConfig = {
   author: {
     name: 'Sai',
     avatar: '/assets/maskable@192.png',
-    status: '🔱',
-    bio: bio[~~(Math.random() * bio.length)],
+    status: '',
+    bio: generateRandomBio(),
     metadata: [
       {
         text: 'GitHub',

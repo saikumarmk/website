@@ -24,4 +24,10 @@ src/routes/**/+page.md
 urara.js
 
 # Things to hide
-src/styles
+src/styles/css-pokemon-gameboy.css
+src/styles/css-pokemon-gameboy.css.map
+src/styles/github.css
+src/styles/github.css.map
+src/styles/poke-gb.css 
+src/styles/fonts
+generateClasses.js
