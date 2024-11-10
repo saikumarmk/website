@@ -6,16 +6,24 @@ categories: [C]
 tags: [webassembly,emulation,C,tutorial,blog-post]
 ---
 
+
+<script>
+import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
+import Sprite from '$lib/components/pkmn/sprite.svelte'
+import Framed from '$lib/components/pkmn/frame.svelte'
+</script>
+
 # WebAssembly and Emulation - Chip 8
 
 ## Introduction
 
-### WebAssembly
-In recent times, deploying compiled languages such as C, Rust and other languages to web pages has been made possible due to WebAssembly. The technology allows for compiled code on a webpage without much code in JavaScript, which this tutorial intends to go through. In my testing, Emscripten was awkward to set up due to the variety of software required, however, proved to be straightforward when compiling.
+In recent times, deploying compiled languages such as C, Rust and other languages to web pages has been made possible due to WebAssembly. The technology allows for compiled code on a webpage without much code in JavaScript, which this tutorial intends to go through. In my testing, Emscripten was awkward to set up due to the variety of software required, however, proved to be straightforward when compiling. For the task, I built a basic emulator for Chip-8, which has few opcodes to implement.
 
-### Chip-8
-
+<Framed>
+<h3>Chip-8</h3>
 Chip-8 is an interpreted system developed in the 1970s and ran on the Chip-8 VM and could run basic video-games, including Pacman (Blinky game), Pong and Space Invaders. It often serves as an excellent introduction to emulation development as there are only 35 opcodes to implement, but still offers a glimpse into how emulators work.
+
+</Framed>
 
 ## Building the Emulator
 
@@ -38,7 +46,7 @@ A chip-8 ROM consists of readable opcodes and segments with data. Assuming your 
 - `ttKK`. Similar to n, but 8 bits over 4 bits.
   
 The standard method of detecting which opcode to use involves bitwise operations. In hexadecimal, we have some useful results. Suppose the hexadecimal representation of a number A has two digits. Then:
-```C
+```c
 int A = 0x23;
 int B;
 B = A & 0x0F;
@@ -64,7 +72,7 @@ While developing this emulator, I consulted with [CowGod's Chip-8 reference](htt
 When testing the emulator, I utilised a test ROM [https://github.com/corax89/chip8-test-rom](https://github.com/corax89/chip8-test-rom) to test necessary opcodes. Of course, not every opcode was guaranteed to be functional, so I ensured that the current opcode and next opcode would be printed. This way, I could use a hex viewer (VSCode hex viewer extension or HxD) to decipher the instruction and see the intended behaviour manually. Of course, this all depends on selecting a few core opcodes functional such as screen drawing and function calls. One example of having to debug faulty execution was finding the program halted early due to an unknown opcode instruction. The first task would be to find the opcode location via a hex viewer, then attempting to decode the neighbouring opcodes to see if I was working with code that wouldn't skip or jump to a region properly.
 
 
-### Taking use of SDL2
+### Making use of SDL2
 
 SDL2 is designed for peripheral interaction, and drawing graphics and our emulator will need to update keypress information when a key is pushed up or down, and redraw the screen when necessary. A large chunk of the code is just for modifying the display following a screen update whereas the keyboard interaction logic relies on the `SDL_PollEvent` function, which checks to see if anything has been pressed.
 
@@ -72,7 +80,7 @@ SDL2 is designed for peripheral interaction, and drawing graphics and our emulat
 
 Conveniently, SDL2 has support for WASM and works seamlessly with a simple change for the build command. By providing the argument `-s USE_SDL=2`, `emcc` compiles with SDL in mind. However, the code itself requires some modification for web-deployment, as functions are not called forever in a browser, but rather periodically. Below is the code you need to insert in the `main` function:
 
-```C
+```c
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(main_loop,0,1);
 #endif
@@ -95,3 +103,6 @@ While the initial Emscripten process proved to be lengthy and convoluted for beg
 ### Future Considerations
 
 Some JS and HTML knowledge is required to implement a drop-down menu for changing ROMs to increase useability. Additionally, having a view of registers and the RAM could also be interesting to implement.
+
+
+<PokemonSprite pokemonName="magneton", size="medium"/>

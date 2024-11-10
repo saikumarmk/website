@@ -5,7 +5,11 @@ created: 2023-02-19
 categories: [University]
 tags: [university]
 ---
-
+<script>
+import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
+import Sprite from '$lib/components/pkmn/sprite.svelte'
+import Framed from '$lib/components/pkmn/frame.svelte'
+</script>
 
 Congrats! You're a fresh university student who likely chose a course on a coin flip, with regrets yet to come. Before you spend years transferring universities because it's "practically free", have a look at this [reddit post](https://www.reddit.com/r/AusFinance/comments/y2eixt/borrowing_power_limited_due_to_hecs/), or [this one](https://www.reddit.com/r/AusFinance/comments/10fnsdv/crippled_by_hecs_debt_will_take_a_lifetime_to_pay/).
 
@@ -34,16 +38,17 @@ A commonwealth-supported position, or CSP for short, is a spot at a university w
 | Band 2: Computing, other health, allied health, visual and performing arts, built environment, engineering, science, environmental studies, surveying, professional pathway psychology, professional pathway social work, pathology | $8,021 | $1,002.63 |
 | Band 1: Agriculture, English, mathematics, statistics, education, clinical psychology, foreign languages, nursing | $3,985 | $498.13 |
 
-In case you think mathematics is the least employable major, traders at Jane Street start with a ~~salary~~ total compensation that is at least AUD 700K. 
+In case you think mathematics is the least employable major, traders at Jane Street start with a total compensation upwards of 600K.
 
 
-It's worth noting that at an undergraduate level if you're a domestic student, you are nearly always in a CSP-supported spot. However, CSP opportunities are limited, especially at the postgraduate level. Not all institutions offer CSP by default for postgraduate courses, meaning you may have to pay the full domestic fee. This is common for medicine and dentistry students who may have to pay the total cost for their course. It's worth noting you can defer full-fee course payments to HECS, though you'll hit the HECS borrowing limit.
+It's worth noting that at an undergraduate level if you're a domestic student, you are nearly always in a CSP-supported spot. However, CSP opportunities are limited at the postgraduate level. Not all institutions offer CSP by default for postgraduate courses, meaning you may have to pay the full domestic fee. This is common for medicine and dentistry students who may have to pay the total cost for their course. It's worth noting you can defer full-fee course payments to HECS, though you'll hit the HECS borrowing limit.
 
 
-## Even more conditions
+## Lifetime limit on study
 
+<Framed>
 From 2022 onwards, you are allowed a lifetime of 7 full-time university years. Any more, and you will pay the full domestic fee. In addition, there is a completion rate requirement, which means that if you don't pass at least 50 per cent of the units you have attempted, you will have to pay the total fee rate until you get that completion rate back up.
-
+</Framed>
 
 ## Moral of the story
 
@@ -58,6 +63,7 @@ If you can afford to, take university seriously. If you don't believe you can ta
 
 For the more curious, if you're a full fee paying student, domestic, or international, university tuition fees will vary across the university and degree you're enrolled in.
 
-### Changelog
 
-- Changed salary to total compensation (salary + bonuses)
+
+
+<Sprite name="medicine.rare-candy", size="medium"/>

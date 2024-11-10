@@ -6,6 +6,13 @@ categories: [Update]
 tags: []
 ---
 
+<script>
+import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
+import Sprite from '$lib/components/pkmn/sprite.svelte'
+import Framed from '$lib/components/pkmn/frame.svelte'
+</script>
+
+
 # The year in review
 
 2022 has been an interesting year, and while I started with a few failures, I ended the year on a high note, with several notable goals that I've achieved.
@@ -28,3 +35,5 @@ Sometime in September, I applied to Canva's machine learning engineer internship
 ## MAC
 
 And finally, I'm now president of the Monash Association of Coding. Which means more responsibilities, but as it's also going to be my last year in university, there's a lot I want to get done before I'm gone, especially concerning better student engagement for students in the faculty of IT, and an open source program people can get behind.
+
+<PokemonSprite pokemonName="lucario", size="medium"/>
