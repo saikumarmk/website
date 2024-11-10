@@ -26,29 +26,17 @@ export const theme: ThemeConfig = [
     text: '🌃 Night'
   },
   {
-    name: 'lofi',
-    text: '🎶 Lo-Fi'
-  },
-  {
-    name: 'lemonade',
-    text: '🍋 Lemonade'
-  },
-  {
-    name: 'cupcake',
-    text: '🧁 Cupcake'
-  },
-  {
-    name: 'garden',
-    text: '🏡 Garden'
-  },
-  {
     name: 'retro',
     text: '🌇 Retro'
   },
   {
     name: 'nord',
     text: '❄️ Nord'
-  }
+  },
+  {
+    name: 'pastel',
+    text: '🖍️ Pastel'
+  },
 ]
 
 export const head: HeadConfig = {}

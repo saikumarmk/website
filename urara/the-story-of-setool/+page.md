@@ -6,6 +6,13 @@ categories: [Python,Dash,Data visualisation]
 tags: [Python,Dash, Data visualisation,blog-post]
 ---
 
+<script>
+import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
+import Sprite from '$lib/components/pkmn/sprite.svelte'
+import Framed from '$lib/components/pkmn/frame.svelte'
+</script>
+
+
 ### Introduction
 
 During the second semester of 2020, I undertook MTH2051 - Introduction to Computational Mathematics. The details of the unit are irrelevant, it is an introductory course on designing algorithms for numerical methods. I mention this unit because it had an unfortunate form of assessment; quizzes with negative marking. The final exam consisted of 20 multiple choice questions, each of which had a negative marking attached to them. Long story short: people were upset with the immutability and unfairness of the exam, attempted to complain, and a lot of bureaucratic action that amounted to nothing.
@@ -30,6 +37,12 @@ Regarding Dash itself, the library is intuitive when being used, they have plent
 
 Heroku is a platform as a service (PaaS), meaning they’ll host your applications… for a fee, at least if it's active enough. It’s free for 450 hours a month of usage, but you have to pay for SSL, something I disagree with because TLS encryption shouldn’t be paywalled, as things, like Let’s Encrypt, exists. Anyway, it’s a decent platform for beginners and is a good introduction to deployment. I did struggle with deploying to Heroku, for a range of beginner-related issues, which I’ll write up on, but getting into Heroku sooner than later is a really good idea.
 
+<Framed>
+Side note - Heroku sucks ass, though I don't exactly blame them, because their platform ended up being used for nefarious purposes, causing them to remove their free tier. Oh well...
+</Framed>
+
 ### Changes, and Reception
 
 Throughout the two years I’ve been working on SETool, I’ve continuously thought about rewriting the code in R and implementing a dashboard that can be turned into a static site, or using `d3.js` and rewriting it to be a front-end project. Overall, people find it very intuitive to use, and I’ve recorded over 1000 unique user visits, which is pretty amazing.
+
+<PokemonSprite pokemonName="porygon2", size="medium"/>

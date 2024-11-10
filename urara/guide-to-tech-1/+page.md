@@ -6,7 +6,11 @@ categories: [University, Career]
 tags: [university, career, playbook]
 ---
 
-
+<script>
+import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
+import Sprite from '$lib/components/pkmn/sprite.svelte'
+import Framed from '$lib/components/pkmn/frame.svelte'
+</script>
 
 
 ## Introduction
@@ -16,7 +20,10 @@ Welcome to The Grad/Intern Playbook! This is a set of articles I wrote documenti
 
 ![The MAC committee of 2023](/assets/guide-to-tech/mac_committee_2023.png)
 
+<Framed>
 The best committee I could have asked for...
+</Framed>
+
 
 ### Inspirations
 
@@ -28,7 +35,10 @@ There already exist articles on getting a grad/intern role in the tech industry,
 
 
 ### Preface
+<Framed>
 Before you read further, this will be an extremely opinionated article that won't shy away from making concrete points. So, if you've got an eye for making real big bucks out of university (in Australia), here's my guide to software engineering as a university student in Australia. This will also be split into multiple parts, with the first part being an introduction to some of the more prominent companies in Australia and the timeline for when you apply to these companies.
+</Framed>
+
 
 ### What do you want out of tech?
 
@@ -109,7 +119,6 @@ Many companies will post their intern/graduate applications on job boards. Some 
 - LinkedIn, especially using [Boolean Search](https://www.linkedin.com/help/linkedin/answer/a524335/using-boolean-search-on-linkedin?lang=en)
 - [GradAustralia](https://gradaustralia.com.au/)
 - [GradConnection](https://au.gradconnection.com/)
-- [MAC's Internship/Graduate Board](https://monashcoding.notion.site/Opportunities-2024-f0e18b9f8621407fabd34a2c96103d23)
 - [AusJobs/Australia-Tech-Internship](https://github.com/AusJobs/Australia-Tech-Internship)
 
 I'd recommend noting companies and what they do so that you can apply in future years. Sometimes, you may find a company that asks that you be a penultimate student.
@@ -117,6 +126,13 @@ I'd recommend noting companies and what they do so that you can apply in future 
 ### Paid and Unpaid Internships
 
 In Australia, unpaid internships are considered [unlawful if the intern is considered to be doing "productive" work](https://www.fairwork.gov.au/tools-and-resources/fact-sheets/unpaid-work/unpaid-work-unpaid-work). If you're undertaking work experience that is considered vocational, i.e contributes to your education, the internship is considered lawful. For this reason, teachers and nurses embark on unpaid internships. So, internships that you seek out should be paid, and some of the previously mentioned companies pay their interns a very good amount. Some services require you to pay for internship experience; these are illegal and predatory.
+
+
+<Framed>
+
+So typically internships offered as part of some university capstone unit aren't illegal, and if they do offer any payment, it's typically through a tax-free scholarship.
+
+</Framed>
 
 ## The timeline
 
@@ -161,12 +177,14 @@ Some students utilise more extended degrees to get more chances for internships.
 
 Three years is short for someone with no prior coding ability to become competent enough. However, it's possible, assuming you do a bunch of development in your spare time. I've heard advice from others regarding underloading/overloading, and the consensus is that it's okay to underload, as 4 units while managing other commitments or working towards a career can be very daunting. There's genuinely no rush to finish early, as you'll be less prepared for whatever comes after.
 
+
 To summarise, you may extend the amount of time you have till you find an internship by:
 
 - Underloading so that you finish your degree later 
 - Doing a double degree or an honours year on top of your degree
 - Pretend that you graduate earlier using an honours year or double degree and say you intend to drop it.
 - I don't endorse this, but you can also fake a penultimate year to stack multiple internships. What you get out of this is beyond me, besides getting a feel for where you want to go.
+
 
 ### Blacklisting
 
@@ -288,4 +306,7 @@ There is much to note regarding landing a role in the tech industry as a univers
 
 To summarise this article, actively work to learn more about the industry and programming, talk to many people, and participate in events throughout the university. But most importantly, push your own limits, challenge your beliefs by trying, and if that isn't enough, remember [Gojo's words,](https://youtu.be/zgMYPTa_1G8?t=195) and [imagine a future version of yourself who's freely surpassed your limits.](https://youtu.be/Hk_xBxYmIqY?t=68) If you're interested in learning more, you can always reach out to me :)
 
+
 ![A future me (Domain Expansion) can surpass his limit](/assets/guide-to-tech/surpass.jpg)
+
+<PokemonSprite pokemonName="marshadow-gen7" size="medium"/>

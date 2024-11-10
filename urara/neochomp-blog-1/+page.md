@@ -7,6 +7,11 @@ tags: [C,Python,SBC]
 ---
 
 
+<script>
+import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
+import Sprite from '$lib/components/pkmn/sprite.svelte'
+import Framed from '$lib/components/pkmn/frame.svelte'
+</script>
 
 # Origins, and starting off
 
@@ -68,7 +73,10 @@ And so, our goose chase for this phantom SBC which we couldn’t even be sure if
 
 ![“Hell yeah looks like a mostly shameless clone” - Shin](/assets/neochomp/blog-1/banana.png)
 
+<Framed>
 “Hell yeah looks like a mostly shameless clone” - Shin
+</Framed>
+
 
 Now, the Banana had some heating issues, though that was definitely the least of our concerns. At this time, a cheap little SBC called the Radxa Zero came to our attention, for an insanely affordable USD 30. It’s also important to note that this was a quad-core SBC, which was on par with the Raspberry Pi 4, for a quarter of the price, and could go up to 4GB RAM (Starting at 512 Mb). We were dealing with one beast of a board. So, we put in an order for all the parts.
 
@@ -81,8 +89,9 @@ As far as major costs were concerned, we were well under $100 per potential prod
 The engineering process always consists of terrible ideas that somehow made it to our brains.
 
 ![The hardware experience. None of these things was actual concerns for us.](/assets/neochomp/blog-1/experience.png)
-
-The hardware experience. None of these things was actual concerns for us.
+<Framed>
+The hardware experience. Most of the project was fine and we didn't have that many hiccups.
+</Framed>
 
 ## Cool Ideas I
 
@@ -97,9 +106,4 @@ We found a [website](https://vic.transportsg.me/mockups) that also creates mocku
 Another idea we had was having events trigger on google calendar events. This [project](https://www.youtube.com/watch?v=BIGsW0TYSuU&ab_channel=VEEBProjects) creates coffee automatically at certain times, and it would be very interesting to have the display be programmed in advance.
 
 
-As a quick preview for what's to come, here's a cute GIF of a Pikachu dancing on the display.
-
-<video controls>
-  <source src="https://cdn.discordapp.com/attachments/953610508349616138/1015531883985113128/VID_20220903_180049.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<PokemonSprite pokemonName="meloetta", size="large"/>
