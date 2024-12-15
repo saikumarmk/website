@@ -23,11 +23,11 @@ The anger over the inaction raised attention to the SETU, a set of statistics pu
 
 The actual data scraped ranged over nearly all units offered at Monash University, along with SETU completion, the number of people doing the unit, 8-13 learning outcomes, each ranked from 1 to 5, and other less important data points. My first attempt at a dashboard was a simple radar chart, seen below.
 
-![SETool v1. It's not very pretty...](/assets/setool_v1.png)
+![SETool v1. It's not very pretty...](/assets/setool/setool_v1.png)
 
 While a radar chart gives you a generous idea of the performance of a unit, it can’t be easily compared to another unit, and it gives off the feeling of taking up too much space (which, it certainly does!). At this point, I received a recommendation to use a data table with shaded entries, visualising the score, with red being worse, and green being better. So, back to the drawing board, it was. Until I stumbled across the DataTable, an interactive and insanely customisable component that could colour in my cells. The conditional filtering was coded across the colour range of 2 to 5 and works surprisingly fast. All the other details such as unit name, code, invited and responded numbers didn’t require any modifications and I was done with my dashboard. Well, not really, I ended up adding a comparison table where you could drill down units and compare them against each other.
 
-![SETool v2's comparison bar. Much better!](/assets/setool_v2.png)
+![SETool v2's comparison bar. Much better!](/assets/setool/setool_v2.png)
 
 ### On Dash
 
