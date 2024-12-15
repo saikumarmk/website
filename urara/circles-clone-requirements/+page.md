@@ -24,7 +24,7 @@ An immediate enhancement I can see is a better handbook, baked into the course p
 - An explicit recommendation system (using the former, and your other units)
 - The explicit cost of units, pulled from the SCA band and an up-to-date cost calculator
 - Gives you proper, strictly formatted requisites for a unit that are easier to interpret 
-    - Think, of a DAG representing the units required to unlock a unit
+- Think, of a DAG representing the units required to unlock a unit
 
 These features fall out from the requisite data we already possess.
 
@@ -44,7 +44,7 @@ Some things I think can be done:
 Some more features off the top of my head:
 
 - Auto-planning with operations research (basically 2SAT the problem) similar to how [Circles does it](https://devsoc.atlassian.net/wiki/spaces/C/pages/754356/Auto-Planning)
-    - This requires representing the requisites as an AST, which is how they unlock new units when you add units
+- This requires representing the requisites as an AST, which is how they unlock new units when you add units
 - The semester planner; I don't think this is a big priority since MonPlan does a good job at this
 - An API for querying; this is just a natural consequence of hosting stuff on a site and having an API from which to request resources. 
 

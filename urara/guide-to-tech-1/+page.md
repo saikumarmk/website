@@ -121,7 +121,7 @@ Many companies will post their intern/graduate applications on job boards. Some 
 - [GradConnection](https://au.gradconnection.com/)
 - [AusJobs/Australia-Tech-Internship](https://github.com/AusJobs/Australia-Tech-Internship)
 
-I'd recommend noting companies and what they do so that you can apply in future years. Sometimes, you may find a company that asks that you be a penultimate student.
+I'd recommend noting companies and what they do so that you can apply in future years. In Australia, most companies take on penultimate students for internships, though there are some companies that take on pre-penultimate students.
 
 ### Paid and Unpaid Internships
 
@@ -130,13 +130,14 @@ In Australia, unpaid internships are considered [unlawful if the intern is consi
 
 <Framed>
 
-So typically internships offered as part of some university capstone unit aren't illegal, and if they do offer any payment, it's typically through a tax-free scholarship.
+So typically internships offered as part of some university capstone unit aren't illegal (The IBL program at Monash for instance), and if they do offer any payment, it's typically through a tax-free scholarship.
 
 </Framed>
 
 ## The timeline
 
-Students typically do three or four-year degrees, whether it's a standard degree, a double degree, or an honours degree. The penultimate year is before your final year when you apply for internships. If unsuccessful, you can always apply for graduate roles in your last year.
+Students typically do three or four-year degrees, whether it's a standard degree, a double degree, or an honours degree. The penultimate year is before your final year when you apply for internships. If unsuccessful, you can always apply for graduate roles in your last year. That's not including changes to your 
+progression, as many students typically switch degrees, pick up a second degree, or underload.
 
 
 ### Does the university matter?
@@ -202,7 +203,7 @@ Some other programs that may be of note include:
 - ~~Akuna's winter internship~~
 - Big 4 insight programs
 
-Even so, you should be okay with finding an internship in your first year. It's exceptional if you do! It's also common to not know that these internships exist, as they sometimes open at the start of the year when you may have yet to begin classes. Smaller companies may also be happy to take you on as an intern or as a part-time developer if you're enthusiastic.
+Even so, you should be okay with not finding an internship in your first year. It's exceptional if you do! It's also common to not know that these internships exist, as they sometimes open at the start of the year when you may have yet to begin classes. Smaller companies may also be happy to take you on as an intern or as a part-time developer if you're enthusiastic.
 
 I suggest drilling down on your programming classes, as they will evolve in difficulty. Another aspect should be learning about different fields in programming. The introductory courses teach Python or C, which are good languages, but don't scratch the surface if you're interested in web development or another field. Some suggestions include:
 
@@ -234,7 +235,7 @@ Two invaluable outlets for students through the university would be tutoring the
 
 Overall, I'd recommend doing the following:
 
-- Attend any networking nights that societies advertise
+- Attend any networking nights that societies advertise. Make sure you talk with other students and not just the recruiters!!
 - Start looking into Leetcode and consider the Blind75/Neetcode150 set of problems
 - Continue working on any personal projects you may have
 - Participate in a hackathon with friends
@@ -245,7 +246,7 @@ As for potential internship outlets, if you're still considered pre-penultimate,
 
 ### Third year /  Penultimate year
 
-By the time you've reached your penultimate year, you will have had quite an amount of experience from clubs, writing code in your own time, hackathons, research, tutoring, or a pre-penultimate internship. The goal is now to smash your internship interviews so that you'll be set for the summer. The big tech companies release their internship applications between January and March, and quantitative trading firms follow a similar timeline. Non-technical companies open up later; for instance, the banks open around mid-year. It is worth noting that ML at Canva only opened in September, so there are always exceptions to the rule of thumb.
+By the time you've reached your penultimate year, you will have had quite an amount of experience from clubs, writing code in your own time, hackathons, research, tutoring, or a pre-penultimate internship. The goal is now to smash your internship interviews so that you'll be set for the summer. The big tech companies release their internship applications between January and March, and quantitative trading firms follow a similar timeline. Non-technical companies open up later; for instance, the banks open around mid-year. It is worth noting that ML at Canva only opened in September (in 2022, it's back to normal), so there are always exceptions to the rule of thumb.
 
 So, the game plan is to have your resume ready (DM me if you want your resume vetted!), be familiar with technical assessments, have a collection of stories you can format using STAR, and have a lot of willpower. These interviews are tiring, as applying to upwards of 10 companies during the semester and progressing is rather taxing. It's also worth it that you use it sooner rather than later, as some of these companies receive upwards of 10k applications. It may be a while before your application is processed, by which point the number of spots would have filled up.
 
