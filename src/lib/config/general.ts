@@ -10,28 +10,8 @@ export const theme: ThemeConfig = [
     text: '🧛 Dark'
   },
   {
-    name: 'valentine',
-    text: '🌸 Valentine'
-  },
-  {
-    name: 'aqua',
-    text: '💦 Aqua'
-  },
-  {
-    name: 'synthwave',
-    text: '🌃 Synthwave'
-  },
-  {
-    name: 'night',
-    text: '🌃 Night'
-  },
-  {
     name: 'retro',
     text: '🌇 Retro'
-  },
-  {
-    name: 'nord',
-    text: '❄️ Nord'
   },
   {
     name: 'pastel',
@@ -44,12 +24,12 @@ export const head: HeadConfig = {}
 export const header: HeaderConfig = {
   nav: [
     {
-      text: 'About',
+      text: 'About Me',
       link: '/about'
     },
     {
-      text: 'Projects',
-      link: '/projects'
+      text: 'Portfolio',
+      link: '/portfolio'
     },
     {
       text: 'Documents',
