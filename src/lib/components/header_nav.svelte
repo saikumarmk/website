@@ -46,7 +46,7 @@
     on:click={() => window.scrollTo(0, 0)}
     class:hidden={scrollY < 32 || !title}
     class="swap-on btn btn-ghost text-base font-normal normal-case transition-all duration-200">
-    {title}
+    {JSON.stringify(title) === '{}' ? '' : title}
   </button>
   <ul class:hidden={scrollY > 64 && title} class="swap-off menu menu-horizontal p-0">
     {#each nav as { text, link, children }}
