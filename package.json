@@ -92,6 +92,6 @@
     "force-graph": "^1.43.2",
     "rehype-katex-svelte": "^1.2.0",
     "remark-math": "3.0.0",
-    "sharp": "^0.34.1"
+    "sharp": "0.32.6"
   }
 }
