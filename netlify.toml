@@ -1,5 +1,5 @@
 [build]
-command = "pnpm approve-builds && npx pnpm i --store=node_modules/.pnpm-store && npx pnpm build"
+command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm build"
 publish = "build"
 [build.environment]
 NPM_FLAGS = "--version"
