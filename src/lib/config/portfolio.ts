@@ -10,7 +10,6 @@ export const projects: Project[] = [
             'A recreation of the Pokemon Red ELO tournament using the PKMN engine.',
         majorProject: false,
         badges: ['Python', 'ASM'],
-        img: 'https://github.com/weLoveTrainz/MiniMelbourne/raw/main/images/bullet-train.png',
         link: 'https://github.com/saikumarmk/pokered-trainer-tournament'
     },
     {
@@ -89,7 +88,6 @@ export const projects: Project[] = [
             'A live train map of Melbourne designed with FastAPI and React.',
         majorProject: false,
         badges: ['Python', 'React'],
-        img: 'https://github.com/weLoveTrainz/MiniMelbourne/raw/main/images/bullet-train.png',
         link: 'https://github.com/weLoveTrainz/MiniMelbourne'
     },
     {
@@ -101,7 +99,6 @@ export const projects: Project[] = [
             'A toy programming language designed in Rust.',
         majorProject: false,
         badges: ['Rust'],
-        img: 'https://github.com/saikumarmk/uwucode/raw/main/images/uwucode_logo.png',
         link: 'https://github.com/saikumarmk/uwucode'
     },
     {
@@ -113,7 +110,6 @@ export const projects: Project[] = [
             'A visualisation tool for unit scores.',
         majorProject: false,
         badges: ['Python'],
-        img: 'https://github.com/saikumarmk/SETool/raw/main/assets/logo.png',
         link: 'https://github.com/saikumarmk/SETool'
     },
     {
@@ -125,8 +121,17 @@ export const projects: Project[] = [
         badges: ['C', 'WASM'],
         description:
             'A CHIP-8 emulator designed in C that can be targetted for the web',
-        img: 'https://github.com/saikumarmk/web-voltchip/raw/main/assets/logo.png',
         link: 'https://github.com/saikumarmk/web-voltchip'
+    },
+    {
+        id: 'acmonaghan',
+        name: "acmonaghan.github.io",
+        tags: ['THREE', 'web-dev'],
+        feature: '',
+        majorProject: false,
+        badges: ['THREE.js'],
+        description: 'A CV site built on eldoraboo/portable-portfolio with THREE.js rendering the background',
+        link: 'https://github.com/acmonaghan/acmonaghan.github.io'
     }
 ]
 
@@ -171,7 +176,7 @@ export const experience: Experience[] = [
         ],
         tags: ['Work'],
         badges: ['Intern'],
-        buttons: [{ label: 'Link', href: 'https://canva.com' }]
+        buttons: [{ label: 'Link', href: 'https://www.digicor.com.au/' }]
     },
     {
         id: 'monash-ra-winter',
@@ -182,7 +187,7 @@ export const experience: Experience[] = [
         tags: ['Work'],
         description: 'Developed a genetic programming framework using simulation in Julia to address a game theoretic problem called paramless. The problem studies function valued traits, specifically in the context of journal/author dynamics.',
         badges: ['Research Assistant'],
-        buttons: [{ label: 'Link', href: 'https://example.com' }]
+        buttons: [{ label: 'Link', href: 'https://www.monash.edu/' }]
     },
     {
         id: 'monash-ra-summer',
@@ -193,7 +198,7 @@ export const experience: Experience[] = [
         img: '../assets/monash.jpeg',
         tags: ['Work'],
         badges: ['Research Assistant'],
-        buttons: [{ label: 'Link', href: 'https://example.com' }]
+        buttons: [{ label: 'Link', href: 'https://www.monash.edu/' }]
     },
     {
         id: 'monash-bads-hons',
@@ -207,7 +212,7 @@ export const experience: Experience[] = [
         tags: ['Education'],
         duration: "February 2020 - December 2023",
         badges: ['Honours'],
-        buttons: [{ label: 'Link', href: 'https://example.com' }]
+        buttons: [{ label: 'Link', href: 'https://www.monash.edu/' }]
     },
     {
         id: 'mac-president',
@@ -221,6 +226,6 @@ export const experience: Experience[] = [
             "Conducted 4 successful coding workshops in Python, covering topics such as FastAPI, discord.py, and web development, reaching over 200 attendees"
         ],
         badges: ['President'],
-        buttons: [{ label: 'Link', href: 'https://example.com' }]
+        buttons: [{ label: 'Link', href: 'https://www.monashcoding.com/' }]
     }
 ];
