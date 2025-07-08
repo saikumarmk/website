@@ -23,11 +23,8 @@
 
 <section id="projects" class="max-w-3xl mx-auto pb-36 px-4 text-center">
   <!-- heading -->
-  <div class="flex items-center gap-4 mb-8 px-4">
-    <div class="flex items-center gap-2">
-      <span class="font-extrabold">Projects</span>
-    </div>
-    <hr class="flex-grow border-t" />
+  <div class="text-left mb-6">
+    <h2 class="text-xl font-bold mb-4">Projects</h2>
   </div>
 
   <!-- filter buttons -->
@@ -42,7 +39,7 @@
   </div>
 
   <!-- projects grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
+  <div class="grid gap-5 px-4" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
     {#each filteredProjects as project (project.id)}
       <div in:fly={{ y: 24, duration: 250 }} class="rounded-lg shadow p-4 bg-base-100 h-full flex flex-col">
         <!-- GitHub link icon (if link exists) -->
