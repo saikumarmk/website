@@ -14,7 +14,7 @@
   const byCategory = (tag: string) => allEntries.filter(e => e.tags.includes(tag))
 </script>
 
-<section id="experience" class="max-w-3xl mx-auto pb-36 px-4 text-center">
+<section id="experience" class="relative z-10 max-w-3xl mx-auto pb-36 px-4 text-center">
   <!-- top heading -->
   <div class="text-left mb-6">
     <h2 class="text-xl font-bold mb-4">My Portfolio</h2>

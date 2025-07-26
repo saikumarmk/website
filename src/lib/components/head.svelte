@@ -8,6 +8,8 @@
 </script>
 
 <svelte:head>
+  <!---post stuff is here-->
+
   <meta name="author" content={site.author?.name} />
   {#if post}
     <link rel="canonical" href={site.protocol + site.domain + post.path} />

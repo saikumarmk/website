@@ -16,7 +16,14 @@
   let pin: boolean = true
   let percent: number
   let [scrollY, lastY] = [0, 0]
+  import { backgroundMode } from '$lib/stores/background'
+  import { get } from 'svelte/store'
 
+  const options = [
+    { value: 'none', label: 'No Background' },
+    { value: 'three', label: 'Astro Background' },
+    { value: 'poke', label: 'Pokémon Background' }
+  ]
   storedTitle.subscribe(storedTitle => (title = storedTitle as string))
 
   $: if (browser && currentTheme) {
@@ -70,6 +77,11 @@
             <span class="i-heroicons-outline-search" />
           </button>
         {/if}
+        <select class="select select-bordered select-sm" bind:value={$backgroundMode}>
+          {#each options as opt}
+            <option value={opt.value}>{opt.label}</option>
+          {/each}
+        </select>
         <div id="change-theme" class="dropdown dropdown-end">
           <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
           <!-- reference: https://github.com/saadeghi/daisyui/issues/1285 -->
