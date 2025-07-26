@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
   import * as THREE from 'three'
+  import cssText from '../../../styles/pokesprite-pokemon-gen8.css?raw'
 
   let container: HTMLDivElement
   let renderer: THREE.WebGLRenderer
@@ -36,17 +37,6 @@
   class PokemonSpriteManager {
     async loadSpriteData(): Promise<void> {
       try {
-        let cssText: string
-
-        try {
-          // First try: relative path
-          const response = await fetch('/src/styles/pokesprite-pokemon-gen8.txt')
-          if (!response.ok) throw new Error(`HTTP ${response.status}`)
-          cssText = await response.text()
-        } catch (fetchError) {
-          console.warn('Local fetch failed, trying alternatives...', fetchError)
-        }
-
         this.parseCSSSprites(cssText)
 
         if (sprites.length === 0) {

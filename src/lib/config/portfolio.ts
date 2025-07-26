@@ -131,7 +131,8 @@ export const projects: Project[] = [
         majorProject: false,
         badges: ['THREE.js'],
         description: 'A CV site built on eldoraboo/portable-portfolio with THREE.js rendering the background',
-        link: 'https://github.com/acmonaghan/acmonaghan.github.io'
+        link: 'https://github.com/acmonaghan/acmonaghan.github.io',
+        buttons: [{ label: 'Website', href: 'https://acmonaghan.github.io' }]
     }
 ]
 
