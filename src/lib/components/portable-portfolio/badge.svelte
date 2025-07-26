@@ -18,3 +18,9 @@
 <span class={classes}>
   {displayText}
 </span>
+
+<style>
+  :global(*) {
+    z-index: 2;
+  }
+</style>

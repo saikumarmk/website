@@ -40,16 +40,19 @@
 <Head />
 
 <div class="flex flex-col flex-nowrap justify-center xl:flex-row xl:flex-wrap h-feed">
-  <div
-    in:fly={{ x: 25, duration: 300, delay: 500 }}
-    out:fly={{ x: 25, duration: 300 }}
-    class="flex-1 w-full max-w-screen-md order-first mx-auto xl:mr-0 xl:ml-8 xl:max-w-md">
-    <Profile />
-  </div>
+  <!-- Profile Section -->
+
+  <!-- Tags Section -->
   <div
     in:fly={{ x: -25, duration: 300, delay: 500 }}
     out:fly={{ x: -25, duration: 300 }}
     class="flex-1 w-full max-w-screen-md xl:order-last mx-auto xl:ml-0 xl:mr-8 xl:max-w-md">
+    <div
+      in:fly={{ x: 25, duration: 300, delay: 500 }}
+      out:fly={{ x: 25, duration: 300 }}
+      class="flex-1 w-full max-w-screen-md order-first mx-auto xl:mr-0 xl:ml-8 xl:max-w-md">
+      <Profile />
+    </div>
     {#if allTags && Object.keys(allTags).length > 0}
       <div
         class="flex xl:flex-wrap gap-2 overflow-x-auto xl:overflow-x-hidden overflow-y-hidden max-h-24 my-auto xl:max-h-fit max-w-fit xl:max-w-full pl-8 md:px-0 xl:pl-8 xl:pt-8">
@@ -66,7 +69,8 @@
       </div>
     {/if}
   </div>
-  <div class="flex-none w-full max-w-screen-md mx-auto xl:mx-0">
+  <!-- Posts Section -->
+  <div class="flex-none w-full max-w-screen-lg mx-auto xl:mx-0">
     {#key posts}
       <!-- {:else} is not used because there is a problem with the transition -->
       {#if loaded && posts.length === 0}

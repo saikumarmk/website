@@ -3,20 +3,24 @@ import type { ThemeConfig, HeadConfig, HeaderConfig, FooterConfig, DateConfig, F
 export const theme: ThemeConfig = [
   {
     name: 'cmyk',
-    text: '🖨 Light'
+    text: 'Light'
   },
   {
     name: 'dracula',
-    text: '🧛 Dark'
+    text: 'Dark'
   },
   {
     name: 'retro',
-    text: '🌇 Retro'
+    text: 'Retro'
   },
   {
     name: 'pastel',
-    text: '🖍️ Pastel'
+    text: 'Pastel'
   },
+  {
+    name: 'black',
+    text: 'Black'
+  }
 ]
 
 export const head: HeadConfig = {}

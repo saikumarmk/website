@@ -1,9 +1,10 @@
 ---
-title: Approximating pimanrules Pokemon Red ELO World
+title: Approximating pimanrules Pokemon Red Elo World
 author: Sai kumar Murali Krishnan
 created: 2024-12-15 
 categories: [assembly, pokemon, simulation]
 tags: [pokemon, simulation]
+summary: "A brief introduction to pkmn/engine"
 ---
 
 <script>

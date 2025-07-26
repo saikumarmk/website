@@ -91,8 +91,15 @@
     "@skeletonlabs/skeleton": "^1.12.0",
     "d3": "^7.9.0",
     "force-graph": "^1.43.2",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.22",
+    "marked": "^16.0.0",
+    "mermaid": "^11.8.1",
     "rehype-katex-svelte": "^1.2.0",
+    "rehype-pretty-code": "^0.14.1",
+    "rehype-stringify": "^10.0.1",
     "remark-math": "3.0.0",
+    "remark-rehype": "^11.1.2",
     "sharp": "^0.34.1"
   }
 }

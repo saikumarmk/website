@@ -4,6 +4,7 @@
 
   // Data
   import ForceGraph from 'force-graph'
+  import { onDestroy } from 'svelte'
   import { forceManyBody, forceLink, forceCollide } from 'd3'
   import * as data from '../../resources/network2024.json'
 
@@ -331,9 +332,30 @@
         populateUnitInfo(data.general_info[node.id])
       })
   }
+  onDestroy(() => {
+    if (Graph) {
+      // Clear graph data and remove forces to break circular refs
+      Graph.graphData({ nodes: [], links: [] })
+      Graph.d3Force('charge', null)
+      Graph.d3Force('link', null)
+      Graph.d3Force('collide', null)
+      Graph.onNodeHover(null)
+      Graph.onNodeClick(null)
+      Graph.nodeCanvasObject(() => {})
+      Graph.nodeCanvasObjectMode(() => {})
+
+      Graph = null
+    }
+
+    // Explicitly clear large datasets
+    if (data.nodes) data.nodes.length = 0
+    if (data.links) data.links.length = 0
+    if (data.general_info) Object.keys(data.general_info).forEach(k => delete data.general_info[k])
+    if (data.index_map) Object.keys(data.index_map).forEach(k => delete data.index_map[k])
+  })
 </script>
 
-<div class="container">
+<div class="container relative z-10">
   <span class="toggle-button" on:click={toggleLeftTab}>
     <span class={showLeftTab ? 'i-heroicons-solid-chevron-double-left' : 'i-heroicons-solid-chevron-double-right'}></span>
   </span>
@@ -432,7 +454,7 @@
     {/if}
   </div>
 
-  <div class="graph-column">
+  <div class="graph-column relative z-10">
     <div id="graph-container" use:GraphAction />
   </div>
 </div>
