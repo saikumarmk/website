@@ -83,7 +83,8 @@
             <span class="absolute -bottom-1 text-[10px] opacity-0 group-hover:opacity-60 transition-opacity">⌘K</span>
           </button>
         {/if}
-        <select class="select select-bordered select-sm" bind:value={$backgroundMode}>
+        <!-- Background selector - hidden on mobile -->
+        <select class="select select-bordered select-sm hidden md:inline-flex" bind:value={$backgroundMode}>
           {#each options as opt}
             <option value={opt.value}>{opt.label}</option>
           {/each}

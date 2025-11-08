@@ -1,127 +1,236 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import { fly } from 'svelte/transition'
-  import { page } from '$app/stores'
-  import { browser } from '$app/environment'
-  import { posts as storedPosts, tags as storedTags } from '$lib/stores/posts'
-  import { title as storedTitle } from '$lib/stores/title'
+  import { posts as storedPosts } from '$lib/stores/posts'
+  import { site } from '$lib/config/site'
+  import { getReadingTime } from '$lib/utils/reading-time'
   import Head from '$lib/components/head.svelte'
   import Footer from '$lib/components/footer.svelte'
-  import Post from '$lib/components/post_card.svelte'
-  import Profile from '$lib/components/index_profile.svelte'
-
-  let allPosts: Urara.Post[]
-  let allTags: string[]
-  let loaded: boolean
-  let [posts, tags, years]: [Urara.Post[], string[], number[]] = [[], [], []]
-
-  storedTitle.set('')
-
-  $: storedPosts.subscribe(storedPosts => (allPosts = storedPosts.filter(post => !post.flags?.includes('unlisted'))))
-
-  $: storedTags.subscribe(storedTags => (allTags = storedTags as string[]))
-
-  $: if (posts.length > 1) years = [new Date(posts[0].published ?? posts[0].created).getFullYear()]
-
-  $: if (tags) {
-    posts = !tags ? allPosts : allPosts.filter(post => tags.every(tag => post.tags?.includes(tag)))
-    if (browser && window.location.pathname === '/')
-      window.history.replaceState({}, '', tags.length > 0 ? `?tags=${tags.toString()}` : `/`)
-  }
-
-  onMount(() => {
-    if (browser) {
-      if ($page.url.searchParams.get('tags')) tags = $page.url.searchParams.get('tags')?.split(',') ?? []
-      loaded = true
+  
+  let allPosts: Urara.Post[] = []
+  
+  storedPosts.subscribe(posts => {
+    if (Array.isArray(posts)) {
+      allPosts = posts.filter(post => !post.flags?.includes('unlisted'))
     }
   })
+  
+  // Featured posts (you can add a 'featured' flag to posts later)
+  $: featuredPosts = allPosts.slice(0, 3)
+  
+  // Latest 5 posts
+  $: latestPosts = allPosts.slice(0, 5)
 </script>
 
 <Head />
 
-<div class="flex flex-col flex-nowrap justify-center xl:flex-row xl:flex-wrap h-feed">
-  <!-- Profile Section -->
-
-  <!-- Tags Section -->
-  <div
-    in:fly={{ x: -25, duration: 300, delay: 500 }}
-    out:fly={{ x: -25, duration: 300 }}
-    class="flex-1 w-full max-w-screen-md xl:order-last mx-auto xl:ml-0 xl:mr-8 xl:max-w-md">
-    <div
-      in:fly={{ x: 25, duration: 300, delay: 500 }}
-      out:fly={{ x: 25, duration: 300 }}
-      class="flex-1 w-full max-w-screen-md order-first mx-auto xl:mr-0 xl:ml-8 xl:max-w-md">
-      <Profile />
-    </div>
-    {#if allTags && Object.keys(allTags).length > 0}
-      <div
-        class="flex xl:flex-wrap gap-2 overflow-x-auto xl:overflow-x-hidden overflow-y-hidden max-h-24 my-auto xl:max-h-fit max-w-fit xl:max-w-full pl-8 md:px-0 xl:pl-8 xl:pt-8">
-        {#each allTags as tag}
-          <button
-            id={tag}
-            on:click={() => (tags.includes(tag) ? (tags = tags.filter(tagName => tagName != tag)) : (tags = [...tags, tag]))}
-            class:!btn-secondary={tags.includes(tag)}
-            class:shadow-lg={tags.includes(tag)}
-            class="btn btn-sm btn-ghost normal-case border-dotted border-base-content/20 border-2 mt-4 mb-8 xl:m-0">
-            #{tag}
-          </button>
-        {/each}
-      </div>
-    {/if}
-  </div>
-  <!-- Posts Section -->
-  <div class="flex-none w-full max-w-screen-lg mx-auto xl:mx-0">
-    {#key posts}
-      <!-- {:else} is not used because there is a problem with the transition -->
-      {#if loaded && posts.length === 0}
-        <div
-          in:fly={{ x: 100, duration: 300, delay: 500 }}
-          out:fly={{ x: -100, duration: 300 }}
-          class="bg-base-300 text-base-content shadow-inner text-center md:rounded-box p-10 -mb-2 md:mb-0 relative z-10">
-          <div class="prose items-center">
-            <h2>
-              Not found: [{#each tags as tag, i}
-                '{tag}'{#if i + 1 < tags.length},{/if}
-              {/each}]
-            </h2>
-            <button on:click={() => (tags = [])} class="btn btn-secondary">
-              <span class="i-heroicons-outline-trash mr-2" />
-              tags = []
-            </button>
-          </div>
+<div class="min-h-screen">
+  <!-- Hero Section -->
+  <div class="hero min-h-[50vh] bg-gradient-to-br from-primary/5 to-secondary/5 border-b border-base-content/10">
+    <div class="hero-content text-center max-w-3xl">
+      <div>
+        {#if site.author.avatar}
+          <img 
+            src={site.author.avatar} 
+            alt={site.author.name}
+            class="w-24 h-24 rounded-full shadow-xl mx-auto mb-6"
+          />
+        {/if}
+        <h1 class="text-5xl font-bold mb-4">Hi, I'm {site.author.name}</h1>
+        <p class="text-xl opacity-80 mb-6">{@html site.author.bio}</p>
+        <p class="text-lg opacity-60 max-w-2xl mx-auto">
+          Applied Scientist at Canva working on generative AI and diffusion models. 
+          I write about machine learning, tech careers, and software engineering.
+        </p>
+        
+        <div class="flex gap-3 justify-center flex-wrap mt-8">
+          <a href="/about" class="btn btn-primary gap-2">
+            <span class="i-heroicons-outline-user w-4 h-4"></span>
+            Learn More
+          </a>
+          <a href={site.author.metadata?.[0]?.link} target="_blank" class="btn btn-outline gap-2">
+            <span class="i-heroicons-outline-code-bracket w-4 h-4"></span>
+            GitHub
+          </a>
         </div>
-      {/if}
-      <main
-        class="flex flex-col relative bg-base-100 md:bg-transparent md:gap-8 z-10"
-        itemprop="mainEntityOfPage"
-        itemscope
-        itemtype="https://schema.org/Blog">
-        {#each posts as post, index}
-          {@const year = new Date(post.published ?? post.created).getFullYear()}
-          {#if !years.includes(year)}
-            <div
-              in:fly={{ x: index % 2 ? 100 : -100, duration: 300, delay: 500 }}
-              out:fly={{ x: index % 2 ? -100 : 100, duration: 300 }}
-              class="divider my-4 md:my-0">
-              {years.push(year) && year}
-            </div>
-          {/if}
-          <div
-            in:fly={{ x: index % 2 ? 100 : -100, duration: 300, delay: 500 }}
-            out:fly={{ x: index % 2 ? -100 : 100, duration: 300 }}
-            class="rounded-box transition-all duration-500 ease-in-out hover:z-30 hover:shadow-lg md:shadow-xl md:hover:shadow-2xl md:hover:-translate-y-0.5">
-            <Post {post} preview={true} loading={index < 5 ? 'eager' : 'lazy'} decoding={index < 5 ? 'auto' : 'async'} />
-          </div>
-        {/each}
-      </main>
-      <div
-        class:hidden={!loaded}
-        class="sticky bottom-0 md:static md:mt-8"
-        in:fly={{ x: posts.length + (1 % 2) ? 100 : -100, duration: 300, delay: 500 }}
-        out:fly={{ x: posts.length + (1 % 2) ? -100 : 100, duration: 300 }}>
-        <div class="divider mt-0 mb-8 hidden lg:flex" />
-        <Footer />
       </div>
-    {/key}
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-16 max-w-6xl">
+    <!-- Featured/Pinned Posts -->
+    <div class="mb-16">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-bold">Featured Posts</h2>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        {#each featuredPosts as post}
+          {@const readTime = getReadingTime(post.html)}
+          <a 
+            href={post.path}
+            class="card bg-gradient-to-br from-primary/10 to-secondary/10 hover:shadow-2xl transition-all p-8 group relative overflow-hidden">
+            <div class="absolute top-4 right-4">
+              <span class="badge badge-primary">Featured</span>
+            </div>
+            <div class="text-xs opacity-60 mb-3">
+              {new Date(post.published ?? post.created).toLocaleDateString('en-US', { 
+                year: 'numeric',
+                month: 'short', 
+                day: 'numeric' 
+              })}
+            </div>
+            <h3 class="font-bold text-xl mb-4 group-hover:text-primary transition-colors">
+              {post.title || post.path.slice(1)}
+            </h3>
+            {#if post.summary}
+              <p class="text-sm opacity-70 mb-4 line-clamp-3">{post.summary}</p>
+            {/if}
+            {#if readTime}
+              <div class="text-xs opacity-60 mt-auto">{readTime}</div>
+            {/if}
+          </a>
+        {/each}
+      </div>
+    </div>
+
+    <!-- Highlights Section - Expanded -->
+    <div class="mb-16">
+      <h2 class="text-3xl font-bold mb-8">Highlights</h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- The Playbook -->
+        <a href="/guide-to-tech-1" class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-8 group">
+          <div class="mb-4">
+            <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span class="i-heroicons-outline-academic-cap w-6 h-6 text-primary"></span>
+            </div>
+            <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">The Playbook</h3>
+          </div>
+          <p class="text-sm opacity-70 mb-4">
+            A comprehensive guide for students and early-career professionals breaking into tech. 
+            Covers timelines, skill development, resume building, and the application process.
+          </p>
+          <div class="flex items-center gap-2 text-sm font-semibold text-primary">
+            Read the Guide
+            <span class="i-heroicons-outline-arrow-right w-4 h-4"></span>
+          </div>
+        </a>
+
+        <!-- Portfolio -->
+        <a href="/portfolio" class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-8 group">
+          <div class="mb-4">
+            <div class="w-12 h-12 bg-secondary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span class="i-heroicons-outline-briefcase w-6 h-6 text-secondary"></span>
+            </div>
+            <h3 class="text-xl font-bold mb-2 group-hover:text-secondary transition-colors">Portfolio</h3>
+          </div>
+          <p class="text-sm opacity-70 mb-4">
+            Explore my professional experience at Canva, research projects, and open-source contributions. 
+            View my timeline, skills, and project showcase.
+          </p>
+          <div class="flex items-center gap-2 text-sm font-semibold text-secondary">
+            View Portfolio
+            <span class="i-heroicons-outline-arrow-right w-4 h-4"></span>
+          </div>
+        </a>
+
+        <!-- Thesis -->
+        <a href="/assets/honours_thesis.pdf" target="_blank" class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-8 group">
+          <div class="mb-4">
+            <div class="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span class="i-heroicons-outline-document-text w-6 h-6 text-accent"></span>
+            </div>
+            <h3 class="text-xl font-bold mb-2 group-hover:text-accent transition-colors">Honours Thesis</h3>
+          </div>
+          <p class="text-sm opacity-70 mb-4">
+            Research on bias modelling and mitigation in diffusion models. 
+            First Class Honours (90/100) from Monash University, 2023.
+          </p>
+          <div class="flex items-center gap-2 text-sm font-semibold text-accent">
+            Read Thesis (PDF)
+            <span class="i-heroicons-outline-arrow-top-right-on-square w-4 h-4"></span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Latest Posts -->
+    <div>
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-bold">Latest Posts</h2>
+        <a href="/archive" class="btn btn-ghost gap-2">
+          View All
+          <span class="i-heroicons-outline-arrow-right w-4 h-4"></span>
+        </a>
+      </div>
+      
+      <div class="space-y-4">
+        {#each latestPosts as post}
+          {@const readTime = getReadingTime(post.html)}
+          <a 
+            href={post.path}
+            class="card bg-base-200 hover:bg-base-300 hover:shadow-lg transition-all p-6 flex flex-row items-center gap-6 group">
+            <!-- Date -->
+            <div class="flex flex-col items-center text-center min-w-[70px]">
+              <div class="text-xl font-bold">
+                {new Date(post.published ?? post.created).getDate()}
+              </div>
+              <div class="text-xs opacity-60 uppercase">
+                {new Date(post.published ?? post.created).toLocaleDateString('en-US', { month: 'short' })}
+              </div>
+              <div class="text-xs opacity-40">
+                {new Date(post.published ?? post.created).getFullYear()}
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1">
+              <h3 class="text-lg font-bold mb-1 group-hover:text-primary transition-colors">
+                {post.title || post.path.slice(1)}
+              </h3>
+              {#if post.summary}
+                <p class="text-sm opacity-70 line-clamp-2">{post.summary}</p>
+              {/if}
+            </div>
+
+            <!-- Meta -->
+            <div class="hidden md:flex flex-col items-end gap-2">
+              {#if post.tags && post.tags.length > 0}
+                <div class="flex gap-1">
+                  {#each post.tags.slice(0, 2) as tag}
+                    <span class="badge badge-sm badge-outline">#{tag}</span>
+                  {/each}
+                </div>
+              {/if}
+              {#if readTime}
+                <div class="text-xs opacity-60">{readTime}</div>
+              {/if}
+            </div>
+
+            <span class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+          </a>
+        {/each}
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-8">
+    <Footer />
   </div>
 </div>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
+
