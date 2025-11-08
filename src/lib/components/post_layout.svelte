@@ -24,7 +24,7 @@
   export let in_reply_to
   // post
   let fm = { path, slug, toc, created, updated, published, summary, tags, flags, title, image, in_reply_to }
-  let post = { type: typeOfPost(fm), ...fm }
+  let post = fm ? { type: typeOfPost(fm), ...fm } : null
 </script>
 
 <Container {post}>

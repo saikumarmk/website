@@ -11,6 +11,20 @@ import TailwindCSS from 'tailwindcss'
 import tailwindConfig from './tailwind.config'
 import autoprefixer from 'autoprefixer'
 import cssnano from 'cssnano'
+import fs from 'fs'
+import path from 'path'
+function watchExtraFiles() {
+  return {
+    name: 'watch-extra-files',
+    configureServer(server) {
+      const fileToWatch = path.resolve('./urara/annotations/elo_calculator.py') // 👈 update path
+      fs.watch(fileToWatch, () => {
+        console.log(`[watch-extra-files] File changed: ${fileToWatch}`)
+        server.ws.send({ type: 'full-reload' })
+      })
+    }
+  }
+}
 
 export default defineConfig({
   envPrefix: 'URARA_',
@@ -27,10 +41,10 @@ export default defineConfig({
         autoprefixer(),
         ...(process.env.NODE_ENV === 'production'
           ? [
-              cssnano({
-                preset: ['default', { discardComments: { removeAll: true } }]
-              })
-            ]
+            cssnano({
+              preset: ['default', { discardComments: { removeAll: true } }]
+            })
+          ]
           : [])
       ]
     }
@@ -48,12 +62,13 @@ export default defineConfig({
     }),
     imagetools(),
     SvelteKit(),
+    watchExtraFiles(),
     SvelteKitPWA({
       registerType: 'autoUpdate',
       manifest: false,
       scope: '/',
       workbox: {
-        globPatterns: ['posts.json', '**/*.{js,css,html,svg,ico,png,webp,avif}'],
+        globPatterns: ['posts.json', '**/*.{js,css,html,svg,ico,png,webp,avif,py}'],
         globIgnores: ['**/sw*', '**/workbox-*']
       }
     })

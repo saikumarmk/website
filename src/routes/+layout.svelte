@@ -13,8 +13,13 @@
   import ThreeCanvas from '$lib/components/three/astro_canvas.svelte'
   import '../app.pcss'
   import PokeCanvas from '$lib/components/three/poke_canvas.svelte'
+  import CodeCopyButton from '$lib/components/code_copy_button.svelte'
+  import ImageLightbox from '$lib/components/image_lightbox.svelte'
+  import SearchModal from '$lib/components/search_modal.svelte'
 
   export let data: LayoutData
+  
+  let searchModal: any
 
   let { res, path } = data
 
@@ -22,8 +27,8 @@
 
   let currentMode = 'none'
   const unsubscribe = backgroundMode.subscribe(mode => (currentMode = mode))
-  posts.set(res)
-  tags.set(genTags(res))
+  posts.set(res || [])
+  tags.set(genTags(res || []))
   onMount(
     () =>
       !dev &&
@@ -46,8 +51,12 @@
 <Head />
 
 <!-- 3) then render all your UI -->
-<Header {path} />
+<Header {path} bind:searchModal />
 
 <Transition {path}>
   <slot />
 </Transition>
+
+<CodeCopyButton />
+<ImageLightbox />
+<SearchModal bind:this={searchModal} />

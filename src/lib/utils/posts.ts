@@ -26,20 +26,20 @@ export const typeOfPost = (
   fm.title
     ? 'article'
     : fm.image
-    ? 'photo'
-    : fm.audio
-    ? 'audio'
-    : fm.video
-    ? 'video'
-    : fm.bookmark_of
-    ? 'bookmark'
-    : fm.like_of
-    ? 'like'
-    : fm.repost_of
-    ? 'repost'
-    : fm.in_reply_to
-    ? 'reply'
-    : 'note'
+      ? 'photo'
+      : fm.audio
+        ? 'audio'
+        : fm.video
+          ? 'video'
+          : fm.bookmark_of
+            ? 'bookmark'
+            : fm.like_of
+              ? 'like'
+              : fm.repost_of
+                ? 'repost'
+                : fm.in_reply_to
+                  ? 'reply'
+                  : 'note'
 
 /**
  * Generate Posts List
@@ -59,16 +59,16 @@ export const genPosts: GenPostsFunction = ({
       html:
         postHtml || typeOfPost(module.metadata) !== 'article'
           ? module.default
-              .render()
-              .html // eslint-disable-next-line no-control-regex
-              .replace(/[\u0000-\u001F]/g, '')
-              .replace(/[\r\n]/g, '')
-              .match(/<main [^>]+>(.*?)<\/main>/gi)?.[0]
-              .replace(/<main [^>]+>(.*?)<\/main>/gi, '$1')
-              // .replace(/( class=")(.*?)(")/gi, '')
-              .replace(/( style=")(.*?)(")/gi, '')
-              .replace(/(<span>)(.*?)(<\/span>)/gi, '$2')
-              .replace(/(<main>)(.*?)(<\/main>)/gi, '$2')
+            .render()
+            .html // eslint-disable-next-line no-control-regex
+            .replace(/[\u0000-\u001F]/g, '')
+            .replace(/[\r\n]/g, '')
+            .match(/<main [^>]+>(.*?)<\/main>/gi)?.[0]
+            .replace(/<main [^>]+>(.*?)<\/main>/gi, '$1')
+            // .replace(/( class=")(.*?)(")/gi, '')
+            .replace(/( style=")(.*?)(")/gi, '')
+            .replace(/(<span>)(.*?)(<\/span>)/gi, '$2')
+            .replace(/(<main>)(.*?)(<\/main>)/gi, '$2')
           : ''
     }))
     .filter((post, index) => (!filterUnlisted || !post.flags?.includes('unlisted')) && (!postLimit || index < postLimit))
@@ -79,6 +79,9 @@ export const genPosts: GenPostsFunction = ({
  * @param posts - posts list
  * @returns - tags list
  */
-export const genTags: GenTagsFunction = posts => [
-  ...new Set(posts.reduce((acc, posts) => (posts.tags ? [...acc, ...posts.tags] : acc), ['']).slice(1))
-]
+export const genTags: GenTagsFunction = posts => {
+  if (!Array.isArray(posts)) return []
+  return [
+    ...new Set(posts.reduce((acc, posts) => (posts.tags ? [...acc, ...posts.tags] : acc), ['']).slice(1))
+  ]
+}

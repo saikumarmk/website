@@ -32,6 +32,10 @@ export const header: HeaderConfig = {
       link: '/about'
     },
     {
+      text: 'Now',
+      link: '/now'
+    },
+    {
       text: 'Portfolio',
       link: '/portfolio'
     },
