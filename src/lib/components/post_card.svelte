@@ -9,6 +9,7 @@
   import RandomPokemonSprite from '$lib/components/pkmn/random_pokemon.svelte'
   import Pagination from '$lib/components/post_pagination.svelte'
   import Comment from '$lib/components/post_comment.svelte'
+  import RelatedPosts from '$lib/components/related_posts.svelte'
   export let post: Urara.Post
   export let preview: boolean = false
   export let loading: 'eager' | 'lazy' = 'lazy'
@@ -40,6 +41,9 @@
   class:image-full={preview && post.type === 'article' && post.image}
   class:before:!rounded-none={preview && post.image}
   class="h-entry card bg-base-100 rounded-none md:rounded-box md:shadow-xl overflow-hidden z-10">
+  {#if !preview}
+    <slot name="breadcrumb" />
+  {/if}
   {#if !preview && postConfig.bridgy}
     <div id="bridgy" class="hidden">
       {#each post.flags?.some( flag => flag.startsWith('bridgy') ) ? post.flags.flatMap( flag => (flag.startsWith('bridgy') ? flag.slice(7) : []) ) : [...(postConfig.bridgy.post ?? []), ...(postConfig.bridgy[post.type] ?? [])] as target}
@@ -122,6 +126,11 @@
     {/if}
   </div>
   {#if !preview}
+    {#if !post.flags?.includes('related-disabled')}
+      <div class="px-4 md:px-8">
+        <RelatedPosts currentPost={post} />
+      </div>
+    {/if}
     {#if (prev || next) && !post.flags?.includes('pagination-disabled') && !post.flags?.includes('unlisted')}
       <Pagination {next} {prev} />
     {/if}

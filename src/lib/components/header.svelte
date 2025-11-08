@@ -9,6 +9,7 @@
   import Nav from '$lib/components/header_nav.svelte'
   import Search from '$lib/components/header_search.svelte'
   export let path: string
+  export let searchModal: any = undefined
   let title: string
   let currentTheme: string
   let currentThemeColor: string
@@ -73,8 +74,13 @@
       </div>
       <div class="navbar-end">
         {#if headerConfig.search}
-          <button aria-label="search" on:click={() => (search = !search)} tabindex="0" class="btn btn-square btn-ghost">
+          <button 
+            aria-label="search" 
+            on:click={() => searchModal?.open()} 
+            tabindex="0" 
+            class="btn btn-square btn-ghost group relative">
             <span class="i-heroicons-outline-search" />
+            <span class="absolute -bottom-1 text-[10px] opacity-0 group-hover:opacity-60 transition-opacity">⌘K</span>
           </button>
         {/if}
         <select class="select select-bordered select-sm" bind:value={$backgroundMode}>
@@ -132,7 +138,7 @@
 <button
   id="totop"
   on:click={() => window.scrollTo(0, 0)}
-  class:translate-y-24={!pin || scrollY === 0}
+  class:translate-y-24={scrollY === 0}
   aria-label="scroll to top"
   class="fixed grid group btn btn-circle btn-lg border-none backdrop-blur bottom-6 right-6 z-50 duration-500 ease-in-out {percent >
   95

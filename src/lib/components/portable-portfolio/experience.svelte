@@ -28,46 +28,51 @@
         <div class="space-y-4">
           {#each byCategory(category) as exp (exp.id)}
             <div in:fly={{ y: 24, duration: 250 }} class="rounded-lg shadow p-4 bg-base-100">
-              <!-- header -->
-              <div class="flex justify-between items-start">
-                <div class="flex items-center gap-3">
-                  <img src={exp.img} alt={exp.company} class="h-12 w-auto rounded" />
-                  <div class="text-left">
-                    <p class="font-semibold">{exp.company}</p>
-                    {#if exp.position}<p>{exp.position}</p>{/if}
-                  </div>
-                </div>
-                {#if exp.duration}
-                  <p class="text-sm opacity-70">{exp.duration}</p>
-                {/if}
+              <!-- company header -->
+              <div class="flex items-center gap-3 mb-4">
+                <img src={exp.img} alt={exp.company} class="h-12 w-auto rounded" />
+                <p class="font-semibold text-lg">{exp.company}</p>
               </div>
 
-              <!-- body -->
-              {#if exp.listItems?.length}
-                <ul class="mt-3 space-y-1 text-left">
-                  {#each exp.listItems as li}
-                    <li class="flex gap-1">
-                      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                      </svg>
-                      <span>{li}</span>
-                    </li>
-                  {/each}
-                </ul>
-              {:else}
-                <p class="mt-3 text-left">{exp.description}</p>
-              {/if}
+              <!-- positions -->
+              <div class="space-y-6">
+                {#each exp.positions as pos}
+                  <div class="pl-4 border-l-2 border-base-300">
+                    <!-- position header -->
+                    <div class="flex justify-between items-start mb-2">
+                      <p class="font-medium">{pos.position}</p>
+                      <p class="text-sm opacity-70">{pos.duration}</p>
+                    </div>
 
-              <!-- footer -->
-              <div class="mt-4 flex flex-wrap gap-2">
-                {#each exp.badges ?? [] as b}
-                  <Badge name={b} />
-                {/each}
+                    <!-- body -->
+                    {#if pos.listItems?.length}
+                      <ul class="mt-2 space-y-1 text-left">
+                        {#each pos.listItems as li}
+                          <li class="flex gap-1">
+                            <svg class="h-4 w-4 flex-shrink-0 mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                            <span>{li}</span>
+                          </li>
+                        {/each}
+                      </ul>
+                    {:else if pos.description}
+                      <p class="mt-2 text-left">{pos.description}</p>
+                    {/if}
 
-                {#each exp.buttons ?? [] as btn}
-                  <a class="underline text-sm" href={btn.href} target="_blank" rel="noopener noreferrer">
-                    {btn.label}
-                  </a>
+                    <!-- footer -->
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      {#each pos.badges ?? [] as b}
+                        <Badge name={b} />
+                      {/each}
+
+                      {#each pos.buttons ?? [] as btn}
+                        <a class="underline text-sm" href={btn.href} target="_blank" rel="noopener noreferrer">
+                          {btn.label}
+                        </a>
+                      {/each}
+                    </div>
+                  </div>
                 {/each}
               </div>
             </div>

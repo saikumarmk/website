@@ -8,17 +8,21 @@ export type Button = {
     href: string;
 };
 
-export type Experience = {
-    id: string;
-    company: string;
-    position?: string;
-    duration?: string;
-    description: string;
-    img: string;
-    tags: string[];
+export type Position = {
+    position: string;
+    duration: string;
+    description?: string;
     badges?: string[];
     buttons?: Button[];
     listItems?: string[];
+};
+
+export type Experience = {
+    id: string;
+    company: string;
+    img: string;
+    tags: string[];
+    positions: Position[];
 };
 
 export type Project = {
