@@ -199,7 +199,7 @@ export const experience: Experience[] = [
     {
         id: 'digicor',
         company: 'DiGiCOR',
-        img: '../assets/digicor.jpg',
+        img: '/assets/digicor.jpg',
         tags: ['Work'],
         positions: [
             {
@@ -214,7 +214,7 @@ export const experience: Experience[] = [
     {
         id: 'monash-work',
         company: 'Monash University',
-        img: '../assets/monash.jpeg',
+        img: '/assets/monash.jpeg',
         tags: ['Work'],
         positions: [
             {
@@ -236,7 +236,7 @@ export const experience: Experience[] = [
     {
         id: 'monash-edu',
         company: 'Monash University',
-        img: '../assets/monash.jpeg',
+        img: '/assets/monash.jpeg',
         tags: ['Education'],
         positions: [
             {
