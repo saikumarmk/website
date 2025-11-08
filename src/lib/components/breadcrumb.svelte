@@ -26,13 +26,27 @@
   // Build breadcrumb from path
   $: pathSegments = path.split('/').filter(Boolean)
   
+  // Declare prev/next variables
+  let prevPost: { title: string; slug: string; part: number } | undefined = undefined
+  let nextPost: { title: string; slug: string; part: number } | undefined = undefined
+  
   // Get previous and next in series
-  $: prevPost = series && currentPart ? series.parts.find(p => p.part === currentPart - 1) : undefined
-  $: nextPost = series && currentPart ? series.parts.find(p => p.part === currentPart + 1) : undefined
+  $: {
+    if (series && currentPart !== undefined) {
+      // Sort parts by part number
+      const sortedParts = [...series.parts].sort((a, b) => a.part - b.part)
+      const currentIndex = sortedParts.findIndex(p => p.part === currentPart)
+      prevPost = currentIndex > 0 ? sortedParts[currentIndex - 1] : undefined
+      nextPost = currentIndex < sortedParts.length - 1 ? sortedParts[currentIndex + 1] : undefined
+    } else {
+      prevPost = undefined
+      nextPost = undefined
+    }
+  }
 </script>
 
 {#if shouldRender}
-{#if series && currentPart}
+{#if series && currentPart !== undefined}
   <!-- Series navigation -->
   <div class="flex items-center justify-between flex-wrap gap-3 text-sm mb-0 mt-4 px-4 md:px-8 pb-4 border-b border-base-content/10">
     <div class="flex items-center gap-2 opacity-60">
@@ -43,7 +57,13 @@
       <span class="hidden sm:inline font-medium">{series.name}</span>
       <span class="sm:hidden font-medium">Playbook</span>
       <span class="opacity-40">/</span>
-      <span class="font-semibold text-primary">Part {currentPart}</span>
+      <span class="font-semibold text-primary">
+        {#if currentPart === 0}
+          FAQ
+        {:else}
+          Part {currentPart}
+        {/if}
+      </span>
     </div>
     <div class="flex items-center gap-1">
       {#if prevPost}

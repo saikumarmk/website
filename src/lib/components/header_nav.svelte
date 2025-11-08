@@ -1,9 +1,17 @@
 <script lang="ts">
+  import { backgroundMode } from '$lib/stores/background'
+  
   export let nav: { text: string; link?: string; children?: { text: string; link: string }[] }[]
   export let path: string
   export let title: string
   export let scrollY: number
   export let pin: boolean
+  
+  const options = [
+    { value: 'none', label: 'No Background' },
+    { value: 'three', label: 'Astro Background' },
+    { value: 'poke', label: 'Pokémon Background' }
+  ]
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -39,6 +47,19 @@
         </li>
       {/if}
     {/each}
+    <!-- Background selector in mobile menu -->
+    <li class="md:hidden mt-2 pt-2 border-t border-base-content/10">
+      <div class="form-control px-2">
+        <label class="label py-1">
+          <span class="label-text text-xs opacity-70">Background</span>
+        </label>
+        <select class="select select-bordered select-sm w-full" bind:value={$backgroundMode}>
+          {#each options as opt}
+            <option value={opt.value}>{opt.label}</option>
+          {/each}
+        </select>
+      </div>
+    </li>
   </ul>
 </div>
 <div class:swap-active={scrollY > 32 && title} class="swap order-last hidden lg:inline-grid">

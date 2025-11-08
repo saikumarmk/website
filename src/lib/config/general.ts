@@ -32,12 +32,12 @@ export const header: HeaderConfig = {
       link: '/about'
     },
     {
-      text: 'Now',
-      link: '/now'
-    },
-    {
       text: 'Portfolio',
       link: '/portfolio'
+    },
+    {
+      text: 'Archive',
+      link: '/archive'
     },
     {
       text: 'Documents',
@@ -82,16 +82,7 @@ export const header: HeaderConfig = {
 
     {
       text: 'Monash Unit Graph',
-      children: [
-        {
-          text: '2D Graph',
-          link: '/monash-graph-2d'
-        },
-        {
-          text: '3D Graph',
-          link: '/monash-graph-3d'
-        }
-      ]
+      link: '/monash-graph'
     }
   ]
 }

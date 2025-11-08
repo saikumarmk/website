@@ -281,8 +281,24 @@ a.button:active {
     text-decoration: none;
 }
 
+/* Giscus comment styling fixes */
+.giscus, .giscus-frame {
+  color-scheme: auto;
+}
 
+/* Fix hard-to-read gray text in light themes */
+:root .giscus .color-fg-muted,
+:root .giscus .color-text-secondary {
+  color: #57606a !important;
+}
 
+/* Improve contrast for reaction/comment counts */
+.giscus .Link--muted {
+  color: #57606a !important;
+}
 
+.giscus .Link--muted:hover {
+  color: #24292f !important;
+}
 
 /*# sourceMappingURL=styles/css-pokemon-gameboy.css.map */
