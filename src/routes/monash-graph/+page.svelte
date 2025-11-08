@@ -120,10 +120,10 @@
   </div>
   
   <!-- Main Content -->
-  <div class="flex-1 flex overflow-hidden relative">
+  <div class="flex-1 flex overflow-hidden relative h-full">
     <!-- Left Sidebar - Controls (Fixed) -->
     <div
-      class="w-80 bg-base-100 border-r border-base-content/10 overflow-hidden flex-none z-30 absolute lg:relative h-full"
+      class="w-80 bg-base-100 border-r border-base-content/10 overflow-y-auto overflow-x-hidden flex-none z-30 absolute lg:relative h-full"
       class:hidden={!showControls}
       class:lg:flex={true}>
       <GraphControls
@@ -138,7 +138,7 @@
     </div>
     
     <!-- Center - Graph (Takes remaining space) -->
-    <div class="flex-1 relative overflow-hidden">
+    <div class="flex-1 relative h-full">
       {#if viewMode === '2d'}
         <Graph2D
           graphData={filteredData}

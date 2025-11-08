@@ -37,7 +37,7 @@
         <h1 class="text-5xl font-bold mb-4">Hi, I'm {site.author.name}</h1>
         <p class="text-xl opacity-80 mb-6">{@html site.author.bio}</p>
         <p class="text-lg opacity-60 max-w-2xl mx-auto">
-          Applied Scientist at Canva working on generative AI and diffusion models. 
+          Applied Scientist at Canva working on training photo and video models. 
           I write about machine learning, tech careers, and software engineering.
         </p>
         
@@ -98,16 +98,16 @@
       
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- The Playbook -->
-        <a href="/guide-to-tech-1" class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-8 group">
+        <a href="/playbook" class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-8 group">
           <div class="mb-4">
             <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span class="i-heroicons-outline-academic-cap w-6 h-6 text-primary"></span>
+              <span class="i-heroicons-outline-book-open w-6 h-6 text-primary"></span>
             </div>
-            <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">The Playbook</h3>
+            <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">The Grad/Intern Playbook</h3>
           </div>
           <p class="text-sm opacity-70 mb-4">
             A comprehensive guide for students and early-career professionals breaking into tech. 
-            Covers timelines, skill development, resume building, and the application process.
+            Covers timelines, skill development, résumé building, and the application process.
           </p>
           <div class="flex items-center gap-2 text-sm font-semibold text-primary">
             Read the Guide
