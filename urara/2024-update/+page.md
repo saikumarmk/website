@@ -45,7 +45,7 @@ My honours year in Applied Data Science was very interesting; only three student
 
 Towards the second half of the year, Canva reached out to ask if I would be interested in being a speaker for a panel at [SIGGRAPH Asia 2023](https://asia.siggraph.org/2023/) which was hosted in Sydney. Seeing as flights, and accommodation were provided on top of a full-access ticket, I decided to take the short vacation to Sydney.
 
-![](/assets/update/siggraph.jpg)
+![](/assets/update/siggraph.webp)
 
 
 Overall, the experience was very eye-opening; I had the chance to network with people across companies such as Nvidia, Pixar, ILM, and seasoned software engineers with decades of experience. VFX studios use machine learning for animation, which was exciting to learn about, especially for software like RenderMan.

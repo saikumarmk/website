@@ -36,7 +36,7 @@ export const site: SiteConfig = {
   lang: 'en-US',
   author: {
     name: 'Sai',
-    avatar: '/assets/sai_red.png',
+    avatar: '/assets/sai_red.webp',
     status: '',
     bio: generateRandomBio(),
     metadata: [

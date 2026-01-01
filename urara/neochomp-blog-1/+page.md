@@ -19,9 +19,9 @@ import Framed from '$lib/components/pkmn/frame.svelte'
 
 While watching [Ado’s music video for One Piece Film Red: New Genesis](https://www.youtube.com/watch?v=1FliVTcX8bQ), I noticed that the video incorporated pixelated displays.
 
-![Untitled](/assets/neochomp/blog-1/ado.png)
+![Untitled](/assets/neochomp/blog-1/ado.webp)
 
-![Untitled](/assets/neochomp/blog-1/newgenesis.png)
+![Untitled](/assets/neochomp/blog-1/newgenesis.webp)
 
 Because I absolutely needed to see the animation on a cute pixel screen, I came across a cute LED display known as the Tidbyt.
 
@@ -31,7 +31,7 @@ What a cute display of train times!
 
 Unfortunately, the price point was a rather exorbitant USD 199… So, naturally, I asked, how the hell do you replicate this? My first few searches for an LED matrix display led to devices powered by a Raspberry Pi, which have been the victim of scalping, and a shortage of silicon chips, leading to some ridiculous prices.
 
-![So much for hobby price computers…](/assets/neochomp/blog-1/pricey.png)
+![So much for hobby price computers…](/assets/neochomp/blog-1/pricey.webp)
 
 So much for hobby price computers…
 
@@ -43,7 +43,7 @@ During our research on the Tidbyt, we discovered how it operates under the hood.
 
 [Tidbyt: Hackable LED Matrix](https://hackaday.io/project/169732-tidbyt-hackable-led-matrix)
 
-![A tear down of the Tidbyt.](/assets/neochomp/blog-1/teardown.png)
+![A tear down of the Tidbyt.](/assets/neochomp/blog-1/teardown.webp)
 
 A teardown of the Tidbyt.
 
@@ -71,7 +71,7 @@ Note, that at this point in time, we were looking for a raspberry pi, or an alte
 
 And so, our goose chase for this phantom SBC which we couldn’t even be sure if we could program once we got it. Our first candidate was the hilariously named Banana Pi M2.
 
-![“Hell yeah looks like a mostly shameless clone” - Shin](/assets/neochomp/blog-1/banana.png)
+!["Hell yeah looks like a mostly shameless clone" - Shin](/assets/neochomp/blog-1/banana.webp)
 
 <Framed>
 “Hell yeah looks like a mostly shameless clone” - Shin

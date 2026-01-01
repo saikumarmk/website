@@ -60,20 +60,20 @@ const imagesToCompress = [
 async function compressImage(config) {
   const inputPath = join(root, config.input);
   const outputPath = join(root, config.output);
-  
+
   console.log(`Compressing ${config.input}...`);
-  
+
   try {
     await sharp(inputPath)
       .resize({ width: config.maxWidth, withoutEnlargement: true })
       .webp({ quality: config.quality })
       .toFile(outputPath);
-    
+
     const { size: inputSize } = await sharp(inputPath).metadata();
     const { size: outputSize } = await sharp(outputPath).metadata();
     const savedMB = ((inputSize - outputSize) / 1024 / 1024).toFixed(2);
     const compressionPercent = (((inputSize - outputSize) / inputSize) * 100).toFixed(1);
-    
+
     console.log(`✓ ${config.output} - Saved ${savedMB} MB (${compressionPercent}% reduction)`);
   } catch (error) {
     console.error(`✗ Failed to compress ${config.input}:`, error.message);
@@ -82,11 +82,11 @@ async function compressImage(config) {
 
 async function main() {
   console.log('Starting image compression...\n');
-  
+
   for (const config of imagesToCompress) {
     await compressImage(config);
   }
-  
+
   console.log('\n✓ Image compression complete!');
 }
 
