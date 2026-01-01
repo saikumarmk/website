@@ -11,11 +11,6 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "pnpm": {
-    "overrides": {
-      "sharp": "0.34.3"
-    }
-  },
   "scripts": {
     "clean": "node urara.js clean",
     "tsc": "tsc -p tsconfig.node.json",
@@ -93,7 +88,8 @@
   },
   "pnpm": {
     "overrides": {
-      "vite>rollup": "^3.10.0"
+      "vite>rollup": "^3.10.0",
+      "sharp": "0.34.3"
     }
   },
   "dependencies": {
