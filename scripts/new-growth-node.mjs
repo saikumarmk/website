@@ -41,12 +41,12 @@ async function main() {
   console.log('\n📝 Creating files...\n');
 
   // 1. Create node page directory
-  const nodeDir = path.join(rootDir, 'urara', 'growth', '2026', id);
+  const nodeDir = path.join(rootDir, 'src', 'routes', 'growth', '2026', id);
   const assetsDir = path.join(nodeDir, 'assets');
 
   if (!fs.existsSync(nodeDir)) {
     fs.mkdirSync(nodeDir, { recursive: true });
-    console.log(`✓ Created directory: urara/growth/2026/${id}/`);
+    console.log(`✓ Created directory: src/routes/growth/2026/${id}/`);
   }
 
   if (!fs.existsSync(assetsDir)) {
@@ -113,7 +113,7 @@ What to learn after completing this node.
 
   const pagePath = path.join(nodeDir, '+page.md');
   fs.writeFileSync(pagePath, pageContent);
-  console.log(`✓ Created page: urara/growth/2026/${id}/+page.md`);
+  console.log(`✓ Created page: src/routes/growth/2026/${id}/+page.md`);
 
   // 3. Update growth2026.json
   const jsonPath = path.join(rootDir, 'src', 'resources', 'growth2026.json');
@@ -142,7 +142,7 @@ What to learn after completing this node.
 
   console.log(`\n✅ Node created successfully!`);
   console.log(`\nNext steps:`);
-  console.log(`1. Edit urara/growth/2026/${id}/+page.md`);
+  console.log(`1. Edit src/routes/growth/2026/${id}/+page.md`);
   console.log(`2. Add prerequisites and edges in growth2026.json`);
   console.log(`3. Run 'npm run dev' to see your changes`);
   console.log(`\nView at: http://localhost:5173/growth/2026/${id}`);
