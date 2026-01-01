@@ -83,6 +83,10 @@ export const header: HeaderConfig = {
     {
       text: 'Monash Unit Graph',
       link: '/monash-graph'
+    },
+    {
+      text: 'Yggdrasil',
+      link: '/growth/2026'
     }
   ]
 }
