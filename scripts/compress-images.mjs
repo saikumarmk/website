@@ -54,6 +54,30 @@ const imagesToCompress = [
     output: 'urara/assets/neochomp/blog-1/pricey.webp',
     maxWidth: 800,
     quality: 85
+  },
+  {
+    input: 'static/assets/projects/acm.png',
+    output: 'static/assets/projects/acm.webp',
+    maxWidth: 400,
+    quality: 90
+  },
+  {
+    input: 'static/assets/projects/minimelbold.png',
+    output: 'static/assets/projects/minimelbold.webp',
+    maxWidth: 400,
+    quality: 90
+  },
+  {
+    input: 'static/assets/projects/minimelbnew.png',
+    output: 'static/assets/projects/minimelbnew.webp',
+    maxWidth: 400,
+    quality: 90
+  },
+  {
+    input: 'static/assets/projects/maidenless.png',
+    output: 'static/assets/projects/maidenless.webp',
+    maxWidth: 400,
+    quality: 90
   }
 ];
 

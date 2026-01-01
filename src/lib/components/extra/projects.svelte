@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Project } from '$lib/config/projects'
+  import type { Project } from '$lib/types/portfolio'
   import Footer from '$lib/components/footer.svelte'
   export let item: unknown
   let project = item as unknown as Project
