@@ -1,5 +1,5 @@
 [build]
-command = "npx pnpm i --store=node_modules/.pnpm-store --ignore-scripts && npx pnpm rebuild sharp && npx pnpm build"
+command = "npx pnpm i --store=node_modules/.pnpm-store --ignore-scripts && npx pnpm --store=node_modules/.pnpm-store rebuild sharp && npx pnpm --store=node_modules/.pnpm-store build"
 publish = "build"
 
 [build.environment]
