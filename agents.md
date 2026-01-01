@@ -586,11 +586,288 @@ Successfully integrated multiple view modes:
 {/if}
 ```
 
+## Yggdrasil (Growth Tree 2026)
+
+### Overview
+
+**Yggdrasil** is the interactive skill tree system at `/growth/2026`. It visualizes learning goals as a directed acyclic graph (DAG) with nodes representing skills and edges showing prerequisites.
+
+**Architecture Pattern:**
+- Follows "Monash Graph Refactor" pattern
+- Coordinator `+page.svelte` with components/ and utils/ folders
+- SSR-safe dynamic imports for graph libraries
+- No direct DOM manipulation, pure Svelte reactivity
+
+### Branch Names
+
+Use short, memorable names:
+- `systems-hpc` - Systems & distributed training
+- `gen-media` - Generative video & media
+- `rl` - Reinforcement learning & post-training
+- `maths` - Mathematical foundations
+- `swe` - Software engineering
+- `physics` - Physics & astrophysics
+
+### Node Tier Structure
+
+**Critical:** Tiers follow a "roots → trunks → branches → crown" metaphor where:
+
+- **Roots:** Foundational **mental models and concepts**. Pure understanding, not implementation.
+  - Example: "Distributed Training Mental Models" (conceptual understanding of DP/FSDP/ZeRO)
+  - NOT: "Fault Tolerance" (that's a technique, not a mental model)
+
+- **Trunks:** **Practical techniques and implementations**. Things you build/do.
+  - Example: "Fault Tolerance & Suspend/Resume", "Research Harness v2"
+  - Trunks implement concepts learned in roots
+
+- **Branches:** Specialized or optional deep dives
+  - Example: "Long-Context Parallelism", "Three.js Journey"
+
+- **Crown:** Capstone projects that integrate multiple skills
+  - Example: "Reproduce + Extend Video Model", "RL for Structured Outputs"
+
+**Bad example (before refactor):**
+```json
+{
+  "id": "fault-tolerance",
+  "tier": "roots"  // ❌ This is a technique, not a foundational concept
+}
+```
+
+**Good example (after refactor):**
+```json
+{
+  "id": "distributed-training-mental-models",
+  "tier": "roots"  // ✅ This is foundational understanding
+}
+```
+
+### Content Creation Workflow
+
+**Pages live in `urara/growth/2026/<node-id>/+page.md`**
+
+**Generator scripts:**
+- `npm run growth:new` - Create new node page + update JSON
+- `npm run growth:backfill` - Create pages for existing JSON nodes
+
+**Node page structure:**
+```markdown
+---
+title: 'Node Title'
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+tags: [tag1, tag2]
+growth:
+  node_id: 'node-id'
+  branch: 'branch-name'
+  tier: 'roots|trunk|branch|crown'
+  estimate_hours: 15
+---
+
+<script context="module">
+  export const concepts = [
+    { id: 'concept-1', title: 'Concept Title' },
+  ];
+</script>
+
+<script>
+  import ConceptChecklist from '$lib/components/growth/ConceptChecklist.svelte';
+</script>
+
+## Overview
+
+Content here...
+
+## Key Concepts
+
+<ConceptChecklist nodeId="node-id" {concepts} />
+```
+
+### MDSvex & LaTeX Critical Rules
+
+**LaTeX Syntax (ALWAYS use these):**
+- ✅ **Inline math:** `$x + y$` 
+- ✅ **Display math:** `$$\nabla_\theta J(\theta) = ...$$`
+- ❌ **NEVER use:** `\(x + y\)` or `\[...\]` (these are NOT supported in MDSvex)
+
+**Comparison Operators (NEVER use raw < >):**
+- ❌ `Model > GPU memory` → breaks (interpreted as HTML tag)
+- ✅ `Model larger than GPU memory` → works
+- ❌ `< 1B params` → breaks
+- ✅ `Under 1B params` → works
+- ❌ `>10:1 ratio` → breaks
+- ✅ `greater than 10:1 ratio` → works
+
+**Special Characters to Avoid:**
+- ❌ `→` (arrow) - causes rendering issues
+- ✅ Use `-`, `to`, or reword: "leads to", "results in"
+- ❌ `<<` or `>>` operators
+- ✅ Use words: "much less than", "much greater than"
+
+**Markdown over HTML:**
+- ✅ `**bold**` (NOT `<strong>bold</strong>`)
+- ✅ `*italic*` (NOT `<em>italic</em>`)
+- ✅ Lists with `-` or `1.` (NOT `<ul><li>`)
+- ✅ Headings with `##` (NOT `<h2>`)
+
+### Graph Visualization
+
+**ELK.js for Layout:**
+- Deterministic layered DAG positioning
+- No force simulation (fixed positions)
+- Custom canvas rendering for RPG aesthetic
+
+**Node Rendering:**
+- Drawn as cards with Pokemon Game Boy styling
+- Branch color strips on left edge
+- Tier badges (RT, TK, BR, CR)
+- Status symbols (locked: dim + dashed, available: bright, complete: checkmark)
+- Font: 'Pokemon GB' with pixelated rendering
+
+**Edge Rendering:**
+- Orthogonal elbow paths (right edge → left edge)
+- Style based on target status
+- Custom arrowheads
+
+**Interaction:**
+- Click node: select (no pan/zoom animation)
+- Hover: highlight connected nodes
+- Search + filters in left panel
+- Node details in right panel
+
+### Pokemon Integration
+
+**Branch → Pokemon mapping:**
+```typescript
+'systems-hpc': { name: 'porygon-z' }
+'gen-media': { name: 'smeargle' }
+'rl': { name: 'alakazam' }
+'maths': { name: 'metagross' }
+'swe': { name: 'rotom' }
+'physics': { name: 'magnezone' }
+```
+
+**Usage:**
+```svelte
+<div class="pokesprite pokemon {pokemon.name}"></div>
+```
+
+### ConceptChecklist Component
+
+**Purpose:** Track mastery of sub-concepts within a node.
+
+**Features:**
+- Checkbox list with progress indicator
+- Persists to localStorage (nodeId + conceptId)
+- Pokemon GB styling
+- MDSvex-safe
+
+**Usage in frontmatter:**
+```markdown
+<script context="module">
+  export const concepts = [
+    { id: 'concept-id', title: 'Concept Title' }
+  ];
+</script>
+
+<ConceptChecklist nodeId="node-id" {concepts} />
+```
+
+### Common Pitfalls
+
+❌ **Using index-based lookups:** Store nodes keyed by ID, pass full objects
+
+❌ **Mixing LaTeX delimiters:** Don't use `\(` and `$` in same file
+
+❌ **Raw comparison operators:** Always spell out "greater than", "less than"
+
+❌ **Unicode arrows in markdown:** Causes rendering failures
+
+❌ **Wrong tier assignment:** Techniques are trunks, not roots
+
+❌ **HTML tags in markdown:** MDSvex already converts markdown to HTML
+
+### Key Resources Integration
+
+**Pattern for embedding external resources:**
+```markdown
+### 📚 Essential Reading
+
+**Resource Name** (Source)  
+[URL](URL)
+
+Brief description with **emphasis** on why it's essential.
+```
+
+**Examples:**
+- Nanotron Ultra-Scale Playbook (HuggingFace)
+- RLHF Book (rlhfbook.com)
+- MIT Diffusion Course 2025
+- Papers with direct arXiv links
+
+### Data Structure
+
+**JSON Schema:**
+```json
+{
+  "year": 2026,
+  "branches": ["systems-hpc", "gen-media", ...],
+  "nodes": [
+    {
+      "id": "kebab-case-id",
+      "title": "Human Readable Title",
+      "branch": "branch-name",
+      "tier": "roots|trunk|branch|crown",
+      "prerequisites": ["id1", "id2"],
+      "status": "locked|available|in_progress|complete",
+      "estimate_hours": 15,
+      "tags": ["tag1", "tag2"],
+      "artifact": { "type": "repo|blog|notebook|demo", "url": "" },
+      "page_path": "/growth/2026/node-id"
+    }
+  ],
+  "edges": [
+    { "source": "prereq-id", "target": "node-id" }
+  ]
+}
+```
+
+### File Structure
+
+```
+src/routes/growth/2026/
+├── +page.svelte              # Coordinator
+├── types.ts                  # TypeScript types
+├── components/
+│   ├── GrowthControls.svelte # Left panel (filters)
+│   ├── GrowthGraph2D.svelte  # Canvas visualization
+│   └── NodeInfo.svelte       # Right panel (details)
+└── utils/
+    ├── graphHelpers.ts       # Data processing
+    ├── nodeUtils.ts          # Node styling & helpers
+    └── elkLayout.ts          # ELK layout engine
+
+urara/growth/2026/
+└── <node-id>/
+    ├── +page.md              # Markdown content
+    └── assets/               # Images, diagrams
+
+src/resources/
+└── growth2026.json           # Graph data
+
+src/lib/components/growth/
+└── ConceptChecklist.svelte   # Concept tracking
+
+scripts/
+├── new-growth-node.mjs       # Node generator
+└── backfill-growth-pages.mjs # Batch page creator
+```
+
 ## License
 
 WTFPL (Do What The Fuck You Want To Public License)
 
 ---
 
-**Last Updated:** November 2025 (Code Review: Nov 8, 2025)
+**Last Updated:** December 2025 (Yggdrasil Integration: Dec 31, 2025)
 
