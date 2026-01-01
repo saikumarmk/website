@@ -11,6 +11,7 @@
   let allTags: string[] = []
   let selectedTag: string | null = null
   let searchQuery = ''
+  let activeView: 'all' | 'learning' | 'blog' = 'all'
 
   storedPosts.subscribe(posts => {
     if (Array.isArray(posts)) {
@@ -34,18 +35,22 @@
     return matchesTag && matchesSearch
   })
 
+  // Helper to check if post is a learning note
+  function isLearningNote(post: Urara.Post): boolean {
+    return post.path?.startsWith('/growth/2026/') || 
+           post.tags?.includes('yggdrasil') ||
+           post.tags?.includes('learning-note') ||
+           (post as any).growth !== undefined
+  }
+
   // Separate learning notes from blog posts
-  $: learningNotes = filteredPosts.filter(post => 
-    post.path?.startsWith('/growth/2026/') || 
-    post.tags?.includes('yggdrasil') ||
-    post.tags?.includes('learning-note')
-  )
+  $: learningNotes = filteredPosts.filter(isLearningNote)
+  $: blogPosts = filteredPosts.filter(post => !isLearningNote(post))
   
-  $: blogPosts = filteredPosts.filter(post => 
-    !post.path?.startsWith('/growth/2026/') && 
-    !post.tags?.includes('yggdrasil') &&
-    !post.tags?.includes('learning-note')
-  )
+  // Apply view filter
+  $: visiblePosts = activeView === 'learning' ? learningNotes 
+                  : activeView === 'blog' ? blogPosts 
+                  : filteredPosts
 
   // Group blog posts by year
   $: postsByYear = blogPosts.reduce((acc, post) => {
@@ -72,9 +77,33 @@
 
 <div class="container mx-auto px-4 py-20 max-w-7xl">
   <!-- Header -->
-  <div class="text-center mb-12">
+  <div class="text-center mb-8">
     <h1 class="text-5xl font-bold mb-4">Archive</h1>
-    <p class="text-lg opacity-70">Browse all posts by tag, year, or search</p>
+    <p class="text-lg opacity-70 mb-6">Browse all posts by tag, year, or search</p>
+    
+    <!-- View Tabs -->
+    <div class="tabs tabs-boxed inline-flex bg-base-200">
+      <button 
+        class="tab"
+        class:tab-active={activeView === 'all'}
+        on:click={() => activeView = 'all'}>
+        All ({allPosts.length})
+      </button>
+      <button 
+        class="tab gap-2"
+        class:tab-active={activeView === 'learning'}
+        on:click={() => activeView = 'learning'}>
+        <span class="i-heroicons-outline-academic-cap w-4 h-4"></span>
+        Learning ({learningNotes.length})
+      </button>
+      <button 
+        class="tab gap-2"
+        class:tab-active={activeView === 'blog'}
+        on:click={() => activeView = 'blog'}>
+        <span class="i-heroicons-outline-document-text w-4 h-4"></span>
+        Blog ({blogPosts.length})
+      </button>
+    </div>
   </div>
 
   <div class="grid lg:grid-cols-4 gap-8">
@@ -129,12 +158,22 @@
       <!-- Stats -->
       <div class="stats stats-vertical lg:stats-horizontal shadow-lg w-full mb-8">
         <div class="stat">
-          <div class="stat-title">Total Posts</div>
-          <div class="stat-value text-primary">{allPosts.length}</div>
+          <div class="stat-title">Showing</div>
+          <div class="stat-value text-primary">{visiblePosts.length}</div>
+          <div class="stat-desc">
+            {#if activeView === 'learning'}
+              Learning notes
+            {:else if activeView === 'blog'}
+              Blog posts
+            {:else}
+              All posts
+            {/if}
+          </div>
         </div>
         <div class="stat">
-          <div class="stat-title">Filtered</div>
-          <div class="stat-value text-secondary">{filteredPosts.length}</div>
+          <div class="stat-title">Total</div>
+          <div class="stat-value">{allPosts.length}</div>
+          <div class="stat-desc">{learningNotes.length} learning, {blogPosts.length} blog</div>
         </div>
         <div class="stat">
           <div class="stat-title">Tags</div>
@@ -156,19 +195,19 @@
         </div>
       {/if}
 
-      <!-- Posts by Category -->
-      {#if filteredPosts.length === 0}
+      <!-- Posts Display -->
+      {#if visiblePosts.length === 0}
         <div class="card bg-base-200 shadow-lg p-12 text-center">
           <span class="i-heroicons-outline-document-magnifying-glass w-16 h-16 mx-auto mb-4 opacity-30"></span>
           <h3 class="text-2xl font-bold mb-2">No posts found</h3>
-          <p class="opacity-70">Try adjusting your filters</p>
+          <p class="opacity-70">Try adjusting your filters or view</p>
         </div>
       {:else}
-        <div class="space-y-16">
+        <div in:fade={{ duration: 300 }}>
           
-          <!-- Learning Notes Section (Yggdrasil) -->
-          {#if learningNotes.length > 0}
-            <div in:fade={{ duration: 300 }}>
+          <!-- Learning Notes View -->
+          {#if activeView === 'all' && learningNotes.length > 0}
+            <div class="mb-16">
               <div class="flex items-center gap-4 mb-6">
                 <span class="i-heroicons-outline-academic-cap w-8 h-8 text-accent"></span>
                 <h2 class="text-3xl font-bold text-accent">Learning Notes</h2>
@@ -179,7 +218,7 @@
                 </a>
               </div>
               <p class="text-sm opacity-70 mb-6 px-1">
-                Skill tree nodes from Yggdrasil 2026 - tracking my learning journey through AI, systems, and software engineering.
+                Skill tree nodes from Yggdrasil 2026 - tracking my learning journey.
               </p>
               <div class="space-y-4">
                 {#each learningNotes as post}
@@ -234,15 +273,61 @@
               </div>
             </div>
           {/if}
+          
+          {#if activeView === 'learning' && learningNotes.length > 0}
+            <div class="space-y-4">
+              {#each learningNotes as post}
+                {@const readTime = getReadingTime(post.html)}
+                <a
+                  href={post.path}
+                  class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-6 flex flex-row items-start gap-4 group border-l-4 border-accent">
+                  <div class="flex flex-col items-center text-center min-w-[80px]">
+                    <div class="text-2xl font-bold">
+                      {new Date(post.published ?? post.created).getDate()}
+                    </div>
+                    <div class="text-xs opacity-60 uppercase">
+                      {new Date(post.published ?? post.created).toLocaleDateString('en-US', { month: 'short' })}
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-accent transition-colors">
+                      {post.title || post.path.slice(1)}
+                    </h3>
+                    {#if post.summary}
+                      <p class="text-sm opacity-70 mb-3 line-clamp-2">{post.summary}</p>
+                    {/if}
+                    <div class="flex items-center gap-3 flex-wrap">
+                      {#if post.tags && post.tags.length > 0}
+                        <div class="flex gap-1 flex-wrap">
+                          {#each post.tags.slice(0, 5) as tag}
+                            <span class="badge badge-sm badge-outline">#{tag}</span>
+                          {/each}
+                        </div>
+                      {/if}
+                      {#if readTime}
+                        <div class="text-xs opacity-60 flex items-center gap-1 ml-auto">
+                          <span class="i-heroicons-outline-clock w-3 h-3"></span>
+                          {readTime}
+                        </div>
+                      {/if}
+                    </div>
+                  </div>
+                  <span class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></span>
+                </a>
+              {/each}
+            </div>
+          {/if}
 
-          <!-- Blog Posts Section -->
-          {#if blogPosts.length > 0}
-            <div in:fade={{ duration: 300 }}>
-              <div class="flex items-center gap-4 mb-6">
-                <span class="i-heroicons-outline-document-text w-8 h-8 text-primary"></span>
-                <h2 class="text-3xl font-bold text-primary">Blog Posts</h2>
-                <div class="flex-1 h-px bg-gradient-to-r from-primary/50 to-transparent"></div>
-              </div>
+          <!-- Blog Posts Section (for 'all' or 'blog' view) -->
+          {#if (activeView === 'all' || activeView === 'blog') && blogPosts.length > 0}
+            <div>
+              {#if activeView === 'all'}
+                <div class="flex items-center gap-4 mb-6">
+                  <span class="i-heroicons-outline-document-text w-8 h-8 text-primary"></span>
+                  <h2 class="text-3xl font-bold text-primary">Blog Posts</h2>
+                  <div class="flex-1 h-px bg-gradient-to-r from-primary/50 to-transparent"></div>
+                </div>
+              {/if}
               <div class="space-y-12">
                 {#each years as year}
             <div in:fade={{ duration: 300 }}>
