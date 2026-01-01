@@ -71,7 +71,7 @@ Note, that at this point in time, we were looking for a raspberry pi, or an alte
 
 And so, our goose chase for this phantom SBC which we couldn’t even be sure if we could program once we got it. Our first candidate was the hilariously named Banana Pi M2.
 
-!["Hell yeah looks like a mostly shameless clone" - Shin](/assets/neochomp/blog-1/banana.webp)
+!['Hell yeah looks like a mostly shameless clone' - Shin](/assets/neochomp/blog-1/banana.webp)
 
 <Framed>
 “Hell yeah looks like a mostly shameless clone” - Shin
