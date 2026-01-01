@@ -42,11 +42,20 @@ const cpFile = (src: string, { stat = 'copy', dest = path.join(check(path.parse(
     .then(() => log('green', `${stat} file`, dest))
     .catch(error)
 
-const rmFile = (src: string, { dest = path.join(check(path.parse(src).ext.slice(1)), src.slice(6)) } = {}) =>
-  fs
+const rmFile = (src: string, { dest = path.join(check(path.parse(src).ext.slice(1)), src.slice(6)) } = {}) => {
+  // Don't delete files in protected directories
+  const protectedDirs = ['src/routes/growth', 'src/routes/monash-graph']
+  
+  if (protectedDirs.some(dir => dest.startsWith(dir))) {
+    log('cyan', 'skip protected file', dest)
+    return Promise.resolve()
+  }
+  
+  return fs
     .rm(dest)
     .then(() => log('yellow', 'remove file', dest))
     .catch(error)
+}
 
 const cpDir = (src: string) =>
   fs.readdir(src, { withFileTypes: true }).then(files =>
@@ -73,12 +82,21 @@ const mkDir = (src: string, { dest = [path.join('src/routes', src.slice(6)), pat
 }
 
 const rmDir = (src: string, { dest = [path.join('src/routes', src.slice(6)), path.join('static', src.slice(6))] } = {}) => {
-  dest.forEach(path =>
+  // Don't delete directories with custom TypeScript/Svelte code
+  const protectedDirs = ['src/routes/growth', 'src/routes/monash-graph']
+  
+  dest.forEach(targetPath => {
+    // Skip if this is a protected directory
+    if (protectedDirs.some(dir => targetPath.startsWith(dir))) {
+      log('cyan', 'skip protected dir', targetPath)
+      return
+    }
+    
     fs
-      .rm(path, { force: true, recursive: true })
-      .then(() => log('yellow', 'remove dir', path))
+      .rm(targetPath, { force: true, recursive: true })
+      .then(() => log('yellow', 'remove dir', targetPath))
       .catch(error)
-  )
+  })
 }
 
 const cleanDir = (src: string) =>
@@ -113,12 +131,12 @@ switch (process.argv[2]) {
         .on('unlinkDir', dir => rmDir(dir))
         .on('error', error => log('red', 'error', error))
         .on('ready', () => log('cyan', 'copy complete. ready for changes'))
-      process
-        .on('SIGINT', () => {
-          log('red', 'sigint')
-          clean()
-          watcher?.close()
-        })
+    process
+      .on('SIGINT', () => {
+        log('red', 'sigint')
+        // Don't clean on dev server stop - preserve custom src/routes files
+        watcher?.close()
+      })
         .on('SIGTERM', () => {
           log('red', 'sigterm')
           watcher?.close()
