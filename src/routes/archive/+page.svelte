@@ -34,8 +34,21 @@
     return matchesTag && matchesSearch
   })
 
-  // Group by year
-  $: postsByYear = filteredPosts.reduce((acc, post) => {
+  // Separate learning notes from blog posts
+  $: learningNotes = filteredPosts.filter(post => 
+    post.path?.startsWith('/growth/2026/') || 
+    post.tags?.includes('yggdrasil') ||
+    post.tags?.includes('learning-note')
+  )
+  
+  $: blogPosts = filteredPosts.filter(post => 
+    !post.path?.startsWith('/growth/2026/') && 
+    !post.tags?.includes('yggdrasil') &&
+    !post.tags?.includes('learning-note')
+  )
+
+  // Group blog posts by year
+  $: postsByYear = blogPosts.reduce((acc, post) => {
     const year = new Date(post.published ?? post.created).getFullYear()
     if (!acc[year]) acc[year] = []
     acc[year].push(post)
@@ -143,7 +156,7 @@
         </div>
       {/if}
 
-      <!-- Posts by Year -->
+      <!-- Posts by Category -->
       {#if filteredPosts.length === 0}
         <div class="card bg-base-200 shadow-lg p-12 text-center">
           <span class="i-heroicons-outline-document-magnifying-glass w-16 h-16 mx-auto mb-4 opacity-30"></span>
@@ -151,8 +164,87 @@
           <p class="opacity-70">Try adjusting your filters</p>
         </div>
       {:else}
-        <div class="space-y-12">
-          {#each years as year}
+        <div class="space-y-16">
+          
+          <!-- Learning Notes Section (Yggdrasil) -->
+          {#if learningNotes.length > 0}
+            <div in:fade={{ duration: 300 }}>
+              <div class="flex items-center gap-4 mb-6">
+                <span class="i-heroicons-outline-academic-cap w-8 h-8 text-accent"></span>
+                <h2 class="text-3xl font-bold text-accent">Learning Notes</h2>
+                <div class="flex-1 h-px bg-gradient-to-r from-accent/50 to-transparent"></div>
+                <a href="/growth/2026" class="btn btn-sm btn-ghost gap-2">
+                  <span class="i-heroicons-outline-map w-4 h-4"></span>
+                  View Tree
+                </a>
+              </div>
+              <p class="text-sm opacity-70 mb-6 px-1">
+                Skill tree nodes from Yggdrasil 2026 - tracking my learning journey through AI, systems, and software engineering.
+              </p>
+              <div class="space-y-4">
+                {#each learningNotes as post}
+                  {@const readTime = getReadingTime(post.html)}
+                  <a
+                    href={post.path}
+                    class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-6 flex flex-row items-start gap-4 group border-l-4 border-accent">
+                    <!-- Date -->
+                    <div class="flex flex-col items-center text-center min-w-[80px]">
+                      <div class="text-2xl font-bold">
+                        {new Date(post.published ?? post.created).getDate()}
+                      </div>
+                      <div class="text-xs opacity-60 uppercase">
+                        {new Date(post.published ?? post.created).toLocaleDateString('en-US', { month: 'short' })}
+                      </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-xl font-bold mb-2 group-hover:text-accent transition-colors">
+                        {post.title || post.path.slice(1)}
+                      </h3>
+                      {#if post.summary}
+                        <p class="text-sm opacity-70 mb-3 line-clamp-2">{post.summary}</p>
+                      {/if}
+                      <div class="flex items-center gap-3 flex-wrap">
+                        {#if post.tags && post.tags.length > 0}
+                          <div class="flex gap-1 flex-wrap">
+                            {#each post.tags as tag}
+                              <span 
+                                class="badge badge-sm"
+                                class:badge-accent={tag === selectedTag}
+                                class:badge-outline={tag !== selectedTag}>
+                                #{tag}
+                              </span>
+                            {/each}
+                          </div>
+                        {/if}
+                        {#if readTime}
+                          <div class="text-xs opacity-60 flex items-center gap-1 ml-auto">
+                            <span class="i-heroicons-outline-clock w-3 h-3"></span>
+                            {readTime}
+                          </div>
+                        {/if}
+                      </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <span class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></span>
+                  </a>
+                {/each}
+              </div>
+            </div>
+          {/if}
+
+          <!-- Blog Posts Section -->
+          {#if blogPosts.length > 0}
+            <div in:fade={{ duration: 300 }}>
+              <div class="flex items-center gap-4 mb-6">
+                <span class="i-heroicons-outline-document-text w-8 h-8 text-primary"></span>
+                <h2 class="text-3xl font-bold text-primary">Blog Posts</h2>
+                <div class="flex-1 h-px bg-gradient-to-r from-primary/50 to-transparent"></div>
+              </div>
+              <div class="space-y-12">
+                {#each years as year}
             <div in:fade={{ duration: 300 }}>
               <!-- Year Header -->
               <div class="flex items-center gap-4 mb-6">
@@ -214,9 +306,13 @@
                     <span class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></span>
                   </a>
                 {/each}
+                </div>
+              </div>
+            {/each}
               </div>
             </div>
-          {/each}
+          {/if}
+          
         </div>
       {/if}
     </div>
