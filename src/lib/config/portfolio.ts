@@ -10,6 +10,7 @@ export const projects: Project[] = [
             'A recreation of the Pokemon Red ELO tournament using the PKMN engine.',
         majorProject: false,
         badges: ['Python', 'ASM'],
+        img: '/assets/red.png',
         link: 'https://github.com/saikumarmk/pokered-trainer-tournament'
     },
     {
@@ -18,9 +19,10 @@ export const projects: Project[] = [
         tags: ['Scraping'],
         feature: '',
         description:
-            'Scraper + Formatter for the Monash Handbooker written in Go.',
+            'Scraper + Formatter for the Monash Handbook written in Go.',
         majorProject: false,
         badges: ['Go'],
+        img: 'https://go.dev/blog/go-brand/Go-Logo/PNG/Go-Logo_Blue.png',
         link: 'https://github.com/saikumarmk/monash-handbook-scraper'
     },
     {
@@ -29,9 +31,10 @@ export const projects: Project[] = [
         tags: ['Data Vis'],
         feature: '',
         description:
-            'A newer SETU visualisation tool prompted in React.',
+            'A newer SETU visualisation tool built in React.',
         majorProject: false,
         badges: ['React'],
+        img: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
         buttons: [{ label: 'Demo', href: 'https://saikumarmk.github.io/unit-scores-dashboard/' }],
         link: 'https://github.com/saikumarmk/unit-scores-dashboard'
     },
@@ -41,10 +44,11 @@ export const projects: Project[] = [
         tags: ['Library'],
         feature: '',
         description:
-            'An async python wrapper for the VicRoads DataExchange API ',
+            'An async python wrapper for the VicRoads DataExchange API.',
         majorProject: false,
         badges: ['Python'],
-        link: 'hhttps://github.com/saikumarmk/vicroads-transport-api'
+        img: '/assets/tram.png',
+        link: 'https://github.com/saikumarmk/vicroads-transport-api'
     },
     {
         id: 'tungsten',
@@ -55,6 +59,7 @@ export const projects: Project[] = [
             'A Wolfram library written to assist with high school mathematics assessments.',
         majorProject: false,
         badges: ['Wolfram'],
+        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png',
         link: 'https://github.com/saikumarmk/tungsten'
     },
     {
@@ -66,6 +71,7 @@ export const projects: Project[] = [
             'Software for rendering animations on a LED-Matrix.',
         majorProject: false,
         badges: ['Python', 'Hardware'],
+        img: '/assets/neochomp.png',
         link: 'https://github.com/saikumarmk/neochomp'
     },
     {
@@ -74,21 +80,11 @@ export const projects: Project[] = [
         tags: ['AI', 'Data Vis'],
         feature: '',
         description:
-            'A streamlit application which generates text from Love Letter pages and visualises information about them. ',
+            'A streamlit application which generates text from Love Letter pages and visualises information about them.',
         majorProject: false,
         badges: ['Python', 'GPT-2', 'Streamlit'],
+        img: '/assets/projects/maidenless.webp',
         link: 'https://github.com/saikumarmk/project-maidenless'
-    },
-    {
-        id: 'MiniMelbourne',
-        name: 'Mini Melbourne',
-        tags: ['Data Vis'],
-        feature: '',
-        description:
-            'A live train map of Melbourne designed with FastAPI and React.',
-        majorProject: false,
-        badges: ['Python', 'React'],
-        link: 'https://github.com/weLoveTrainz/MiniMelbourne'
     },
     {
         id: 'uwucode',
@@ -96,9 +92,10 @@ export const projects: Project[] = [
         tags: ['Low Level'],
         feature: '',
         description:
-            'A toy programming language designed in Rust.',
+            'A toy programming language designed in Rust. It features a custom lexer and parser built from scratch. The language supports variables, functions, and control flow. It was created as a learning project to understand compiler design. The syntax is intentionally playful and fun to write.',
         majorProject: false,
         badges: ['Rust'],
+        img: 'https://github.com/saikumarmk/uwucode/raw/main/images/uwucode_logo.png',
         link: 'https://github.com/saikumarmk/uwucode'
     },
     {
@@ -110,6 +107,7 @@ export const projects: Project[] = [
             'A visualisation tool for unit scores.',
         majorProject: false,
         badges: ['Python'],
+        img: 'https://github.com/saikumarmk/SETool/raw/main/assets/logo.png',
         link: 'https://github.com/saikumarmk/SETool'
     },
     {
@@ -117,10 +115,11 @@ export const projects: Project[] = [
         name: 'voltchip',
         tags: ['Low Level'],
         feature: '',
+        description:
+            'A CHIP-8 emulator designed in C that can be targetted for the web.',
         majorProject: false,
         badges: ['C', 'WASM'],
-        description:
-            'A CHIP-8 emulator designed in C that can be targetted for the web',
+        img: 'https://github.com/saikumarmk/web-voltchip/raw/main/assets/logo.png',
         link: 'https://github.com/saikumarmk/web-voltchip'
     },
     {
@@ -130,7 +129,8 @@ export const projects: Project[] = [
         feature: '',
         majorProject: false,
         badges: ['THREE.js'],
-        description: 'A CV site built on eldoraboo/portable-portfolio with THREE.js rendering the background',
+        description: 'A CV site built on eldoraboo/portable-portfolio with THREE.js rendering the background.',
+        img: '/assets/projects/acm.webp',
         link: 'https://github.com/acmonaghan/acmonaghan.github.io',
         buttons: [{ label: 'Website', href: 'https://acmonaghan.github.io' }]
     },
@@ -141,7 +141,8 @@ export const projects: Project[] = [
         feature: '',
         majorProject: false,
         badges: ['mapbox'],
-        description: 'A new version of Mini Melbourne with 3D rendering using Mapbox GL JS + bus, tram, and VLine data',
+        description: 'A new version of Mini Melbourne with 3D rendering using Mapbox GL JS + bus, tram, and VLine data.',
+        img: '/assets/projects/minimelbnew.webp',
         link: 'https://github.com/saikumarmk/mini-melbourne-3d',
         buttons: [{ label: 'Website', href: 'https://transit.saikumarmk.com/' }]
     },
@@ -151,10 +152,35 @@ export const projects: Project[] = [
         tags: ['Data Vis', 'web-dev', 'Astrophysics'],
         feature: '',
         majorProject: false,
-        badges: ['mapbox'],
-        description: 'An effort to compress the SKIRTOR model files and visualise them through Streamlit',
+        badges: ['Streamlit'],
+        description: 'An effort to compress the SKIRTOR model files and visualise them through Streamlit.',
+        img: '/assets/blackhole.png',
         link: 'https://github.com/saikumarmk/skirtor',
-        buttons: [{ label: 'Website', href: 'https://transit.saikumarmk.com/' }]
+        buttons: [{ label: 'Website', href: 'https://skirtor.saikumarmk.com/' }]
+    },
+    {
+        id: 'monash-handbook-plus',
+        name: "monash-handbook-plus",
+        tags: ['Data Vis', 'web-dev', 'Education'],
+        feature: '',
+        majorProject: true,
+        badges: ['React', 'TypeScript', 'D3.js'],
+        description: 'A comprehensive Monash University handbook tool with unit search, cost calculator, areas of study browser, interactive graph visualization, degree planner with auto-scheduling, pathway finder, and shareable study plans.',
+        img: '/assets/monash-handbook-plus-logo.png',
+        link: 'https://github.com/saikumarmk/monash-handbook-plus',
+        buttons: [{ label: 'Website', href: 'https://saikumarmk.github.io/monash-handbook-plus/' }]
+    },
+    {
+        id: 'saikumarmk-website',
+        name: "saikumarmk.com",
+        tags: ['web-dev', 'Portfolio'],
+        feature: '',
+        majorProject: true,
+        badges: ['SvelteKit', 'TypeScript', 'TailwindCSS', 'THREE.js'],
+        description: 'My personal website and blog built with SvelteKit. Features a Pokemon-themed aesthetic, interactive skill tree (Yggdrasil), blog posts about tech and university, project showcase, and 3D visualizations.',
+        img: '/assets/sai_red.webp',
+        link: 'https://github.com/saikumarmk/saikumarmk.github.io',
+        buttons: [{ label: 'Website', href: 'https://saikumarmk.com' }]
     }
 ]
 

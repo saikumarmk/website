@@ -17,6 +17,7 @@
   const staticPages = [
     { title: 'About', path: '/about', summary: 'Learn more about me', type: 'page' },
     { title: 'Portfolio', path: '/portfolio', summary: 'View my work and projects', type: 'page' },
+    { title: 'Project Dex', path: '/portfolio/projects', summary: 'Browse all projects in Pokedex style', type: 'page' },
     { title: 'Yggdrasil 2026', path: '/growth/2026', summary: 'Interactive skill tree and learning roadmap', type: 'page' },
     { title: 'Archive', path: '/archive', summary: 'Browse all posts by tag and year', type: 'page' },
   ]
