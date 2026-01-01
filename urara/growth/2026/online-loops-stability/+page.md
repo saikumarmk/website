@@ -1,4 +1,6 @@
 ---
+flags:
+  - unlisted
 title: 'Online Loops & Stability'
 created: 2025-12-31
 updated: 2025-12-31
@@ -9,6 +11,8 @@ growth:
   tier: 'trunk'
   estimate_hours: 20
 ---
+flags:
+  - unlisted
 
 <script context="module">
   export const concepts = [

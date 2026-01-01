@@ -7,11 +7,19 @@
   export let isOpen = false
   
   let searchQuery = ''
-  let searchResults: Urara.Post[] = []
+  let searchResults: any[] = []
   let selectedIndex = 0
   let searchInput: HTMLInputElement
   
   let allPosts: Urara.Post[] = []
+  
+  // Static pages to include in search
+  const staticPages = [
+    { title: 'About', path: '/about', summary: 'Learn more about me', type: 'page' },
+    { title: 'Portfolio', path: '/portfolio', summary: 'View my work and projects', type: 'page' },
+    { title: 'Yggdrasil 2026', path: '/growth/2026', summary: 'Interactive skill tree and learning roadmap', type: 'page' },
+    { title: 'Archive', path: '/archive', summary: 'Browse all posts by tag and year', type: 'page' },
+  ]
   
   storedPosts.subscribe(posts => {
     if (Array.isArray(posts)) {
@@ -28,7 +36,18 @@
     
     const lowerQuery = query.toLowerCase()
     
-    searchResults = allPosts
+    // Search static pages
+    const staticResults = staticPages
+      .map(page => {
+        let score = 0
+        if (page.title.toLowerCase().includes(lowerQuery)) score += 150 // Higher priority
+        if (page.summary.toLowerCase().includes(lowerQuery)) score += 50
+        return { item: { ...page, isStatic: true }, score }
+      })
+      .filter(({ score }) => score > 0)
+    
+    // Search posts
+    const postResults = allPosts
       .map(post => {
         let score = 0
         
@@ -52,12 +71,15 @@
           score += 10
         }
         
-        return { post, score }
+        return { item: post, score }
       })
       .filter(({ score }) => score > 0)
+    
+    // Combine and sort
+    searchResults = [...staticResults, ...postResults]
       .sort((a, b) => b.score - a.score)
       .slice(0, 10)
-      .map(({ post }) => post)
+      .map(({ item }) => item)
     
     selectedIndex = 0
   }
@@ -197,7 +219,17 @@
                   class="flex flex-col px-4 py-3 hover:bg-base-200 transition-colors cursor-pointer {index === selectedIndex ? 'bg-base-200' : ''}"
                   on:mouseenter={() => selectedIndex = index}>
                   <div class="flex items-start justify-between gap-2">
-                    <span class="font-semibold">{post.title ?? post.path.slice(1)}</span>
+                    <div class="flex items-center gap-2">
+                      {#if post.isStatic}
+                        <span class="i-heroicons-outline-star w-4 h-4 opacity-50"></span>
+                      {:else}
+                        <span class="i-heroicons-outline-document-text w-4 h-4 opacity-50"></span>
+                      {/if}
+                      <span class="font-semibold">{post.title ?? post.path.slice(1)}</span>
+                      {#if post.isStatic}
+                        <span class="badge badge-xs badge-primary">Page</span>
+                      {/if}
+                    </div>
                     {#if index === selectedIndex}
                       <span class="i-heroicons-outline-arrow-right w-4 h-4 flex-shrink-0 mt-1"></span>
                     {/if}
