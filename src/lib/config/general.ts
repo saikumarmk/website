@@ -82,7 +82,7 @@ export const header: HeaderConfig = {
 
     {
       text: 'Monash Unit Graph',
-      link: '/monash-graph'
+      link: 'https://saikumarmk.github.io/monash-handbook-plus/graph'
     },
     {
       text: 'Yggdrasil',

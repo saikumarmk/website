@@ -24,7 +24,7 @@ Over the last few months, I've worked with some other members of my club to work
 In the journey to scrape requisites, I discovered MonPlan, a now discontinued course planner, can verify course plans, which means it can indirectly return course requisites. After some fiddling and a bit of grouping, I managed to get a rough collection of requisites. Then, I used the Monash Handbook API to scrape any other information and collated it. All this code may be found in [this repository](https://github.com/monashcoding/TheBetterHandbookAPI).
 
 
-After compiling these requisites, I whipped up a network visualisation of all 5360 or so Monash units. You may find the graph [here](/monash-graph).
+After compiling these requisites, I whipped up a network visualisation of all 5360 or so Monash units. You may find the graph [here](https://saikumarmk.github.io/monash-handbook-plus/graph).
 
 
 ## Canva

@@ -102,9 +102,9 @@ export default defineConfig({
         autofill: {
           provider: 'fs',
           path: (path: string) => {
-            // For pages that live directly in src/routes (growth, monash-graph, etc.)
+            // For pages that live directly in src/routes (growth, etc.)
             // keep the path as-is. Only map to urara/ for blog posts.
-            if (path.includes('/growth/') || path.includes('/monash-graph/')) {
+            if (path.includes('/growth/')) {
               return path
             }
             return path.replace('/src/routes/', '/urara/')

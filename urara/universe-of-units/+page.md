@@ -8,7 +8,7 @@ tags: [scraping, visualisation]
 
 # Introduction
 
-You may have seen the unit graph visualisations on my website and wondered what they mean or how I came to create them. The [Monash Unit Graph](https://www.saikumarmk.com/monash-graph-3d/) visualises all ~5200 units offered at Monash University across all campuses. But how did I come to collect all this data? This piece will outline the format of the Monash handbook, how to scrape the handbook, how to collect requisites, and how to put all the information together.
+You may have seen the unit graph visualisations on my website and wondered what they mean or how I came to create them. The [Monash Unit Graph](https://saikumarmk.github.io/monash-handbook-plus/graph) visualises all ~5200 units offered at Monash University across all campuses. But how did I come to collect all this data? This piece will outline the format of the Monash handbook, how to scrape the handbook, how to collect requisites, and how to put all the information together.
 
 ## Inspirations
 
