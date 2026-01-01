@@ -30,8 +30,8 @@
 {#if source}
   <picture>
     <source srcset={source.map(({ src, w }) => `${src} ${w}w`).join(', ')} type="image/avif" />
-    <img {src} {alt} class={className ?? 'rounded-lg my-2'} {loading} {decoding} />
+    <img {src} {alt} class={className ?? 'rounded-lg my-2 max-w-full h-auto'} {loading} {decoding} style="max-width: 800px; margin-left: auto; margin-right: auto;" />
   </picture>
 {:else}
-  <img {src} {alt} class={className ?? 'rounded-lg my-2'} {loading} {decoding} />
+  <img {src} {alt} class={className ?? 'rounded-lg my-2 max-w-full h-auto'} {loading} {decoding} style="max-width: 800px; margin-left: auto; margin-right: auto;" />
 {/if}
