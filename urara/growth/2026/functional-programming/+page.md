@@ -1,4 +1,6 @@
 ---
+flags:
+  - unlisted
 title: 'Functional Programming'
 created: 2025-12-31
 updated: 2025-12-31
@@ -9,6 +11,8 @@ growth:
   tier: 'branch'
   estimate_hours: 10
 ---
+flags:
+  - unlisted
 
 <script context="module">
   export const concepts = [

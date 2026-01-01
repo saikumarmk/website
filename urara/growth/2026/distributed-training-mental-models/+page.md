@@ -1,4 +1,6 @@
 ---
+flags:
+  - unlisted
 title: 'Distributed Training Mental Models'
 created: 2025-12-31
 updated: 2025-12-31
@@ -9,6 +11,8 @@ growth:
   tier: 'roots'
   estimate_hours: 15
 ---
+flags:
+  - unlisted
 
 <script context="module">
   export const concepts = [

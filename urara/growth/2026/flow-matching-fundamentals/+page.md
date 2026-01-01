@@ -1,4 +1,6 @@
 ---
+flags:
+  - unlisted
 title: 'Flow Matching Fundamentals'
 created: 2025-12-31
 updated: 2025-12-31
@@ -9,6 +11,8 @@ growth:
   tier: 'roots'
   estimate_hours: 12
 ---
+flags:
+  - unlisted
 
 <script context="module">
   export const concepts = [
