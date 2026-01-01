@@ -60,12 +60,10 @@
   )
 </script>
 
-{#if !/monash-graph-(2d|3d)/.test(path)}
-  {#if currentMode === 'three' && ThreeCanvas}
-    <svelte:component this={ThreeCanvas} />
-  {:else if currentMode === 'poke' && PokeCanvas}
-    <svelte:component this={PokeCanvas} />
-  {/if}
+{#if currentMode === 'three' && ThreeCanvas}
+  <svelte:component this={ThreeCanvas} />
+{:else if currentMode === 'poke' && PokeCanvas}
+  <svelte:component this={PokeCanvas} />
 {/if}
 <Head />
 
