@@ -17,3 +17,4 @@
   <p>Redirecting to <a href="/growth/2026" class="link link-primary">Yggdrasil 2026</a>...</p>
 </div>
 
+

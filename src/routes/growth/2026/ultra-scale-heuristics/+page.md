@@ -2,7 +2,7 @@
 title: 'Ultra-Scale Heuristics Distillation'
 created: 2025-12-31
 updated: 2025-12-31
-tags: [5D-parallelism, overlap, bucketing, ZeRO, playbook, ultra-scale]
+tags: [yggdrasil, systems-hpc, 5D-parallelism, overlap, bucketing, ZeRO, playbook, ultra-scale]
 growth:
   node_id: 'ultra-scale-heuristics'
   branch: 'systems-hpc'

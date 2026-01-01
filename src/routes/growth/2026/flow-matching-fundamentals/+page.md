@@ -2,7 +2,7 @@
 title: 'Flow Matching Fundamentals'
 created: 2025-12-31
 updated: 2025-12-31
-tags: [ODE, flow-matching, trajectory, diffusion, continuous-normalizing-flows]
+tags: [yggdrasil, gen-media, ODE, flow-matching, trajectory, diffusion, continuous-normalizing-flows]
 growth:
   node_id: 'flow-matching-fundamentals'
   branch: 'gen-media'

@@ -11,7 +11,7 @@
   let allTags: string[] = []
   let selectedTag: string | null = null
   let searchQuery = ''
-  let activeView: 'all' | 'learning' | 'blog' = 'all'
+  let activeView: 'all' | 'learning' | 'blog' = 'blog'
 
   storedPosts.subscribe(posts => {
     if (Array.isArray(posts)) {
@@ -84,10 +84,11 @@
     <!-- View Tabs -->
     <div class="tabs tabs-boxed inline-flex bg-base-200">
       <button 
-        class="tab"
-        class:tab-active={activeView === 'all'}
-        on:click={() => activeView = 'all'}>
-        All ({allPosts.length})
+        class="tab gap-2"
+        class:tab-active={activeView === 'blog'}
+        on:click={() => activeView = 'blog'}>
+        <span class="i-heroicons-outline-document-text w-4 h-4"></span>
+        Blog ({blogPosts.length})
       </button>
       <button 
         class="tab gap-2"
@@ -97,11 +98,10 @@
         Learning ({learningNotes.length})
       </button>
       <button 
-        class="tab gap-2"
-        class:tab-active={activeView === 'blog'}
-        on:click={() => activeView = 'blog'}>
-        <span class="i-heroicons-outline-document-text w-4 h-4"></span>
-        Blog ({blogPosts.length})
+        class="tab"
+        class:tab-active={activeView === 'all'}
+        on:click={() => activeView = 'all'}>
+        All ({allPosts.length})
       </button>
     </div>
   </div>

@@ -10,9 +10,7 @@
   import Transition from '$lib/components/transition.svelte'
   import { backgroundMode } from '$lib/stores/background'
   import 'uno.css'
-  import ThreeCanvas from '$lib/components/three/astro_canvas.svelte'
   import '../app.pcss'
-  import PokeCanvas from '$lib/components/three/poke_canvas.svelte'
   import CodeCopyButton from '$lib/components/code_copy_button.svelte'
   import ImageLightbox from '$lib/components/image_lightbox.svelte'
   import SearchModal from '$lib/components/search_modal.svelte'
@@ -20,6 +18,8 @@
   export let data: LayoutData
   
   let searchModal: any
+  let ThreeCanvas: any = null
+  let PokeCanvas: any = null
 
   let { res, path } = data
 
@@ -27,6 +27,20 @@
 
   let currentMode = 'none'
   const unsubscribe = backgroundMode.subscribe(mode => (currentMode = mode))
+  
+  // Dynamically load canvas components when needed
+  $: if (browser && currentMode === 'three' && !ThreeCanvas) {
+    import('$lib/components/three/astro_canvas.svelte').then(module => {
+      ThreeCanvas = module.default
+    })
+  }
+  
+  $: if (browser && currentMode === 'poke' && !PokeCanvas) {
+    import('$lib/components/three/poke_canvas.svelte').then(module => {
+      PokeCanvas = module.default
+    })
+  }
+  
   posts.set(res || [])
   tags.set(genTags(res || []))
   onMount(
@@ -42,10 +56,10 @@
 </script>
 
 {#if !/monash-graph-(2d|3d)/.test(path)}
-  {#if currentMode === 'three'}
-    <ThreeCanvas />
-  {:else if currentMode === 'poke'}
-    <PokeCanvas />
+  {#if currentMode === 'three' && ThreeCanvas}
+    <svelte:component this={ThreeCanvas} />
+  {:else if currentMode === 'poke' && PokeCanvas}
+    <svelte:component this={PokeCanvas} />
   {/if}
 {/if}
 <Head />

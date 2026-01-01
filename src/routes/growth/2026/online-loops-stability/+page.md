@@ -2,7 +2,7 @@
 title: 'Online Loops & Stability'
 created: 2025-12-31
 updated: 2025-12-31
-tags: [online, distribution-shift, stability, iterative-training, RL]
+tags: [yggdrasil, rl, online, distribution-shift, stability, iterative-training, RL]
 growth:
   node_id: 'online-loops-stability'
   branch: 'rl'
