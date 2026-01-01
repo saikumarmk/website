@@ -1,9 +1,13 @@
 [build]
-command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm build"
+command = "npx pnpm i --store=node_modules/.pnpm-store --ignore-scripts && npx pnpm rebuild sharp && npx pnpm build"
 publish = "build"
+
 [build.environment]
-NPM_FLAGS = "--version"
-AWS_LAMBDA_JS_RUNTIME = "nodejs16.x"
+NODE_VERSION = "20"
+NPM_FLAGS = "--legacy-peer-deps"
+SHARP_IGNORE_GLOBAL_LIBVIPS = "1"
+AWS_LAMBDA_JS_RUNTIME = "nodejs20.x"
+
 [functions]
 node_bundler = "esbuild"
 included_files = ["node_modules/sharp/**/*"]
