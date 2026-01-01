@@ -13,11 +13,22 @@
     }
   })
   
+  // Helper to check if post is a learning note (Yggdrasil)
+  function isLearningNote(post: Urara.Post): boolean {
+    return post.path?.startsWith('/growth/2026/') || 
+           post.tags?.includes('yggdrasil') ||
+           post.tags?.includes('learning-note') ||
+           (post as any).growth !== undefined
+  }
+  
+  // Filter out Yggdrasil pages from homepage
+  $: blogPosts = allPosts.filter(post => !isLearningNote(post))
+  
   // Featured posts (you can add a 'featured' flag to posts later)
-  $: featuredPosts = allPosts.slice(0, 3)
+  $: featuredPosts = blogPosts.slice(0, 3)
   
   // Latest 5 posts
-  $: latestPosts = allPosts.slice(0, 5)
+  $: latestPosts = blogPosts.slice(0, 5)
 </script>
 
 <Head />

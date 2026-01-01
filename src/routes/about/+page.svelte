@@ -154,7 +154,7 @@
             <div class="avatar">
               <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                 <div class="bg-gradient-to-br from-primary to-secondary w-full h-full flex items-center justify-center text-4xl">
-                  👨‍💻
+                  🤿🏻
                 </div>
               </div>
             </div>
@@ -327,8 +327,8 @@
           
           <div class="text-sm opacity-70 space-y-2">
             <p>📧 Email available in résumé</p>
-            <p>💼 LinkedIn: Search "Sai Kumar Monash"</p>
-            <p>💬 Discord: Theorvolt</p>
+            <p>🏼 LinkedIn: Search "Sai Kumar Monash"</p>
+            <p>🎼 Discord: Theorvolt</p>
           </div>
         </div>
       {/if}
@@ -376,4 +376,3 @@
   }
   
 </style>
-
