@@ -14,8 +14,8 @@ const imagesToCompress = [
     quality: 85
   },
   {
-    input: 'urara/assets/pfp.png',
-    output: 'urara/assets/pfp.webp',
+    input: 'urara/assets/sai_red.png',
+    output: 'urara/assets/sai_red.webp',
     maxWidth: 400,
     quality: 90
   },
