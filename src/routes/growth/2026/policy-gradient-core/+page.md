@@ -2,7 +2,7 @@
 title: 'Policy Gradient Core'
 created: 2025-12-31
 updated: 2025-12-31
-tags: [REINFORCE, actor-critic, policy-gradient, RL]
+tags: [yggdrasil, rl, REINFORCE, actor-critic, policy-gradient, RL]
 growth:
   node_id: 'policy-gradient-core'
   branch: 'rl'

@@ -2,7 +2,7 @@
 title: 'PPO from Scratch'
 created: 2025-12-31
 updated: 2025-12-31
-tags: [PPO, implementation, evaluation, RL, GRPO]
+tags: [yggdrasil, rl, PPO, implementation, evaluation, RL, GRPO]
 growth:
   node_id: 'ppo-from-scratch'
   branch: 'rl'

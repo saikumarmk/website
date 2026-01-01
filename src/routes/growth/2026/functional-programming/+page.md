@@ -2,7 +2,7 @@
 title: 'Functional Programming'
 created: 2025-12-31
 updated: 2025-12-31
-tags: [fp]
+tags: [yggdrasil, swe, fp]
 growth:
   node_id: 'functional-programming'
   branch: 'swe-craft'

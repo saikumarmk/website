@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import { fly } from 'svelte/transition'
   import { browser } from '$app/environment'
   import Card from '$lib/components/post_card.svelte'
@@ -9,7 +10,28 @@
   import { getSeriesInfo } from '$lib/utils/series'
   export let post: Urara.Post | null
   
+  let katexLoaded = false
+  
   $: seriesInfo = post ? getSeriesInfo(post) : undefined
+  
+  // Lazy load KaTeX CSS only if the post contains math
+  onMount(() => {
+    if (browser && !katexLoaded) {
+      // Check if page has math elements (defer to next tick to let content render)
+      setTimeout(() => {
+        const hasMath = document.querySelector('.math, .katex')
+        if (hasMath) {
+          const link = document.createElement('link')
+          link.rel = 'stylesheet'
+          link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css'
+          link.integrity = 'sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV'
+          link.crossOrigin = 'anonymous'
+          document.head.appendChild(link)
+          katexLoaded = true
+        }
+      }, 100)
+    }
+  })
 </script>
 
 <Head {post} />

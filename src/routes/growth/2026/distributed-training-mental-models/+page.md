@@ -2,7 +2,7 @@
 title: 'Distributed Training Mental Models'
 created: 2025-12-31
 updated: 2025-12-31
-tags: [distributed, DP, FSDP, ZeRO, sharding, mental-models]
+tags: [yggdrasil, systems-hpc, distributed, DP, FSDP, ZeRO, sharding, mental-models]
 growth:
   node_id: 'distributed-training-mental-models'
   branch: 'systems-hpc'
