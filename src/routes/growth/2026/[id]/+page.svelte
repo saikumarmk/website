@@ -10,6 +10,12 @@
   $: node = data.nodes.find(n => n.id === nodeId);
 </script>
 
+<script context="module" lang="ts">
+  // Disable prerendering for dynamic fallback route
+  // Specific markdown pages will still prerender as individual route folders
+  export const prerender = false;
+</script>
+
 <svelte:head>
   <title>{node ? node.title : 'Node Not Found'} - Yggdrasil 2026</title>
 </svelte:head>
