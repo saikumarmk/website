@@ -28,6 +28,11 @@
   let currentMode = 'none'
   const unsubscribe = backgroundMode.subscribe(mode => (currentMode = mode))
   
+  // Lazy load Pokemon sprites on homepage (for random bio Pokemon)
+  $: if (browser && path === '/') {
+    import('../styles/pokesprite-pokemon-gen8.css')
+  }
+  
   // Dynamically load canvas components when needed
   $: if (browser && currentMode === 'three' && !ThreeCanvas) {
     import('$lib/components/three/astro_canvas.svelte').then(module => {

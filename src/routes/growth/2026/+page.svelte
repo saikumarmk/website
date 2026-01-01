@@ -5,6 +5,7 @@
   import type { GrowthData, GrowthNode, GraphNode } from './types';
   import { buildGraphData, filterNodes, filterEdges, createNodeMap } from './utils/graphHelpers';
   import { computeDerivedStatuses } from './utils/nodeUtils';
+  import '../../../styles/pokesprite-pokemon-gen8.css'; // Load Pokemon sprites for branch badges
 
   const data = growthData as GrowthData;
 
