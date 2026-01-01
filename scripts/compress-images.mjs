@@ -30,6 +30,30 @@ const imagesToCompress = [
     output: 'urara/assets/neochomp/blog-1/teardown.webp',
     maxWidth: 1000,
     quality: 85
+  },
+  {
+    input: 'urara/assets/update/siggraph.jpg',
+    output: 'urara/assets/update/siggraph.webp',
+    maxWidth: 1200,
+    quality: 85
+  },
+  {
+    input: 'urara/assets/neochomp/blog-1/ado.png',
+    output: 'urara/assets/neochomp/blog-1/ado.webp',
+    maxWidth: 800,
+    quality: 85
+  },
+  {
+    input: 'urara/assets/neochomp/blog-1/banana.png',
+    output: 'urara/assets/neochomp/blog-1/banana.webp',
+    maxWidth: 800,
+    quality: 85
+  },
+  {
+    input: 'urara/assets/neochomp/blog-1/pricey.png',
+    output: 'urara/assets/neochomp/blog-1/pricey.webp',
+    maxWidth: 800,
+    quality: 85
   }
 ];
 

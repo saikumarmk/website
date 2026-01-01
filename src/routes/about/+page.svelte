@@ -149,17 +149,6 @@
     <section id="hero" class="min-h-screen flex items-center p-8 lg:p-12">
       {#if mounted}
         <div in:fly={{ x: 50, duration: 800 }}>
-          <!-- Mobile avatar -->
-          <div class="lg:hidden mb-8">
-            <div class="avatar">
-              <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <div class="bg-gradient-to-br from-primary to-secondary w-full h-full flex items-center justify-center text-4xl">
-                  🤿🏻
-                </div>
-              </div>
-            </div>
-          </div>
-          
           <h1 class="text-5xl lg:text-6xl font-bold mb-6">
             Hi, I'm <span class="text-primary">Sai</span>
           </h1>
