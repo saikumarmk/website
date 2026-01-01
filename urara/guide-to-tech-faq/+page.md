@@ -6,12 +6,6 @@ categories: [University, Career]
 tags: [university, career]
 ---
 
-<script>
-import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
-import Sprite from '$lib/components/pkmn/sprite.svelte'
-</script>
-
-
 I've received many questions on my article, so this page will act as an index for the most popular questions, and the answers to them.
 
 
@@ -55,5 +49,3 @@ Nothing, really~~, other than potential referrals~~. I'm invested in bringing ou
 ### On Natural Talent versus Hard work
 
 I'm a firm believer of 70-80% of your ability coming through hard work. Some people may learn stuff instantly, or be able to solve problems instantly, but the only person you should seriously compare yourself to is you. Being diligient and resilient is hard, but are amazing traits to have in your life, so even if you feel like nothing is going your way, continue to push on. Don't just push on as you normally do though, actively challenge yourself, your assumptions about the way you learn if you feel it's ineffective, and really fight the content placed in front of you.
-
-<PokemonSprite pokemonName="smeargle" size="large"/>
