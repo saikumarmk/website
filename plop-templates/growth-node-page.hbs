@@ -1,0 +1,55 @@
+---
+title: '{{title}}'
+created: {{currentDate}}
+updated: {{currentDate}}
+tags: [{{tags}}]
+growth:
+  node_id: '{{id}}'
+  branch: '{{branch}}'
+  tier: '{{tier}}'
+  estimate_hours: {{estimateHours}}
+concepts:
+  - id: concept-1
+    title: "Core Concept 1"
+  - id: concept-2
+    title: "Core Concept 2"
+---
+
+<script>
+  import ConceptChecklist from '$lib/components/growth/ConceptChecklist.svelte';
+</script>
+
+## Overview
+
+Brief introduction to {{title}}.
+
+## Key Concepts
+
+<ConceptChecklist nodeId="{{id}}" concepts={frontmatter.growth.concepts} />
+
+## Learning Path
+
+### Concept 1
+
+Content here...
+
+### Concept 2
+
+Content here...
+
+## Implementation
+
+Practical examples and code...
+
+## Resources
+
+- Resource 1
+- Resource 2
+
+## Next Steps
+
+What to learn after completing this node.
+
+
+
+

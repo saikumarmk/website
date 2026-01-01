@@ -1,0 +1,1218 @@
+{
+    "year": 2026,
+    "branches": [
+        "systems-hpc",
+        "gen-media",
+        "rl",
+        "maths",
+        "swe",
+        "physics"
+    ],
+    "nodes": [
+        {
+            "id": "distributed-training-mental-models",
+            "title": "Distributed Training Mental Models",
+            "branch": "systems-hpc",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "DP",
+                "FSDP",
+                "ZeRO",
+                "sharding",
+                "mental-models"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/distributed-training-mental-models"
+        },
+        {
+            "id": "measurement-instrumentation",
+            "title": "Measurement & Instrumentation",
+            "branch": "systems-hpc",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 10,
+            "tags": [
+                "profiling",
+                "throughput",
+                "memory",
+                "communication"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/measurement-instrumentation"
+        },
+        {
+            "id": "video-data-fundamentals",
+            "title": "Video Data Fundamentals",
+            "branch": "systems-hpc",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 8,
+            "tags": [
+                "video",
+                "decode",
+                "IO",
+                "dataloader"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/video-data-fundamentals"
+        },
+        {
+            "id": "fault-tolerance",
+            "title": "Fault Tolerance & Suspend/Resume",
+            "branch": "systems-hpc",
+            "tier": "trunk",
+            "prerequisites": [
+                "distributed-training-mental-models"
+            ],
+            "status": "locked",
+            "estimate_hours": 8,
+            "tags": [
+                "checkpointing",
+                "fault-tolerance",
+                "reliability"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/fault-tolerance"
+        },
+        {
+            "id": "research-harness-v2",
+            "title": "Research Harness v2",
+            "branch": "systems-hpc",
+            "tier": "trunk",
+            "prerequisites": [
+                "distributed-training-mental-models",
+                "fault-tolerance",
+                "measurement-instrumentation"
+            ],
+            "status": "locked",
+            "estimate_hours": 20,
+            "tags": [
+                "template",
+                "sweeps",
+                "checkpoints",
+                "eval"
+            ],
+            "artifact": {
+                "type": "repo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/research-harness-v2"
+        },
+        {
+            "id": "video-data-engine",
+            "title": "Video Data Engine",
+            "branch": "systems-hpc",
+            "tier": "trunk",
+            "prerequisites": [
+                "video-data-fundamentals",
+                "measurement-instrumentation"
+            ],
+            "status": "locked",
+            "estimate_hours": 25,
+            "tags": [
+                "video",
+                "pipeline",
+                "decode",
+                "bottleneck"
+            ],
+            "artifact": {
+                "type": "repo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/video-data-engine"
+        },
+        {
+            "id": "curation-labeling-factory",
+            "title": "Curation & Labeling Factory",
+            "branch": "systems-hpc",
+            "tier": "trunk",
+            "prerequisites": [
+                "video-data-engine"
+            ],
+            "status": "locked",
+            "estimate_hours": 18,
+            "tags": [
+                "VLM",
+                "captioning",
+                "dataset",
+                "QA"
+            ],
+            "artifact": {
+                "type": "repo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/curation-labeling-factory"
+        },
+        {
+            "id": "ultra-scale-heuristics",
+            "title": "Ultra-Scale Heuristics Distillation",
+            "branch": "systems-hpc",
+            "tier": "trunk",
+            "prerequisites": [
+                "distributed-training-mental-models",
+                "measurement-instrumentation"
+            ],
+            "status": "locked",
+            "estimate_hours": 30,
+            "tags": [
+                "5D-parallelism",
+                "overlap",
+                "bucketing",
+                "ZeRO",
+                "playbook"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/ultra-scale-heuristics"
+        },
+        {
+            "id": "cost-capacity-modeling",
+            "title": "Cost & Capacity Modeling",
+            "branch": "systems-hpc",
+            "tier": "trunk",
+            "prerequisites": [
+                "measurement-instrumentation"
+            ],
+            "status": "locked",
+            "estimate_hours": 12,
+            "tags": [
+                "cost",
+                "GPU-hours",
+                "scaling-plan"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/cost-capacity-modeling"
+        },
+        {
+            "id": "long-context-parallelism",
+            "title": "Long-Context Parallelism",
+            "branch": "systems-hpc",
+            "tier": "branch",
+            "prerequisites": [
+                "ultra-scale-heuristics"
+            ],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "sequence-parallelism",
+                "context-parallelism",
+                "ring-attention"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/long-context-parallelism"
+        },
+        {
+            "id": "inference-serving-fundamentals",
+            "title": "Inference Serving Fundamentals",
+            "branch": "systems-hpc",
+            "tier": "branch",
+            "prerequisites": [
+                "ultra-scale-heuristics"
+            ],
+            "status": "locked",
+            "estimate_hours": 12,
+            "tags": [
+                "batching",
+                "memory-pressure",
+                "latency",
+                "throughput"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/inference-serving-fundamentals"
+        },
+        {
+            "id": "transformer-video-arch",
+            "title": "Transformer Video Architecture",
+            "branch": "gen-media",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "DiT",
+                "patches",
+                "spatiotemporal",
+                "attention"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/transformer-video-arch"
+        },
+        {
+            "id": "flow-matching-fundamentals",
+            "title": "Flow Matching Fundamentals",
+            "branch": "gen-media",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 12,
+            "tags": [
+                "ODE",
+                "flow-matching",
+                "trajectory"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/flow-matching-fundamentals"
+        },
+        {
+            "id": "video-tokenization-vaes",
+            "title": "Video Tokenization & VAEs",
+            "branch": "gen-media",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 10,
+            "tags": [
+                "VAE",
+                "tokenization",
+                "representation"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/video-tokenization-vaes"
+        },
+        {
+            "id": "evaluation-protocols",
+            "title": "Evaluation Protocols",
+            "branch": "gen-media",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 8,
+            "tags": [
+                "eval",
+                "metrics",
+                "rubric"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/evaluation-protocols"
+        },
+        {
+            "id": "rectified-flow-toolkit",
+            "title": "Rectified Flow / Consistency Toolkit",
+            "branch": "gen-media",
+            "tier": "trunk",
+            "prerequisites": [
+                "flow-matching-fundamentals"
+            ],
+            "status": "locked",
+            "estimate_hours": 20,
+            "tags": [
+                "rectified-flow",
+                "consistency",
+                "distillation"
+            ],
+            "artifact": {
+                "type": "repo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/rectified-flow-toolkit"
+        },
+        {
+            "id": "conditioning-control",
+            "title": "Conditioning & Control",
+            "branch": "gen-media",
+            "tier": "trunk",
+            "prerequisites": [
+                "transformer-video-arch"
+            ],
+            "status": "locked",
+            "estimate_hours": 18,
+            "tags": [
+                "T2V",
+                "I2V",
+                "camera",
+                "motion",
+                "control"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/conditioning-control"
+        },
+        {
+            "id": "temporal-consistency",
+            "title": "Temporal Consistency Diagnostics",
+            "branch": "gen-media",
+            "tier": "trunk",
+            "prerequisites": [
+                "transformer-video-arch",
+                "evaluation-protocols"
+            ],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "flicker",
+                "identity-drift",
+                "object-permanence"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/temporal-consistency"
+        },
+        {
+            "id": "world-model-literacy",
+            "title": "World-Model / Next-Token Literacy",
+            "branch": "gen-media",
+            "tier": "trunk",
+            "prerequisites": [
+                "transformer-video-arch"
+            ],
+            "status": "locked",
+            "estimate_hours": 12,
+            "tags": [
+                "world-model",
+                "next-token",
+                "paradigm"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/world-model-literacy"
+        },
+        {
+            "id": "inference-acceleration",
+            "title": "Inference Acceleration Practice",
+            "branch": "gen-media",
+            "tier": "trunk",
+            "prerequisites": [
+                "rectified-flow-toolkit"
+            ],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "step-reduction",
+                "caching",
+                "quality-speed"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/inference-acceleration"
+        },
+        {
+            "id": "reproduce-extend-video-model",
+            "title": "Reproduce + Extend Video Model",
+            "branch": "gen-media",
+            "tier": "crown",
+            "prerequisites": [
+                "rectified-flow-toolkit",
+                "conditioning-control",
+                "temporal-consistency"
+            ],
+            "status": "locked",
+            "estimate_hours": 40,
+            "tags": [
+                "replication",
+                "ablation",
+                "extension"
+            ],
+            "artifact": {
+                "type": "repo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/reproduce-extend-video-model"
+        },
+        {
+            "id": "representation-bridge",
+            "title": "Representation Bridge (3D/Scene)",
+            "branch": "gen-media",
+            "tier": "branch",
+            "prerequisites": [
+                "transformer-video-arch"
+            ],
+            "status": "locked",
+            "estimate_hours": 20,
+            "tags": [
+                "3DGS",
+                "NeRF",
+                "scene-aware"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/representation-bridge"
+        },
+        {
+            "id": "policy-gradient-core",
+            "title": "Policy Gradient Core",
+            "branch": "rl",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 10,
+            "tags": [
+                "REINFORCE",
+                "actor-critic",
+                "policy-gradient"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/policy-gradient-core"
+        },
+        {
+            "id": "ppo-from-scratch",
+            "title": "PPO from Scratch",
+            "branch": "rl",
+            "tier": "roots",
+            "prerequisites": [
+                "policy-gradient-core"
+            ],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "PPO",
+                "implementation",
+                "evaluation"
+            ],
+            "artifact": {
+                "type": "repo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/ppo-from-scratch"
+        },
+        {
+            "id": "preference-data-eval-design",
+            "title": "Preference Data & Eval Design",
+            "branch": "rl",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 12,
+            "tags": [
+                "preferences",
+                "A/B",
+                "reward-hacking"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/preference-data-eval-design"
+        },
+        {
+            "id": "dpo-family",
+            "title": "DPO-Family Competence",
+            "branch": "rl",
+            "tier": "trunk",
+            "prerequisites": [
+                "policy-gradient-core",
+                "preference-data-eval-design"
+            ],
+            "status": "locked",
+            "estimate_hours": 18,
+            "tags": [
+                "DPO",
+                "IPO",
+                "KTO"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/dpo-family"
+        },
+        {
+            "id": "reward-modeling-judge",
+            "title": "Reward Modeling / Judge Training",
+            "branch": "rl",
+            "tier": "trunk",
+            "prerequisites": [
+                "preference-data-eval-design"
+            ],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "reward-model",
+                "judge",
+                "vision"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/reward-modeling-judge"
+        },
+        {
+            "id": "online-loops-stability",
+            "title": "Online Loops & Stability",
+            "branch": "rl",
+            "tier": "trunk",
+            "prerequisites": [
+                "ppo-from-scratch",
+                "dpo-family"
+            ],
+            "status": "locked",
+            "estimate_hours": 20,
+            "tags": [
+                "online",
+                "distribution-shift",
+                "stability"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/online-loops-stability"
+        },
+        {
+            "id": "search-test-time-compute",
+            "title": "Search / Test-Time Compute",
+            "branch": "rl",
+            "tier": "branch",
+            "prerequisites": [
+                "reward-modeling-judge"
+            ],
+            "status": "locked",
+            "estimate_hours": 12,
+            "tags": [
+                "best-of-N",
+                "reranking",
+                "self-refinement"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/search-test-time-compute"
+        },
+        {
+            "id": "rl-structured-outputs",
+            "title": "RL for Structured Outputs",
+            "branch": "rl",
+            "tier": "crown",
+            "prerequisites": [
+                "online-loops-stability",
+                "reward-modeling-judge"
+            ],
+            "status": "locked",
+            "estimate_hours": 25,
+            "tags": [
+                "layout",
+                "CDF",
+                "constraints",
+                "reward-design"
+            ],
+            "artifact": {
+                "type": "repo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/rl-structured-outputs"
+        },
+        {
+            "id": "measure-theoretic-probability",
+            "title": "Measure-Theoretic Probability",
+            "branch": "maths",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 20,
+            "tags": [
+                "measure-theory",
+                "probability",
+                "convergence"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/measure-theoretic-probability"
+        },
+        {
+            "id": "analysis-for-ml",
+            "title": "Analysis for ML",
+            "branch": "maths",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 18,
+            "tags": [
+                "metric-spaces",
+                "completeness",
+                "compactness"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/analysis-for-ml"
+        },
+        {
+            "id": "optimization-theory",
+            "title": "Optimization Theory",
+            "branch": "maths",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 22,
+            "tags": [
+                "convex",
+                "duality",
+                "KKT",
+                "nonconvex"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/optimization-theory"
+        },
+        {
+            "id": "stochastic-processes-calculus",
+            "title": "Stochastic Processes & Calculus",
+            "branch": "maths",
+            "tier": "trunk",
+            "prerequisites": [
+                "measure-theoretic-probability"
+            ],
+            "status": "locked",
+            "estimate_hours": 25,
+            "tags": [
+                "Brownian",
+                "martingales",
+                "Ito",
+                "SDE"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/stochastic-processes-calculus"
+        },
+        {
+            "id": "optimal-transport-bridge",
+            "title": "Optimal Transport Bridge",
+            "branch": "maths",
+            "tier": "trunk",
+            "prerequisites": [
+                "measure-theoretic-probability",
+                "optimization-theory"
+            ],
+            "status": "locked",
+            "estimate_hours": 20,
+            "tags": [
+                "Wasserstein",
+                "OT",
+                "flow"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/optimal-transport-bridge"
+        },
+        {
+            "id": "information-geometry-kl",
+            "title": "Information Geometry / KL Toolkit",
+            "branch": "maths",
+            "tier": "trunk",
+            "prerequisites": [
+                "measure-theoretic-probability"
+            ],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "KL",
+                "variational",
+                "Fisher"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/information-geometry-kl"
+        },
+        {
+            "id": "lie-groups-geometry-3d",
+            "title": "Lie Groups & Geometry for 3D",
+            "branch": "maths",
+            "tier": "branch",
+            "prerequisites": [
+                "analysis-for-ml"
+            ],
+            "status": "locked",
+            "estimate_hours": 18,
+            "tags": [
+                "SO3",
+                "SE3",
+                "exp-map"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/lie-groups-geometry-3d"
+        },
+        {
+            "id": "harmonic-analysis-spectral",
+            "title": "Harmonic Analysis / Spectral Methods",
+            "branch": "maths",
+            "tier": "branch",
+            "prerequisites": [
+                "analysis-for-ml"
+            ],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "FFT",
+                "wavelets",
+                "spherical-harmonics"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/harmonic-analysis-spectral"
+        },
+        {
+            "id": "design-patterns",
+            "title": "Design Patterns",
+            "branch": "swe",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 10,
+            "tags": [
+                "patterns",
+                "abstraction",
+                "architecture"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/design-patterns"
+        },
+        {
+            "id": "testing-reliability-ml",
+            "title": "Testing & Reliability for ML",
+            "branch": "swe",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 8,
+            "tags": [
+                "testing",
+                "invariants",
+                "eval-harness"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/testing-reliability-ml"
+        },
+        {
+            "id": "production-integration-observability",
+            "title": "Production Integration & Observability",
+            "branch": "swe",
+            "tier": "trunk",
+            "prerequisites": [
+                "testing-reliability-ml"
+            ],
+            "status": "locked",
+            "estimate_hours": 12,
+            "tags": [
+                "deployment",
+                "logging",
+                "observability"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/production-integration-observability"
+        },
+        {
+            "id": "functional-programming",
+            "title": "Functional Programming",
+            "branch": "swe",
+            "tier": "branch",
+            "prerequisites": [
+                "design-patterns"
+            ],
+            "status": "locked",
+            "estimate_hours": 10,
+            "tags": [
+                "FP",
+                "abstraction",
+                "bounded"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/functional-programming"
+        },
+        {
+            "id": "threejs-journey",
+            "title": "Three.js Journey",
+            "branch": "swe",
+            "tier": "branch",
+            "prerequisites": [
+                "design-patterns"
+            ],
+            "status": "locked",
+            "estimate_hours": 20,
+            "tags": [
+                "Three.js",
+                "visualization",
+                "interactive",
+                "journey"
+            ],
+            "artifact": {
+                "type": "demo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/threejs-journey"
+        },
+        {
+            "id": "classical-mechanics",
+            "title": "Classical Mechanics",
+            "branch": "physics",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "Lagrangian",
+                "Hamiltonian",
+                "dynamics"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/classical-mechanics"
+        },
+        {
+            "id": "quantum-foundations",
+            "title": "Quantum Foundations",
+            "branch": "physics",
+            "tier": "roots",
+            "prerequisites": [],
+            "status": "locked",
+            "estimate_hours": 18,
+            "tags": [
+                "quantum",
+                "states",
+                "operators",
+                "measurement"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/quantum-foundations"
+        },
+        {
+            "id": "orbital-mechanics-nbody",
+            "title": "Orbital Mechanics + N-Body",
+            "branch": "physics",
+            "tier": "trunk",
+            "prerequisites": [
+                "classical-mechanics"
+            ],
+            "status": "locked",
+            "estimate_hours": 20,
+            "tags": [
+                "orbits",
+                "N-body",
+                "simulation",
+                "HPC"
+            ],
+            "artifact": {
+                "type": "demo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/orbital-mechanics-nbody"
+        },
+        {
+            "id": "stellar-structure-evolution",
+            "title": "Stellar Structure & Evolution",
+            "branch": "physics",
+            "tier": "trunk",
+            "prerequisites": [
+                "classical-mechanics"
+            ],
+            "status": "locked",
+            "estimate_hours": 15,
+            "tags": [
+                "stellar",
+                "astrophysics"
+            ],
+            "artifact": {
+                "type": "blog",
+                "url": ""
+            },
+            "page_path": "/growth/2026/stellar-structure-evolution"
+        },
+        {
+            "id": "relativity-cosmology",
+            "title": "Relativity & Cosmology",
+            "branch": "physics",
+            "tier": "trunk",
+            "prerequisites": [
+                "classical-mechanics"
+            ],
+            "status": "locked",
+            "estimate_hours": 20,
+            "tags": [
+                "relativity",
+                "metrics",
+                "geodesics",
+                "cosmology"
+            ],
+            "artifact": {
+                "type": "notebook",
+                "url": ""
+            },
+            "page_path": "/growth/2026/relativity-cosmology"
+        },
+        {
+            "id": "radiative-transfer-rendering",
+            "title": "Radiative Transfer / Rendering",
+            "branch": "physics",
+            "tier": "branch",
+            "prerequisites": [
+                "stellar-structure-evolution"
+            ],
+            "status": "locked",
+            "estimate_hours": 18,
+            "tags": [
+                "light-transport",
+                "rendering",
+                "graphics"
+            ],
+            "artifact": {
+                "type": "demo",
+                "url": ""
+            },
+            "page_path": "/growth/2026/radiative-transfer-rendering"
+        }
+    ],
+    "edges": [
+        {
+            "source": "distributed-training-mental-models",
+            "target": "fault-tolerance"
+        },
+        {
+            "source": "distributed-training-mental-models",
+            "target": "research-harness-v2"
+        },
+        {
+            "source": "fault-tolerance",
+            "target": "research-harness-v2"
+        },
+        {
+            "source": "measurement-instrumentation",
+            "target": "research-harness-v2"
+        },
+        {
+            "source": "video-data-fundamentals",
+            "target": "video-data-engine"
+        },
+        {
+            "source": "measurement-instrumentation",
+            "target": "video-data-engine"
+        },
+        {
+            "source": "video-data-engine",
+            "target": "curation-labeling-factory"
+        },
+        {
+            "source": "distributed-training-mental-models",
+            "target": "ultra-scale-heuristics"
+        },
+        {
+            "source": "measurement-instrumentation",
+            "target": "ultra-scale-heuristics"
+        },
+        {
+            "source": "measurement-instrumentation",
+            "target": "cost-capacity-modeling"
+        },
+        {
+            "source": "ultra-scale-heuristics",
+            "target": "long-context-parallelism"
+        },
+        {
+            "source": "ultra-scale-heuristics",
+            "target": "inference-serving-fundamentals"
+        },
+        {
+            "source": "flow-matching-fundamentals",
+            "target": "rectified-flow-toolkit"
+        },
+        {
+            "source": "transformer-video-arch",
+            "target": "conditioning-control"
+        },
+        {
+            "source": "transformer-video-arch",
+            "target": "temporal-consistency"
+        },
+        {
+            "source": "evaluation-protocols",
+            "target": "temporal-consistency"
+        },
+        {
+            "source": "transformer-video-arch",
+            "target": "world-model-literacy"
+        },
+        {
+            "source": "rectified-flow-toolkit",
+            "target": "inference-acceleration"
+        },
+        {
+            "source": "rectified-flow-toolkit",
+            "target": "reproduce-extend-video-model"
+        },
+        {
+            "source": "conditioning-control",
+            "target": "reproduce-extend-video-model"
+        },
+        {
+            "source": "temporal-consistency",
+            "target": "reproduce-extend-video-model"
+        },
+        {
+            "source": "transformer-video-arch",
+            "target": "representation-bridge"
+        },
+        {
+            "source": "policy-gradient-core",
+            "target": "ppo-from-scratch"
+        },
+        {
+            "source": "policy-gradient-core",
+            "target": "dpo-family"
+        },
+        {
+            "source": "preference-data-eval-design",
+            "target": "dpo-family"
+        },
+        {
+            "source": "preference-data-eval-design",
+            "target": "reward-modeling-judge"
+        },
+        {
+            "source": "ppo-from-scratch",
+            "target": "online-loops-stability"
+        },
+        {
+            "source": "dpo-family",
+            "target": "online-loops-stability"
+        },
+        {
+            "source": "reward-modeling-judge",
+            "target": "search-test-time-compute"
+        },
+        {
+            "source": "online-loops-stability",
+            "target": "rl-structured-outputs"
+        },
+        {
+            "source": "reward-modeling-judge",
+            "target": "rl-structured-outputs"
+        },
+        {
+            "source": "measure-theoretic-probability",
+            "target": "stochastic-processes-calculus"
+        },
+        {
+            "source": "measure-theoretic-probability",
+            "target": "optimal-transport-bridge"
+        },
+        {
+            "source": "optimization-theory",
+            "target": "optimal-transport-bridge"
+        },
+        {
+            "source": "measure-theoretic-probability",
+            "target": "information-geometry-kl"
+        },
+        {
+            "source": "analysis-for-ml",
+            "target": "lie-groups-geometry-3d"
+        },
+        {
+            "source": "analysis-for-ml",
+            "target": "harmonic-analysis-spectral"
+        },
+        {
+            "source": "testing-reliability-ml",
+            "target": "production-integration-observability"
+        },
+        {
+            "source": "design-patterns",
+            "target": "functional-programming"
+        },
+        {
+            "source": "design-patterns",
+            "target": "threejs-journey"
+        },
+        {
+            "source": "classical-mechanics",
+            "target": "orbital-mechanics-nbody"
+        },
+        {
+            "source": "classical-mechanics",
+            "target": "stellar-structure-evolution"
+        },
+        {
+            "source": "classical-mechanics",
+            "target": "relativity-cosmology"
+        },
+        {
+            "source": "stellar-structure-evolution",
+            "target": "radiative-transfer-rendering"
+        }
+    ]
+}
