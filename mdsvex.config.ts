@@ -101,7 +101,14 @@ export default defineConfig({
         target: 'mdsvex',
         autofill: {
           provider: 'fs',
-          path: (path: string) => path.replace('/src/routes/', '/urara/')
+          path: (path: string) => {
+            // For pages that live directly in src/routes (growth, monash-graph, etc.)
+            // keep the path as-is. Only map to urara/ for blog posts.
+            if (path.includes('/growth/') || path.includes('/monash-graph/')) {
+              return path
+            }
+            return path.replace('/src/routes/', '/urara/')
+          }
         }
       }
     ],
