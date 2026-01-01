@@ -31,8 +31,26 @@ export default defineConfig({
   build: {
     sourcemap: false,
     rollupOptions: {
-      cache: false
-    }
+      cache: false,
+      output: {
+        manualChunks(id) {
+          // Split large libraries into separate chunks
+          if (id.includes('node_modules')) {
+            if (id.includes('elkjs')) return 'elk'
+            if (id.includes('three')) return 'three'
+            if (id.includes('force-graph') && id.includes('3d')) return 'force-graph-3d'
+            if (id.includes('force-graph')) return 'force-graph-2d'
+            if (id.includes('d3')) return 'd3'
+            if (id.includes('mermaid')) return 'mermaid'
+            if (id.includes('katex')) return 'katex'
+            if (id.includes('svelte')) return 'svelte-vendor'
+            // Other node_modules go to common vendor chunk
+            return 'vendor'
+          }
+        }
+      }
+    },
+    chunkSizeWarningLimit: 600
   },
   css: {
     postcss: {
@@ -68,8 +86,25 @@ export default defineConfig({
       manifest: false,
       scope: '/',
       workbox: {
-        globPatterns: ['posts.json', '**/*.{js,css,html,svg,ico,png,webp,avif,py}'],
-        globIgnores: ['**/sw*', '**/workbox-*']
+        // Increase precache limit for large chunks
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MB
+        // Don't precache large images/files
+        globPatterns: ['posts.json', '**/*.{js,css,html,svg,ico}'],
+        globIgnores: ['**/sw*', '**/workbox-*'],
+        // Runtime caching for images
+        runtimeCaching: [
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|webp|avif)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
+              }
+            }
+          }
+        ]
       }
     })
   ]
