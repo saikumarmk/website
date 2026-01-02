@@ -47,9 +47,22 @@ The script creates:
 - `src/routes/growth/2026/<node-id>/+page.md` - The markdown page
 - Updates `src/resources/growth2026.json` with the new node and edges
 
-### Backfilling Pages for Existing Nodes
+### Creating a Page for a Single Existing Node
 
-If you've added nodes to `growth2026.json` manually, generate their pages:
+If a node exists in `growth2026.json` but doesn't have a page yet:
+
+```bash
+pnpm run growth:page <node-id>
+```
+
+Example:
+```bash
+pnpm run growth:page distributed-training-mental-models
+```
+
+### Backfilling Pages for All Existing Nodes
+
+To generate pages for ALL nodes in `growth2026.json` that don't have pages:
 
 ```bash
 pnpm run growth:backfill

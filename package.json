@@ -28,7 +28,8 @@
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --write --plugin-search-dir=. .",
     "growth:new": "node scripts/new-growth-node.mjs",
-    "growth:backfill": "node scripts/backfill-growth-pages.mjs"
+    "growth:backfill": "node scripts/backfill-growth-pages.mjs",
+    "growth:page": "node scripts/create-growth-page.mjs"
   },
   "devDependencies": {
     "@iconify-json/heroicons-outline": "^1.1.6",
