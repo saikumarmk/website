@@ -1,15 +1,139 @@
 ## Personal Site
-I keep my personal site contents here. You can visit it at [https://www.saikumarmk.com](https://www.saikumarmk.com)
+
+Personal website and blog built with SvelteKit, based on the [Urara](https://github.com/importantimport/urara) template.
+
+Visit at [https://www.saikumarmk.com](https://www.saikumarmk.com)
 
 
-## Powered by Urara
-Check the repository out here: [https://github.com/importantimport/urara](https://github.com/importantimport/urara)
+## Notable Components
+
+This site features several custom interactive components beyond the standard blog template.
+
+### Project Dex
+
+A Pokedex-inspired project showcase at `/portfolio/projects`.
+
+**Source:** `src/routes/portfolio/projects/+page.svelte`
+
+**Features:**
+- Grid of project squares with Pokemon sprites as icons
+- Modal popup styled like a Pokedex entry with Pokemon Game Boy grid background
+- Typing effect that displays description text character-by-character (30ms/char)
+- Pagination system that splits long descriptions into 2-sentence pages
+- Red bouncing arrow indicator for "more text" navigation
+- Responsive design with different fonts for mobile (`pokemondppt`) vs desktop (`Press Start 2P`)
+
+**How it works:**
+```
+1. Projects defined in src/lib/config/portfolio.ts
+2. Each project has a Pokemon sprite (from pokesprite CSS classes)
+3. On click, modal opens and triggers startTyping() animation
+4. getDescriptionPages() splits text by sentences for pagination
+5. Arrow appears when more pages available
+```
+
+### TechBadge Component
+
+3D beveled technology badges inspired by Pokemon type badges.
+
+**Source:** `src/lib/components/projects/TechBadge.svelte`
+
+**Features:**
+- 4x4 CSS grid creates beveled 3D illusion
+- Dynamic color generation using `lighten()` and `darken()` functions
+- Auto-scaling text based on badge name length
+- Corner dots for decorative effect
+- Shadow and highlight calculated from base colors
+
+**Usage:**
+```svelte
+<TechBadge name="Python" colors={['#3776AB', '#FFD43B', '#3776AB', '#FFD43B']} />
+```
+
+Colors are mapped in `src/lib/config/tech-colors.ts`.
+
+### Yggdrasil (Growth Tree)
+
+Interactive skill tree visualization at `/growth/2026` for tracking learning goals.
+
+**Source:**
+- Main: `src/routes/growth/2026/+page.svelte`
+- Graph: `src/routes/growth/2026/components/GrowthGraph2D.svelte`
+- Layout: `src/routes/growth/2026/utils/elkLayout.ts`
+- Data: `src/resources/growth2026.json`
+
+**Features:**
+- DAG layout using ELK.js for deterministic node positioning
+- Canvas-rendered nodes with Pokemon Game Boy styling
+- Branch color coding with Pokemon sprite mascots
+- Tier system: Roots (foundations) -> Trunk (techniques) -> Branch (specializations) -> Crown (capstones)
+- Status tracking: locked, available, in_progress, complete
+- Filter panel for branches, tiers, and status
+- Click-to-select with detail panel
+
+**Node structure in JSON:**
+```json
+{
+  "id": "node-id",
+  "title": "Human Title",
+  "branch": "systems-hpc",
+  "tier": "trunk",
+  "prerequisites": ["other-node"],
+  "status": "available",
+  "estimate_hours": 15
+}
+```
+
+### Pokemon Sprite System
+
+Site-wide Pokemon Game Boy aesthetic using sprite sheets.
+
+**Source:**
+- Sprites: `src/lib/components/pkmn/pokemon.svelte`
+- Framed: `src/lib/components/pkmn/frame.svelte`
+- CSS: `src/styles/pokesprite-pokemon-gen8.css`
+- Data: `src/resources/pokemonClasses.json`
+
+**Usage in markdown:**
+```svelte
+<script>
+import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
+</script>
+
+<PokemonSprite pokemonName="pikachu" size="large" />
+```
+
+The CSS uses background-position to display individual Pokemon from a spritesheet.
+
+### Search Modal
+
+Ctrl+K triggered search with weighted scoring.
+
+**Source:** `src/lib/components/search_modal.svelte`
+
+**Features:**
+- Searches posts AND static pages (About, Portfolio, Yggdrasil, etc.)
+- Weighted scoring: title (100) > tags (50) > summary (30) > content (10)
+- Arrow key navigation with auto-scroll
+- ESC to close, Enter to navigate
+- Highlights matched text
+
+**Scoring algorithm:**
+```js
+if (title.includes(query)) score += 100;
+if (tags.some(t => t.includes(query))) score += 50;
+if (summary.includes(query)) score += 30;
+if (content.includes(query)) score += 10;
+```
+
+Results sorted by score descending.
 
 
-## Docs
+## Content Structure
 
-`urara/*` contains all posts that are rendered via the standard route, and contain a `+page.md` which which are the contents of the page. You can include scripts e.g
+`urara/*` contains all posts rendered via the standard route. Each post has a `+page.md` with frontmatter and content.
 
+**Importing components in markdown:**
 ```js
 <script>
 import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
@@ -18,14 +142,16 @@ import Framed from '$lib/components/pkmn/frame.svelte'
 </script>
 ```
 
-To modify the home page, edit `src\routes\+page.svelte`.
+**Key files:**
+- Home page: `src/routes/+page.svelte`
+- Post container: `src/lib/components/post_container.svelte`
+- Site config: `src/lib/config/site.ts`
+- Portfolio data: `src/lib/config/portfolio.ts`
 
-To modify the actual post + container: `src\lib\components\post_container.svelte`
 
+## Yggdrasil Commands
 
-## Yggdrasil (Growth Tree)
-
-The Yggdrasil skill tree is located at `/growth/2026`. Like all other content, Yggdrasil pages live in `urara/growth/2026/` and get copied to `src/routes/` by the Urara build system.
+Growth pages live in `urara/growth/2026/` and get copied to `src/routes/` during dev/build.
 
 ### Creating a New Node
 
@@ -72,12 +198,14 @@ pnpm run growth:backfill
 
 ```
 urara/growth/2026/
+└── <node-id>/
+    └── +page.md              # Node content (copied to src/routes/ on build)
+
+src/routes/growth/2026/
 ├── +page.svelte              # Main graph visualization
 ├── types.ts                  # TypeScript types
-├── components/               # Graph UI components
-├── utils/                    # Graph helpers
-└── <node-id>/
-    └── +page.md              # Node content page
+├── components/               # Graph UI components (GrowthGraph2D, GrowthControls)
+└── utils/                    # Graph helpers (elkLayout, nodeUtils, graphHelpers)
 
 src/resources/
 └── growth2026.json           # Node/edge data
