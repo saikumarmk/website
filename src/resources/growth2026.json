@@ -1035,6 +1035,21 @@
                 "url": ""
             },
             "page_path": "/growth/2026/radiative-transfer-rendering"
+        },
+        {
+            "id": "competitive-programming",
+            "title": "Competitive Programming",
+            "branch": "swe-craft",
+            "tier": "roots",
+            "prerequisites": [],
+            "estimate_hours": 10,
+            "tags": [],
+            "artifact": {
+                "type": "repo",
+                "url": ""
+            },
+            "status": "locked",
+            "page_path": "/growth/2026/competitive-programming"
         }
     ],
     "edges": [
