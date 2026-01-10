@@ -107,26 +107,27 @@ The CSS uses background-position to display individual Pokemon from a spriteshee
 
 ### Search Modal
 
-Ctrl+K triggered search with weighted scoring.
+Ctrl+K triggered full-text search powered by FlexSearch.
 
-**Source:** `src/lib/components/search_modal.svelte`
+**Source:** 
+- Modal: `src/lib/components/search_modal.svelte`
+- Index: `src/routes/search-index.json/+server.ts`
 
 **Features:**
-- Searches posts AND static pages (About, Portfolio, Yggdrasil, etc.)
+- Full-text search across post content (not just titles/tags)
+- Powered by FlexSearch (~6KB gzipped)
+- Lazy-loaded index - only fetches when search opens
+- Searches posts AND static pages
 - Weighted scoring: title (100) > tags (50) > summary (30) > content (10)
 - Arrow key navigation with auto-scroll
-- ESC to close, Enter to navigate
-- Highlights matched text
+- Loading state while index builds
 
-**Scoring algorithm:**
-```js
-if (title.includes(query)) score += 100;
-if (tags.some(t => t.includes(query))) score += 50;
-if (summary.includes(query)) score += 30;
-if (content.includes(query)) score += 10;
-```
-
-Results sorted by score descending.
+**How it works:**
+1. User presses Ctrl+K to open search
+2. `/search-index.json` is fetched (contains post content as plain text)
+3. FlexSearch Document index is built client-side
+4. Index is cached for subsequent searches
+5. Results ranked by field matches
 
 ### LaTeX Math Rendering
 

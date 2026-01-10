@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { browser } from '$app/environment'
-  import { posts as storedPosts } from '$lib/stores/posts'
   import { goto } from '$app/navigation'
+  import FlexSearch from 'flexsearch'
   
   export let isOpen = false
   
@@ -11,73 +11,116 @@
   let selectedIndex = 0
   let searchInput: HTMLInputElement
   
-  let allPosts: Urara.Post[] = []
+  // FlexSearch index
+  let searchIndex: FlexSearch.Document<any, string[]> | null = null
+  let searchablePosts: any[] = []
+  let indexLoading = false
+  let indexLoaded = false
   
   // Static pages to include in search
   const staticPages = [
-    { title: 'About', path: '/about', summary: 'Learn more about me', type: 'page' },
-    { title: 'Portfolio', path: '/portfolio', summary: 'View my work and projects', type: 'page' },
-    { title: 'Project Dex', path: '/portfolio/projects', summary: 'Browse all projects in Pokedex style', type: 'page' },
-    { title: 'Yggdrasil 2026', path: '/growth/2026', summary: 'Interactive skill tree and learning roadmap', type: 'page' },
-    { title: 'Archive', path: '/archive', summary: 'Browse all posts by tag and year', type: 'page' },
+    { title: 'About', path: '/about', summary: 'Learn more about me', content: '', type: 'page' },
+    { title: 'Portfolio', path: '/portfolio', summary: 'View my work and projects', content: '', type: 'page' },
+    { title: 'Project Dex', path: '/portfolio/projects', summary: 'Browse all projects in Pokedex style', content: '', type: 'page' },
+    { title: 'Yggdrasil 2026', path: '/growth/2026', summary: 'Interactive skill tree and learning roadmap', content: '', type: 'page' },
+    { title: 'Archive', path: '/archive', summary: 'Browse all posts by tag and year', content: '', type: 'page' },
   ]
   
-  storedPosts.subscribe(posts => {
-    if (Array.isArray(posts)) {
-      allPosts = posts.filter(post => !post.flags?.includes('unlisted'))
+  // Load and build search index (lazy, only when modal opens)
+  async function loadSearchIndex() {
+    if (indexLoaded || indexLoading) return
+    
+    indexLoading = true
+    
+    try {
+      const response = await fetch('/search-index.json')
+      searchablePosts = await response.json()
+      
+      // Create FlexSearch document index
+      searchIndex = new FlexSearch.Document({
+        document: {
+          id: 'path',
+          index: ['title', 'summary', 'content', 'tags'],
+          store: ['path', 'title', 'summary', 'tags', 'created']
+        },
+        tokenize: 'forward',
+        resolution: 9
+      })
+      
+      // Add all posts to the index
+      for (const post of searchablePosts) {
+        searchIndex.add({
+          ...post,
+          tags: post.tags?.join(' ') || ''
+        })
+      }
+      
+      // Add static pages
+      for (const page of staticPages) {
+        searchIndex.add({
+          ...page,
+          tags: ''
+        })
+      }
+      
+      indexLoaded = true
+    } catch (error) {
+      console.error('Failed to load search index:', error)
+    } finally {
+      indexLoading = false
     }
-  })
+  }
   
-  // Search function
+  // Search function using FlexSearch
   function performSearch(query: string) {
-    if (!query.trim()) {
+    if (!query.trim() || !searchIndex) {
       searchResults = []
       return
     }
     
-    const lowerQuery = query.toLowerCase()
+    // Search across all indexed fields
+    const results = searchIndex.search(query, {
+      limit: 15,
+      enrich: true
+    })
     
-    // Search static pages
-    const staticResults = staticPages
-      .map(page => {
-        let score = 0
-        if (page.title.toLowerCase().includes(lowerQuery)) score += 150 // Higher priority
-        if (page.summary.toLowerCase().includes(lowerQuery)) score += 50
-        return { item: { ...page, isStatic: true }, score }
+    // Collect unique results with scores
+    const resultMap = new Map<string, { item: any; score: number }>()
+    
+    // FlexSearch returns results grouped by field
+    results.forEach((fieldResult: any) => {
+      const fieldName = fieldResult.field
+      const fieldScore = fieldName === 'title' ? 100 
+        : fieldName === 'tags' ? 50 
+        : fieldName === 'summary' ? 30 
+        : 10 // content
+      
+      fieldResult.result.forEach((match: any) => {
+        const path = match.id
+        const doc = match.doc
+        
+        if (resultMap.has(path)) {
+          resultMap.get(path)!.score += fieldScore
+        } else {
+          // Check if it's a static page
+          const staticPage = staticPages.find(p => p.path === path)
+          resultMap.set(path, {
+            item: {
+              path: doc.path,
+              title: doc.title,
+              summary: doc.summary,
+              tags: doc.tags?.split(' ').filter(Boolean) || [],
+              created: doc.created,
+              isStatic: !!staticPage
+            },
+            score: fieldScore + (staticPage ? 50 : 0) // Boost static pages slightly
+          })
+        }
       })
-      .filter(({ score }) => score > 0)
+    })
     
-    // Search posts
-    const postResults = allPosts
-      .map(post => {
-        let score = 0
-        
-        // Title match (highest priority)
-        if (post.title?.toLowerCase().includes(lowerQuery)) {
-          score += 100
-        }
-        
-        // Tags match
-        if (post.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))) {
-          score += 50
-        }
-        
-        // Summary match
-        if (post.summary?.toLowerCase().includes(lowerQuery)) {
-          score += 30
-        }
-        
-        // Content match (lowest priority)
-        if (post.html?.toLowerCase().includes(lowerQuery)) {
-          score += 10
-        }
-        
-        return { item: post, score }
-      })
-      .filter(({ score }) => score > 0)
-    
-    // Combine and sort
-    searchResults = [...staticResults, ...postResults]
+    // Sort by score and convert to array
+    searchResults = Array.from(resultMap.values())
       .sort((a, b) => b.score - a.score)
       .slice(0, 10)
       .map(({ item }) => item)
@@ -85,14 +128,15 @@
     selectedIndex = 0
   }
   
-  // Reactive search
-  $: performSearch(searchQuery)
+  // Reactive search (only when index is loaded)
+  $: if (indexLoaded) performSearch(searchQuery)
   
   // Open/close handlers
   export function open() {
     isOpen = true
     if (browser) {
       document.body.style.overflow = 'hidden'
+      loadSearchIndex() // Load index when modal opens
       setTimeout(() => searchInput?.focus(), 100)
     }
   }
@@ -119,13 +163,11 @@
       case 'ArrowDown':
         e.preventDefault()
         selectedIndex = Math.min(selectedIndex + 1, searchResults.length - 1)
-        // Scroll selected item into view
         scrollToSelected()
         break
       case 'ArrowUp':
         e.preventDefault()
         selectedIndex = Math.max(selectedIndex - 1, 0)
-        // Scroll selected item into view
         scrollToSelected()
         break
       case 'Enter':
@@ -194,17 +236,23 @@
           bind:value={searchQuery}
           on:keydown={handleInputKeydown}
           type="text"
-          placeholder="Search posts..."
+          placeholder={indexLoading ? "Loading search..." : "Search posts..."}
           class="flex-1 bg-transparent outline-none text-base"
           id="search-title"
           autocomplete="off"
-          spellcheck="false" />
+          spellcheck="false"
+          disabled={indexLoading} />
         <kbd class="kbd kbd-sm">ESC</kbd>
       </div>
       
       <!-- Search results -->
       <div class="max-h-[60vh] overflow-y-auto">
-        {#if searchQuery && searchResults.length === 0}
+        {#if indexLoading}
+          <div class="px-4 py-8 text-center opacity-60">
+            <span class="loading loading-spinner loading-md"></span>
+            <p class="mt-2">Building search index...</p>
+          </div>
+        {:else if searchQuery && searchResults.length === 0}
           <div class="px-4 py-8 text-center opacity-60">
             <span class="i-heroicons-outline-document-search w-12 h-12 mx-auto mb-2"></span>
             <p>No results found for "{searchQuery}"</p>
@@ -252,8 +300,8 @@
         {:else}
           <div class="px-4 py-8 text-center opacity-60">
             <span class="i-heroicons-outline-search-circle w-12 h-12 mx-auto mb-2"></span>
-            <p class="mb-1">Quick search</p>
-            <p class="text-sm">Start typing to search posts by title, tags, or content</p>
+            <p class="mb-1">Full-text search</p>
+            <p class="text-sm">Search by title, tags, summary, or content</p>
           </div>
         {/if}
       </div>
@@ -320,4 +368,3 @@
     }
   }
 </style>
-
