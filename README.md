@@ -128,6 +128,95 @@ if (content.includes(query)) score += 10;
 
 Results sorted by score descending.
 
+### LaTeX Math Rendering
+
+Math expressions rendered via KaTeX through `rehype-katex-svelte`.
+
+**Configuration:** `mdsvex.config.ts`
+
+**Syntax:**
+- Inline math: `$x + y$`
+- Display math: `$$\nabla_\theta J(\theta) = ...$$`
+
+**Custom macros defined:**
+```js
+macros: {
+  "\\CC": "\\mathbb{C}",
+  "\\vec": "\\mathbf",
+}
+```
+
+**Important:** Do NOT use `\(` or `\[` delimiters - they are not supported in MDSvex. Always use `$` and `$$`.
+
+### Mermaid Diagrams
+
+Dynamic diagram rendering with theme-aware colors.
+
+**Source:** `src/lib/components/prose/mermaid.svelte`
+
+**Features:**
+- Reads DaisyUI CSS variables for theme colors
+- Converts HSL to hex for Mermaid compatibility
+- Auto-rerenders on theme change via MutationObserver
+- Unique IDs prevent conflicts with multiple diagrams
+
+**Usage in markdown:**
+````markdown
+```mermaid
+graph LR
+    A[Start] --> B[Process]
+    B --> C[End]
+```
+````
+
+The component extracts `--b1`, `--p`, `--bc` CSS variables from DaisyUI and maps them to Mermaid's theme system.
+
+### Python Code Annotator
+
+Side-by-side documentation and code display, inspired by literate programming.
+
+**Source:** `src/lib/components/prose/code.svelte`
+
+**Features:**
+- Fetches Python file from URL at runtime
+- Parses docstrings and comments as documentation
+- Renders docs as markdown (via `mdsvex_processor.js`)
+- Syntax highlights code with highlight.js
+- Two-column layout: docs left, code right
+- Responsive: stacks vertically on mobile
+
+**Usage:**
+```svelte
+<script>
+import PythonCode from '$lib/components/prose/code.svelte'
+</script>
+
+<PythonCode 
+  sourceUrl="/annotations/elo_calculator.py" 
+  title="Elo Calculator" 
+/>
+```
+
+**Python file format:**
+```python
+"""
+## Section Title
+
+Markdown documentation here.
+"""
+
+def my_function():
+    """
+    Function docstring becomes docs panel content.
+    """
+    code_here()  # This appears in code panel
+```
+
+The parser detects:
+- Triple-quoted docstrings (`"""` or `'''`)
+- Comment blocks starting with `#`
+- Function/class definitions to create new sections
+
 
 ## Content Structure
 
