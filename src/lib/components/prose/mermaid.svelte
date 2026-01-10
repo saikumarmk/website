@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
-  import mermaid from 'mermaid'
   import { browser } from '$app/environment'
 
   export let graph: string
@@ -8,6 +7,7 @@
   let container: HTMLElement
   let observer: MutationObserver
   let uniqueId = `mermaid-${crypto.randomUUID()}`
+  let mermaidModule: any = null
 
   function hslStringToHex(hsl: string): string {
     const [h, s, l] = hsl.replaceAll('%', '').trim().split(/\s+/).map(Number)
@@ -42,15 +42,20 @@
   async function renderMermaid() {
     if (!browser || !container) return
 
+    // Lazy load mermaid only when needed
+    if (!mermaidModule) {
+      mermaidModule = (await import('mermaid')).default
+    }
+
     const themeVariables = getThemeVariables()
 
-    mermaid.initialize({
+    mermaidModule.initialize({
       startOnLoad: false,
       theme: 'base',
       themeVariables
     })
 
-    const { svg } = await mermaid.render(uniqueId, graph)
+    const { svg } = await mermaidModule.render(uniqueId, graph)
     container.innerHTML = ''
     container.innerHTML = svg
   }
