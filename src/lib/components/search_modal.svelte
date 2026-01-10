@@ -71,6 +71,36 @@
     }
   }
   
+  // Extract a snippet around the matched text
+  function getContentSnippet(content: string, query: string): string | null {
+    if (!content) return null
+    
+    const lowerContent = content.toLowerCase()
+    const lowerQuery = query.toLowerCase()
+    const matchIndex = lowerContent.indexOf(lowerQuery)
+    
+    if (matchIndex === -1) return null
+    
+    // Get ~40 chars before and after the match
+    const snippetStart = Math.max(0, matchIndex - 40)
+    const snippetEnd = Math.min(content.length, matchIndex + query.length + 60)
+    
+    let snippet = content.slice(snippetStart, snippetEnd).trim()
+    
+    // Add ellipsis if truncated
+    if (snippetStart > 0) snippet = '...' + snippet
+    if (snippetEnd < content.length) snippet = snippet + '...'
+    
+    return snippet
+  }
+  
+  // Highlight matched text in a string
+  function highlightMatch(text: string, query: string): string {
+    if (!text || !query) return text
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+    return text.replace(regex, '<mark class="bg-warning/40 rounded px-0.5">$1</mark>')
+  }
+
   // Search function using FlexSearch
   function performSearch(query: string) {
     if (!query.trim() || !searchIndex) {
@@ -84,8 +114,8 @@
       enrich: true
     })
     
-    // Collect unique results with scores
-    const resultMap = new Map<string, { item: any; score: number }>()
+    // Collect unique results with scores and match info
+    const resultMap = new Map<string, { item: any; score: number; matchedFields: string[] }>()
     
     // FlexSearch returns results grouped by field
     results.forEach((fieldResult: any) => {
@@ -100,10 +130,17 @@
         const doc = match.doc
         
         if (resultMap.has(path)) {
-          resultMap.get(path)!.score += fieldScore
+          const existing = resultMap.get(path)!
+          existing.score += fieldScore
+          if (!existing.matchedFields.includes(fieldName)) {
+            existing.matchedFields.push(fieldName)
+          }
         } else {
           // Check if it's a static page
           const staticPage = staticPages.find(p => p.path === path)
+          // Get full post data for content snippet
+          const fullPost = searchablePosts.find(p => p.path === path)
+          
           resultMap.set(path, {
             item: {
               path: doc.path,
@@ -111,19 +148,26 @@
               summary: doc.summary,
               tags: doc.tags?.split(' ').filter(Boolean) || [],
               created: doc.created,
-              isStatic: !!staticPage
+              isStatic: !!staticPage,
+              content: fullPost?.content || ''
             },
-            score: fieldScore + (staticPage ? 50 : 0) // Boost static pages slightly
+            score: fieldScore + (staticPage ? 50 : 0),
+            matchedFields: [fieldName]
           })
         }
       })
     })
     
-    // Sort by score and convert to array
+    // Sort by score and convert to array, adding snippet if content matched
     searchResults = Array.from(resultMap.values())
       .sort((a, b) => b.score - a.score)
       .slice(0, 10)
-      .map(({ item }) => item)
+      .map(({ item, matchedFields }) => ({
+        ...item,
+        matchedInContent: matchedFields.includes('content') && !matchedFields.includes('title') && !matchedFields.includes('summary'),
+        contentSnippet: matchedFields.includes('content') ? getContentSnippet(item.content, query) : null,
+        query // Pass query for highlighting
+      }))
     
     selectedIndex = 0
   }
@@ -283,7 +327,12 @@
                       <span class="i-heroicons-outline-arrow-right w-4 h-4 flex-shrink-0 mt-1"></span>
                     {/if}
                   </div>
-                  {#if post.summary}
+                  {#if post.contentSnippet && post.matchedInContent}
+                    <!-- Show content snippet when match is in body -->
+                    <p class="text-sm opacity-70 mt-1 line-clamp-2 italic">
+                      {@html highlightMatch(post.contentSnippet, post.query)}
+                    </p>
+                  {:else if post.summary}
                     <p class="text-sm opacity-70 mt-1 line-clamp-2">{post.summary}</p>
                   {/if}
                   {#if post.tags && post.tags.length > 0}
