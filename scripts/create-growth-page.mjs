@@ -29,25 +29,18 @@ async function main() {
     process.exit(1);
   }
 
-  const nodeDir = path.join(rootDir, 'src', 'routes', 'growth', '2026', node.id);
+  const nodeDir = path.join(rootDir, 'urara', 'growth', '2026', node.id);
   const pagePath = path.join(nodeDir, '+page.md');
 
   // Check if page already exists
   if (fs.existsSync(pagePath)) {
-    console.log(`Page already exists: src/routes/growth/2026/${node.id}/+page.md`);
+    console.log(`Page already exists: urara/growth/2026/${node.id}/+page.md`);
     process.exit(0);
   }
 
   // Create directory
   if (!fs.existsSync(nodeDir)) {
     fs.mkdirSync(nodeDir, { recursive: true });
-  }
-
-  // Create assets directory
-  const assetsDir = path.join(nodeDir, 'assets');
-  if (!fs.existsSync(assetsDir)) {
-    fs.mkdirSync(assetsDir, { recursive: true });
-    fs.writeFileSync(path.join(assetsDir, '.gitkeep'), '');
   }
 
   // Create page
@@ -88,7 +81,7 @@ Content here...
 `;
 
   fs.writeFileSync(pagePath, pageContent);
-  console.log(`Created: src/routes/growth/2026/${node.id}/+page.md`);
+  console.log(`Created: urara/growth/2026/${node.id}/+page.md`);
 }
 
 main().catch(error => {
