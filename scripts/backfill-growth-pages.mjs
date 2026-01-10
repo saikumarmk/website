@@ -18,7 +18,7 @@ async function main() {
   let skipped = 0;
 
   for (const node of growthData.nodes) {
-    const nodeDir = path.join(rootDir, 'src', 'routes', 'growth', '2026', node.id);
+    const nodeDir = path.join(rootDir, 'urara', 'growth', '2026', node.id);
     const pagePath = path.join(nodeDir, '+page.md');
 
     // Check if page already exists
@@ -31,13 +31,6 @@ async function main() {
     // Create directory
     if (!fs.existsSync(nodeDir)) {
       fs.mkdirSync(nodeDir, { recursive: true});
-    }
-
-    // Create assets directory
-    const assetsDir = path.join(nodeDir, 'assets');
-    if (!fs.existsSync(assetsDir)) {
-      fs.mkdirSync(assetsDir, { recursive: true });
-      fs.writeFileSync(path.join(assetsDir, '.gitkeep'), '');
     }
 
     // Create page

@@ -99,17 +99,13 @@ export default defineConfig({
       {
         presets: ['hugo'],
         target: 'mdsvex',
-        autofill: {
-          provider: 'fs',
-          path: (path: string) => {
-            // For pages that live directly in src/routes (growth, etc.)
-            // keep the path as-is. Only map to urara/ for blog posts.
-            if (path.includes('/growth/')) {
-              return path
-            }
-            return path.replace('/src/routes/', '/urara/')
-          }
+      autofill: {
+        provider: 'fs',
+        path: (path: string) => {
+          // All markdown content lives in urara/ and gets copied to src/routes/
+          return path.replace('/src/routes/', '/urara/')
         }
+      }
       }
     ],
     remarkUraraFm,

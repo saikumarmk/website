@@ -25,7 +25,7 @@ To modify the actual post + container: `src\lib\components\post_container.svelte
 
 ## Yggdrasil (Growth Tree)
 
-The Yggdrasil skill tree is located at `/growth/2026`. Unlike regular blog posts, Yggdrasil pages live directly in `src/routes/growth/2026/` (not in `urara/`) to avoid conflicts with the Urara build system.
+The Yggdrasil skill tree is located at `/growth/2026`. Like all other content, Yggdrasil pages live in `urara/growth/2026/` and get copied to `src/routes/` by the Urara build system.
 
 ### Creating a New Node
 
@@ -44,7 +44,7 @@ This will prompt for:
 - Estimated hours
 
 The script creates:
-- `src/routes/growth/2026/<node-id>/+page.md` - The markdown page
+- `urara/growth/2026/<node-id>/+page.md` - The markdown page
 - Updates `src/resources/growth2026.json` with the new node and edges
 
 ### Creating a Page for a Single Existing Node
@@ -71,7 +71,7 @@ pnpm run growth:backfill
 ### File Structure
 
 ```
-src/routes/growth/2026/
+urara/growth/2026/
 ├── +page.svelte              # Main graph visualization
 ├── types.ts                  # TypeScript types
 ├── components/               # Graph UI components
