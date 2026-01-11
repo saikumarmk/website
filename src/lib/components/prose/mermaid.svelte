@@ -28,14 +28,62 @@
     const style = getComputedStyle(document.documentElement)
     const get = (name: string) => style.getPropertyValue(name).trim()
 
+    // Get base colors
+    const bgColor = hslStringToHex(get('--b1'))
+    const primaryColor = hslStringToHex(get('--p'))
+    const textColor = hslStringToHex(get('--bc'))
+    const secondaryColor = hslStringToHex(get('--s') || get('--b2'))
+    const accentColor = hslStringToHex(get('--a') || get('--p'))
+
     return {
-      background: hslStringToHex(get('--b1')),
-      primaryColor: hslStringToHex(get('--p')),
-      primaryTextColor: hslStringToHex(get('--bc')),
-      nodeBorder: hslStringToHex(get('--p')),
-      edgeLabelBackground: hslStringToHex(get('--b1')),
-      clusterBkg: hslStringToHex(get('--b1')),
-      clusterBorder: hslStringToHex(get('--p'))
+      // Background colors
+      background: bgColor,
+      
+      // Primary node colors - use lighter bg with dark text for contrast
+      primaryColor: primaryColor,
+      primaryTextColor: '#ffffff', // Force white text on primary color nodes
+      primaryBorderColor: primaryColor,
+      
+      // Secondary colors
+      secondaryColor: secondaryColor,
+      secondaryTextColor: textColor,
+      secondaryBorderColor: secondaryColor,
+      
+      // Tertiary/accent colors
+      tertiaryColor: bgColor,
+      tertiaryTextColor: textColor,
+      tertiaryBorderColor: accentColor,
+      
+      // Line and edge colors
+      lineColor: textColor,
+      textColor: textColor,
+      
+      // Node styling
+      nodeBorder: primaryColor,
+      nodeTextColor: textColor,
+      
+      // Edge labels
+      edgeLabelBackground: bgColor,
+      
+      // Cluster/subgraph styling
+      clusterBkg: bgColor,
+      clusterBorder: primaryColor,
+      
+      // Gantt chart specific - ensure contrast
+      sectionBkgColor: bgColor,
+      altSectionBkgColor: secondaryColor,
+      sectionBkgColor2: bgColor,
+      taskTextColor: '#ffffff', // White text on colored bars
+      taskTextOutsideColor: textColor,
+      taskTextClickableColor: '#ffffff',
+      activeTaskBorderColor: accentColor,
+      gridColor: textColor,
+      doneTaskBkgColor: primaryColor,
+      
+      // Timeline specific
+      cScale0: primaryColor,
+      cScale1: secondaryColor,
+      cScale2: accentColor
     }
   }
 
@@ -75,4 +123,11 @@
   })
 </script>
 
-<div bind:this={container} class="mermaid" />
+<div bind:this={container} class="mermaid flex justify-center" />
+
+<style>
+  .mermaid :global(svg) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
