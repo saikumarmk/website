@@ -28,10 +28,6 @@ function watchExtraFiles() {
 
 export default defineConfig({
   envPrefix: 'URARA_',
-  optimizeDeps: {
-    // Exclude mermaid from pre-bundling to avoid Firefox TDZ issues
-    exclude: ['mermaid']
-  },
   build: {
     sourcemap: false,
     rollupOptions: {
@@ -40,8 +36,7 @@ export default defineConfig({
         manualChunks(id) {
           // Split large libraries into separate chunks
           if (id.includes('node_modules')) {
-            // Skip mermaid - let Vite handle it naturally to avoid Firefox TDZ issues
-            if (id.includes('mermaid')) return undefined
+            if (id.includes('mermaid')) return 'mermaid'
             if (id.includes('elkjs')) return 'elk'
             if (id.includes('three')) return 'three'
             if (id.includes('force-graph') && id.includes('3d')) return 'force-graph-3d'

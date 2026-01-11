@@ -22,8 +22,10 @@
   export let title
   export let image
   export let in_reply_to
+  // custom
+  export let slab_title: boolean | string | undefined = undefined
   // post
-  let fm = { path, slug, toc, created, updated, published, summary, tags, flags, title, image, in_reply_to }
+  let fm = { path, slug, toc, created, updated, published, summary, tags, flags, title, image, in_reply_to, slab_title }
   let post = fm ? { type: typeOfPost(fm), ...fm } : null
 </script>
 

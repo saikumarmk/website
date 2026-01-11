@@ -67,6 +67,12 @@ declare global {
            * @property bridgy-{target} - add a link to Bridgy in the post. https://brid.gy/publish/{target}
            */
           flags?: string[]
+          /**
+           * render title as stylized slab text.
+           * @example true - auto-generate styling based on title
+           * @example "3c 2.5 3ci 2" - custom config per word (size + c=colored + i=italic)
+           */
+          slab_title?: boolean | string
         }
       type Toc = {
         depth: number

@@ -8,6 +8,7 @@
   import { hslToHex } from '$lib/utils/color'
   import Nav from '$lib/components/header_nav.svelte'
   import Search from '$lib/components/header_search.svelte'
+  import ColorSelector from '$lib/components/color_selector.svelte'
   export let path: string
   export let searchModal: any = undefined
   let title: string
@@ -17,14 +18,7 @@
   let pin: boolean = true
   let percent: number
   let [scrollY, lastY] = [0, 0]
-  import { backgroundMode } from '$lib/stores/background'
-  import { get } from 'svelte/store'
-
-  const options = [
-    { value: 'none', label: 'No Background' },
-    { value: 'three', label: 'Astro Background' },
-    { value: 'poke', label: 'Pokémon Background' }
-  ]
+  
   storedTitle.subscribe(storedTitle => (title = storedTitle as string))
 
   $: if (browser && currentTheme) {
@@ -83,12 +77,6 @@
             <span class="absolute -bottom-1 text-[10px] opacity-0 group-hover:opacity-60 transition-opacity">⌘K</span>
           </button>
         {/if}
-        <!-- Background selector - hidden on mobile -->
-        <select class="select select-bordered select-sm hidden md:inline-flex" bind:value={$backgroundMode}>
-          {#each options as opt}
-            <option value={opt.value}>{opt.label}</option>
-          {/each}
-        </select>
         <div id="change-theme" class="dropdown dropdown-end">
           <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
           <!-- reference: https://github.com/saadeghi/daisyui/issues/1285 -->
@@ -97,32 +85,12 @@
           </div>
           <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
           <!-- reference: https://github.com/saadeghi/daisyui/issues/1285 -->
-          <ul
+          <div
             tabindex="0"
-            class="flex flex-nowrap shadow-2xl menu dropdown-content bg-base-100 text-base-content rounded-box w-52 p-2 gap-2 overflow-y-auto max-h-[21.5rem]"
+            class="shadow-2xl dropdown-content bg-base-100 text-base-content rounded-box w-64"
             class:hidden={!pin}>
-            {#each theme as { name, text }}
-              <button
-                data-theme={name}
-                on:click={() => {
-                  currentTheme = name
-                  localStorage.setItem('theme', name)
-                }}
-                class:border-2={currentTheme === name}
-                class:border-primary={currentTheme === name}
-                class="btn btn-ghost w-full hover:bg-primary group rounded-lg flex bg-base-100 p-2 transition-all">
-                <p class="flex-1 text-left text-base-content group-hover:text-primary-content transition-color">
-                  {text ?? name}
-                </p>
-                <div class="flex-none m-auto flex gap-1">
-                  <div class="bg-primary w-2 h-4 rounded" />
-                  <div class="bg-secondary w-2 h-4 rounded" />
-                  <div class="bg-accent w-2 h-4 rounded" />
-                  <div class="bg-neutral w-2 h-4 rounded" />
-                </div>
-              </button>
-            {/each}
-          </ul>
+            <ColorSelector themes={theme} on:change={(e) => currentTheme = e.detail} />
+          </div>
         </div>
       </div>
     </div>
