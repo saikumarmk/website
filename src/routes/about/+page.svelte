@@ -146,16 +146,16 @@
     </div>
     
     <!-- Hero Section -->
-    <section id="hero" class="min-h-screen flex items-center p-8 lg:p-12">
+    <section id="hero" class="py-12 lg:py-16 px-6 lg:px-12">
       {#if mounted}
         <div in:fly={{ x: 50, duration: 800 }}>
-          <h1 class="text-5xl lg:text-6xl font-bold mb-6">
+          <h1 class="text-4xl lg:text-5xl font-bold mb-4">
             Hi, I'm <span class="text-primary">Sai</span>
           </h1>
-          <p class="text-xl lg:text-2xl opacity-80 mb-6">
+          <p class="text-lg lg:text-xl opacity-80 mb-4">
             Machine Learning Engineer working on generative AI at Canva
           </p>
-          <div class="prose prose-lg max-w-none opacity-70 mb-8">
+          <div class="prose max-w-none opacity-70 mb-6">
             <p>
               I'm a graduate from Monash University, having completed my honours year in 
               <a href="https://handbook.monash.edu/current/courses/S3003" target="_blank" class="link link-primary">Applied Data Science</a>, 
@@ -198,15 +198,15 @@
     </section>
     
     <!-- On Industry Research Section -->
-    <section id="research" class="min-h-screen p-8 lg:p-12 bg-base-200">
+    <section id="research" class="py-12 lg:py-16 px-6 lg:px-12 bg-base-200">
       {#if mounted}
         <div in:fly={{ x: 50, duration: 800, delay: 200 }}>
-          <div class="flex items-center gap-3 mb-6">
-            <span class="i-heroicons-outline-beaker w-10 h-10 text-primary"></span>
-            <h2 class="text-4xl font-bold">On Industry Research</h2>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="i-heroicons-outline-beaker w-8 h-8 text-primary"></span>
+            <h2 class="text-3xl font-bold">On Industry Research</h2>
           </div>
           
-          <div class="prose prose-lg max-w-none">
+          <div class="prose max-w-none">
             <p>
               Over the summer of 2023, I had the unique opportunity of doing a Machine Learning Engineering internship at Canva. 
               The project involved researching AI safety techniques for AI image generation, and unlike an ordinary project, 
@@ -244,15 +244,15 @@
     </section>
     
     <!-- Advice Section -->
-    <section id="advice" class="min-h-screen p-8 lg:p-12">
+    <section id="advice" class="py-12 lg:py-16 px-6 lg:px-12">
       {#if mounted}
         <div in:fly={{ x: 50, duration: 800, delay: 200 }}>
-          <div class="flex items-center gap-3 mb-6">
-            <span class="i-heroicons-outline-light-bulb w-10 h-10 text-primary"></span>
-            <h2 class="text-4xl font-bold">My Advice to New Students</h2>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="i-heroicons-outline-light-bulb w-8 h-8 text-primary"></span>
+            <h2 class="text-3xl font-bold">My Advice to New Students</h2>
           </div>
           
-          <div class="prose prose-lg max-w-none">
+          <div class="prose max-w-none">
             <p>
               Compared to high school, your actions have much more weight and are more noticeable. If you want to make the most of 
               university, attend events outside of classes, and don't focus exclusively on your grades, you gain little if you spend 
@@ -276,7 +276,7 @@
             </p>
           </div>
           
-          <div class="mt-8 alert alert-success">
+          <div class="mt-6 alert alert-success">
             <span class="i-heroicons-outline-book-open w-6 h-6"></span>
             <div>
               <h3 class="font-bold">Want more detailed advice?</h3>
@@ -291,33 +291,33 @@
     </section>
     
     <!-- Contact Section -->
-    <section id="contact" class="min-h-screen flex items-center p-8 lg:p-12 bg-base-200">
+    <section id="contact" class="py-12 lg:py-16 px-6 lg:px-12 bg-base-200">
       {#if mounted}
         <div class="w-full" in:fly={{ x: 50, duration: 800, delay: 200 }}>
-          <div class="flex items-center gap-3 mb-6">
-            <span class="i-heroicons-outline-chat-bubble-left-right w-10 h-10 text-primary"></span>
-            <h2 class="text-4xl font-bold">Let's Connect</h2>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="i-heroicons-outline-chat-bubble-left-right w-8 h-8 text-primary"></span>
+            <h2 class="text-3xl font-bold">Let's Connect</h2>
           </div>
-          <p class="text-lg opacity-70 mb-8 max-w-xl">
+          <p class="opacity-70 mb-6 max-w-xl">
             Have questions about my experiences at Canva, want to discuss ML research, or looking for career advice? 
             Feel free to reach out!
           </p>
           
-          <div class="flex flex-col gap-4 max-w-md mb-8">
-            <a href="https://github.com/saikumarmk" target="_blank" class="btn btn-lg btn-primary gap-2 justify-start">
+          <div class="flex flex-col gap-3 max-w-md mb-6">
+            <a href="https://github.com/saikumarmk" target="_blank" class="btn btn-primary gap-2 justify-start">
               <span class="i-heroicons-outline-code-bracket w-5 h-5"></span>
               GitHub: @saikumarmk
             </a>
-            <a href="/assets/resume.pdf" target="_blank" class="btn btn-lg btn-outline gap-2 justify-start">
+            <a href="/assets/resume.pdf" target="_blank" class="btn btn-outline gap-2 justify-start">
               <span class="i-heroicons-outline-document-text w-5 h-5"></span>
               Download Résumé
             </a>
           </div>
           
-          <div class="text-sm opacity-70 space-y-2">
+          <div class="text-sm opacity-70 space-y-1">
             <p>📧 Email available in résumé</p>
-            <p>🏼 LinkedIn: Search "Sai Kumar Monash"</p>
-            <p>🎼 Discord: Theorvolt</p>
+            <p>💼 LinkedIn: Search "Sai Kumar Monash"</p>
+            <p>💬 Discord: Theorvolt</p>
           </div>
         </div>
       {/if}

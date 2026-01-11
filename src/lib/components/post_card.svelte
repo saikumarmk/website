@@ -10,6 +10,7 @@
   import Pagination from '$lib/components/post_pagination.svelte'
   import Comment from '$lib/components/post_comment.svelte'
   import RelatedPosts from '$lib/components/related_posts.svelte'
+  import SlabTitle from '$lib/components/slab_title.svelte'
   export let post: Urara.Post
   export let preview: boolean = false
   export let loading: 'eager' | 'lazy' = 'lazy'
@@ -97,6 +98,14 @@
             <a itemprop="url" class="u-url p-name" href={post.path}>{post.title ?? post.path.slice(1)}</a>
             <RandomPokemonSprite />
           </h2>
+        {:else if post.slab_title}
+          <div itemprop="name headline" class="mb-8 p-name">
+            <SlabTitle 
+              title={post.title ?? post.path.slice(1)} 
+              slug={post.path}
+              config={typeof post.slab_title === 'string' ? post.slab_title : ''}
+            />
+          </div>
         {:else}
           <h1 itemprop="name headline" class="card-title text-3xl mb-8 p-name">{post.title ?? post.path.slice(1)}</h1>
         {/if}

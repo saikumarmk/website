@@ -34,131 +34,136 @@
 <Head />
 
 <div class="min-h-screen">
-  <!-- Hero Section -->
-  <div class="hero min-h-[50vh] bg-gradient-to-br from-primary/5 to-secondary/5 border-b border-base-content/10">
-    <div class="hero-content text-center max-w-3xl">
-      <div>
+  <!-- Hero Section - Horizontal Layout -->
+  <div class="border-b border-base-content/10 bg-gradient-to-br from-primary/5 to-secondary/5">
+    <div class="container mx-auto px-4 py-10 md:py-12 max-w-5xl">
+      <div class="flex flex-col md:flex-row items-center gap-6 md:gap-10">
+        <!-- Avatar -->
         {#if site.author.avatar}
-          <img 
-            src={site.author.avatar} 
-            alt={site.author.name}
-            class="w-24 h-24 rounded-full shadow-xl mx-auto mb-6"
-          />
+          <div class="flex-shrink-0">
+            <img 
+              src={site.author.avatar} 
+              alt={site.author.name}
+              class="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-xl ring-4 ring-primary/20"
+            />
+          </div>
         {/if}
-        <h1 class="text-5xl font-bold mb-4">Hi, I'm {site.author.name}</h1>
-        <p class="text-xl opacity-80 mb-6">{@html site.author.bio}</p>
-        <p class="text-lg opacity-60 max-w-2xl mx-auto">
-          Applied Scientist at Canva working on training photo and video models. 
-          I write about machine learning, tech careers, and software engineering.
-        </p>
         
-        <div class="flex gap-3 justify-center flex-wrap mt-8">
-          <a href="/about" class="btn btn-primary gap-2">
-            <span class="i-heroicons-outline-user w-4 h-4"></span>
-            Learn More
-          </a>
-          <a href={site.author.metadata?.[0]?.link} target="_blank" class="btn btn-outline gap-2">
-            <span class="i-heroicons-outline-code-bracket w-4 h-4"></span>
-            GitHub
-          </a>
+        <!-- Text Content -->
+        <div class="flex-1 text-center md:text-left">
+          <h1 class="text-3xl md:text-4xl font-bold mb-2">
+            Hi, I'm <span class="text-primary">{site.author.name}</span>
+          </h1>
+          <p class="text-base md:text-lg opacity-80 mb-3">{@html site.author.bio}</p>
+          <p class="text-sm opacity-60 mb-4 max-w-xl">
+            Applied Scientist at Canva working on training photo and video models. 
+            I write about machine learning, tech careers, and software engineering.
+          </p>
+          
+          <div class="flex gap-2 justify-center md:justify-start flex-wrap">
+            <a href="/about" class="btn btn-primary btn-sm gap-2">
+              <span class="i-heroicons-outline-user w-4 h-4"></span>
+              About Me
+            </a>
+            <a href={site.author.metadata?.[0]?.link} target="_blank" class="btn btn-outline btn-sm gap-2">
+              <span class="i-heroicons-outline-code-bracket w-4 h-4"></span>
+              GitHub
+            </a>
+            <a href="/assets/resume.pdf" target="_blank" class="btn btn-ghost btn-sm gap-2">
+              <span class="i-heroicons-outline-document-text w-4 h-4"></span>
+              Résumé
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="container mx-auto px-4 py-16 max-w-6xl">
+  <div class="container mx-auto px-4 py-10 max-w-5xl">
     <!-- Featured/Pinned Posts -->
-    <div class="mb-16">
-      <div class="flex items-center justify-between mb-8">
-        <h2 class="text-3xl font-bold">Featured Posts</h2>
-      </div>
+    <div class="mb-10">
+      <h2 class="text-2xl font-bold mb-5">Featured Posts</h2>
       
-      <div class="grid md:grid-cols-3 gap-6">
+      <div class="grid md:grid-cols-3 gap-4">
         {#each featuredPosts as post}
           {@const readTime = getReadingTime(post.html)}
           <a 
             href={post.path}
-            class="card bg-gradient-to-br from-primary/10 to-secondary/10 hover:shadow-2xl transition-all p-8 group relative overflow-hidden">
-            <div class="absolute top-4 right-4">
-              <span class="badge badge-primary">Featured</span>
+            class="card bg-gradient-to-br from-primary/10 to-secondary/10 hover:shadow-xl transition-all p-5 group relative overflow-hidden">
+            <div class="absolute top-3 right-3">
+              <span class="badge badge-primary badge-sm">Featured</span>
             </div>
-            <div class="text-xs opacity-60 mb-3">
+            <div class="text-xs opacity-60 mb-2">
               {new Date(post.published ?? post.created).toLocaleDateString('en-US', { 
                 year: 'numeric',
                 month: 'short', 
                 day: 'numeric' 
               })}
             </div>
-            <h3 class="font-bold text-xl mb-4 group-hover:text-primary transition-colors">
+            <h3 class="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
               {post.title || post.path.slice(1)}
             </h3>
             {#if post.summary}
-              <p class="text-sm opacity-70 mb-4 line-clamp-3">{post.summary}</p>
+              <p class="text-sm opacity-70 mb-3 line-clamp-2">{post.summary}</p>
             {/if}
             {#if readTime}
-              <div class="text-xs opacity-60 mt-auto">{readTime}</div>
+              <div class="text-xs opacity-60">{readTime}</div>
             {/if}
           </a>
         {/each}
       </div>
     </div>
 
-    <!-- Highlights Section - Expanded -->
-    <div class="mb-16">
-      <h2 class="text-3xl font-bold mb-8">Highlights</h2>
+    <!-- Highlights Section -->
+    <div class="mb-10">
+      <h2 class="text-2xl font-bold mb-5">Highlights</h2>
       
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid md:grid-cols-3 gap-4">
         <!-- The Playbook -->
-        <a href="/playbook" class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-8 group">
-          <div class="mb-4">
-            <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span class="i-heroicons-outline-book-open w-6 h-6 text-primary"></span>
+        <a href="/playbook" class="card bg-base-200 hover:bg-base-300 hover:shadow-lg transition-all p-5 group">
+          <div class="flex items-start gap-3 mb-3">
+            <div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+              <span class="i-heroicons-outline-book-open w-5 h-5 text-primary"></span>
             </div>
-            <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">The Grad/Intern Playbook</h3>
+            <h3 class="text-lg font-bold group-hover:text-primary transition-colors">Grad/Intern Playbook</h3>
           </div>
-          <p class="text-sm opacity-70 mb-4">
-            A comprehensive guide for students and early-career professionals breaking into tech. 
-            Covers timelines, skill development, résumé building, and the application process.
+          <p class="text-sm opacity-70 mb-3">
+            Guide for students breaking into tech. Timelines, skills, résumés, and applications.
           </p>
-          <div class="flex items-center gap-2 text-sm font-semibold text-primary">
-            Read the Guide
-            <span class="i-heroicons-outline-arrow-right w-4 h-4"></span>
+          <div class="flex items-center gap-1 text-sm font-semibold text-primary">
+            Read Guide <span class="i-heroicons-outline-arrow-right w-4 h-4"></span>
           </div>
         </a>
 
         <!-- Portfolio -->
-        <a href="/portfolio" class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-8 group">
-          <div class="mb-4">
-            <div class="w-12 h-12 bg-secondary/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span class="i-heroicons-outline-briefcase w-6 h-6 text-secondary"></span>
+        <a href="/portfolio" class="card bg-base-200 hover:bg-base-300 hover:shadow-lg transition-all p-5 group">
+          <div class="flex items-start gap-3 mb-3">
+            <div class="w-10 h-10 bg-secondary/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+              <span class="i-heroicons-outline-briefcase w-5 h-5 text-secondary"></span>
             </div>
-            <h3 class="text-xl font-bold mb-2 group-hover:text-secondary transition-colors">Portfolio</h3>
+            <h3 class="text-lg font-bold group-hover:text-secondary transition-colors">Portfolio</h3>
           </div>
-          <p class="text-sm opacity-70 mb-4">
-            Explore my professional experience at Canva, research projects, and open-source contributions. 
-            View my timeline, skills, and project showcase.
+          <p class="text-sm opacity-70 mb-3">
+            Professional experience at Canva, research projects, and open-source work.
           </p>
-          <div class="flex items-center gap-2 text-sm font-semibold text-secondary">
-            View Portfolio
-            <span class="i-heroicons-outline-arrow-right w-4 h-4"></span>
+          <div class="flex items-center gap-1 text-sm font-semibold text-secondary">
+            View Portfolio <span class="i-heroicons-outline-arrow-right w-4 h-4"></span>
           </div>
         </a>
 
         <!-- Thesis -->
-        <a href="/assets/honours_thesis.pdf" target="_blank" class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-8 group">
-          <div class="mb-4">
-            <div class="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <span class="i-heroicons-outline-document-text w-6 h-6 text-accent"></span>
+        <a href="/assets/honours_thesis.pdf" target="_blank" class="card bg-base-200 hover:bg-base-300 hover:shadow-lg transition-all p-5 group">
+          <div class="flex items-start gap-3 mb-3">
+            <div class="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+              <span class="i-heroicons-outline-document-text w-5 h-5 text-accent"></span>
             </div>
-            <h3 class="text-xl font-bold mb-2 group-hover:text-accent transition-colors">Honours Thesis</h3>
+            <h3 class="text-lg font-bold group-hover:text-accent transition-colors">Honours Thesis</h3>
           </div>
-          <p class="text-sm opacity-70 mb-4">
-            Research on bias modelling and mitigation in diffusion models. 
-            First Class Honours (90/100) from Monash University, 2023.
+          <p class="text-sm opacity-70 mb-3">
+            Bias modelling in diffusion models. First Class Honours (90/100), Monash 2023.
           </p>
-          <div class="flex items-center gap-2 text-sm font-semibold text-accent">
-            Read Thesis (PDF)
-            <span class="i-heroicons-outline-arrow-top-right-on-square w-4 h-4"></span>
+          <div class="flex items-center gap-1 text-sm font-semibold text-accent">
+            Read PDF <span class="i-heroicons-outline-arrow-top-right-on-square w-4 h-4"></span>
           </div>
         </a>
       </div>
@@ -166,67 +171,58 @@
 
     <!-- Latest Posts -->
     <div>
-      <div class="flex items-center justify-between mb-8">
-        <h2 class="text-3xl font-bold">Latest Posts</h2>
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-2xl font-bold">Latest Posts</h2>
         <a href="/archive" class="btn btn-ghost gap-2">
           View All
           <span class="i-heroicons-outline-arrow-right w-4 h-4"></span>
         </a>
       </div>
       
-      <div class="space-y-4">
+      <div class="space-y-3">
         {#each latestPosts as post}
           {@const readTime = getReadingTime(post.html)}
           <a 
             href={post.path}
-            class="card bg-base-200 hover:bg-base-300 hover:shadow-lg transition-all p-6 flex flex-row items-center gap-6 group">
+            class="card bg-base-200 hover:bg-base-300 hover:shadow-md transition-all p-4 flex flex-row items-center gap-4 group">
             <!-- Date -->
-            <div class="flex flex-col items-center text-center min-w-[70px]">
-              <div class="text-xl font-bold">
+            <div class="flex flex-col items-center text-center min-w-[50px]">
+              <div class="text-lg font-bold leading-tight">
                 {new Date(post.published ?? post.created).getDate()}
               </div>
               <div class="text-xs opacity-60 uppercase">
                 {new Date(post.published ?? post.created).toLocaleDateString('en-US', { month: 'short' })}
               </div>
-              <div class="text-xs opacity-40">
-                {new Date(post.published ?? post.created).getFullYear()}
-              </div>
             </div>
 
             <!-- Content -->
-            <div class="flex-1">
-              <h3 class="text-lg font-bold mb-1 group-hover:text-primary transition-colors">
+            <div class="flex-1 min-w-0">
+              <h3 class="font-bold mb-0.5 group-hover:text-primary transition-colors truncate">
                 {post.title || post.path.slice(1)}
               </h3>
               {#if post.summary}
-                <p class="text-sm opacity-70 line-clamp-2">{post.summary}</p>
+                <p class="text-sm opacity-70 truncate">{post.summary}</p>
               {/if}
             </div>
 
             <!-- Meta -->
-            <div class="hidden md:flex flex-col items-end gap-2">
+            <div class="hidden md:flex items-center gap-3 flex-shrink-0">
               {#if post.tags && post.tags.length > 0}
-                <div class="flex gap-1">
-                  {#each post.tags.slice(0, 2) as tag}
-                    <span class="badge badge-sm badge-outline">#{tag}</span>
-                  {/each}
-                </div>
+                <span class="badge badge-sm badge-outline">#{post.tags[0]}</span>
               {/if}
               {#if readTime}
-                <div class="text-xs opacity-60">{readTime}</div>
+                <span class="text-xs opacity-60 whitespace-nowrap">{readTime}</span>
               {/if}
             </div>
 
-            <span class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+            <span class="i-heroicons-outline-chevron-right w-4 h-4 opacity-40 group-hover:opacity-100 transition-opacity flex-shrink-0"></span>
           </a>
         {/each}
       </div>
     </div>
   </div>
 
-  <div class="container mx-auto px-4 py-8">
-    <Footer />
-  </div>
+  <Footer />
 </div>
 
 <style>

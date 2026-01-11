@@ -36,7 +36,7 @@ export const header: HeaderConfig = {
       link: '/portfolio'
     },
     {
-      text: 'Archive',
+      text: 'Blog',
       link: '/archive'
     },
     {

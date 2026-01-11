@@ -1,5 +1,6 @@
 ---
 title: "Elements of this Website"
+slab_title: true
 author: Sai Kumar Murali Krishnan
 created: 2025-07-14 
 categories: [random, web-dev]
@@ -10,8 +11,14 @@ summary: "Elements of this Website"
 <script>
 import Mermaid from '$lib/components/prose/mermaid.svelte'
 import PythonCode from '$lib/components/prose/code.svelte'
+import SlabTitle from '$lib/components/slab_title.svelte'
 </script>
 
+<SlabTitle 
+  title="My Cool Blog Post" 
+  slug="my-cool-post"
+  config="3c 2.5 3c 2.5i"
+/>
 
 I've been adding some stuff to my website.
 
