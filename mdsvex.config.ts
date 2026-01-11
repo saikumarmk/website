@@ -24,6 +24,14 @@ import { lex, parse as parseFence } from 'fenceparser'
 import { renderCodeToHTML, runTwoSlash, createShikiHighlighter } from 'shiki-twoslash'
 type VALUE = { [key in string | number]: VALUE } | Array<VALUE> | string | boolean | number
 
+// Strip Svelte component tags from heading text for ToC
+const cleanHeadingText = (text: string): string => {
+  return text
+    .replace(/<[A-Z][a-zA-Z]*\s[^>]*\/>/g, '') // Self-closing components like <PokemonSprite ... />
+    .replace(/<[A-Z][a-zA-Z]*[^>]*>.*?<\/[A-Z][a-zA-Z]*>/g, '') // Components with children
+    .trim()
+}
+
 const remarkUraraFm =
   () =>
     (tree: Node<Data>, { data, filename }: { data: { fm?: Record<string, unknown> }; filename?: string }) => {
@@ -37,10 +45,12 @@ const remarkUraraFm =
       if (data.fm.toc !== false) {
         const [slugs, toc]: [slugs: Slugger, toc: { depth: number; title: string; slug: string }[]] = [new Slugger(), []]
         visit(tree, 'heading', (node: { depth: number }) => {
+          const rawTitle = toString(node)
+          const cleanTitle = cleanHeadingText(rawTitle)
           toc.push({
             depth: node.depth,
-            title: toString(node),
-            slug: slugs.slug(toString(node), false)
+            title: cleanTitle,
+            slug: slugs.slug(rawTitle, false) // Keep raw for slug matching
           })
         })
         if (toc.length > 0) data.fm.toc = toc
