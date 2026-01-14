@@ -36,7 +36,8 @@ export default defineConfig({
         manualChunks(id) {
           // Split large libraries into separate chunks
           if (id.includes('node_modules')) {
-            if (id.includes('mermaid')) return 'mermaid'
+            // Let mermaid be handled naturally by Rollup to avoid Firefox TDZ issues
+            if (id.includes('mermaid')) return undefined
             if (id.includes('elkjs')) return 'elk'
             if (id.includes('three')) return 'three'
             if (id.includes('force-graph') && id.includes('3d')) return 'force-graph-3d'
