@@ -3,8 +3,7 @@
   import { onMount } from 'svelte'
   import { browser } from '$app/environment'
   
-  export let post: Urara.Post
-  export let config: GiscusConfig
+  let { post, config } = $props()
   
   let giscusContainer: HTMLDivElement
   

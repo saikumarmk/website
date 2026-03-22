@@ -18,13 +18,21 @@
     eager: true
   })
 
-  let className: string | undefined = undefined
-  export { className as class }
-  export let src: string
-  export let alt: string = src
-  export let loading: 'eager' | 'lazy' = 'lazy'
-  export let decoding: 'async' | 'sync' | 'auto' = 'async'
-  let source: Image[] | undefined = sources[`/static${src}`]
+  let {
+    class: className = undefined,
+    src,
+    alt = src,
+    loading = 'lazy',
+    decoding = 'async'
+  }: {
+    class?: string
+    src: string
+    alt?: string
+    loading?: 'eager' | 'lazy'
+    decoding?: 'async' | 'sync' | 'auto'
+  } = $props()
+
+  let source: Image[] | undefined = $derived(sources[`/static${src}`])
 </script>
 
 {#if source}

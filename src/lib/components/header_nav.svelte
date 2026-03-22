@@ -1,12 +1,20 @@
 <script lang="ts">
   import { backgroundMode } from '$lib/stores/background'
   
-  export let nav: { text: string; link?: string; children?: { text: string; link: string }[] }[]
-  export let path: string
-  export let title: string
-  export let scrollY: number
-  export let pin: boolean
-  
+  let {
+    nav,
+    path,
+    title,
+    scrollY,
+    pin
+  }: {
+    nav: { text: string; link?: string; children?: { text: string; link: string }[] }[]
+    path: string
+    title: string
+    scrollY: number
+    pin: boolean
+  } = $props()
+
   const options = [
     { value: 'none', label: 'No Background' },
     { value: 'three', label: 'Astro Background' },
@@ -64,7 +72,7 @@
 </div>
 <div class:swap-active={scrollY > 32 && title} class="swap order-last hidden lg:inline-grid">
   <button
-    on:click={() => window.scrollTo(0, 0)}
+    onclick={() => window.scrollTo(0, 0)}
     class:hidden={scrollY < 32 || !title}
     class="swap-on btn btn-ghost text-base font-normal normal-case transition-all duration-200">
     {JSON.stringify(title) === '{}' ? '' : title}

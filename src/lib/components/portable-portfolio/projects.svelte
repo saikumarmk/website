@@ -15,10 +15,11 @@
     )
   ]
 
-  let selected = 'All'
+  let selected = $state('All')
 
-  /* reactive filtered list */
-  $: filteredProjects = selected === 'All' ? get(projects) : get(projects).filter(p => p.tags?.includes(selected))
+  let filteredProjects = $derived(
+    selected === 'All' ? get(projects) : get(projects).filter(p => p.tags?.includes(selected))
+  )
 </script>
 
 <section id="projects" class="max-w-3xl mx-auto pb-36 px-4 text-center">
@@ -32,7 +33,7 @@
     {#each options as tag}
       <button
         class={`bg-base-100 px-3 py-1 rounded border md:rounded-box ${selected === tag ? 'md:shadow-xl' : 'border-gray-300'}`}
-        on:click={() => (selected = tag)}>
+        onclick={() => (selected = tag)}>
         {tag}
       </button>
     {/each}

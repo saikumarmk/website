@@ -1,9 +1,8 @@
 <script lang="ts">
-  export let name: string
-  export let size: string
+  let { name, size } = $props()
 
-  const wrapperClass = `sprite-wrapper ${size}`
-  const spriteClass = `pokesprite ${name.replace('.', ' ')}`
+  let wrapperClass = $derived(`sprite-wrapper ${size}`)
+  let spriteClass = $derived(`pokesprite ${name.replace('.', ' ')}`)
 </script>
 
 <div class={wrapperClass}>

@@ -78,20 +78,20 @@
   })
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window onkeydown={handleKeydown} />
 
 {#if isOpen}
   <!-- Lightbox overlay -->
   <div
     class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
-    on:click={closeLightbox}
-    on:keydown={(e) => e.key === 'Enter' && closeLightbox()}
+    onclick={closeLightbox}
+    onkeydown={(e) => e.key === 'Enter' && closeLightbox()}
     role="button"
     tabindex="0"
     aria-label="Close lightbox">
     <!-- Close button -->
     <button
-      on:click={closeLightbox}
+      onclick={closeLightbox}
       class="absolute top-4 right-4 btn btn-circle btn-ghost text-white hover:bg-white/20 z-10"
       aria-label="Close lightbox">
       <span class="i-heroicons-outline-x w-6 h-6"></span>
@@ -100,15 +100,15 @@
     <!-- Image container -->
     <div
       class="relative max-w-7xl max-h-full flex items-center justify-center"
-      on:click|stopPropagation
-      on:keydown|stopPropagation
+      onclick={e => e.stopPropagation()}
+      onkeydown={e => e.stopPropagation()}
       role="button"
       tabindex="-1">
       <img
         src={currentImage}
         alt={currentAlt}
         class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl animate-in zoom-in-95 duration-300"
-        on:click|stopPropagation />
+        onclick={e => e.stopPropagation()} />
       
       {#if currentAlt}
         <div class="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-4 text-center rounded-b-lg">

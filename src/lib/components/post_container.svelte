@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { fly } from 'svelte/transition'
   import { onMount, onDestroy } from 'svelte'
   import { get } from 'svelte/store'
@@ -10,12 +11,13 @@
   import Footer from '$lib/components/footer.svelte'
   import Breadcrumb from '$lib/components/breadcrumb.svelte'
   import { getSeriesInfo } from '$lib/utils/series'
-  export let post: Urara.Post | null
 
-  $: seriesInfo = post ? getSeriesInfo(post) : undefined
+  let { post, children }: { post: Urara.Post | null; children?: Snippet } = $props()
+
+  let seriesInfo = $derived(post ? getSeriesInfo(post) : undefined)
 
   /** Fullscreen deck — only on client (`$page` is unavailable during genPosts SSR). */
-  let deckPresentation = false
+  let deckPresentation = $state(false)
 
   function syncDeckPresentation() {
     if (!browser || !post) {
@@ -58,12 +60,12 @@
     {#if post}
       <div class="flex-1 w-full min-h-0">
         <Card {post} {deckPresentation}>
-          <svelte:fragment slot="breadcrumb">
+          {#snippet breadcrumb()}
             {#if !deckPresentation}
               <Breadcrumb {post} series={seriesInfo?.series} currentPart={seriesInfo?.part} />
             {/if}
-          </svelte:fragment>
-          <slot />
+          {/snippet}
+          {@render children?.()}
         </Card>
       </div>
     {/if}

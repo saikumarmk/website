@@ -1,14 +1,19 @@
 <script lang="ts">
-  export let type: 'artist' | 'album' | 'track' = 'track'
-  export let id: string
-  export let theme: boolean = true
-  export let compact: boolean = false
-  export let width: string = '100%'
-  export let height: string = compact ? '152' : '352'
-  const src = `https://open.spotify.com/embed/${type}/${id}?${new URLSearchParams({
+  let {
+    type = 'track',
+    id,
+    theme = true,
+    compact = false,
+    width = '100%',
+    height: heightProp
+  } = $props()
+
+  let height = $derived(heightProp ?? (compact ? '152' : '352'))
+
+  let src = $derived(`https://open.spotify.com/embed/${type}/${id}?${new URLSearchParams({
     utm_source: 'generator',
     theme: theme ? '1' : '0'
-  }).toString()}`
+  }).toString()}`)
 </script>
 
 <iframe

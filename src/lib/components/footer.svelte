@@ -3,13 +3,11 @@
   import { browser } from '$app/environment'
   import { site } from '$lib/config/site'
 
-  let className = ''
-  export { className as class }
+  let { class: className = '', rounded = false } = $props()
 
   const year = new Date().getFullYear()
-  
-  // Time on site tracker
-  let timeOnSite = '00:00'
+
+  let timeOnSite = $state('00:00')
   let interval: ReturnType<typeof setInterval>
   
   function formatTime(seconds: number): string {
@@ -55,7 +53,7 @@
   })
 </script>
 
-<footer class="border-t border-base-content/10 bg-base-200 mt-auto {className}">
+<footer class="border-t border-base-content/10 bg-base-200 mt-auto {className}" class:rounded-box={rounded}>
   <div class="container mx-auto px-4 py-6 max-w-5xl">
     <!-- Main footer content -->
     <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">

@@ -3,21 +3,22 @@
   import { browser } from '$app/environment'
   import '$lib/slides/slide-theme.css'
 
-  export let title = ''
-  export let path = ''
+  let { title = '', path = '', children } = $props()
 
   let viewport: HTMLElement
-  let slides: HTMLElement[] = []
-  let current = 0
-  let slidesMode = false
+  let slides = $state<HTMLElement[]>([])
+  let current = $state(0)
+  let slidesMode = $state(false)
   let touchStartX = 0
 
-  $: slideCount = slides.length
-  $: progressPct = slideCount > 1 ? (current / (slideCount - 1)) * 100 : 0
+  let slideCount = $derived(slides.length)
+  let progressPct = $derived(slideCount > 1 ? (current / (slideCount - 1)) * 100 : 0)
 
-  $: if (browser && viewport) {
-    applyMode(slidesMode)
-  }
+  $effect(() => {
+    if (browser && viewport) {
+      applyMode(slidesMode)
+    }
+  })
 
   function collectSlides() {
     if (!viewport) return
@@ -41,10 +42,10 @@
 
   function goTo(index: number) {
     if (index < 0 || index >= slides.length) return
-    const prev = slides[current]
-    prev.classList.remove('active')
-    if (index > current) prev.classList.add('exit-up')
-    setTimeout(() => prev.classList.remove('exit-up'), 450)
+    const prevSlide = slides[current]
+    prevSlide.classList.remove('active')
+    if (index > current) prevSlide.classList.add('exit-up')
+    setTimeout(() => prevSlide.classList.remove('exit-up'), 450)
 
     current = index
     slides[current].classList.add('active')
@@ -90,21 +91,22 @@
     }
   }
 
-  onMount(async () => {
-    const { page } = await import('$app/stores')
-    slidesMode = window.location.search.includes('mode=slides')
-    await tick()
-    applyMode(slidesMode)
+  onMount(() => {
+    let unsub: (() => void) | undefined
+    void import('$app/stores').then(async ({ page }) => {
+      slidesMode = window.location.search.includes('mode=slides')
+      await tick()
+      applyMode(slidesMode)
 
-    const unsub = page.subscribe($p => {
-      const newMode = $p.url.searchParams.get('mode') === 'slides'
-      if (newMode !== slidesMode) {
-        slidesMode = newMode
-        applyMode(slidesMode)
-      }
+      unsub = page.subscribe($p => {
+        const newMode = $p.url.searchParams.get('mode') === 'slides'
+        if (newMode !== slidesMode) {
+          slidesMode = newMode
+          applyMode(slidesMode)
+        }
+      })
     })
-
-    return () => unsub()
+    return () => unsub?.()
   })
 
   onDestroy(() => {
@@ -112,7 +114,7 @@
   })
 </script>
 
-<svelte:window on:keydown={onKeydown} on:touchstart={onTouchStart} on:touchend={onTouchEnd} />
+<svelte:window onkeydown={onKeydown} ontouchstart={onTouchStart} ontouchend={onTouchEnd} />
 
 {#if !slidesMode}
   <a href="{path}?mode=slides" class="slide-deck-present-btn btn btn-primary btn-sm gap-2">
@@ -125,7 +127,7 @@
   class="slide-deck-viewport"
   class:slide-deck-viewport--presenting={slidesMode}
   bind:this={viewport}>
-  <slot />
+  {@render children?.()}
   {#if slidesMode}
     <div class="slide-deck-progress-bar" aria-hidden="true" style="width: {progressPct}%;" />
     <div class="slide-deck-counter font-mono" aria-live="polite">

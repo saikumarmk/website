@@ -1,17 +1,23 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
-  import type { GraphNode, GraphLink } from '../types';
-  import { getBranchColor, TIER_LABELS } from '../utils/nodeUtils';
-  import { computeElkLayout } from '../utils/elkLayout';
+  import { onMount } from 'svelte'
+  import { browser } from '$app/environment'
+  import type { GraphNode, GraphLink } from '../types'
+  import { getBranchColor, TIER_LABELS } from '../utils/nodeUtils'
+  import { computeElkLayout } from '../utils/elkLayout'
 
-  export let nodes: GraphNode[];
-  export let links: GraphLink[];
-  export let selectedNode: GraphNode | null = null;
+  let {
+    nodes,
+    links,
+    selectedNode = $bindable(null)
+  }: {
+    nodes: GraphNode[]
+    links: GraphLink[]
+    selectedNode?: GraphNode | null
+  } = $props()
 
-  let container: HTMLDivElement;
-  let graphInstance: any;
-  let hoveredNode: GraphNode | null = null;
+  let container: HTMLDivElement
+  let graphInstance = $state<any>(null)
+  let hoveredNode = $state<GraphNode | null>(null)
   let lastNodesHash = '';
   let lastLinksHash = '';
 
@@ -265,44 +271,60 @@
     ctx.fill();
   }
 
-  onMount(async () => {
-    if (!browser) return;
+  onMount(() => {
+    if (!browser) return
 
-    const ForceGraph = (await import('force-graph')).default;
-    
-    // Get background color from CSS variable or default
-    const bgColor = getComputedStyle(document.documentElement)
-      .getPropertyValue('--b3')
-      .trim() || '#1a1a1a';
-    
-    graphInstance = ForceGraph()(container)
-      .width(container.clientWidth)
-      .height(container.clientHeight)
-      .backgroundColor(bgColor);
+    let cancelled = false
 
-    await applyLayout();
+    ;(async () => {
+      const ForceGraph = (await import('force-graph')).default
+      if (cancelled) return
+
+      const bgColor =
+        getComputedStyle(document.documentElement).getPropertyValue('--b3').trim() || '#1a1a1a'
+
+      const instance = ForceGraph()(container)
+        .width(container.clientWidth)
+        .height(container.clientHeight)
+        .backgroundColor(bgColor)
+
+      if (cancelled) {
+        instance._destructor()
+        return
+      }
+
+      graphInstance = instance
+      await applyLayout()
+
+      if (cancelled && graphInstance) {
+        graphInstance._destructor()
+        graphInstance = null
+      }
+    })()
 
     return () => {
+      cancelled = true
       if (graphInstance) {
-        graphInstance._destructor();
+        graphInstance._destructor()
+        graphInstance = null
       }
-    };
-  });
-
-  // Re-apply layout only when data genuinely changes
-  $: if (browser && graphInstance) {
-    const nodesHash = nodes.map(n => n.id).join(',');
-    const linksHash = links.map(l => `${l.source}-${l.target}`).join(',');
-    
-    if (nodesHash !== lastNodesHash || linksHash !== lastLinksHash) {
-      lastNodesHash = nodesHash;
-      lastLinksHash = linksHash;
-      applyLayout();
     }
-  }
+  })
+
+  $effect(() => {
+    if (!browser || !graphInstance) return
+    const nodesHash = nodes.map(n => n.id).join(',')
+    const linksHash = links.map(l => `${l.source}-${l.target}`).join(',')
+
+    if (nodesHash !== lastNodesHash || linksHash !== lastLinksHash) {
+      lastNodesHash = nodesHash
+      lastLinksHash = linksHash
+      applyLayout()
+    }
+  })
 </script>
 
-<div bind:this={container} class="w-full h-full" />
+<div bind:this={container} class="w-full h-full"></div>
 
 
 

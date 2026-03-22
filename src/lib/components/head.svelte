@@ -3,8 +3,7 @@
   import { head } from '$lib/config/general'
   import { site } from '$lib/config/site'
   import OpenGraph from '$lib/components/head_opengraph.svelte'
-  export let post: Urara.Post | undefined = undefined
-  export let page: Urara.Page | undefined = undefined
+  let { post = undefined, page = undefined } = $props()
 </script>
 
 <svelte:head>

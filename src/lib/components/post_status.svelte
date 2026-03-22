@@ -2,14 +2,19 @@
   import { date } from '$lib/config/general'
   import { site } from '$lib/config/site'
   import { getReadingTime } from '$lib/utils/reading-time'
-  export let post: Urara.Post
-  export let preview: boolean = false
-  const stringPublished = new Date(post.published ?? post.created).toLocaleString(date.locales, date.options)
-  const stringUpdated = new Date(post.updated ?? post.published ?? post.created).toLocaleString(date.locales, date.options)
-  const jsonPublished = new Date(post.published ?? post.created).toJSON()
-  const jsonUpdated = new Date(post.updated ?? post.published ?? post.created).toJSON()
-  
-  $: readingTime = getReadingTime(post.html)
+
+  let { post, preview = false } = $props()
+
+  let stringPublished = $derived(
+    new Date(post.published ?? post.created).toLocaleString(date.locales, date.options)
+  )
+  let stringUpdated = $derived(
+    new Date(post.updated ?? post.published ?? post.created).toLocaleString(date.locales, date.options)
+  )
+  let jsonPublished = $derived(new Date(post.published ?? post.created).toJSON())
+  let jsonUpdated = $derived(new Date(post.updated ?? post.published ?? post.created).toJSON())
+
+  let readingTime = $derived(getReadingTime(post.html))
 </script>
 
 <div class:md:mb-4={!preview && post.type !== 'article'} class="flex flex-wrap font-semibold gap-1.5 items-center">

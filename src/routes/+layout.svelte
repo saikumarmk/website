@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { LayoutData } from './$types'
+  import type { LayoutProps } from './$types'
   import { onMount } from 'svelte'
   import { browser, dev } from '$app/environment'
   import { genTags } from '$lib/utils/posts'
@@ -15,40 +15,50 @@
   import ImageLightbox from '$lib/components/image_lightbox.svelte'
   import SearchModal from '$lib/components/search_modal.svelte'
 
-  export let data: LayoutData
-  
-  let searchModal: any
-  let ThreeCanvas: any = null
-  let PokeCanvas: any = null
+  let { data, children }: LayoutProps = $props()
 
-  /** Keep in sync on client navigations — a one-time destructuring left `posts` stale after the first load. */
-  $: ({ res, path } = data)
+  let searchModal = $state<any>()
+  let ThreeCanvas = $state<any>(null)
+  let PokeCanvas = $state<any>(null)
 
-  let currentMode = 'none'
-  const unsubscribe = backgroundMode.subscribe(mode => (currentMode = mode))
-  
-  // Lazy load Pokemon sprites on homepage (for random bio Pokemon)
-  $: if (browser && path === '/') {
-    import('../styles/pokesprite-pokemon-gen8.css')
-  }
-  
-  // Dynamically load canvas components when needed
-  $: if (browser && currentMode === 'three' && !ThreeCanvas) {
-    import('$lib/components/three/astro_canvas.svelte').then(module => {
-      ThreeCanvas = module.default
+  let res = $derived(data.res)
+  let path = $derived(data.path)
+
+  let currentMode = $state('none')
+  $effect(() => {
+    const unsub = backgroundMode.subscribe(mode => {
+      currentMode = mode
     })
-  }
-  
-  $: if (browser && currentMode === 'poke' && !PokeCanvas) {
-    import('$lib/components/three/poke_canvas.svelte').then(module => {
-      PokeCanvas = module.default
-    })
-  }
-  
-  $: {
-    posts.set(res ?? [])
-    tags.set(genTags(res ?? []))
-  }
+    return unsub
+  })
+
+  $effect(() => {
+    if (browser && path === '/') {
+      import('../styles/pokesprite-pokemon-gen8.css')
+    }
+  })
+
+  $effect(() => {
+    if (browser && currentMode === 'three' && !ThreeCanvas) {
+      import('$lib/components/three/astro_canvas.svelte').then(module => {
+        ThreeCanvas = module.default
+      })
+    }
+  })
+
+  $effect(() => {
+    if (browser && currentMode === 'poke' && !PokeCanvas) {
+      import('$lib/components/three/poke_canvas.svelte').then(module => {
+        PokeCanvas = module.default
+      })
+    }
+  })
+
+  $effect(() => {
+    posts.set(data.res ?? [])
+    tags.set(genTags(data.res ?? []))
+  })
+
   onMount(
     () =>
       !dev &&
@@ -62,9 +72,9 @@
 </script>
 
 {#if currentMode === 'three' && ThreeCanvas}
-  <svelte:component this={ThreeCanvas} />
+  <ThreeCanvas />
 {:else if currentMode === 'poke' && PokeCanvas}
-  <svelte:component this={PokeCanvas} />
+  <PokeCanvas />
 {/if}
 <Head />
 
@@ -72,7 +82,7 @@
 <Header {path} bind:searchModal />
 
 <Transition {path}>
-  <slot />
+  {@render children()}
 </Transition>
 
 <CodeCopyButton />

@@ -2,10 +2,12 @@
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
 
-  export let nodeId: string;
-  export let concepts: Array<{ id: string; title: string }> = [];
+  let {
+    nodeId,
+    concepts = []
+  }: { nodeId: string; concepts?: Array<{ id: string; title: string }> } = $props();
 
-  let completedConcepts = new Set<string>();
+  let completedConcepts = $state(new Set<string>());
 
   // Load completion state from localStorage
   onMount(() => {
@@ -17,7 +19,7 @@
         completedConcepts.add(concept.id);
       }
     });
-    completedConcepts = completedConcepts; // Trigger reactivity
+    completedConcepts = new Set(completedConcepts);
   });
 
   function toggleConcept(conceptId: string) {
@@ -31,11 +33,11 @@
       completedConcepts.add(conceptId);
       localStorage.setItem(key, 'true');
     }
-    completedConcepts = completedConcepts; // Trigger reactivity
+    completedConcepts = new Set(completedConcepts);
   }
 
-  $: progress = concepts.length > 0 ? completedConcepts.size / concepts.length : 0;
-  $: progressPercent = Math.round(progress * 100);
+  let progress = $derived(concepts.length > 0 ? completedConcepts.size / concepts.length : 0);
+  let progressPercent = $derived(Math.round(progress * 100));
 </script>
 
 {#if concepts.length > 0}
@@ -73,7 +75,7 @@
             type="checkbox"
             class="checkbox checkbox-primary"
             checked={isComplete}
-            on:change={() => toggleConcept(concept.id)}
+            onchange={() => toggleConcept(concept.id)}
           />
           <span class="flex-1" class:line-through={isComplete} class:opacity-60={isComplete}>
             {concept.title}

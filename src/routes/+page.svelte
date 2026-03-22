@@ -4,31 +4,31 @@
   import { getReadingTime } from '$lib/utils/reading-time'
   import Head from '$lib/components/head.svelte'
   import Footer from '$lib/components/footer.svelte'
-  
-  let allPosts: Urara.Post[] = []
-  
-  storedPosts.subscribe(posts => {
-    if (Array.isArray(posts)) {
-      allPosts = posts.filter(post => !post.flags?.includes('unlisted'))
-    }
+
+  let allPosts = $state<Urara.Post[]>([])
+
+  $effect(() => {
+    const unsub = storedPosts.subscribe(posts => {
+      if (Array.isArray(posts)) {
+        allPosts = posts.filter(post => !post.flags?.includes('unlisted'))
+      }
+    })
+    return unsub
   })
-  
+
   // Helper to check if post is a learning note (Yggdrasil)
   function isLearningNote(post: Urara.Post): boolean {
-    return post.path?.startsWith('/growth/2026/') || 
-           post.tags?.includes('yggdrasil') ||
-           post.tags?.includes('learning-note') ||
-           (post as any).growth !== undefined
+    return (
+      post.path?.startsWith('/growth/2026/') ||
+      post.tags?.includes('yggdrasil') ||
+      post.tags?.includes('learning-note') ||
+      (post as any).growth !== undefined
+    )
   }
-  
-  // Filter out Yggdrasil pages from homepage
-  $: blogPosts = allPosts.filter(post => !isLearningNote(post))
-  
-  // Featured posts (you can add a 'featured' flag to posts later)
-  $: featuredPosts = blogPosts.slice(0, 3)
-  
-  // Latest 5 posts
-  $: latestPosts = blogPosts.slice(0, 5)
+
+  let blogPosts = $derived(allPosts.filter(post => !isLearningNote(post)))
+  let featuredPosts = $derived(blogPosts.slice(0, 3))
+  let latestPosts = $derived(blogPosts.slice(0, 5))
 </script>
 
 <Head />
@@ -41,14 +41,14 @@
         <!-- Avatar -->
         {#if site.author.avatar}
           <div class="flex-shrink-0">
-            <img 
-              src={site.author.avatar} 
+            <img
+              src={site.author.avatar}
               alt={site.author.name}
               class="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-xl ring-4 ring-primary/20"
             />
           </div>
         {/if}
-        
+
         <!-- Text Content -->
         <div class="flex-1 text-center md:text-left">
           <h1 class="text-3xl md:text-4xl font-bold mb-2">
@@ -56,10 +56,10 @@
           </h1>
           <p class="text-base md:text-lg opacity-80 mb-3">{@html site.author.bio}</p>
           <p class="text-sm opacity-60 mb-4 max-w-xl">
-            Senior Applied Scientist at Canva working on training photo and video models. 
-            I write about machine learning, tech careers, and software engineering.
+            Senior Applied Scientist at Canva working on training photo and video models. I write about machine learning, tech
+            careers, and software engineering.
           </p>
-          
+
           <div class="flex gap-2 justify-center md:justify-start flex-wrap">
             <a href="/about" class="btn btn-primary btn-sm gap-2">
               <span class="i-heroicons-outline-user w-4 h-4"></span>
@@ -83,21 +83,22 @@
     <!-- Featured/Pinned Posts -->
     <div class="mb-10">
       <h2 class="text-2xl font-bold mb-5">Featured Posts</h2>
-      
+
       <div class="grid md:grid-cols-3 gap-4">
         {#each featuredPosts as post}
           {@const readTime = getReadingTime(post.html)}
-          <a 
+          <a
             href={post.path}
-            class="card bg-gradient-to-br from-primary/10 to-secondary/10 hover:shadow-xl transition-all p-5 group relative overflow-hidden">
+            class="card bg-gradient-to-br from-primary/10 to-secondary/10 hover:shadow-xl transition-all p-5 group relative overflow-hidden"
+          >
             <div class="absolute top-3 right-3">
               <span class="badge badge-primary badge-sm">Featured</span>
             </div>
             <div class="text-xs opacity-60 mb-2">
-              {new Date(post.published ?? post.created).toLocaleDateString('en-US', { 
+              {new Date(post.published ?? post.created).toLocaleDateString('en-US', {
                 year: 'numeric',
-                month: 'short', 
-                day: 'numeric' 
+                month: 'short',
+                day: 'numeric'
               })}
             </div>
             <h3 class="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
@@ -117,12 +118,14 @@
     <!-- Highlights Section -->
     <div class="mb-10">
       <h2 class="text-2xl font-bold mb-5">Highlights</h2>
-      
+
       <div class="grid md:grid-cols-3 gap-4">
         <!-- The Playbook -->
         <a href="/playbook" class="card bg-base-200 hover:bg-base-300 hover:shadow-lg transition-all p-5 group">
           <div class="flex items-start gap-3 mb-3">
-            <div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+            <div
+              class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+            >
               <span class="i-heroicons-outline-book-open w-5 h-5 text-primary"></span>
             </div>
             <h3 class="text-lg font-bold group-hover:text-primary transition-colors">Grad/Intern Playbook</h3>
@@ -138,7 +141,9 @@
         <!-- Portfolio -->
         <a href="/portfolio" class="card bg-base-200 hover:bg-base-300 hover:shadow-lg transition-all p-5 group">
           <div class="flex items-start gap-3 mb-3">
-            <div class="w-10 h-10 bg-secondary/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+            <div
+              class="w-10 h-10 bg-secondary/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+            >
               <span class="i-heroicons-outline-briefcase w-5 h-5 text-secondary"></span>
             </div>
             <h3 class="text-lg font-bold group-hover:text-secondary transition-colors">Portfolio</h3>
@@ -152,9 +157,15 @@
         </a>
 
         <!-- Thesis -->
-        <a href="/assets/honours_thesis.pdf" target="_blank" class="card bg-base-200 hover:bg-base-300 hover:shadow-lg transition-all p-5 group">
+        <a
+          href="/assets/honours_thesis.pdf"
+          target="_blank"
+          class="card bg-base-200 hover:bg-base-300 hover:shadow-lg transition-all p-5 group"
+        >
           <div class="flex items-start gap-3 mb-3">
-            <div class="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+            <div
+              class="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+            >
               <span class="i-heroicons-outline-document-text w-5 h-5 text-accent"></span>
             </div>
             <h3 class="text-lg font-bold group-hover:text-accent transition-colors">Honours Thesis</h3>
@@ -178,13 +189,14 @@
           <span class="i-heroicons-outline-arrow-right w-4 h-4"></span>
         </a>
       </div>
-      
+
       <div class="space-y-3">
         {#each latestPosts as post}
           {@const readTime = getReadingTime(post.html)}
-          <a 
+          <a
             href={post.path}
-            class="card bg-base-200 hover:bg-base-300 hover:shadow-md transition-all p-4 flex flex-row items-center gap-4 group">
+            class="card bg-base-200 hover:bg-base-300 hover:shadow-md transition-all p-4 flex flex-row items-center gap-4 group"
+          >
             <!-- Date -->
             <div class="flex flex-col items-center text-center min-w-[50px]">
               <div class="text-lg font-bold leading-tight">
@@ -215,7 +227,9 @@
               {/if}
             </div>
 
-            <span class="i-heroicons-outline-chevron-right w-4 h-4 opacity-40 group-hover:opacity-100 transition-opacity flex-shrink-0"></span>
+            <span
+              class="i-heroicons-outline-chevron-right w-4 h-4 opacity-40 group-hover:opacity-100 transition-opacity flex-shrink-0"
+            ></span>
           </a>
         {/each}
       </div>
@@ -232,7 +246,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -240,4 +254,3 @@
     overflow: hidden;
   }
 </style>
-

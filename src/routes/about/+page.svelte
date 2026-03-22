@@ -50,7 +50,7 @@
   <title>About Me | saikumarmk.com</title>
 </svelte:head>
 
-<svelte:window on:mousemove={handleMouseMove} />
+<svelte:window onmousemove={handleMouseMove} />
 
 <div class="flex min-h-screen relative">
   <!-- Left Side - Animated Background -->
@@ -134,7 +134,7 @@
       <div class="flex justify-center gap-2 p-4">
         {#each sections as section, i}
           <button
-            on:click={() => scrollToSection(i)}
+            onclick={() => scrollToSection(i)}
             class="btn btn-sm btn-circle"
             class:btn-primary={currentSection === i}
             class:btn-ghost={currentSection !== i}
