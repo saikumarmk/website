@@ -87,20 +87,40 @@
     }
   }
 
+  /** In deck mode, inactive slides are `visibility:hidden`; Mermaid must render after the slide is active. */
+  function shouldDeferRender(): boolean {
+    const deck = container?.closest('.slide-deck-viewport--presenting')
+    if (!deck) return false
+    const slide = container?.closest('section.slide')
+    if (!slide) return false
+    return !slide.classList.contains('active')
+  }
+
   async function renderMermaid() {
     if (!browser || !container) return
+    if (shouldDeferRender()) return
 
-    const themeVariables = getThemeVariables()
+    try {
+      let themeVariables
+      try {
+        themeVariables = getThemeVariables()
+      } catch {
+        themeVariables = {}
+      }
 
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'base',
-      themeVariables
-    })
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'base',
+        themeVariables
+      })
 
-    const { svg } = await mermaid.render(uniqueId, graph)
-    container.innerHTML = ''
-    container.innerHTML = svg
+      const { svg } = await mermaid.render(uniqueId, graph)
+      container.innerHTML = ''
+      container.innerHTML = svg
+    } catch (e) {
+      console.error('[Mermaid]', e)
+      container.innerHTML = `<p class="text-error text-sm">Diagram failed to render.</p>`
+    }
   }
 
   $effect(() => {
@@ -114,6 +134,36 @@
       attributes: true,
       attributeFilter: ['data-theme']
     })
+
+    const slide = container?.closest('section.slide')
+    const deckViewport = container?.closest('.slide-deck-viewport')
+    let slideObserver: MutationObserver | undefined
+    let deckObserver: MutationObserver | undefined
+
+    const scheduleRender = () => {
+      requestAnimationFrame(() => void renderMermaid())
+    }
+
+    const onDeckSlide = () => scheduleRender()
+    deckViewport?.addEventListener('slide-deck-active', onDeckSlide)
+
+    if (slide) {
+      slideObserver = new MutationObserver(scheduleRender)
+      slideObserver.observe(slide, { attributes: true, attributeFilter: ['class'] })
+    }
+    if (deckViewport) {
+      deckObserver = new MutationObserver(scheduleRender)
+      deckObserver.observe(deckViewport, { attributes: true, attributeFilter: ['class'] })
+    }
+
+    scheduleRender()
+
+    return () => {
+      deckViewport?.removeEventListener('slide-deck-active', onDeckSlide)
+      observer?.disconnect()
+      slideObserver?.disconnect()
+      deckObserver?.disconnect()
+    }
   })
 
   onDestroy(() => {

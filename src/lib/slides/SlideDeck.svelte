@@ -18,8 +18,14 @@
 
   function collectSlides() {
     if (!viewport) return
-    slides = Array.from(viewport.querySelectorAll(':scope > section.slide'))
+    // Descendants, not only direct children — Svelte may insert fragment markers; `> section` can miss slides.
+    slides = Array.from(viewport.querySelectorAll('section.slide'))
     slideCount = slides.length
+  }
+
+  function notifySlideChange() {
+    if (!browser || !viewport) return
+    viewport.dispatchEvent(new CustomEvent('slide-deck-active', { bubbles: true }))
   }
 
   function readSlideIndexFromSearch(search: string): number {
@@ -43,6 +49,7 @@
       document.body.classList.remove('deck-presentation-active')
       for (const s of slides) s.classList.remove('active', 'exit-up')
     }
+    notifySlideChange()
   }
 
   function goTo(index: number, opts?: { fromUrl?: boolean }) {
@@ -54,6 +61,7 @@
 
     current = index
     slides[current].classList.add('active')
+    notifySlideChange()
     if (slidesMode && browser && !opts?.fromUrl) {
       void goto(`?mode=slides&slide=${index}`, { replaceState: true, noScroll: true })
     }
