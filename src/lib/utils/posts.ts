@@ -1,4 +1,5 @@
 import type { FFFFlavoredFrontmatter } from 'fff-flavored-frontmatter'
+import { render } from 'svelte/server'
 
 interface GenPostsOptions {
   /** import.meta.glob<Urara.Post.Module> https://vitejs.dev/guide/features.html#glob-import */
@@ -58,9 +59,8 @@ export const genPosts: GenPostsFunction = ({
     if (!(postHtml || typeOfPost(module.metadata) !== 'article')) return ''
     try {
       return (
-        module.default
-          .render()
-          .html // eslint-disable-next-line no-control-regex
+        render(module.default, { props: {} })
+          .body // eslint-disable-next-line no-control-regex
           .replace(/[\u0000-\u001F]/g, '')
           .replace(/[\r\n]/g, '')
           .match(/<main [^>]+>(.*?)<\/main>/gi)?.[0]

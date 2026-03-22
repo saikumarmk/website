@@ -10,7 +10,7 @@ import rehypeExternalLinks from 'rehype-external-links'
 import type { Node, Data } from 'unist'
 import { remarkSlideSplit } from './src/lib/slides/remark-slide-split.js'
 import { statSync } from 'fs'
-import { parse, join } from 'path'
+import { parse, join, resolve } from 'path'
 import { visit } from 'unist-util-visit'
 import { toString } from 'mdast-util-to-string'
 import Slugger from 'github-slugger'
@@ -80,7 +80,7 @@ export default defineConfig({
     dashes: 'oldschool'
   },
   layout: {
-    _: './src/lib/components/post_layout.svelte'
+    _: resolve('src/lib/components/post_layout.svelte')
   },
   highlight: {
     highlighter: async (code, lang, meta) => {
