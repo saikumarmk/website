@@ -7,70 +7,85 @@
 
   storedTitle.set('Archive')
 
-  let allPosts: Urara.Post[] = []
-  let allTags: string[] = []
-  let selectedTag: string | null = null
-  let searchQuery = ''
-  let activeView: 'all' | 'learning' | 'blog' = 'blog'
+  let allPosts = $state<Urara.Post[]>([])
+  let allTags = $state<string[]>([])
+  let selectedTag = $state<string | null>(null)
+  let searchQuery = $state('')
+  let activeView = $state<'all' | 'learning' | 'blog'>('blog')
 
-  storedPosts.subscribe(posts => {
-    if (Array.isArray(posts)) {
-      allPosts = posts.filter(post => !post.flags?.includes('unlisted'))
-    }
+  $effect(() => {
+    const unsub = storedPosts.subscribe(posts => {
+      if (Array.isArray(posts)) {
+        allPosts = posts.filter(post => !post.flags?.includes('unlisted'))
+      }
+    })
+    return unsub
   })
 
-  storedTags.subscribe(tags => {
-    if (Array.isArray(tags)) {
-      allTags = tags as string[]
-    }
+  $effect(() => {
+    const unsub = storedTags.subscribe(tags => {
+      if (Array.isArray(tags)) {
+        allTags = tags as string[]
+      }
+    })
+    return unsub
   })
 
-  // Filter posts
-  $: filteredPosts = allPosts.filter(post => {
-    const matchesTag = !selectedTag || post.tags?.includes(selectedTag)
-    const matchesSearch = !searchQuery || 
-      post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.summary?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    return matchesTag && matchesSearch
-  })
+  let filteredPosts = $derived(
+    allPosts.filter(post => {
+      const matchesTag = !selectedTag || post.tags?.includes(selectedTag)
+      const matchesSearch =
+        !searchQuery ||
+        post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.summary?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+      return matchesTag && matchesSearch
+    })
+  )
 
-  // Helper to check if post is a learning note
   function isLearningNote(post: Urara.Post): boolean {
-    return post.path?.startsWith('/growth/2026/') || 
-           post.tags?.includes('yggdrasil') ||
-           post.tags?.includes('learning-note') ||
-           (post as any).growth !== undefined
+    return (
+      post.path?.startsWith('/growth/2026/') ||
+      post.tags?.includes('yggdrasil') ||
+      post.tags?.includes('learning-note') ||
+      (post as any).growth !== undefined
+    )
   }
 
-  // Separate learning notes from blog posts
-  $: learningNotes = filteredPosts.filter(isLearningNote)
-  $: blogPosts = filteredPosts.filter(post => !isLearningNote(post))
-  
-  // Apply view filter
-  $: visiblePosts = activeView === 'learning' ? learningNotes 
-                  : activeView === 'blog' ? blogPosts 
-                  : filteredPosts
+  let learningNotes = $derived(filteredPosts.filter(isLearningNote))
+  let blogPosts = $derived(filteredPosts.filter(post => !isLearningNote(post)))
 
-  // Group blog posts by year
-  $: postsByYear = blogPosts.reduce((acc, post) => {
-    const year = new Date(post.published ?? post.created).getFullYear()
-    if (!acc[year]) acc[year] = []
-    acc[year].push(post)
-    return acc
-  }, {} as Record<number, Urara.Post[]>)
+  let visiblePosts = $derived(
+    activeView === 'learning' ? learningNotes : activeView === 'blog' ? blogPosts : filteredPosts
+  )
 
-  $: years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a))
+  let postsByYear = $derived.by(() => {
+    return blogPosts.reduce(
+      (acc, post) => {
+        const year = new Date(post.published ?? post.created).getFullYear()
+        if (!acc[year]) acc[year] = []
+        acc[year].push(post)
+        return acc
+      },
+      {} as Record<number, Urara.Post[]>
+    )
+  })
 
-  // Count posts per tag
-  $: tagCounts = allPosts.reduce((acc, post) => {
-    post.tags?.forEach(tag => {
-      acc[tag] = (acc[tag] || 0) + 1
-    })
-    return acc
-  }, {} as Record<string, number>)
+  let years = $derived(Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a)))
 
-  $: sortedTags = allTags.sort((a, b) => (tagCounts[b] || 0) - (tagCounts[a] || 0))
+  let tagCounts = $derived.by(() => {
+    return allPosts.reduce(
+      (acc, post) => {
+        post.tags?.forEach(tag => {
+          acc[tag] = (acc[tag] || 0) + 1
+        })
+        return acc
+      },
+      {} as Record<string, number>
+    )
+  })
+
+  let sortedTags = $derived.by(() => [...allTags].sort((a, b) => (tagCounts[b] || 0) - (tagCounts[a] || 0)))
 </script>
 
 <Head />
@@ -80,27 +95,18 @@
   <div class="text-center mb-8">
     <h1 class="text-5xl font-bold mb-4">Archive</h1>
     <p class="text-lg opacity-70 mb-6">Browse all posts by tag, year, or search</p>
-    
+
     <!-- View Tabs -->
     <div class="tabs tabs-boxed inline-flex bg-base-200">
-      <button 
-        class="tab gap-2"
-        class:tab-active={activeView === 'blog'}
-        on:click={() => activeView = 'blog'}>
+      <button class="tab gap-2" class:tab-active={activeView === 'blog'} onclick={() => (activeView = 'blog')}>
         <span class="i-heroicons-outline-document-text w-4 h-4"></span>
         Blog ({blogPosts.length})
       </button>
-      <button 
-        class="tab gap-2"
-        class:tab-active={activeView === 'learning'}
-        on:click={() => activeView = 'learning'}>
+      <button class="tab gap-2" class:tab-active={activeView === 'learning'} onclick={() => (activeView = 'learning')}>
         <span class="i-heroicons-outline-academic-cap w-4 h-4"></span>
         Learning ({learningNotes.length})
       </button>
-      <button 
-        class="tab"
-        class:tab-active={activeView === 'all'}
-        on:click={() => activeView = 'all'}>
+      <button class="tab" class:tab-active={activeView === 'all'} onclick={() => (activeView = 'all')}>
         All ({allPosts.length})
       </button>
     </div>
@@ -117,19 +123,18 @@
             <span class="bg-base-300">
               <span class="i-heroicons-outline-magnifying-glass w-5 h-5"></span>
             </span>
-            <input
-              type="text"
-              placeholder="Search posts..."
-              class="input input-bordered w-full"
-              bind:value={searchQuery}
-            />
+            <input type="text" placeholder="Search posts..." class="input input-bordered w-full" bind:value={searchQuery} />
           </div>
         </div>
 
         {#if selectedTag || searchQuery}
           <button
-            on:click={() => { selectedTag = null; searchQuery = '' }}
-            class="btn btn-sm btn-ghost w-full mt-4">
+            onclick={() => {
+              selectedTag = null
+              searchQuery = ''
+            }}
+            class="btn btn-sm btn-ghost w-full mt-4"
+          >
             <span class="i-heroicons-outline-x-mark w-4 h-4 mr-2"></span>
             Clear filters
           </button>
@@ -141,10 +146,11 @@
         <div class="flex flex-col gap-1 max-h-96 overflow-y-auto">
           {#each sortedTags as tag}
             <button
-              on:click={() => selectedTag = selectedTag === tag ? null : tag}
+              onclick={() => (selectedTag = selectedTag === tag ? null : tag)}
               class="btn btn-sm justify-between"
               class:btn-primary={selectedTag === tag}
-              class:btn-ghost={selectedTag !== tag}>
+              class:btn-ghost={selectedTag !== tag}
+            >
               <span>#{tag}</span>
               <span class="badge badge-sm">{tagCounts[tag]}</span>
             </button>
@@ -204,7 +210,6 @@
         </div>
       {:else}
         <div in:fade={{ duration: 300 }}>
-          
           <!-- Learning Notes View -->
           {#if activeView === 'all' && learningNotes.length > 0}
             <div class="mb-16">
@@ -225,8 +230,8 @@
                   {@const readTime = getReadingTime(post.html)}
                   <a
                     href={post.path}
-                    class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-6 flex flex-row items-start gap-4 group border-l-4 border-accent">
-                    <!-- Date -->
+                    class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-6 flex flex-row items-start gap-4 group border-l-4 border-accent"
+                  >
                     <div class="flex flex-col items-center text-center min-w-[80px]">
                       <div class="text-2xl font-bold">
                         {new Date(post.published ?? post.created).getDate()}
@@ -236,7 +241,6 @@
                       </div>
                     </div>
 
-                    <!-- Content -->
                     <div class="flex-1 min-w-0">
                       <h3 class="text-xl font-bold mb-2 group-hover:text-accent transition-colors">
                         {post.title || post.path.slice(1)}
@@ -248,10 +252,11 @@
                         {#if post.tags && post.tags.length > 0}
                           <div class="flex gap-1 flex-wrap">
                             {#each post.tags as tag}
-                              <span 
+                              <span
                                 class="badge badge-sm"
                                 class:badge-accent={tag === selectedTag}
-                                class:badge-outline={tag !== selectedTag}>
+                                class:badge-outline={tag !== selectedTag}
+                              >
                                 #{tag}
                               </span>
                             {/each}
@@ -266,21 +271,23 @@
                       </div>
                     </div>
 
-                    <!-- Arrow -->
-                    <span class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></span>
+                    <span
+                      class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                    ></span>
                   </a>
                 {/each}
               </div>
             </div>
           {/if}
-          
+
           {#if activeView === 'learning' && learningNotes.length > 0}
             <div class="space-y-4">
               {#each learningNotes as post}
                 {@const readTime = getReadingTime(post.html)}
                 <a
                   href={post.path}
-                  class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-6 flex flex-row items-start gap-4 group border-l-4 border-accent">
+                  class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-6 flex flex-row items-start gap-4 group border-l-4 border-accent"
+                >
                   <div class="flex flex-col items-center text-center min-w-[80px]">
                     <div class="text-2xl font-bold">
                       {new Date(post.published ?? post.created).getDate()}
@@ -312,13 +319,14 @@
                       {/if}
                     </div>
                   </div>
-                  <span class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></span>
+                  <span
+                    class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                  ></span>
                 </a>
               {/each}
             </div>
           {/if}
 
-          <!-- Blog Posts Section (for 'all' or 'blog' view) -->
           {#if (activeView === 'all' || activeView === 'blog') && blogPosts.length > 0}
             <div>
               {#if activeView === 'all'}
@@ -330,74 +338,72 @@
               {/if}
               <div class="space-y-12">
                 {#each years as year}
-            <div in:fade={{ duration: 300 }}>
-              <!-- Year Header -->
-              <div class="flex items-center gap-4 mb-6">
-                <h2 class="text-3xl font-bold text-primary">{year}</h2>
-                <div class="flex-1 h-px bg-gradient-to-r from-primary/50 to-transparent"></div>
-                <span class="text-sm opacity-60">
-                  {postsByYear[Number(year)].length} post{postsByYear[Number(year)].length !== 1 ? 's' : ''}
-                </span>
-              </div>
-
-              <!-- Posts -->
-              <div class="space-y-4">
-                {#each postsByYear[Number(year)] as post}
-                  {@const readTime = getReadingTime(post.html)}
-                  <a
-                    href={post.path}
-                    class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-6 flex flex-row items-start gap-4 group">
-                    <!-- Date -->
-                    <div class="flex flex-col items-center text-center min-w-[80px]">
-                      <div class="text-2xl font-bold">
-                        {new Date(post.published ?? post.created).getDate()}
-                      </div>
-                      <div class="text-xs opacity-60 uppercase">
-                        {new Date(post.published ?? post.created).toLocaleDateString('en-US', { month: 'short' })}
-                      </div>
+                  <div in:fade={{ duration: 300 }}>
+                    <div class="flex items-center gap-4 mb-6">
+                      <h2 class="text-3xl font-bold text-primary">{year}</h2>
+                      <div class="flex-1 h-px bg-gradient-to-r from-primary/50 to-transparent"></div>
+                      <span class="text-sm opacity-60">
+                        {postsByYear[Number(year)].length} post{postsByYear[Number(year)].length !== 1 ? 's' : ''}
+                      </span>
                     </div>
 
-                    <!-- Content -->
-                    <div class="flex-1 min-w-0">
-                      <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-                        {post.title || post.path.slice(1)}
-                      </h3>
-                      {#if post.summary}
-                        <p class="text-sm opacity-70 mb-3 line-clamp-2">{post.summary}</p>
-                      {/if}
-                      <div class="flex items-center gap-3 flex-wrap">
-                        {#if post.tags && post.tags.length > 0}
-                          <div class="flex gap-1 flex-wrap">
-                            {#each post.tags as tag}
-                              <span 
-                                class="badge badge-sm"
-                                class:badge-primary={tag === selectedTag}
-                                class:badge-outline={tag !== selectedTag}>
-                                #{tag}
-                              </span>
-                            {/each}
+                    <div class="space-y-4">
+                      {#each postsByYear[Number(year)] as post}
+                        {@const readTime = getReadingTime(post.html)}
+                        <a
+                          href={post.path}
+                          class="card bg-base-200 hover:bg-base-300 hover:shadow-xl transition-all p-6 flex flex-row items-start gap-4 group"
+                        >
+                          <div class="flex flex-col items-center text-center min-w-[80px]">
+                            <div class="text-2xl font-bold">
+                              {new Date(post.published ?? post.created).getDate()}
+                            </div>
+                            <div class="text-xs opacity-60 uppercase">
+                              {new Date(post.published ?? post.created).toLocaleDateString('en-US', { month: 'short' })}
+                            </div>
                           </div>
-                        {/if}
-                        {#if readTime}
-                          <div class="text-xs opacity-60 flex items-center gap-1 ml-auto">
-                            <span class="i-heroicons-outline-clock w-3 h-3"></span>
-                            {readTime}
-                          </div>
-                        {/if}
-                      </div>
-                    </div>
 
-                    <!-- Arrow -->
-                    <span class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"></span>
-                  </a>
+                          <div class="flex-1 min-w-0">
+                            <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                              {post.title || post.path.slice(1)}
+                            </h3>
+                            {#if post.summary}
+                              <p class="text-sm opacity-70 mb-3 line-clamp-2">{post.summary}</p>
+                            {/if}
+                            <div class="flex items-center gap-3 flex-wrap">
+                              {#if post.tags && post.tags.length > 0}
+                                <div class="flex gap-1 flex-wrap">
+                                  {#each post.tags as tag}
+                                    <span
+                                      class="badge badge-sm"
+                                      class:badge-primary={tag === selectedTag}
+                                      class:badge-outline={tag !== selectedTag}
+                                    >
+                                      #{tag}
+                                    </span>
+                                  {/each}
+                                </div>
+                              {/if}
+                              {#if readTime}
+                                <div class="text-xs opacity-60 flex items-center gap-1 ml-auto">
+                                  <span class="i-heroicons-outline-clock w-3 h-3"></span>
+                                  {readTime}
+                                </div>
+                              {/if}
+                            </div>
+                          </div>
+
+                          <span
+                            class="i-heroicons-outline-arrow-right w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          ></span>
+                        </a>
+                      {/each}
+                    </div>
+                  </div>
                 {/each}
-                </div>
-              </div>
-            {/each}
               </div>
             </div>
           {/if}
-          
         </div>
       {/if}
     </div>
@@ -412,4 +418,3 @@
     overflow: hidden;
   }
 </style>
-

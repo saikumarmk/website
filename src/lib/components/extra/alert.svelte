@@ -1,7 +1,10 @@
 <script lang="ts">
-  export let title: string | undefined = undefined
-  export let description: string | undefined = undefined
-  export let status: 'info' | 'success' | 'warning' | 'error' | undefined = undefined
+  let {
+    title = undefined,
+    description = undefined,
+    status = undefined,
+    children
+  } = $props()
 </script>
 
 <div
@@ -27,9 +30,9 @@
       {/if}
     </div>
   </div>
-  {#if $$slots.default}
+  {#if children}
     <div class="block w-full">
-      <slot />
+      {@render children()}
     </div>
   {/if}
 </div>

@@ -1,9 +1,10 @@
 <script lang="ts">
-  export let name: string;
-  export let colors: string[] = ['#666666', '#666666', '#666666', '#666666'];
-  export let small: boolean = false;
+  let {
+    name,
+    colors = ['#666666', '#666666', '#666666', '#666666'],
+    small = false
+  } = $props();
 
-  // Color utilities
   function lighten(color: string, amount: number = 0.5): string {
     const num = parseInt(color.replace('#', ''), 16);
     const r = Math.min(255, Math.floor((num >> 16) + (255 - (num >> 16)) * amount));
@@ -20,14 +21,13 @@
     return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
   }
 
-  // Scale text based on length
-  $: scaleFactor = name.length <= 5 ? 1 
-    : name.length <= 6 ? 0.9 
-    : name.length <= 8 ? 0.7 
-    : 0.6;
+  let scaleFactor = $derived(
+    name.length <= 5 ? 1 : name.length <= 6 ? 0.9 : name.length <= 8 ? 0.7 : 0.6
+  );
 
-  $: size = small ? { width: '120px', height: '40px', fontSize: '9px' } 
-    : { width: '184px', height: '56px', fontSize: '14px' };
+  let size = $derived(
+    small ? { width: '120px', height: '40px', fontSize: '9px' } : { width: '184px', height: '56px', fontSize: '14px' }
+  );
 </script>
 
 <div class="tech-badge" style="width: {size.width}; height: {size.height};">

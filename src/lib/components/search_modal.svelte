@@ -4,15 +4,15 @@
   import { goto } from '$app/navigation'
   import FlexSearch from 'flexsearch'
   
-  export let isOpen = false
-  
-  let searchQuery = ''
-  let searchResults: any[] = []
-  let selectedIndex = 0
-  let searchInput: HTMLInputElement
+  let isOpen = $state(false)
+
+  let searchQuery = $state('')
+  let searchResults = $state<any[]>([])
+  let selectedIndex = $state(0)
+  let searchInput = $state<HTMLInputElement | undefined>(undefined)
   
   // FlexSearch index
-  let searchIndex: FlexSearch.Document<any, string[]> | null = null
+  let searchIndex: any = null
   let searchablePosts: any[] = []
   let indexLoading = false
   let indexLoaded = false
@@ -112,12 +112,10 @@
     const results = searchIndex.search(query, {
       limit: 15,
       enrich: true
-    })
-    
-    // Collect unique results with scores and match info
+    }) as unknown as any[]
+
     const resultMap = new Map<string, { item: any; score: number; matchedFields: string[] }>()
-    
-    // FlexSearch returns results grouped by field
+
     results.forEach((fieldResult: any) => {
       const fieldName = fieldResult.field
       const fieldScore = fieldName === 'title' ? 100 
@@ -172,8 +170,9 @@
     selectedIndex = 0
   }
   
-  // Reactive search (only when index is loaded)
-  $: if (indexLoaded) performSearch(searchQuery)
+  $effect(() => {
+    if (indexLoaded) performSearch(searchQuery)
+  })
   
   // Open/close handlers
   export function open() {
@@ -257,8 +256,8 @@
   <!-- Modal overlay -->
   <div
     class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-start justify-center pt-[10vh] px-4 animate-in fade-in duration-200"
-    on:click={close}
-    on:keydown={(e) => e.key === 'Enter' && close()}
+    onclick={close}
+    onkeydown={(e) => e.key === 'Enter' && close()}
     role="button"
     tabindex="0"
     aria-label="Close search">
@@ -266,8 +265,8 @@
     <!-- Search modal -->
     <div
       class="w-full max-w-2xl bg-base-100 rounded-lg shadow-2xl animate-in slide-in-from-top-4 duration-300"
-      on:click|stopPropagation
-      on:keydown|stopPropagation
+      onclick={e => e.stopPropagation()}
+      onkeydown={e => e.stopPropagation()}
       role="dialog"
       aria-modal="true"
       aria-labelledby="search-title">
@@ -278,7 +277,7 @@
         <input
           bind:this={searchInput}
           bind:value={searchQuery}
-          on:keydown={handleInputKeydown}
+          onkeydown={handleInputKeydown}
           type="text"
           placeholder={indexLoading ? "Loading search..." : "Search posts..."}
           class="flex-1 bg-transparent outline-none text-base"
@@ -307,10 +306,10 @@
               <li>
                 <a
                   href={post.path}
-                  on:click={close}
+                  onclick={close}
                   data-search-index={index}
                   class="flex flex-col px-4 py-3 hover:bg-base-200 transition-colors cursor-pointer {index === selectedIndex ? 'bg-base-200' : ''}"
-                  on:mouseenter={() => selectedIndex = index}>
+                  onmouseenter={() => selectedIndex = index}>
                   <div class="flex items-start justify-between gap-2">
                     <div class="flex items-center gap-2">
                       {#if post.isStatic}

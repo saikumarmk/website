@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { browser } from '$app/environment'
   import { post as postConfig } from '$lib/config/post'
   import { posts as storedPosts } from '$lib/stores/posts'
@@ -11,18 +12,32 @@
   import Comment from '$lib/components/post_comment.svelte'
   import RelatedPosts from '$lib/components/related_posts.svelte'
   import SlabTitle from '$lib/components/slab_title.svelte'
-  export let post: Urara.Post
-  /** Fullscreen slide deck: hide blog chrome, only render body slot */
-  export let deckPresentation = false
-  export let preview: boolean = false
-  export let loading: 'eager' | 'lazy' = 'lazy'
-  export let decoding: 'async' | 'sync' | 'auto' = 'async'
-  // pagination
-  let index: number
-  let prev: Urara.Post | undefined = undefined
-  let next: Urara.Post | undefined = undefined
-  if (browser && !preview)
-    storedPosts.subscribe((storedPosts: Urara.Post[]) => {
+
+  let {
+    post,
+    deckPresentation = false,
+    preview = false,
+    loading = 'lazy',
+    decoding = 'async',
+    children,
+    breadcrumb
+  }: {
+    post: Urara.Post
+    deckPresentation?: boolean
+    preview?: boolean
+    loading?: 'eager' | 'lazy'
+    decoding?: 'async' | 'sync' | 'auto'
+    children?: Snippet
+    breadcrumb?: Snippet
+  } = $props()
+
+  let index = $state(0)
+  let prev = $state<Urara.Post | undefined>(undefined)
+  let next = $state<Urara.Post | undefined>(undefined)
+
+  $effect(() => {
+    if (!browser || preview) return
+    const unsub = storedPosts.subscribe((storedPosts: Urara.Post[]) => {
       index = storedPosts.findIndex(storedPost => storedPost.path === post.path)
       prev = storedPosts
         .slice(0, index)
@@ -31,6 +46,8 @@
       next = storedPosts.slice(index + 1).find(post => !post.flags?.includes('unlisted'))
       storedTitle.set(post.title ?? post.path.slice(1))
     })
+    return () => unsub()
+  })
 </script>
 
 <svelte:element
@@ -47,7 +64,7 @@
     ? 'w-full max-w-none bg-transparent shadow-none p-0 m-0 flex flex-col flex-1 min-h-0 min-h-[100dvh] overflow-hidden border-0'
     : 'card bg-base-100 rounded-none md:rounded-box md:shadow-xl overflow-hidden'}">
   {#if !preview && !deckPresentation}
-    <slot name="breadcrumb" />
+    {#if breadcrumb}{@render breadcrumb()}{/if}
   {/if}
   {#if !preview && !deckPresentation && postConfig.bridgy}
     <div id="bridgy" class="hidden">
@@ -127,7 +144,7 @@
       class:mt-4={post.type !== 'article' && !deckPresentation}
       class="urara-prose prose e-content {deckPresentation ? '!max-w-none !px-0 !py-0 flex flex-1 flex-col min-h-0' : ''}">
       {#if !preview}
-        <slot />
+        {@render children?.()}
       {:else if post.html}
         {@html post.html}
       {/if}

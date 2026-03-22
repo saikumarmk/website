@@ -1,14 +1,15 @@
-<script>
+<script lang="ts">
+  // @ts-nocheck
+
   import { onMount } from 'svelte'
   import { processMarkdown } from './mdsvex_processor.js'
   import hljs from 'highlight.js'
 
-  export let sourceUrl = ''
-  export let title = 'Python Code Renderer'
+  let { sourceUrl = '', title = 'Python Code Renderer' } = $props()
 
-  let sections = []
-  let loading = true
-  let error = null
+  let sections = $state([])
+  let loading = $state(true)
+  let error = $state(null)
 
   function parseCodeToSections(code) {
     const lines = code.split('\n')

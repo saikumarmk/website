@@ -1,54 +1,42 @@
 <script lang="ts">
   import { posts as storedPosts } from '$lib/stores/posts'
   import { getReadingTime } from '$lib/utils/reading-time'
-  
-  export let currentPost: Urara.Post
-  export let maxPosts: number = 3
-  
-  let relatedPosts: Urara.Post[] = []
-  let allPosts: Urara.Post[] = []
-  
-  // Subscribe to posts store
-  storedPosts.subscribe(posts => {
-    if (Array.isArray(posts)) {
-      allPosts = posts
-    }
+
+  let { currentPost, maxPosts = 3 } = $props()
+
+  let allPosts = $state<Urara.Post[]>([])
+
+  $effect(() => {
+    const unsub = storedPosts.subscribe(posts => {
+      if (Array.isArray(posts)) {
+        allPosts = posts
+      }
+    })
+    return () => unsub()
   })
-  
-  // Calculate relevance score based on shared tags
+
   function calculateRelevance(post: Urara.Post): number {
     if (!currentPost.tags || !post.tags) return 0
-    
     const sharedTags = currentPost.tags.filter(tag => post.tags?.includes(tag))
     return sharedTags.length
   }
-  
-  // Get related posts reactively
-  $: {
-    // Filter out current post and unlisted posts
+
+  let relatedPosts = $derived.by(() => {
     const eligiblePosts = allPosts.filter(
-      post => 
-        post.path !== currentPost.path && 
-        !post.flags?.includes('unlisted')
+      p => p.path !== currentPost.path && !p.flags?.includes('unlisted')
     )
-    
-    // Sort by relevance (shared tags), then by date
     const sorted = eligiblePosts
-      .map(post => ({ post, relevance: calculateRelevance(post) }))
-      .filter(({ relevance }) => relevance > 0) // Only posts with at least one shared tag
+      .map(p => ({ post: p, relevance: calculateRelevance(p) }))
+      .filter(x => x.relevance > 0)
       .sort((a, b) => {
-        if (a.relevance !== b.relevance) {
-          return b.relevance - a.relevance
-        }
-        // If same relevance, prefer newer posts
+        if (a.relevance !== b.relevance) return b.relevance - a.relevance
         const dateA = new Date(a.post.published ?? a.post.created).getTime()
         const dateB = new Date(b.post.published ?? b.post.created).getTime()
         return dateB - dateA
       })
-      .map(({ post }) => post)
-    
-    relatedPosts = sorted.slice(0, maxPosts)
-  }
+      .map(x => x.post)
+    return sorted.slice(0, maxPosts)
+  })
 </script>
 
 {#if relatedPosts.length > 0}
@@ -56,7 +44,7 @@
     <h2 class="text-2xl font-bold mb-4">Related Posts</h2>
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {#each relatedPosts as post}
-        <a 
+        <a
           href={post.path}
           class="card bg-base-200 hover:bg-base-300 transition-all duration-300 hover:shadow-lg group">
           <div class="card-body p-4">
@@ -99,4 +87,3 @@
     overflow: hidden;
   }
 </style>
-

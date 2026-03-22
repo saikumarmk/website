@@ -83,7 +83,7 @@
           <span class="font-mono text-sm">{status}</span>
         </div>
         
-        <button class="btn btn-primary btn-sm" on:click={renderMermaid}>
+        <button class="btn btn-primary btn-sm" onclick={renderMermaid}>
           Retry Render
         </button>
         

@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { Project } from '$lib/types/portfolio'
   import Footer from '$lib/components/footer.svelte'
-  export let item: unknown
-  let project = item as unknown as Project
-  let tags = project.tags
+  let { item } = $props()
+  let project = $derived(item as unknown as Project)
+  let tags = $derived(project.tags)
 </script>
 
 {#if project.id === 'footer'}

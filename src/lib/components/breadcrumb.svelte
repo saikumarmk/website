@@ -2,18 +2,25 @@
   import { page } from '$app/stores'
   import { browser } from '$app/environment'
   import { onMount } from 'svelte'
-  
-  export let post: Urara.Post | undefined = undefined
-  export let series: { name: string; parts: { title: string; slug: string; part: number }[] } | undefined = undefined
-  export let currentPart: number | undefined = undefined
-  
-  // Use post path for SSR, update with page store on client
-  let path = post?.path || ''
-  
-  // Don't render if no post or path
-  $: shouldRender = Boolean(path || post)
-  
-  // Only subscribe to page store on client side
+
+  let {
+    post = undefined,
+    series = undefined,
+    currentPart = undefined
+  }: {
+    post?: Urara.Post
+    series?: { name: string; parts: { title: string; slug: string; part: number }[] }
+    currentPart?: number
+  } = $props()
+
+  let path = $state('')
+
+  $effect.pre(() => {
+    if (post?.path != null && post.path !== '') path = post.path
+  })
+
+  let shouldRender = $derived(Boolean(path || post))
+
   onMount(() => {
     if (browser) {
       const unsubscribe = page.subscribe($page => {
@@ -22,18 +29,14 @@
       return unsubscribe
     }
   })
-  
-  // Build breadcrumb from path
-  $: pathSegments = path.split('/').filter(Boolean)
-  
-  // Declare prev/next variables
-  let prevPost: { title: string; slug: string; part: number } | undefined = undefined
-  let nextPost: { title: string; slug: string; part: number } | undefined = undefined
-  
-  // Get previous and next in series
-  $: {
+
+  let pathSegments = $derived(path.split('/').filter(Boolean))
+
+  let prevPost = $state<{ title: string; slug: string; part: number } | undefined>(undefined)
+  let nextPost = $state<{ title: string; slug: string; part: number } | undefined>(undefined)
+
+  $effect(() => {
     if (series && currentPart !== undefined) {
-      // Sort parts by part number
       const sortedParts = [...series.parts].sort((a, b) => a.part - b.part)
       const currentIndex = sortedParts.findIndex(p => p.part === currentPart)
       prevPost = currentIndex > 0 ? sortedParts[currentIndex - 1] : undefined
@@ -42,7 +45,7 @@
       prevPost = undefined
       nextPost = undefined
     }
-  }
+  })
 </script>
 
 {#if shouldRender}
@@ -117,4 +120,3 @@
   </div>
 {/if}
 {/if}
-

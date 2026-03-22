@@ -34,7 +34,7 @@
         <h2 class="-mt-12 md:-mt-24">{errMsg}</h2>
         <div class="card-actions">
           <a href="/" class="btn btn-neutral no-underline shadow-xl hover:shadow-2xl mt-8">
-            <span class="i-heroicons-outline-home -ml-1 mr-2" />
+            <span class="i-heroicons-outline-home -ml-1 mr-2"></span>
             Back to Home
           </a>
         </div>

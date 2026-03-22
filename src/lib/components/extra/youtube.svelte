@@ -1,14 +1,17 @@
 <script lang="ts">
-  export let id: string
-  export let list: boolean | undefined = undefined
-  export let playlist: string | undefined = undefined
-  export let start: string | undefined = undefined
-  export let autoplay: boolean = false
-  export let disablekb: boolean = false
-  export let controls: boolean = true
-  export let fs = true
-  export let loop = false
-  const src = `https://www.youtube.com/embed/${id}?${new URLSearchParams({
+  let {
+    id,
+    list = undefined,
+    playlist = undefined,
+    start = undefined,
+    autoplay = false,
+    disablekb = false,
+    controls = true,
+    fs = true,
+    loop = false
+  } = $props()
+
+  let src = $derived(`https://www.youtube.com/embed/${id}?${new URLSearchParams({
     ...(list ? { listType: 'playlist', list: 'true' } : {}),
     ...(playlist ? { playlist } : {}),
     ...(start ? { start } : {}),
@@ -17,7 +20,7 @@
     controls: controls ? '1' : '0',
     fs: fs ? '1' : '0',
     loop: loop ? '1' : '0'
-  }).toString()}`
+  }).toString()}`)
 </script>
 
 <div class="relative pb-[56.25%] mb-4">

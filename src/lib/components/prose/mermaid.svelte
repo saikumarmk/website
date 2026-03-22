@@ -3,7 +3,7 @@
   import { browser } from '$app/environment'
   import mermaid from 'mermaid'
 
-  export let graph: string
+  let { graph } = $props()
 
   let container: HTMLElement
   let observer: MutationObserver
@@ -103,9 +103,12 @@
     container.innerHTML = svg
   }
 
-  onMount(() => {
-    renderMermaid()
+  $effect(() => {
+    graph
+    void renderMermaid()
+  })
 
+  onMount(() => {
     observer = new MutationObserver(() => renderMermaid())
     observer.observe(document.documentElement, {
       attributes: true,

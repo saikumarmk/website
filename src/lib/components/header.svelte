@@ -9,42 +9,55 @@
   import Nav from '$lib/components/header_nav.svelte'
   import Search from '$lib/components/header_search.svelte'
   import ColorSelector from '$lib/components/color_selector.svelte'
-  export let path: string
-  export let searchModal: any = undefined
-  let title: string
-  let currentTheme: string
-  let currentThemeColor: string
-  let search: boolean = false
-  let pin: boolean = true
-  let percent: number
-  let [scrollY, lastY] = [0, 0]
-  
-  storedTitle.subscribe(storedTitle => (title = storedTitle as string))
 
-  $: if (browser && currentTheme) {
-    document.documentElement.setAttribute('data-theme', currentTheme)
-    currentThemeColor = hslToHex(
-      ...(getComputedStyle(document.documentElement)
-        .getPropertyValue('--b1')
-        .slice(dev ? 1 : 0)
-        .replaceAll('%', '')
-        .split(' ')
-        .map(Number) as [number, number, number])
-    )
-  }
+  let { path, searchModal = $bindable(undefined) } = $props()
 
-  $: if (scrollY) {
-    pin = lastY - scrollY > 0 || scrollY === 0 ? true : false
-    lastY = scrollY
-    if (browser)
-      percent =
-        Math.round((scrollY / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 10000) / 100
-  }
+  let title = $state('')
+  let currentTheme = $state('')
 
-  if (browser)
+  $effect.pre(() => {
+    if (!browser) return
     currentTheme =
       localStorage.getItem('theme') ??
       (window.matchMedia('(prefers-color-scheme: dark)').matches ? theme?.[1].name : (theme[0].name ?? theme[0].name))
+  })
+  let currentThemeColor = $state('')
+  let search = $state(false)
+  let pin = $state(true)
+  let percent = $state(0)
+  let scrollY = $state(0)
+  let lastY = $state(0)
+
+  $effect(() => {
+    const unsub = storedTitle.subscribe(stored => {
+      title = stored as string
+    })
+    return () => unsub()
+  })
+
+  $effect(() => {
+    if (browser && currentTheme) {
+      document.documentElement.setAttribute('data-theme', currentTheme)
+      currentThemeColor = hslToHex(
+        ...(getComputedStyle(document.documentElement)
+          .getPropertyValue('--b1')
+          .slice(dev ? 1 : 0)
+          .replaceAll('%', '')
+          .split(' ')
+          .map(Number) as [number, number, number])
+      )
+    }
+  })
+
+  $effect(() => {
+    if (scrollY !== undefined) {
+      pin = lastY - scrollY > 0 || scrollY === 0 ? true : false
+      lastY = scrollY
+      if (browser)
+        percent =
+          Math.round((scrollY / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 10000) / 100
+    }
+  })
 </script>
 
 <svelte:head>
@@ -70,7 +83,7 @@
         {#if headerConfig.search}
           <button 
             aria-label="search" 
-            on:click={() => searchModal?.open()} 
+            onclick={() => searchModal?.open()} 
             tabindex="0" 
             class="btn btn-square btn-ghost group relative">
             <span class="i-heroicons-outline-search" />
@@ -89,7 +102,7 @@
             tabindex="0"
             class="shadow-2xl dropdown-content bg-base-100 text-base-content rounded-box w-64"
             class:hidden={!pin}>
-            <ColorSelector themes={theme} on:change={(e) => currentTheme = e.detail} />
+            <ColorSelector themes={theme} onchange={(t: string) => (currentTheme = t)} />
           </div>
         </div>
       </div>
@@ -97,7 +110,7 @@
   {:else}
     <div in:fly={{ x: 50, duration: 300, delay: 300 }} out:fly={{ x: 50, duration: 300 }} class="navbar">
       <Search />
-      <button on:click={() => (search = !search)} tabindex="0" class="btn btn-square btn-ghost">
+      <button onclick={() => (search = !search)} tabindex="0" class="btn btn-square btn-ghost">
         <span class="i-heroicons-outline-x" />
       </button>
     </div>
@@ -106,7 +119,7 @@
 
 <button
   id="totop"
-  on:click={() => window.scrollTo(0, 0)}
+  onclick={() => window.scrollTo(0, 0)}
   class:translate-y-24={scrollY === 0}
   aria-label="scroll to top"
   class="fixed grid group btn btn-circle btn-lg border-none backdrop-blur bottom-6 right-6 z-50 duration-500 ease-in-out {percent >

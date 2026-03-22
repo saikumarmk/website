@@ -7,13 +7,23 @@
     BRANCH_POKEMON
   } from '../utils/nodeUtils';
 
-  export let data: GrowthData;
-  export let searchQuery: string;
-  export let selectedBranches: string[];
-  export let selectedTiers: string[];
-  export let selectedStatuses: string[];
-  export let selectedNode: GraphNode | null = null;
-  export let nodeMap: Map<string, GrowthNode>;
+  let {
+    data,
+    searchQuery = $bindable(),
+    selectedBranches = $bindable(),
+    selectedTiers = $bindable(),
+    selectedStatuses = $bindable(),
+    selectedNode = $bindable(null),
+    nodeMap
+  }: {
+    data: GrowthData;
+    searchQuery: string;
+    selectedBranches: string[];
+    selectedTiers: string[];
+    selectedStatuses: string[];
+    selectedNode: GraphNode | null;
+    nodeMap: Map<string, GrowthNode>;
+  } = $props();
 
   const branches = data.branches;
   const tiers = ['roots', 'trunk', 'branch', 'crown'];
@@ -102,7 +112,7 @@
           class="btn btn-xs"
           class:btn-primary={selectedBranches.includes(branch)}
           class:btn-ghost={!selectedBranches.includes(branch)}
-          on:click={() => toggleBranch(branch)}
+          onclick={() => toggleBranch(branch)}
         >
           {branchLabels[branch] || branch}
         </button>
@@ -119,7 +129,7 @@
           class="btn btn-xs"
           class:btn-primary={selectedTiers.includes(tier)}
           class:btn-ghost={!selectedTiers.includes(tier)}
-          on:click={() => toggleTier(tier)}
+          onclick={() => toggleTier(tier)}
         >
           {tierLabels[tier]}
         </button>
@@ -136,7 +146,7 @@
           class="btn btn-xs"
           class:btn-primary={selectedStatuses.includes(status)}
           class:btn-ghost={!selectedStatuses.includes(status)}
-          on:click={() => toggleStatus(status)}
+          onclick={() => toggleStatus(status)}
         >
           {statusLabels[status]}
         </button>
@@ -145,7 +155,7 @@
   </div>
 
   <!-- Clear Filters -->
-  <button class="btn btn-sm btn-outline w-full mb-4" on:click={clearFilters}>
+  <button class="btn btn-sm btn-outline w-full mb-4" onclick={clearFilters}>
     Clear All Filters
   </button>
 

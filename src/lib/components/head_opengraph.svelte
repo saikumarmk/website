@@ -1,8 +1,7 @@
 <script lang="ts">
   import { site } from '$lib/config/site'
   import { any, maskable } from '$lib/config/icon'
-  export let post: Urara.Post | undefined = undefined
-  export let page: Urara.Page | undefined = undefined
+  let { post = undefined, page = undefined } = $props()
 </script>
 
 <svelte:head>

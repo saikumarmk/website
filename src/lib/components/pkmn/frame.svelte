@@ -1,7 +1,7 @@
 <script>
-  export let customFont = false // Whether to use the custom Pokémon font or not
+  let { customFont = false, children } = $props()
 </script>
 
 <div class={`framed ${customFont ? 'font-pokemonGB' : ''}`}>
-  <p><slot></slot></p>
+  <p>{@render children?.()}</p>
 </div>

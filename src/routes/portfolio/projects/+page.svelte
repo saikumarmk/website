@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
-  import { projects } from '$lib/config/portfolio';
-  import TechBadge from '$lib/components/projects/TechBadge.svelte';
-  import { getTechColors } from '$lib/config/tech-colors';
-  import Head from '$lib/components/head.svelte';
-  import { title as storedTitle } from '$lib/stores/title';
+  import { onMount } from 'svelte'
+  import { browser } from '$app/environment'
+  import { projects } from '$lib/config/portfolio'
+  import TechBadge from '$lib/components/projects/TechBadge.svelte'
+  import { getTechColors } from '$lib/config/tech-colors'
+  import Head from '$lib/components/head.svelte'
+  import { title as storedTitle } from '$lib/stores/title'
 
-  storedTitle.set('Projects');
+  storedTitle.set('Projects')
 
   // Category/subtitle for each project
   const categoryMap: Record<string, string> = {
@@ -26,16 +26,15 @@
     'skirtor': 'Astrophysics Viz',
     'monash-handbook-plus': 'University Handbook Tool',
     'saikumarmk-website': 'Personal Website'
-  };
+  }
 
-  let selectedProject: string | null = null;
-  let currentDescriptionPage = 0;
-  let displayedText = '';
-  let fullText = '';
-  let isTyping = false;
-  let typingInterval: NodeJS.Timeout | null = null;
+  let selectedProject = $state<string | null>(null)
+  let currentDescriptionPage = $state(0)
+  let displayedText = $state('')
+  let fullText = $state('')
+  let isTyping = $state(false)
+  let typingInterval = $state<ReturnType<typeof setInterval> | null>(null)
 
-  // Split description into pages (by sentences)
   function getDescriptionPages(description: string): string[] {
     // Split by periods, but keep the period with the sentence
     const sentences = description.match(/[^.!?]+[.!?]+/g) || [description];
@@ -47,91 +46,93 @@
       if (page) pages.push(page);
     }
     
-    return pages.length > 0 ? pages : [description];
+    return pages.length > 0 ? pages : [description]
   }
 
-  // Typing effect
   function startTyping(text: string) {
     // Clear any existing typing animation
     if (typingInterval) {
-      clearInterval(typingInterval);
+      clearInterval(typingInterval)
     }
-    
-    fullText = text;
-    displayedText = '';
-    isTyping = true;
-    
-    let index = 0;
-    const speed = 30; // milliseconds per character
-    
+
+    fullText = text
+    displayedText = ''
+    isTyping = true
+
+    let index = 0
+    const speed = 30
+
     typingInterval = setInterval(() => {
       if (index < fullText.length) {
-        displayedText = fullText.slice(0, index + 1);
-        index++;
+        displayedText = fullText.slice(0, index + 1)
+        index++
       } else {
-        isTyping = false;
+        isTyping = false
         if (typingInterval) {
-          clearInterval(typingInterval);
-          typingInterval = null;
+          clearInterval(typingInterval)
+          typingInterval = null
         }
       }
-    }, speed);
+    }, speed)
   }
 
-  // Reset page when changing projects
-  $: if (selectedProject) {
-    currentDescriptionPage = 0;
-    const project = projects.find(p => p.id === selectedProject);
-    if (project) {
-      const pages = getDescriptionPages(project.description || '');
-      startTyping(pages[0]);
+  $effect(() => {
+    if (selectedProject) {
+      currentDescriptionPage = 0
+      const project = projects.find(p => p.id === selectedProject)
+      if (project) {
+        const pages = getDescriptionPages(project.description || '')
+        startTyping(pages[0])
+      }
     }
-  }
+  })
 
-  // Handle Escape key to close modal
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape' && selectedProject) {
-      selectedProject = null;
+      selectedProject = null
       if (typingInterval) {
-        clearInterval(typingInterval);
-        typingInterval = null;
+        clearInterval(typingInterval)
+        typingInterval = null
       }
     }
   }
 
-  // Cleanup when modal closes
-  $: if (!selectedProject && typingInterval) {
-    clearInterval(typingInterval);
-    typingInterval = null;
-    isTyping = false;
-  }
+  $effect(() => {
+    if (!selectedProject && typingInterval) {
+      clearInterval(typingInterval)
+      typingInterval = null
+      isTyping = false
+    }
+  })
 
   function nextPage() {
-    currentDescriptionPage++;
-    const project = projects.find(p => p.id === selectedProject);
+    currentDescriptionPage++
+    const project = projects.find(p => p.id === selectedProject)
     if (project) {
-      const pages = getDescriptionPages(project.description || '');
-      startTyping(pages[currentDescriptionPage]);
+      const pages = getDescriptionPages(project.description || '')
+      startTyping(pages[currentDescriptionPage])
     }
   }
 
-  // Prevent body scroll when modal is open
-  $: if (browser) {
+  $effect(() => {
+    if (!browser) return
     if (selectedProject) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''
     }
-  }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  })
 
   onMount(() => {
-    window.addEventListener('keydown', handleKeydown);
+    window.addEventListener('keydown', handleKeydown)
     return () => {
-      window.removeEventListener('keydown', handleKeydown);
-      document.body.style.overflow = '';
-    };
-  });
-
+      window.removeEventListener('keydown', handleKeydown)
+      document.body.style.overflow = ''
+    }
+  })
 </script>
 
 <Head />
@@ -167,8 +168,9 @@
         <button
           class="pokedex-square"
           class:selected={selectedProject === project.id}
-          on:click={() => selectedProject = selectedProject === project.id ? null : project.id}
-          aria-label="View {project.name}">
+          onclick={() => (selectedProject = selectedProject === project.id ? null : project.id)}
+          aria-label="View {project.name}"
+        >
           <div class="square-id">
             {String(idx + 1).padStart(3, '0')}
           </div>
@@ -187,21 +189,23 @@
     {@const idx = projects.findIndex(p => p.id === selectedProject)}
     {@const pages = getDescriptionPages(project.description || '')}
     {@const isLastPage = currentDescriptionPage >= pages.length - 1}
-    <div 
-      class="modal-overlay" 
-      on:click={() => selectedProject = null}
-      on:keydown={(e) => e.key === 'Enter' && (selectedProject = null)}
+    <div
+      class="modal-overlay"
+      onclick={() => (selectedProject = null)}
+      onkeydown={e => e.key === 'Enter' && (selectedProject = null)}
       role="button"
       tabindex="0"
-      aria-label="Close modal">
-      <div 
-        class="pokedex-modal" 
-        on:click|stopPropagation
-        on:keydown|stopPropagation
+      aria-label="Close modal"
+    >
+      <div
+        class="pokedex-modal"
+        onclick={e => e.stopPropagation()}
+        onkeydown={e => e.stopPropagation()}
         role="dialog"
-        aria-modal="true">
+        aria-modal="true"
+      >
         <!-- Close button -->
-        <button class="close-button" on:click={() => selectedProject = null} aria-label="Close">
+        <button class="close-button" onclick={() => (selectedProject = null)} aria-label="Close">
           ✕
         </button>
 
@@ -267,7 +271,7 @@
             <div class="frame-border-right">
               <!-- Floating arrow on right side (only show if not last page and not typing) -->
               {#if !isLastPage && !isTyping}
-                <button class="side-arrow-container" on:click={nextPage} aria-label="Next page">
+                <button class="side-arrow-container" onclick={nextPage} aria-label="Next page">
                   <div class="floating-arrow">
                     <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect width="12" height="1" fill="white"/>
