@@ -1,4 +1,5 @@
 {
+  // Emit urara.js, svelte.config.js, mdsvex.config.js — SvelteKit reads the emitted .js; mdsvex.config.js is tracked (see .gitignore).
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
@@ -7,5 +8,10 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["urara.ts", "svelte.config.ts", "mdsvex.config.ts"]
+  "include": [
+    "urara.ts",
+    "svelte.config.ts",
+    "mdsvex.config.ts",
+    "src/lib/slides/remark-slide-split.ts"
+  ]
 }

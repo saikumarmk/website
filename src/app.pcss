@@ -110,18 +110,99 @@ footer a {
   @apply blur-sm hover:blur-none active:blur-none transition-all select-all;
 }
 
-/* .prose pre */
-
-.prose pre {
-  @apply mockup-code !bg-neutral min-w-0;
+/*
+ * Code blocks: mdsvex uses Shiki + Monokai (same palette as Reveal’s default highlight.js theme).
+ * Do not use highlight.js highlightElement() here — it would replace Shiki’s markup.
+ * Do not put !bg-neutral on pre.shiki — it overrides Shiki’s inline background.
+ */
+:root {
+  --code-reveal-bg: #272822;
+  /* highlight.js Monokai default text (reveal.js plugin) — slightly softer than editor F8F8F2 */
+  --code-reveal-fg: #dddddd;
+  --code-block-border: rgb(255 255 255 / 0.09);
+  --code-block-shadow:
+    0 4px 22px -4px rgba(0, 0, 0, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-.prose pre:not(.shiki) {
-  @apply bg-neutral text-neutral-content;
+/* Reveal-style vertical rhythm (revealjs.com/code) */
+.prose pre,
+.urara-prose pre {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.prose pre:not(.shiki)::before {
-  @apply sticky -left-5 -ml-5;
+/* Shiki: pad .code-container; match Reveal hljs Monokai #272822 exactly (no olive border mix) */
+.prose pre.shiki,
+.urara-prose pre.shiki {
+  @apply rounded-lg overflow-hidden w-full min-w-0 border;
+  padding: 0;
+  /* Typography’s --tw-prose-pre-bg can tint the panel; force Reveal Monokai */
+  --tw-prose-pre-bg: var(--code-reveal-bg);
+  --tw-prose-pre-code: var(--code-reveal-fg);
+  background-color: var(--code-reveal-bg) !important;
+  color: var(--code-reveal-fg) !important;
+  border-color: var(--code-block-border);
+  box-shadow: var(--code-block-shadow);
+  line-height: 1.6;
+  font-size: 0.85rem;
+  /* @tailwindcss/typography sets pre { font-weight: 400 } — keep block normal */
+  font-weight: 400;
+}
+
+.prose pre.shiki > .code-container,
+.urara-prose pre.shiki > .code-container {
+  padding: 1.2rem 1.4rem 1.5rem;
+  overflow-x: auto;
+}
+
+/*
+ * Typography: `pre code { font-weight: inherit }` pins tokens to 400. shiki-twoslash drops fontStyle
+ * from spans. Mirror Reveal highlight.js Monokai bold — use !important so we beat .prose pre code.
+ */
+.prose pre.shiki code,
+.urara-prose pre.shiki code {
+  font-weight: 400;
+}
+
+.prose pre.shiki span[style*='#F92672'],
+.urara-prose pre.shiki span[style*='#F92672'],
+.prose pre.shiki span[style*='#f92672'],
+.urara-prose pre.shiki span[style*='#f92672'],
+pre.shiki span[style*='#F92672'],
+pre.shiki span[style*='#f92672'] {
+  font-weight: 700 !important;
+}
+
+.prose pre.shiki span[style*='#AE81FF'],
+.urara-prose pre.shiki span[style*='#AE81FF'],
+.prose pre.shiki span[style*='#ae81ff'],
+.urara-prose pre.shiki span[style*='#ae81ff'],
+pre.shiki span[style*='#AE81FF'],
+pre.shiki span[style*='#ae81ff'] {
+  font-weight: 700 !important;
+}
+
+/* Plain pre>code fallbacks (no Shiki) */
+.prose pre:not(.shiki),
+.urara-prose pre:not(.shiki) {
+  @apply rounded-lg w-full min-w-0 border-0;
+  background: transparent !important;
+  padding: 0;
+}
+
+.prose pre:not(.shiki) code,
+.urara-prose pre:not(.shiki) code {
+  display: block;
+  padding: 1.2rem 1.4rem;
+  border-radius: 8px;
+  background: var(--code-reveal-bg);
+  color: var(--code-reveal-fg);
+  line-height: 1.6;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  box-shadow: var(--code-block-shadow);
+  border: 1px solid var(--code-block-border);
 }
 
 /* .urara-prose pre */
@@ -136,22 +217,15 @@ footer a {
   @apply pb-0;
 }
 
-.urara-prose > pre > div.code-container {
-  @apply pb-5 overflow-x-auto;
-}
-
 /* shiki */
 
 pre.shiki {
   @apply px-0;
 }
 
-pre.shiki::before {
-  @apply sticky;
-}
-
 pre.shiki > div.code-title {
-  @apply absolute -mt-10 ml-20 pt-1.5 pl-1.5 opacity-50;
+  @apply absolute -mt-10 ml-4 pt-1.5 pl-1.5 opacity-50;
+  color: rgb(248 248 242 / 0.65); /* monokai foreground on monokai bg */
 }
 
 pre.shiki .language-id {
@@ -191,11 +265,14 @@ pre.twoslash data-lsp {
 }
 
 pre.twoslash:hover data-lsp {
-  @apply border-neutral-content/30;
+  border-bottom-color: rgb(102 217 239 / 0.35);
 }
 
 pre.twoslash data-lsp:hover::before {
-  @apply content-[attr(lsp)] absolute rounded translate-y-5 bg-neutral-focus text-neutral-content font-mono whitespace-pre-wrap transition-all px-2 py-1 z-50;
+  @apply content-[attr(lsp)] absolute rounded translate-y-5 font-mono whitespace-pre-wrap transition-all px-2 py-1 z-50;
+  background: #3e3d32;
+  color: #f8f8f2;
+  border: 1px solid color-mix(in srgb, #a6e22e 28%, transparent);
 }
 
 /* your code here */
@@ -205,6 +282,14 @@ pre.twoslash data-lsp:hover::before {
   font-style: normal;
   font-weight: 400;
   src: url(https://fonts.gstatic.com/s/firacode/v22/uU9eCBsR6Z2vfE9aq3bL0fxyUs4tcw4W_D1sJVD7Ng.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://fonts.gstatic.com/s/firacode/v27/uU9NCBsR6Z2vfE9aq3bh3dSD.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -317,6 +402,26 @@ a.button:active {
 
 .giscus .Link--muted:hover {
   color: #24292f !important;
+}
+
+/* Fullscreen slide deck (?mode=slides + slides: true) */
+body.deck-presentation-active #totop {
+  display: none !important;
+}
+body.deck-presentation-active {
+  overflow: hidden;
+}
+html:has(body.deck-presentation-active) {
+  overflow: hidden;
+}
+
+body.deck-presentation-active .layout-transition {
+  padding-bottom: 0 !important;
+  min-height: 100dvh;
+}
+
+body.deck-presentation-active .deck-presentation-shell {
+  min-height: 100dvh;
 }
 
 /*# sourceMappingURL=styles/css-pokemon-gameboy.css.map */

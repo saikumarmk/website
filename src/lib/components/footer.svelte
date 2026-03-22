@@ -2,7 +2,10 @@
   import { onMount, onDestroy } from 'svelte'
   import { browser } from '$app/environment'
   import { site } from '$lib/config/site'
-  
+
+  let className = ''
+  export { className as class }
+
   const year = new Date().getFullYear()
   
   // Time on site tracker
@@ -52,7 +55,7 @@
   })
 </script>
 
-<footer class="border-t border-base-content/10 bg-base-200/50 mt-auto">
+<footer class="border-t border-base-content/10 bg-base-200 mt-auto {className}">
   <div class="container mx-auto px-4 py-6 max-w-5xl">
     <!-- Main footer content -->
     <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">

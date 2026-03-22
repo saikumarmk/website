@@ -193,9 +193,15 @@ export const experience: Experience[] = [
         tags: ['Work'],
         positions: [
             {
-                position: "Applied Scientist - VDAS (Video Studio)",
-                duration: "Sep 2025 - Current",
+                position: "Senior Applied Scientist - VDAS (Video Studio)",
+                duration: "March 2026 - Current",
                 listItems: ["Stuff yet to come :p"],
+                badges: ['AS'],
+                buttons: [{ label: 'Link', href: 'https://canva.com' }]},
+            {
+                position: "Applied Scientist - VDAS (Video Studio)",
+                duration: "Sep 2025 - February 2026",
+                listItems: ["Worked on stuff :p"],
                 badges: ['AS'],
                 buttons: [{ label: 'Link', href: 'https://canva.com' }]
             },

@@ -21,9 +21,8 @@
   let ThreeCanvas: any = null
   let PokeCanvas: any = null
 
-  let { res, path } = data
-
-  $: if (data) path = data.path
+  /** Keep in sync on client navigations — a one-time destructuring left `posts` stale after the first load. */
+  $: ({ res, path } = data)
 
   let currentMode = 'none'
   const unsubscribe = backgroundMode.subscribe(mode => (currentMode = mode))
@@ -46,8 +45,10 @@
     })
   }
   
-  posts.set(res || [])
-  tags.set(genTags(res || []))
+  $: {
+    posts.set(res ?? [])
+    tags.set(genTags(res ?? []))
+  }
   onMount(
     () =>
       !dev &&

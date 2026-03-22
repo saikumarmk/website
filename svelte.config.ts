@@ -23,7 +23,9 @@ export default defineConfig({
       : adapterStatic({
           pages: 'build',
           assets: 'build',
-          fallback: undefined
+          fallback: undefined,
+          // growth/2026/[id] is dynamic (prerender = false); required for static export without platform env (e.g. local build, CI)
+          strict: false
         }),
     prerender: {
       handleMissingId: 'warn'

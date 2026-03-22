@@ -73,6 +73,10 @@ declare global {
            * @example "3c 2.5 3ci 2" - custom config per word (size + c=colored + i=italic)
            */
           slab_title?: boolean | string
+          /**
+           * Split markdown on `---` into slides; add `?mode=slides` for fullscreen deck.
+           */
+          slides?: boolean
         }
       type Toc = {
         depth: number

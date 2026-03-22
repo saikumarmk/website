@@ -7,6 +7,7 @@ static
 
 # dependencies
 node_modules
+package-lock.json
 
 # env
 *.local
@@ -21,6 +22,7 @@ pnpm-debug.log*
 src/routes/**/+page.svelte.md
 src/routes/**/+page.md
 *.config.js
+!mdsvex.config.js
 urara.js
 
 # Things to hide
@@ -31,6 +33,11 @@ src/styles/github.css.map
 src/styles/poke-gb.css 
 src/styles/fonts
 generateClasses.js
+
+# Generated / reference files
+test-results/
+docs/
+example.html
 
 # Unfinished blog posts
 urara/uni-journey-1/

@@ -8,6 +8,7 @@ import rehypeExternalLinks from 'rehype-external-links'
 
 // urara remark plugins
 import type { Node, Data } from 'unist'
+import { remarkSlideSplit } from './src/lib/slides/remark-slide-split.js'
 import { statSync } from 'fs'
 import { parse, join } from 'path'
 import { visit } from 'unist-util-visit'
@@ -96,8 +97,8 @@ export default defineConfig({
           code,
           lang as string,
           fence ?? {},
-          { themeName: 'material-default' },
-          await createShikiHighlighter({ theme: 'material-default' }),
+          { themeName: 'monokai' },
+          await createShikiHighlighter({ theme: 'monokai' }),
           twoslash
         )
       )}\` }`
@@ -118,6 +119,7 @@ export default defineConfig({
       }
       }
     ],
+    remarkSlideSplit,
     remarkUraraFm,
     remarkUraraSpoiler,
     [remarkFootnotes, { inlineNotes: true }],

@@ -21,9 +21,10 @@ type GenTagsFunction = (posts: Urara.Post[]) => string[]
  * @returns - post type string
  */
 export const typeOfPost = (
-  fm: FFFFlavoredFrontmatter
-): 'note' | 'article' | 'reply' | 'photo' | 'like' | 'video' | 'repost' | 'bookmark' | 'audio' =>
-  fm.title
+  fm: FFFFlavoredFrontmatter | null | undefined
+): 'note' | 'article' | 'reply' | 'photo' | 'like' | 'video' | 'repost' | 'bookmark' | 'audio' => {
+  if (!fm) return 'note'
+  return fm.title
     ? 'article'
     : fm.image
       ? 'photo'
@@ -40,6 +41,7 @@ export const typeOfPost = (
                 : fm.in_reply_to
                   ? 'reply'
                   : 'note'
+}
 
 /**
  * Generate Posts List
@@ -51,28 +53,47 @@ export const genPosts: GenPostsFunction = ({
   postHtml = false,
   postLimit = undefined,
   filterUnlisted = false
-} = {}) =>
-  Object.entries(modules)
-    .map(([, module]) => ({
-      ...module.metadata,
-      type: typeOfPost(module.metadata),
-      html:
-        postHtml || typeOfPost(module.metadata) !== 'article'
-          ? module.default
-            .render()
-            .html // eslint-disable-next-line no-control-regex
-            .replace(/[\u0000-\u001F]/g, '')
-            .replace(/[\r\n]/g, '')
-            .match(/<main [^>]+>(.*?)<\/main>/gi)?.[0]
-            .replace(/<main [^>]+>(.*?)<\/main>/gi, '$1')
-            // .replace(/( class=")(.*?)(")/gi, '')
-            .replace(/( style=")(.*?)(")/gi, '')
-            .replace(/(<span>)(.*?)(<\/span>)/gi, '$2')
-            .replace(/(<main>)(.*?)(<\/main>)/gi, '$2')
-          : ''
-    }))
+} = {}) => {
+  function renderHtml(module: Urara.Post.Module): string {
+    if (!(postHtml || typeOfPost(module.metadata) !== 'article')) return ''
+    try {
+      return (
+        module.default
+          .render()
+          .html // eslint-disable-next-line no-control-regex
+          .replace(/[\u0000-\u001F]/g, '')
+          .replace(/[\r\n]/g, '')
+          .match(/<main [^>]+>(.*?)<\/main>/gi)?.[0]
+          .replace(/<main [^>]+>(.*?)<\/main>/gi, '$1')
+          // .replace(/( class=")(.*?)(")/gi, '')
+          .replace(/( style=")(.*?)(")/gi, '')
+          .replace(/(<span>)(.*?)(<\/span>)/gi, '$2')
+          .replace(/(<main>)(.*?)(<\/main>)/gi, '$2') ?? ''
+      )
+    } catch (e) {
+      console.warn(`[genPosts] failed to render ${module.metadata?.slug ?? '?'}:`, (e as Error).message)
+      return ''
+    }
+  }
+
+  const posts: Urara.Post[] = []
+  for (const [, module] of Object.entries(modules)) {
+    if (module?.metadata == null) continue
+    try {
+      posts.push({
+        ...module.metadata,
+        type: typeOfPost(module.metadata),
+        html: renderHtml(module)
+      } as Urara.Post)
+    } catch (e) {
+      console.warn(`[genPosts] skipping broken post ${module.metadata?.slug ?? '?'}:`, (e as Error).message)
+    }
+  }
+
+  return posts
     .filter((post, index) => (!filterUnlisted || !post.flags?.includes('unlisted')) && (!postLimit || index < postLimit))
     .sort((a, b) => Date.parse(b.published ?? b.created) - Date.parse(a.published ?? a.created))
+}
 
 /**
  * Generate Tags List
