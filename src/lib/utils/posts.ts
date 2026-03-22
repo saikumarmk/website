@@ -16,6 +16,20 @@ type GenPostsFunction = (options?: GenPostsOptions) => Urara.Post[]
 
 type GenTagsFunction = (posts: Urara.Post[]) => string[]
 
+/** Same ordering/filter as genPosts (used by search index prerender). */
+export function filterAndSortPosts<T extends Urara.Post>(
+  posts: T[],
+  filterUnlisted = false,
+  postLimit?: number
+): T[] {
+  return posts
+    .filter(
+      (post, index) =>
+        (!filterUnlisted || !post.flags?.includes('unlisted')) && (!postLimit || index < postLimit)
+    )
+    .sort((a, b) => Date.parse(b.published ?? b.created) - Date.parse(a.published ?? a.created))
+}
+
 /**
  * Detect Post Type
  * @param fm - post frontmatter
@@ -58,18 +72,22 @@ export const genPosts: GenPostsFunction = ({
   function renderHtml(module: Urara.Post.Module): string {
     if (!(postHtml || typeOfPost(module.metadata) !== 'article')) return ''
     try {
-      return (
-        render(module.default, { props: {} })
-          .body // eslint-disable-next-line no-control-regex
-          .replace(/[\u0000-\u001F]/g, '')
-          .replace(/[\r\n]/g, '')
-          .match(/<main [^>]+>(.*?)<\/main>/gi)?.[0]
-          .replace(/<main [^>]+>(.*?)<\/main>/gi, '$1')
-          // .replace(/( class=")(.*?)(")/gi, '')
-          .replace(/( style=")(.*?)(")/gi, '')
-          .replace(/(<span>)(.*?)(<\/span>)/gi, '$2')
-          .replace(/(<main>)(.*?)(<\/main>)/gi, '$2') ?? ''
-      )
+      const body = render(module.default, { props: {} })
+        .body // eslint-disable-next-line no-control-regex
+        .replace(/[\u0000-\u001F]/g, '')
+        .replace(/[\r\n]/g, '')
+
+      // Prefer <main> / <article> inner HTML (search-index strips tags later).
+      // Old pattern `<main [^>]+>` failed for `<main>` with no attrs and could throw when .match() was null.
+      const inner =
+        body.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ??
+        body.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1]
+
+      const fragment = inner ?? body
+
+      return fragment
+        .replace(/( style=")(.*?)(")/gi, '')
+        .replace(/(<span>)(.*?)(<\/span>)/gi, '$2')
     } catch (e) {
       console.warn(`[genPosts] failed to render ${module.metadata?.slug ?? '?'}:`, (e as Error).message)
       return ''
@@ -90,9 +108,7 @@ export const genPosts: GenPostsFunction = ({
     }
   }
 
-  return posts
-    .filter((post, index) => (!filterUnlisted || !post.flags?.includes('unlisted')) && (!postLimit || index < postLimit))
-    .sort((a, b) => Date.parse(b.published ?? b.created) - Date.parse(a.published ?? a.created))
+  return filterAndSortPosts(posts, filterUnlisted, postLimit)
 }
 
 /**

@@ -3,6 +3,7 @@
   import { browser } from '$app/environment'
   import { goto } from '$app/navigation'
   import FlexSearch from 'flexsearch'
+  import { FLEXSEARCH_DOCUMENT_OPTIONS, STATIC_SEARCH_PAGES } from '$lib/search/flexsearch-config'
   
   let isOpen = $state(false)
 
@@ -11,20 +12,13 @@
   let selectedIndex = $state(0)
   let searchInput = $state<HTMLInputElement | undefined>(undefined)
   
-  // FlexSearch index
+  // FlexSearch index (must be $state so loading UI and $effect react after async load)
   let searchIndex: any = null
   let searchablePosts: any[] = []
-  let indexLoading = false
-  let indexLoaded = false
+  let indexLoading = $state(false)
+  let indexLoaded = $state(false)
   
-  // Static pages to include in search
-  const staticPages = [
-    { title: 'About', path: '/about', summary: 'Learn more about me', content: '', type: 'page' },
-    { title: 'Portfolio', path: '/portfolio', summary: 'View my work and projects', content: '', type: 'page' },
-    { title: 'Project Dex', path: '/portfolio/projects', summary: 'Browse all projects in Pokedex style', content: '', type: 'page' },
-    { title: 'Yggdrasil 2026', path: '/growth/2026', summary: 'Interactive skill tree and learning roadmap', content: '', type: 'page' },
-    { title: 'Archive', path: '/archive', summary: 'Browse all posts by tag and year', content: '', type: 'page' },
-  ]
+  const staticPages = STATIC_SEARCH_PAGES
   
   // Load and build search index (lazy, only when modal opens)
   async function loadSearchIndex() {
@@ -34,35 +28,34 @@
     
     try {
       const response = await fetch('/search-index.json')
-      searchablePosts = await response.json()
-      
-      // Create FlexSearch document index
-      searchIndex = new FlexSearch.Document({
-        document: {
-          id: 'path',
-          index: ['title', 'summary', 'content', 'tags'],
-          store: ['path', 'title', 'summary', 'tags', 'created']
-        },
-        tokenize: 'forward',
-        resolution: 9
-      })
-      
-      // Add all posts to the index
-      for (const post of searchablePosts) {
-        searchIndex.add({
-          ...post,
-          tags: post.tags?.join(' ') || ''
-        })
+      const data = await response.json()
+
+      // New format: { posts, serializedIndex }; legacy: plain array of posts
+      searchablePosts = Array.isArray(data) ? data : (data.posts ?? [])
+
+      searchIndex = new FlexSearch.Document(FLEXSEARCH_DOCUMENT_OPTIONS)
+
+      const serialized = !Array.isArray(data) && data.serializedIndex
+      if (Array.isArray(serialized) && serialized.length > 0) {
+        for (const pair of serialized) {
+          if (!Array.isArray(pair) || pair.length < 2) continue
+          searchIndex.import(pair[0], pair[1])
+        }
+      } else {
+        for (const post of searchablePosts) {
+          searchIndex.add({
+            ...post,
+            tags: post.tags?.join(' ') || ''
+          })
+        }
+        for (const page of staticPages) {
+          searchIndex.add({
+            ...page,
+            tags: ''
+          })
+        }
       }
-      
-      // Add static pages
-      for (const page of staticPages) {
-        searchIndex.add({
-          ...page,
-          tags: ''
-        })
-      }
-      
+
       indexLoaded = true
     } catch (error) {
       console.error('Failed to load search index:', error)
@@ -101,32 +94,51 @@
     return text.replace(regex, '<mark class="bg-warning/40 rounded px-0.5">$1</mark>')
   }
 
+  function normalizeTags(doc: { tags?: string | string[] }) {
+    const t = doc?.tags
+    if (Array.isArray(t)) return t.filter(Boolean)
+    if (typeof t === 'string') return t.split(/\s+/).filter(Boolean)
+    return []
+  }
+
   // Search function using FlexSearch
   function performSearch(query: string) {
     if (!query.trim() || !searchIndex) {
       searchResults = []
       return
     }
-    
-    // Search across all indexed fields
-    const results = searchIndex.search(query, {
-      limit: 15,
-      enrich: true
-    }) as unknown as any[]
+
+    let results: any[]
+    try {
+      const raw = searchIndex.search(query, {
+        limit: 15,
+        enrich: true
+      }) as any
+      results = Array.isArray(raw) ? raw : []
+    } catch (e) {
+      console.error('FlexSearch search failed:', e)
+      searchResults = []
+      return
+    }
 
     const resultMap = new Map<string, { item: any; score: number; matchedFields: string[] }>()
 
     results.forEach((fieldResult: any) => {
-      const fieldName = fieldResult.field
-      const fieldScore = fieldName === 'title' ? 100 
-        : fieldName === 'tags' ? 50 
-        : fieldName === 'summary' ? 30 
-        : 10 // content
-      
-      fieldResult.result.forEach((match: any) => {
+      const fieldName = fieldResult.field ?? 'content'
+      const fieldScore =
+        fieldName === 'title' ? 100
+        : fieldName === 'tags' ? 50
+        : fieldName === 'summary' ? 30
+        : 10
+
+      const row = fieldResult.result
+      if (!Array.isArray(row)) return
+
+      row.forEach((match: any) => {
         const path = match.id
         const doc = match.doc
-        
+        if (!doc || path == null) return
+
         if (resultMap.has(path)) {
           const existing = resultMap.get(path)!
           existing.score += fieldScore
@@ -134,17 +146,15 @@
             existing.matchedFields.push(fieldName)
           }
         } else {
-          // Check if it's a static page
           const staticPage = staticPages.find(p => p.path === path)
-          // Get full post data for content snippet
           const fullPost = searchablePosts.find(p => p.path === path)
-          
+
           resultMap.set(path, {
             item: {
               path: doc.path,
               title: doc.title,
               summary: doc.summary,
-              tags: doc.tags?.split(' ').filter(Boolean) || [],
+              tags: normalizeTags(doc),
               created: doc.created,
               isStatic: !!staticPage,
               content: fullPost?.content || ''
@@ -232,22 +242,25 @@
     }
   }
   
-  // Global Ctrl+K handler
+  // Global ⌘/Ctrl+K — use e.code (layout-independent); capture so we beat focused inputs / other handlers
   function handleGlobalKeydown(e: KeyboardEvent) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault()
-      if (isOpen) {
-        close()
-      } else {
-        open()
-      }
+    if (!(e.ctrlKey || e.metaKey)) return
+    if (e.altKey || e.shiftKey) return
+    const isK = e.code === 'KeyK' || e.key === 'k' || e.key === 'K'
+    if (!isK) return
+    e.preventDefault()
+    e.stopPropagation()
+    if (isOpen) {
+      close()
+    } else {
+      open()
     }
   }
-  
+
   onMount(() => {
     if (browser) {
-      window.addEventListener('keydown', handleGlobalKeydown)
-      return () => window.removeEventListener('keydown', handleGlobalKeydown)
+      window.addEventListener('keydown', handleGlobalKeydown, true)
+      return () => window.removeEventListener('keydown', handleGlobalKeydown, true)
     }
   })
 </script>
@@ -293,7 +306,7 @@
         {#if indexLoading}
           <div class="px-4 py-8 text-center opacity-60">
             <span class="loading loading-spinner loading-md"></span>
-            <p class="mt-2">Building search index...</p>
+            <p class="mt-2">Loading search…</p>
           </div>
         {:else if searchQuery && searchResults.length === 0}
           <div class="px-4 py-8 text-center opacity-60">
