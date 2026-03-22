@@ -198,6 +198,31 @@ test.describe('slide deck (mdsvex slides: true)', () => {
     expect(bad, bad.join('; ')).toEqual([])
   })
 
+  test('deck mode: Diagrams & code embeds follows Features and Mermaid renders SVG diagrams', async ({
+    page
+  }) => {
+    const thrown: string[] = []
+    page.on('pageerror', err => thrown.push(err.message))
+
+    await page.goto('/cool-stuff/?mode=slides&slide=3', { waitUntil: 'networkidle' })
+    await expect(page.locator('section.slide.active')).toHaveAttribute('data-slide', '3')
+    await expect(
+      page.locator('section.slide.active').getByRole('heading', { name: /^Features$/i })
+    ).toBeVisible()
+
+    await page.keyboard.press('ArrowRight')
+    await expect(page).toHaveURL(/[?&]slide=4(?:&|$)/)
+    await expect(page.locator('section.slide.active')).toHaveAttribute('data-slide', '4')
+    await expect(
+      page.locator('section.slide.active').getByRole('heading', { name: /Diagrams & code embeds/i })
+    ).toBeVisible()
+
+    const diagramSlide = page.locator('section.slide[data-slide="4"]')
+    // Two <Mermaid> blocks on this slide; each should produce an <svg> after client render.
+    await expect(diagramSlide.locator('.mermaid svg')).toHaveCount(2, { timeout: 25_000 })
+    expect(thrown, thrown.join('; ')).toEqual([])
+  })
+
   test('legacy /slides-example redirects to cool-stuff deck', async ({ page }) => {
     await page.goto('/slides-example/', { waitUntil: 'domcontentloaded' })
     await expect(page).toHaveURL(/\/cool-stuff\/?\?mode=slides/)

@@ -2,7 +2,6 @@
 import type { MdsvexOptions } from 'mdsvex'
 
 // rehype plugins
-import { rehypeLayoutMdsvexComponents } from './src/lib/mdsvex/rehype-layout-mdsvex-components.js'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeExternalLinks from 'rehype-external-links'
@@ -11,7 +10,7 @@ import rehypeExternalLinks from 'rehype-external-links'
 import type { Node, Data } from 'unist'
 import { remarkSlideSplit } from './src/lib/slides/remark-slide-split.js'
 import { statSync } from 'fs'
-import { parse, join, resolve } from 'path'
+import { parse, join } from 'path'
 import { visit } from 'unist-util-visit'
 import { toString } from 'mdast-util-to-string'
 import Slugger from 'github-slugger'
@@ -129,8 +128,6 @@ export default defineConfig({
     remarkMath
   ],
   rehypePlugins: [
-    // Map <Mermaid /> etc. in raw HTML to Components.* (see plugin file — mdsvex only rewrites HAST elements).
-    rehypeLayoutMdsvexComponents as any,
     rehypeSlug as any,
     [rehypeAutolinkHeadings, { behavior: 'wrap' }],
     [
