@@ -7,14 +7,13 @@ import adapterStatic from '@sveltejs/adapter-static'
 // svelte preprocessor
 import { mdsvex } from 'mdsvex'
 import mdsvexConfig from './mdsvex.config.js'
-import importAssets from 'svelte-preprocess-import-assets'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 
 const defineConfig = (config: Config) => config
 
 export default defineConfig({
   extensions: ['.svelte', ...(mdsvexConfig.extensions as string[])],
-  preprocess: [mdsvex(mdsvexConfig), importAssets(), vitePreprocess()],
+  preprocess: [mdsvex(mdsvexConfig), vitePreprocess()],
   kit: {
     adapter: Object.keys(process.env).some(key => ['VERCEL', 'NETLIFY'].includes(key))
       ? adapterAuto()
