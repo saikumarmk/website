@@ -33,7 +33,7 @@
 
 <Head />
 
-<div class="min-h-screen">
+<div class="min-h-screen flex flex-col">
   <!-- Hero Section - Horizontal Layout -->
   <div class="border-b border-base-content/10 bg-gradient-to-br from-primary/5 to-secondary/5">
     <div class="container mx-auto px-4 py-10 md:py-12 max-w-5xl">
@@ -56,7 +56,7 @@
           </h1>
           <p class="text-base md:text-lg opacity-80 mb-3">{@html site.author.bio}</p>
           <p class="text-sm opacity-60 mb-4 max-w-xl">
-            Applied Scientist at Canva working on training photo and video models. 
+            Senior Applied Scientist at Canva working on training photo and video models. 
             I write about machine learning, tech careers, and software engineering.
           </p>
           

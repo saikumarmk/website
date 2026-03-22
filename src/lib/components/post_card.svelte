@@ -12,6 +12,8 @@
   import RelatedPosts from '$lib/components/related_posts.svelte'
   import SlabTitle from '$lib/components/slab_title.svelte'
   export let post: Urara.Post
+  /** Fullscreen slide deck: hide blog chrome, only render body slot */
+  export let deckPresentation = false
   export let preview: boolean = false
   export let loading: 'eager' | 'lazy' = 'lazy'
   export let decoding: 'async' | 'sync' | 'auto' = 'async'
@@ -36,16 +38,18 @@
   itemscope
   itemtype="https://schema.org/BlogPosting"
   itemprop="blogPost"
-  class:md:mb-8={!preview}
-  class:lg:mb-16={!preview}
+  class:md:mb-8={!preview && !deckPresentation}
+  class:lg:mb-16={!preview && !deckPresentation}
   class:group={preview}
   class:image-full={preview && post.type === 'article' && post.image}
   class:before:!rounded-none={preview && post.image}
-  class="h-entry card bg-base-100 rounded-none md:rounded-box md:shadow-xl overflow-hidden z-10">
-  {#if !preview}
+  class="h-entry z-10 {deckPresentation
+    ? 'w-full max-w-none bg-transparent shadow-none p-0 m-0 flex flex-col flex-1 min-h-0 min-h-[100dvh] overflow-hidden border-0'
+    : 'card bg-base-100 rounded-none md:rounded-box md:shadow-xl overflow-hidden'}">
+  {#if !preview && !deckPresentation}
     <slot name="breadcrumb" />
   {/if}
-  {#if !preview && postConfig.bridgy}
+  {#if !preview && !deckPresentation && postConfig.bridgy}
     <div id="bridgy" class="hidden">
       {#each post.flags?.some( flag => flag.startsWith('bridgy') ) ? post.flags.flatMap( flag => (flag.startsWith('bridgy') ? flag.slice(7) : []) ) : [...(postConfig.bridgy.post ?? []), ...(postConfig.bridgy[post.type] ?? [])] as target}
         {#if target === 'fed'}
@@ -56,7 +60,7 @@
       {/each}
     </div>
   {/if}
-  {#if post.in_reply_to}
+  {#if post.in_reply_to && !deckPresentation}
     <Reply in_reply_to={post.in_reply_to} class="mt-4 mx-4" />
   {/if}
   {#if post.image && preview}
@@ -72,11 +76,11 @@
     </figure>
   {/if}
   <div
-    class={`card-body gap-0 ${
+    class={`${deckPresentation ? '' : 'card-body'} gap-0 ${
       preview && post.type === 'article' && post.image ? 'md:col-start-1 md:row-start-1 md:text-neutral-content md:z-20' : ''
-    }`}>
+    } ${deckPresentation ? '!p-0 flex flex-1 flex-col min-h-0' : ''}`}>
     <div class="flex flex-col gap-2">
-      {#if post.image && !preview}
+      {#if post.image && !preview && !deckPresentation}
         <figure
           class={`md:order-last rounded-box shadow-xl mb-4 ${
             post.type === 'article' ? 'flex-col gap-2 -mx-4 -mt-8 md:mt-0' : 'flex-col -mx-8'
@@ -89,8 +93,10 @@
             {decoding} />
         </figure>
       {/if}
+      {#if !deckPresentation}
       <Status {post} {preview} />
-      {#if post.title}
+      {/if}
+      {#if post.title && !deckPresentation}
         {#if preview}
           <h2
             itemprop="name headline"
@@ -110,20 +116,23 @@
           <h1 itemprop="name headline" class="card-title text-3xl mb-8 p-name">{post.title ?? post.path.slice(1)}</h1>
         {/if}
       {/if}
-      {#if post.summary}
+      {#if post.summary && !deckPresentation}
         <p itemprop="description" class:hidden={!preview || post.type !== 'article'} class="p-summary mb-auto">
           {post.summary}
         </p>
       {/if}
     </div>
-    <main itemprop="articleBody" class:mt-4={post.type !== 'article'} class="urara-prose prose e-content">
+    <main
+      itemprop="articleBody"
+      class:mt-4={post.type !== 'article' && !deckPresentation}
+      class="urara-prose prose e-content {deckPresentation ? '!max-w-none !px-0 !py-0 flex flex-1 flex-col min-h-0' : ''}">
       {#if !preview}
         <slot />
       {:else if post.html}
         {@html post.html}
       {/if}
     </main>
-    {#if !preview && post.tags}
+    {#if !preview && post.tags && !deckPresentation}
       <div class="divider mt-4 mb-0" />
       <div>
         {#each post.tags as tag}
@@ -134,7 +143,7 @@
       </div>
     {/if}
   </div>
-  {#if !preview}
+  {#if !preview && !deckPresentation}
     {#if !post.flags?.includes('related-disabled')}
       <div class="px-4 md:px-8">
         <RelatedPosts currentPost={post} />
