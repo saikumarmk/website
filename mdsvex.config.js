@@ -4,7 +4,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeExternalLinks from 'rehype-external-links';
 import { remarkSlideSplit } from './src/lib/slides/remark-slide-split.js';
-import { parse, join, resolve } from 'path';
+import { parse, join } from 'path';
 import { visit } from 'unist-util-visit';
 import { toString } from 'mdast-util-to-string';
 import Slugger from 'github-slugger';
@@ -66,8 +66,10 @@ export default defineConfig({
     smartypants: {
         dashes: 'oldschool'
     },
+    // Relative path (not path.resolve): absolute paths in generated imports can split the
+    // layout module between client/server bundles and break `* as Components` for MD embeds.
     layout: {
-        _: resolve('src/lib/components/post_layout.svelte')
+        _: 'src/lib/components/post_layout.svelte'
     },
     highlight: {
         highlighter: async (code, lang, meta) => {
