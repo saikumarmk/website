@@ -33,12 +33,6 @@
   })
 
   $effect(() => {
-    if (browser && path === '/') {
-      import('../styles/pokesprite-pokemon-gen8.css')
-    }
-  })
-
-  $effect(() => {
     if (browser && currentMode === 'three' && !ThreeCanvas) {
       import('$lib/components/three/astro_canvas.svelte').then(module => {
         ThreeCanvas = module.default

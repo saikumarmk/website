@@ -223,8 +223,9 @@ test.describe('slide deck (mdsvex slides: true)', () => {
     expect(thrown, thrown.join('; ')).toEqual([])
   })
 
-  test('legacy /slides-example redirects to cool-stuff deck', async ({ page }) => {
+  test('legacy /slides-example redirects to cool-stuff deck handoff', async ({ page }) => {
     await page.goto('/slides-example/', { waitUntil: 'domcontentloaded' })
-    await expect(page).toHaveURL(/\/cool-stuff\/?\?mode=slides/)
+    await expect(page).toHaveURL(/\/cool-stuff\/deck\/?/)
+    await expect(page).toHaveURL(/[?&]mode=slides/, { timeout: 15_000 })
   })
 })
