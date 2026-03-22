@@ -8,7 +8,7 @@ import adapterStatic from '@sveltejs/adapter-static'
 import { mdsvex } from 'mdsvex'
 import mdsvexConfig from './mdsvex.config.js'
 import importAssets from 'svelte-preprocess-import-assets'
-import { vitePreprocess } from '@sveltejs/kit/vite'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 
 const defineConfig = (config: Config) => config
 
