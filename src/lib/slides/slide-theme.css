@@ -33,8 +33,9 @@
   align-items: flex-start;
   padding: 6vh 8vw;
   opacity: 0;
+  visibility: hidden;
   transform: translateY(24px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s ease;
   pointer-events: none;
   max-width: var(--slide-max);
   margin: 0 auto;
@@ -45,12 +46,14 @@
 
 .slide-deck-viewport--presenting > section.slide.active {
   opacity: 1;
+  visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
 }
 
 .slide-deck-viewport--presenting > section.slide.exit-up {
   opacity: 0;
+  visibility: hidden;
   transform: translateY(-24px);
 }
 

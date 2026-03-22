@@ -26,6 +26,8 @@ export const theme: ThemeConfig = [
 export const head: HeadConfig = {}
 
 export const header: HeaderConfig = {
+  /** Enables navbar search control (⌘K / Ctrl+K opens `SearchModal` via `bind:searchModal`) */
+  search: { provider: 'duckduckgo' },
   nav: [
     {
       text: 'About Me',

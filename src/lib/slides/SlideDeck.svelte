@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount, onDestroy, tick } from 'svelte'
   import { browser } from '$app/environment'
+  import { goto } from '$app/navigation'
+  import { page } from '$app/stores'
   import '$lib/slides/slide-theme.css'
 
   let { title = '', path = '', children } = $props()
@@ -20,6 +22,12 @@
     slideCount = slides.length
   }
 
+  function readSlideIndexFromSearch(search: string): number {
+    const raw = new URLSearchParams(search).get('slide')
+    const n = raw === null || raw === '' ? 0 : parseInt(raw, 10)
+    return Number.isFinite(n) ? n : 0
+  }
+
   function applyMode(presenting: boolean) {
     collectSlides()
     if (slides.length === 0) return
@@ -27,15 +35,17 @@
     if (presenting) {
       document.body.classList.add('deck-presentation-active')
       for (const s of slides) s.classList.remove('active', 'exit-up')
-      current = 0
-      slides[0].classList.add('active')
+      const search = browser ? window.location.search : ''
+      const idx = Math.max(0, Math.min(slides.length - 1, readSlideIndexFromSearch(search)))
+      current = idx
+      slides[current].classList.add('active')
     } else {
       document.body.classList.remove('deck-presentation-active')
       for (const s of slides) s.classList.remove('active', 'exit-up')
     }
   }
 
-  function goTo(index: number) {
+  function goTo(index: number, opts?: { fromUrl?: boolean }) {
     if (index < 0 || index >= slides.length) return
     const prevSlide = slides[current]
     prevSlide.classList.remove('active')
@@ -44,6 +54,9 @@
 
     current = index
     slides[current].classList.add('active')
+    if (slidesMode && browser && !opts?.fromUrl) {
+      void goto(`?mode=slides&slide=${index}`, { replaceState: true, noScroll: true })
+    }
   }
 
   function onKeydown(e: KeyboardEvent) {
@@ -88,17 +101,24 @@
 
   onMount(() => {
     let unsub: (() => void) | undefined
-    void import('$app/stores').then(async ({ page }) => {
-      slidesMode = window.location.search.includes('mode=slides')
-      await tick()
+    slidesMode = browser && window.location.search.includes('mode=slides')
+    void tick().then(async () => {
       applyMode(slidesMode)
-
+      await tick()
       unsub = page.subscribe($p => {
+        if (!browser) return
         const newMode = $p.url.searchParams.get('mode') === 'slides'
         if (newMode !== slidesMode) {
           slidesMode = newMode
           applyMode(slidesMode)
+          return
         }
+        if (!newMode || slides.length === 0) return
+        const idx = Math.max(
+          0,
+          Math.min(slides.length - 1, readSlideIndexFromSearch($p.url.search))
+        )
+        if (idx !== current) goTo(idx, { fromUrl: true })
       })
     })
     return () => unsub?.()
@@ -121,6 +141,10 @@
 <div
   class="slide-deck-viewport"
   class:slide-deck-viewport--presenting={slidesMode}
+  class:deck-root={slidesMode}
+  class:deck-slides={slidesMode}
+  role={slidesMode ? 'region' : undefined}
+  aria-label={slidesMode ? 'Slide deck' : undefined}
   bind:this={viewport}>
   {@render children?.()}
   {#if slidesMode}
