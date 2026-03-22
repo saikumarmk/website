@@ -14,10 +14,9 @@
 /* ── Viewport ─────────────────────────────────────────────────────── */
 
 .slide-deck-viewport--presenting {
-  position: relative;
-  flex: 1 1 0;
-  min-height: 0;
-  width: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
   background: hsl(var(--b1));
   color: hsl(var(--bc));
   overflow: hidden;
@@ -32,7 +31,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: calc(4.5rem + 2vh) 8vw 6vh;
+  padding: 6vh 8vw;
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.45s ease, transform 0.45s ease;
@@ -58,25 +57,25 @@
 /* ── Chrome: progress bar + counter ───────────────────────────────── */
 
 .slide-deck-progress-bar {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   height: 3px;
   background: hsl(var(--p));
   transition: width 0.4s ease;
-  z-index: 10;
+  z-index: 1000;
   max-width: 100%;
   pointer-events: none;
 }
 
 .slide-deck-counter {
-  position: absolute;
+  position: fixed;
   bottom: 1.4rem;
   right: 2rem;
   font-size: 0.75rem;
   letter-spacing: 1px;
   color: hsl(var(--bc) / 0.5);
-  z-index: 10;
+  z-index: 1000;
   pointer-events: none;
 }
 

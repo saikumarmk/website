@@ -6,23 +6,18 @@
   let { title = '', path = '', children } = $props()
 
   let viewport: HTMLElement
-  let slides = $state<HTMLElement[]>([])
+  let slides: HTMLElement[] = []
   let current = $state(0)
+  let slideCount = $state(0)
   let slidesMode = $state(false)
   let touchStartX = 0
 
-  let slideCount = $derived(slides.length)
   let progressPct = $derived(slideCount > 1 ? (current / (slideCount - 1)) * 100 : 0)
-
-  $effect(() => {
-    if (browser && viewport) {
-      applyMode(slidesMode)
-    }
-  })
 
   function collectSlides() {
     if (!viewport) return
     slides = Array.from(viewport.querySelectorAll(':scope > section.slide'))
+    slideCount = slides.length
   }
 
   function applyMode(presenting: boolean) {
