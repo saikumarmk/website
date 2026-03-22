@@ -1,4 +1,7 @@
 <script lang="ts">
+  /** Gen8 sheet — do not rely on +layout (that only loaded on `/`). */
+  import '../../../styles/pokesprite-pokemon-gen8.css'
+
   let { pokemonName, size = 'pokemon-sprite', inline = false } = $props()
 
   let wrapperClass = $derived(`sprite-wrapper ${size}${inline ? ' inline-block align-middle ml-2' : ''}`)

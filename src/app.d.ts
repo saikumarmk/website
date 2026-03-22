@@ -74,7 +74,7 @@ declare global {
            */
           slab_title?: boolean | string
           /**
-           * Split markdown on `---` into slides; add `?mode=slides` for fullscreen deck.
+           * Split markdown on `---` into slides; deck mode uses `?mode=slides` on the client (see `/cool-stuff/deck/` handoff for static-safe links).
            */
           slides?: boolean
         }

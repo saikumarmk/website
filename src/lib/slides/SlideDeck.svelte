@@ -18,8 +18,9 @@
 
   function collectSlides() {
     if (!viewport) return
-    // Descendants, not only direct children — Svelte may insert fragment markers; `> section` can miss slides.
-    slides = Array.from(viewport.querySelectorAll('section.slide'))
+    // Only top-level slides (direct children). Nested `section.slide` inside a slide breaks
+    // index/active sync and deck CSS if we match descendants.
+    slides = Array.from(viewport.querySelectorAll(':scope > section.slide'))
     slideCount = slides.length
   }
 
@@ -107,6 +108,14 @@
     }
   }
 
+  /** Avoid `?` in `href` — static prerender crawlers emit invalid filenames for query URLs. */
+  function openPresent(e: MouseEvent) {
+    e.preventDefault()
+    const u = new URL(path || '/', window.location.origin)
+    u.searchParams.set('mode', 'slides')
+    void goto(`${u.pathname}${u.search}`, { replaceState: false })
+  }
+
   onMount(() => {
     let unsub: (() => void) | undefined
     slidesMode = browser && window.location.search.includes('mode=slides')
@@ -140,7 +149,7 @@
 <svelte:window onkeydown={onKeydown} ontouchstart={onTouchStart} ontouchend={onTouchEnd} />
 
 {#if !slidesMode}
-  <a href="{path}?mode=slides" class="slide-deck-present-btn btn btn-primary btn-sm gap-2">
+  <a href={path} class="slide-deck-present-btn btn btn-primary btn-sm gap-2" onclick={openPresent}>
     <span class="i-heroicons-outline-presentation-chart-bar w-4 h-4" />
     Present Slides
   </a>

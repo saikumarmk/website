@@ -24,7 +24,7 @@
 
 /* ── Individual slides ────────────────────────────────────────────── */
 
-.slide-deck-viewport--presenting section.slide {
+.slide-deck-viewport--presenting > section.slide {
   position: absolute;
   inset: 0;
   display: flex;
@@ -44,14 +44,14 @@
   overflow-y: auto;
 }
 
-.slide-deck-viewport--presenting section.slide.active {
+.slide-deck-viewport--presenting > section.slide.active {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
 }
 
-.slide-deck-viewport--presenting section.slide.exit-up {
+.slide-deck-viewport--presenting > section.slide.exit-up {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-24px);
@@ -125,22 +125,22 @@
   }
 }
 
-.slide-deck-viewport--presenting section.slide.active .stagger-1 {
+.slide-deck-viewport--presenting > section.slide.active .stagger-1 {
   animation: slideDeckFadeInUp 0.5s 0.1s both;
 }
-.slide-deck-viewport--presenting section.slide.active .stagger-2 {
+.slide-deck-viewport--presenting > section.slide.active .stagger-2 {
   animation: slideDeckFadeInUp 0.5s 0.25s both;
 }
-.slide-deck-viewport--presenting section.slide.active .stagger-3 {
+.slide-deck-viewport--presenting > section.slide.active .stagger-3 {
   animation: slideDeckFadeInUp 0.5s 0.4s both;
 }
-.slide-deck-viewport--presenting section.slide.active .stagger-4 {
+.slide-deck-viewport--presenting > section.slide.active .stagger-4 {
   animation: slideDeckFadeInUp 0.5s 0.55s both;
 }
-.slide-deck-viewport--presenting section.slide.active .stagger-5 {
+.slide-deck-viewport--presenting > section.slide.active .stagger-5 {
   animation: slideDeckFadeInUp 0.5s 0.7s both;
 }
-.slide-deck-viewport--presenting section.slide.active .stagger-6 {
+.slide-deck-viewport--presenting > section.slide.active .stagger-6 {
   animation: slideDeckFadeInUp 0.5s 0.85s both;
 }
 

@@ -12,7 +12,7 @@ toc: false
 
 # This site in one deck
 
-**Article** at this URL · **present** with [`?mode=slides`](/cool-stuff?mode=slides) for fullscreen. **Mermaid**, **PythonCode**, **SlabTitle**, and **PokemonSprite** come from `post_layout.svelte` (mdsvex layout exports)—works in **split slides** and **SSR**.
+**Article** at this URL · **present** with [**Present Slides** on this page](/cool-stuff/deck/) (or the button above) for fullscreen. **Mermaid**, **PythonCode**, **SlabTitle**, and **PokemonSprite** come from `post_layout.svelte` (mdsvex layout exports)—works in **split slides** and **SSR**.
 
 ---
 
@@ -39,7 +39,7 @@ toc: false
 - **⌘K / Ctrl+K** — full-text search (posts + static pages)
 - **Theme** — palette picker in the header (DaisyUI)
 - **Atom** / **Sitemap** — footer
-- **Slides** — `slides: true` in frontmatter + `?mode=slides` for deck mode (this page)
+- **Slides** — `slides: true` in frontmatter + **Present Slides** or [`/cool-stuff/deck/`](/cool-stuff/deck/) for deck mode (this page)
 
 ---
 
@@ -159,4 +159,4 @@ Wrap content in `class="slide-full-bleed"` for edge-to-edge (theme variable `--s
 
 - **Browse** [Portfolio](/portfolio) and [Archive](/archive)
 - **Search** with ⌘K — try company names, tags, or post titles
-- **Deck mode**: add `?mode=slides` to this URL for fullscreen slides
+- **Deck mode**: use **Present Slides**, or open [`/cool-stuff/deck/`](/cool-stuff/deck/) for fullscreen slides
