@@ -181,6 +181,23 @@ test.describe('slide deck (mdsvex slides: true)', () => {
     expect(thrown, thrown.join('; ')).toEqual([])
   })
 
+  test('deck mode: no ReferenceError for layout embeds (SlabTitle / Mermaid) on client', async ({
+    page
+  }) => {
+    const thrown: string[] = []
+    page.on('pageerror', err => thrown.push(err.message))
+    await page.goto('/cool-stuff/?mode=slides&slide=4', { waitUntil: 'networkidle' })
+    await expect(page.locator('section.slide.active')).toHaveAttribute('data-slide', '4')
+    await expect(
+      page.locator('section.slide.active').getByRole('heading', { name: /Diagrams & code embeds/i })
+    ).toBeVisible()
+    await expect(page.locator('.deck-root.deck-slides')).toBeVisible()
+    const bad = thrown.filter(
+      m => /SlabTitle is not defined|Mermaid is not defined|PythonCode is not defined/i.test(m)
+    )
+    expect(bad, bad.join('; ')).toEqual([])
+  })
+
   test('legacy /slides-example redirects to cool-stuff deck', async ({ page }) => {
     await page.goto('/slides-example/', { waitUntil: 'domcontentloaded' })
     await expect(page).toHaveURL(/\/cool-stuff\/?\?mode=slides/)

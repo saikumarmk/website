@@ -80,8 +80,10 @@ export default defineConfig({
   smartypants: {
     dashes: 'oldschool'
   },
+  // Relative path (not path.resolve): absolute paths in generated imports can split the
+  // layout module between client/server bundles and break `* as Components` for MD embeds.
   layout: {
-    _: resolve('src/lib/components/post_layout.svelte')
+    _: 'src/lib/components/post_layout.svelte'
   },
   highlight: {
     highlighter: async (code, lang, meta) => {

@@ -62,6 +62,16 @@ function watchExtraFiles() {
 
 export default defineConfig({
   envPrefix: 'URARA_',
+  /**
+   * mdsvex emits `import Layout, * as Components from 'src/lib/components/post_layout.svelte'`.
+   * Without this alias Rollup treats it as an unresolved bare import; with it, layout + namespace
+   * bind consistently on client and server (fixes ReferenceError: SlabTitle is not defined in MD pages).
+   */
+  resolve: {
+    alias: {
+      'src/lib': path.resolve('./src/lib')
+    }
+  },
   /** Single dev port — if 5173 is busy, fail fast instead of silently using 5174+ */
   server: {
     port: 5173,
