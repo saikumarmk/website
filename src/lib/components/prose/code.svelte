@@ -140,7 +140,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
 </svelte:head>
 
-<div class="python-code-renderer">
+<div class="python-code-renderer not-prose">
   <h1 class="renderer-title">{title}</h1>
 
   <div class="renderer-container">
@@ -202,7 +202,7 @@
 
   .code-section {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     border-bottom: 1px solid #e5e7eb;
     min-height: 100px;
   }
@@ -218,6 +218,7 @@
   }
 
   .docs-panel {
+    min-width: 0;
     padding: 1.5rem;
     background-color: white;
     border-right: 1px solid #e5e7eb;
@@ -225,12 +226,14 @@
   }
 
   .code-panel {
+    min-width: 0;
     padding: 1.5rem;
     background-color: #f9fafb;
   }
 
   .code-panel pre {
     margin: 0;
+    max-width: 100%;
     background-color: #1f2937;
     border-radius: 0.5rem;
     padding: 1rem;

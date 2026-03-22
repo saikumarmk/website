@@ -125,9 +125,9 @@ footer a {
     0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* Reveal-style vertical rhythm (revealjs.com/code) */
-.prose pre,
-.urara-prose pre {
+/* Reveal-style vertical rhythm (revealjs.com/code) — skip .not-prose (e.g. PythonCode annotator) */
+.prose pre:not(.not-prose *),
+.urara-prose pre:not(.not-prose *) {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -183,16 +183,16 @@ pre.shiki span[style*='#ae81ff'] {
   font-weight: 700 !important;
 }
 
-/* Plain pre>code fallbacks (no Shiki) */
-.prose pre:not(.shiki),
-.urara-prose pre:not(.shiki) {
+/* Plain pre>code fallbacks (no Shiki) — not inside Python annotated viewer (.not-prose) */
+.prose pre:not(.shiki):not(.not-prose *),
+.urara-prose pre:not(.shiki):not(.not-prose *) {
   @apply rounded-lg w-full min-w-0 border-0;
   background: transparent !important;
   padding: 0;
 }
 
-.prose pre:not(.shiki) code,
-.urara-prose pre:not(.shiki) code {
+.prose pre:not(.shiki):not(.not-prose *) code,
+.urara-prose pre:not(.shiki):not(.not-prose *) code {
   display: block;
   padding: 1.2rem 1.4rem;
   border-radius: 8px;
