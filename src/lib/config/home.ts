@@ -8,7 +8,7 @@ export type HomeAppCard = {
 }
 
 export const homeContent = {
-  rotatingFocus: ['video models', 'diffusion systems', 'photo effects'],
+  tagline: 'AI researcher · Machine Learning Engineer',
   statusMessages: [
     'Probably napping',
     'Applied Scientist of sorts',
@@ -23,6 +23,7 @@ export const homeContent = {
     'Playing a JRPG',
     'Listening to an Ado song',
     'Listening to 踊',
+    'Optimising concerningly slow models',
     'Improving the site into a proper workshop.',
     'Reverse-engineering Yakuza 0 data tables.',
     'Stress-testing SvelteKit, one route at a time.',
@@ -34,11 +35,15 @@ export const homeContent = {
     'reinforcement learning',
     'HPC / distributed training',
     'reverse engineering',
-    'Yakuza / RGG',
-    'Pokémon data',
+    'Yakuza',
+    'Persona/SMT',
+    'Pokémon',
     'measure theory',
     'literate programming',
-    'C',
+    'C++',
+    'Rust',
+    'Deep Learning',
+    'Machine Learning',
     'Python',
     'tech-career writing'
   ],

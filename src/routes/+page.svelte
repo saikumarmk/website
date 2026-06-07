@@ -9,13 +9,12 @@
 
   let { data }: { data: { res?: Urara.Post[] } } = $props()
   let allPosts = $derived((data.res ?? []).filter(post => !post.flags?.includes('unlisted')))
-  let wordIndex = $state(0)
   let nowIndex = $state(0)
   let nowText = $state('')
   let nowTimer: ReturnType<typeof setInterval> | undefined
   let nowTypeTimer: ReturnType<typeof setTimeout> | undefined
 
-  const { rotatingFocus, interests, appCards, statusMessages } = homeContent
+  const { tagline, interests, appCards, statusMessages } = homeContent
 
   function isLearningNote(post: Urara.Post): boolean {
     return (
@@ -100,16 +99,13 @@
     </div>
 
     <h1 class="huge">Hi, I'm <span>Sai.</span></h1>
-    <button class="kinetic-line" onclick={() => (wordIndex = (wordIndex + 1) % rotatingFocus.length)}>
-      I train <span>{rotatingFocus[wordIndex]}</span>
-    </button>
+    <p class="hero-tagline">{tagline}</p>
 
     <div class="now-line"><span>~/now ▸</span><output>{nowText}</output><i aria-hidden="true"></i></div>
 
     <p class="lede">
       ...and I write about <b>how the sausage gets made</b>: machine learning, the tech-career maze,
-      reverse-engineering side quests, and the craft of software. A growing archive, one overgrown skill tree,
-      and a Pokédex of projects.
+      reverse-engineering side quests, and the craft of software. Welcome to my personal record of all things!
     </p>
 
     <div class="hero-actions">
@@ -264,8 +260,8 @@
   }
   .dim { color: var(--dim); }
   .huge { font-family: var(--sans); font-size: clamp(2.7rem, 9vw, 7rem); line-height: .94; letter-spacing: -.045em; font-weight: 800; margin-bottom: 20px; }
-  .huge span, .kinetic-line span, .metarow em, .editorial-footer span { color: var(--accent); font-style: normal; }
-  .kinetic-line { display: block; border: 0; padding: 0; background: transparent; font-family: var(--sans); font-size: clamp(1.35rem, 4vw, 2.5rem); color: var(--fg-2); cursor: pointer; margin-bottom: 30px; }
+  .huge span, .metarow em, .editorial-footer span { color: var(--accent); font-style: normal; }
+  .hero-tagline { font-family: var(--sans); font-size: clamp(1.35rem, 4vw, 2.5rem); color: var(--fg-2); margin: 0 0 30px; max-width: 28ch; line-height: 1.25; }
   .now-line { display: inline-flex; gap: 12px; align-items: center; border: 1px solid var(--line-strong); border-left: 3px solid var(--accent); border-radius: 8px; padding: 11px 16px; margin-bottom: 24px; background: color-mix(in srgb, var(--panel) 60%, transparent); }
   .now-line span { color: var(--accent); font-weight: 700; }
   .now-line output { min-width: min(58vw, 38ch); }

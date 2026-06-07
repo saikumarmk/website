@@ -1,8 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import AsciiParticles from '$lib/components/pretext/AsciiParticles.svelte'
+  import TrainerCard from '$lib/components/about/TrainerCard.svelte'
   import { reveal } from '$lib/actions/reveal'
   import { assets } from '$lib/config/assets'
+  let { data }: { data: { res?: Urara.Post[] } } = $props()
+  let allPosts = $derived((data.res ?? []).filter(post => !post.flags?.includes('unlisted')))
+  let postCount = $derived(allPosts.length)
 
   let currentSection = $state(0)
   let mounted = $state(false)
@@ -242,6 +246,10 @@
           Have questions about my experiences at Canva, want to discuss ML research, or looking for career advice?
           Feel free to reach out!
         </p>
+
+        <div class="mb-8 max-w-3xl">
+          <TrainerCard {postCount} />
+        </div>
 
         <div class="flex flex-col gap-3 max-w-md mb-6">
           <a href="https://github.com/saikumarmk" target="_blank" class="btn btn-primary gap-2 justify-start">
