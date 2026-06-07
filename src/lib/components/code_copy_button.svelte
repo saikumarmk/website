@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { afterNavigate } from '$app/navigation'
   import { browser } from '$app/environment'
   
   let copiedCode: string | null = null
@@ -71,29 +72,10 @@
   
   onMount(() => {
     addCopyButtons()
-    
-    // Re-run when content changes (for dynamic content)
-    const observer = new MutationObserver((mutations) => {
-      // Only re-add if new code blocks are added, not when buttons are added
-      const hasNewCodeBlocks = mutations.some(mutation => 
-        Array.from(mutation.addedNodes).some(node => 
-          node instanceof HTMLElement && (
-            node.tagName === 'PRE' || 
-            node.querySelector?.('pre')
-          )
-        )
-      )
-      if (hasNewCodeBlocks) {
-        addCopyButtons()
-      }
+
+    afterNavigate(() => {
+      requestAnimationFrame(addCopyButtons)
     })
-    
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    })
-    
-    return () => observer.disconnect()
   })
 </script>
 

@@ -29,7 +29,7 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: safe center;
   align-items: flex-start;
   padding: 6vh 8vw;
   opacity: 0;

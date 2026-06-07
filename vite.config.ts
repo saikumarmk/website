@@ -1,9 +1,11 @@
 // vite define config
 import { execSync } from 'node:child_process'
-import { defineConfig } from 'vite'
+import { defineConfig, type ViteDevServer } from 'vite'
 // vite plugin
 import UnoCSS from 'unocss/vite'
 import { presetTagify, presetIcons } from 'unocss'
+import heroiconsOutline from '@iconify-json/heroicons-outline/icons.json' with { type: 'json' }
+import heroiconsSolid from '@iconify-json/heroicons-solid/icons.json' with { type: 'json' }
 import extractorSvelte from '@unocss/extractor-svelte'
 import { imagetools } from 'vite-imagetools'
 import { sveltekit as SvelteKit } from '@sveltejs/kit/vite'
@@ -50,7 +52,7 @@ function uraraMirrorPlugin() {
 function watchExtraFiles() {
   return {
     name: 'watch-extra-files',
-    configureServer(server) {
+    configureServer(server: ViteDevServer) {
       const fileToWatch = path.resolve('./urara/annotations/elo_calculator.py') // 👈 update path
       fs.watch(fileToWatch, () => {
         console.log(`[watch-extra-files] File changed: ${fileToWatch}`)
@@ -104,13 +106,13 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
-        TailwindCSS(tailwindConfig),
-        autoprefixer(),
+        TailwindCSS(tailwindConfig as any) as any,
+        autoprefixer() as any,
         ...(process.env.NODE_ENV === 'production'
           ? [
             cssnano({
               preset: ['default', { discardComments: { removeAll: true } }]
-            })
+            }) as any
           ]
           : [])
       ]
@@ -125,9 +127,15 @@ export default defineConfig({
         presetTagify({
           extraProperties: (matched: string) => (matched.startsWith('i-') ? { display: 'inline-block' } : {})
         }),
-        presetIcons({ scale: 1.5 })
+        presetIcons({
+          scale: 1.5,
+          collections: {
+            'heroicons-outline': () => heroiconsOutline as any,
+            'heroicons-solid': () => heroiconsSolid as any
+          }
+        })
       ]
-    }),
+    } as any),
     imagetools(),
     SvelteKit(),
     watchExtraFiles(),

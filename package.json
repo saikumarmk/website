@@ -32,11 +32,15 @@
     "growth:page": "node scripts/create-growth-page.mjs",
     "test:e2e": "playwright test",
     "test:e2e:dev": "E2E_DEV=1 playwright test",
+    "test:e2e:install": "playwright install chromium firefox",
+    "test:perf": "playwright test -c playwright.perf.config.ts",
+    "test:perf:preview": "E2E_PERF_PREVIEW=1 playwright test -c playwright.perf.config.ts",
     "prepare": "tsc -p tsconfig.node.json && node urara.js build"
   },
   "devDependencies": {
     "@iconify-json/heroicons-outline": "^1.1.6",
     "@iconify-json/heroicons-solid": "^1.1.7",
+    "@iconify/utils": "^3.1.0",
     "@playwright/test": "^1.49.1",
     "@sveltejs/adapter-auto": "^3.3.1",
     "@sveltejs/adapter-node": "^5.5.4",
@@ -102,6 +106,8 @@
     }
   },
   "dependencies": {
+    "@chenglou/pretext": "^0.0.5",
+    "@fiddle-digital/string-tune": "^1.1.55",
     "d3": "^7.9.0",
     "elkjs": "^0.11.0",
     "flexsearch": "^0.8.212",

@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from 'svelte'
   import { browser } from '$app/environment'
   import { site } from '$lib/config/site'
+  import { assets } from '$lib/config/assets'
 
   let { class: className = '', rounded = false } = $props()
 
@@ -53,7 +54,7 @@
   })
 </script>
 
-<footer class="border-t border-base-content/10 bg-base-200 mt-auto {className}" class:rounded-box={rounded}>
+<footer class="site-footer border-t mt-auto {className}" class:rounded-box={rounded}>
   <div class="container mx-auto px-4 py-6 max-w-5xl">
     <!-- Main footer content -->
     <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
@@ -86,7 +87,7 @@
           href="https://github.com/saikumarmk" 
           target="_blank" 
           rel="noopener noreferrer"
-          class="opacity-60 hover:opacity-100 hover:text-primary transition-all"
+          class="ds-link opacity-60 hover:opacity-100 transition-all"
           title="GitHub"
         >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -97,7 +98,7 @@
           href="https://www.linkedin.com/in/saikumarmk/" 
           target="_blank" 
           rel="noopener noreferrer"
-          class="opacity-60 hover:opacity-100 hover:text-primary transition-all"
+          class="ds-link opacity-60 hover:opacity-100 transition-all"
           title="LinkedIn"
         >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -105,9 +106,9 @@
           </svg>
         </a>
         <a 
-          href="/assets/resume.pdf" 
+          href={assets.resume}
           target="_blank"
-          class="opacity-60 hover:opacity-100 hover:text-primary transition-all"
+          class="ds-link opacity-60 hover:opacity-100 transition-all"
           title="Résumé"
         >
           <span class="i-heroicons-outline-document-text w-5 h-5"></span>
@@ -116,20 +117,41 @@
     </div>
     
     <!-- Bottom row -->
-    <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-4 pt-4 border-t border-base-content/5 text-xs opacity-50">
+    <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-4 pt-4 border-t footer-bottom text-xs opacity-50">
       <span>Built with SvelteKit</span>
       <span>•</span>
-      <a href="https://github.com/saikumarmk/website" target="_blank" rel="noopener" class="hover:text-primary hover:opacity-100 transition-colors">
+      <a href="https://github.com/saikumarmk/website" target="_blank" rel="noopener" class="ds-link hover:opacity-100 transition-colors">
         Source Code
       </a>
       <span>•</span>
-      <a href="/archive" class="hover:text-primary hover:opacity-100 transition-colors">
+      <a href="/archive" class="ds-link hover:opacity-100 transition-colors">
         Blog
       </a>
       <span>•</span>
-      <a href="/sitemap.xml" class="hover:text-primary hover:opacity-100 transition-colors">
+      <a href="/sitemap.xml" class="ds-link hover:opacity-100 transition-colors">
         Sitemap
       </a>
     </div>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    border-color: hsl(var(--bc) / 0.1);
+    background: hsl(var(--b2));
+  }
+
+  .footer-bottom {
+    border-color: hsl(var(--bc) / 0.05);
+  }
+
+  :global(.site-editorial-surface) .site-footer {
+    border-color: var(--site-line);
+    background: var(--site-bg);
+    color: var(--site-muted);
+  }
+
+  :global(.site-editorial-surface) .footer-bottom {
+    border-color: var(--site-line);
+  }
+</style>

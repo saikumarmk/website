@@ -91,7 +91,7 @@
   function highlightMatch(text: string, query: string): string {
     if (!text || !query) return text
     const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
-    return text.replace(regex, '<mark class="bg-warning/40 rounded px-0.5">$1</mark>')
+    return text.replace(regex, '<mark class="search-mark">$1</mark>')
   }
 
   function normalizeTags(doc: { tags?: string | string[] }) {
@@ -268,7 +268,7 @@
 {#if isOpen}
   <!-- Modal overlay -->
   <div
-    class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-start justify-center pt-[10vh] px-4 animate-in fade-in duration-200"
+    class="search-overlay fixed inset-0 z-[60] flex items-start justify-center pt-[10vh] px-4 animate-in fade-in duration-200"
     onclick={close}
     onkeydown={(e) => e.key === 'Enter' && close()}
     role="button"
@@ -277,15 +277,16 @@
     
     <!-- Search modal -->
     <div
-      class="w-full max-w-2xl bg-base-100 rounded-lg shadow-2xl animate-in slide-in-from-top-4 duration-300"
+      class="search-dialog w-full max-w-2xl rounded-lg shadow-2xl animate-in slide-in-from-top-4 duration-300"
       onclick={e => e.stopPropagation()}
       onkeydown={e => e.stopPropagation()}
       role="dialog"
       aria-modal="true"
-      aria-labelledby="search-title">
+      aria-labelledby="search-title"
+      tabindex="-1">
       
       <!-- Search input -->
-      <div class="flex items-center gap-3 px-4 py-3 border-b border-base-content/10">
+      <div class="search-bar flex items-center gap-3 px-4 py-3 border-b">
         <span class="i-heroicons-outline-search w-5 h-5 opacity-50"></span>
         <input
           bind:this={searchInput}
@@ -293,16 +294,16 @@
           onkeydown={handleInputKeydown}
           type="text"
           placeholder={indexLoading ? "Loading search..." : "Search posts..."}
-          class="flex-1 bg-transparent outline-none text-base"
+          class="search-input flex-1 bg-transparent outline-none text-base"
           id="search-title"
           autocomplete="off"
           spellcheck="false"
           disabled={indexLoading} />
-        <kbd class="kbd kbd-sm">ESC</kbd>
+        <kbd class="search-kbd">ESC</kbd>
       </div>
       
       <!-- Search results -->
-      <div class="max-h-[60vh] overflow-y-auto">
+      <div class="search-results max-h-[60vh] overflow-y-auto">
         {#if indexLoading}
           <div class="px-4 py-8 text-center opacity-60">
             <span class="loading loading-spinner loading-md"></span>
@@ -321,7 +322,7 @@
                   href={post.path}
                   onclick={close}
                   data-search-index={index}
-                  class="flex flex-col px-4 py-3 hover:bg-base-200 transition-colors cursor-pointer {index === selectedIndex ? 'bg-base-200' : ''}"
+                  class="search-result flex flex-col px-4 py-3 transition-colors cursor-pointer {index === selectedIndex ? 'selected' : ''}"
                   onmouseenter={() => selectedIndex = index}>
                   <div class="flex items-start justify-between gap-2">
                     <div class="flex items-center gap-2">
@@ -332,7 +333,7 @@
                       {/if}
                       <span class="font-semibold">{post.title ?? post.path.slice(1)}</span>
                       {#if post.isStatic}
-                        <span class="badge badge-xs badge-primary">Page</span>
+                        <span class="search-badge">Page</span>
                       {/if}
                     </div>
                     {#if index === selectedIndex}
@@ -350,7 +351,7 @@
                   {#if post.tags && post.tags.length > 0}
                     <div class="flex gap-2 mt-2 flex-wrap">
                       {#each post.tags.slice(0, 3) as tag}
-                        <span class="badge badge-xs badge-outline">#{tag}</span>
+                        <span class="search-tag">#{tag}</span>
                       {/each}
                     </div>
                   {/if}
@@ -368,20 +369,20 @@
       </div>
       
       <!-- Footer -->
-      <div class="px-4 py-3 border-t border-base-content/10 flex items-center justify-between text-xs opacity-60">
+      <div class="search-footer px-4 py-3 border-t flex items-center justify-between text-xs">
         <div class="flex items-center gap-4">
           <span class="flex items-center gap-1">
-            <kbd class="kbd kbd-xs">↑</kbd>
-            <kbd class="kbd kbd-xs">↓</kbd>
+            <kbd class="search-kbd small">↑</kbd>
+            <kbd class="search-kbd small">↓</kbd>
             Navigate
           </span>
           <span class="flex items-center gap-1">
-            <kbd class="kbd kbd-xs">↵</kbd>
+            <kbd class="search-kbd small">↵</kbd>
             Select
           </span>
         </div>
         <span class="flex items-center gap-1">
-          <kbd class="kbd kbd-xs">ESC</kbd>
+          <kbd class="search-kbd small">ESC</kbd>
           Close
         </span>
       </div>
@@ -392,9 +393,113 @@
 <style>
   .line-clamp-2 {
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  :global(.search-mark) {
+    background: hsl(var(--p) / 0.22);
+    color: inherit;
+    border-radius: 0.25rem;
+    padding-inline: 0.125rem;
+  }
+
+  .search-overlay {
+    background: rgb(0 0 0 / 0.62);
+    backdrop-filter: blur(8px);
+  }
+
+  .search-dialog {
+    border: 1px solid hsl(var(--bc) / 0.14);
+    background: hsl(var(--b1));
+    color: hsl(var(--bc));
+    overflow: hidden;
+  }
+
+  .search-bar,
+  .search-footer {
+    border-color: hsl(var(--bc) / 0.12);
+  }
+
+  .search-footer {
+    color: hsl(var(--bc) / 0.62);
+  }
+
+  .search-result:hover,
+  .search-result.selected {
+    background: hsl(var(--b2));
+  }
+
+  .search-kbd {
+    border: 1px solid hsl(var(--bc) / 0.16);
+    border-bottom-width: 2px;
+    border-radius: 0.35rem;
+    background: hsl(var(--b2));
+    color: hsl(var(--bc) / 0.72);
+    padding: 0.12rem 0.45rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    line-height: 1.2;
+  }
+
+  .search-kbd.small {
+    font-size: 0.65rem;
+    padding: 0.08rem 0.32rem;
+  }
+
+  .search-badge,
+  .search-tag {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid hsl(var(--p) / 0.38);
+    color: hsl(var(--p));
+    font-size: 0.68rem;
+    line-height: 1;
+    padding: 0.15rem 0.45rem;
+  }
+
+  .search-badge {
+    background: hsl(var(--p) / 0.14);
+  }
+
+  :global(html.site-editorial-root) .search-dialog {
+    border-color: var(--site-line-strong);
+    background: color-mix(in srgb, var(--site-panel) 94%, transparent);
+    color: var(--site-fg);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 0.4);
+  }
+
+  :global(html.site-editorial-root) .search-bar,
+  :global(html.site-editorial-root) .search-footer {
+    border-color: var(--site-line);
+  }
+
+  :global(html.site-editorial-root) .search-footer {
+    color: var(--site-muted);
+  }
+
+  :global(html.site-editorial-root) .search-result:hover,
+  :global(html.site-editorial-root) .search-result.selected {
+    background: var(--site-panel-2);
+  }
+
+  :global(html.site-editorial-root) .search-kbd {
+    border-color: var(--site-line-strong);
+    background: var(--site-panel-2);
+    color: var(--site-muted);
+  }
+
+  :global(html.site-editorial-root) .search-badge,
+  :global(html.site-editorial-root) .search-tag {
+    border-color: color-mix(in srgb, var(--site-accent) 38%, transparent);
+    color: var(--site-accent);
+  }
+
+  :global(html.site-editorial-root) .search-badge {
+    background: color-mix(in srgb, var(--site-accent) 14%, transparent);
   }
   
   .animate-in {

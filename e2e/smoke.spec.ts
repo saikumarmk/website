@@ -1,4 +1,5 @@
 import { test, expect } from './fixtures'
+import { assets } from '../src/lib/config/assets'
 
 /** Core routes touched by recent config / dependency cleanup */
 const paths = ['/', '/about', '/portfolio', '/archive', '/growth/2026', '/playbook']
@@ -21,6 +22,15 @@ test('search index JSON has posts and pre-serialized FlexSearch chunks', async (
   expect(data.posts.length).toBeGreaterThan(0)
   expect(Array.isArray(data.serializedIndex)).toBeTruthy()
   expect(data.serializedIndex.length).toBeGreaterThan(0)
+})
+
+test('résumé link on homepage resolves', async ({ page, request }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  const resumeLink = page.getByRole('link', { name: /résumé/i }).first()
+  await expect(resumeLink).toHaveAttribute('href', assets.resume)
+
+  const res = await request.get(assets.resume)
+  expect(res.ok()).toBeTruthy()
 })
 
 test('search modal finishes loading and returns a result', async ({ page }) => {

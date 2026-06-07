@@ -51,7 +51,7 @@
 <Head {post} />
 
 <div
-  class="flex flex-col xl:flex-row justify-center"
+  class="post-page-shell flex flex-col xl:flex-row justify-center"
   class:deck-presentation-shell={deckPresentation}>
   <!-- Post Section -->
   <div
@@ -88,3 +88,15 @@
     </div>
   {/if}
 </div>
+
+<style>
+  :global(.site-editorial-surface) .post-page-shell {
+    min-height: 100vh;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: clip;
+    background: var(--site-bg-image), var(--site-bg);
+    color: var(--site-fg);
+    font-family: var(--site-mono2);
+  }
+</style>

@@ -1,34 +1,19 @@
 <script lang="ts">
 import { experience as experienceStore } from '$lib/stores/portfolio'
 import { get } from 'svelte/store'
-import { fade } from 'svelte/transition'
-import Badge from '$lib/components/portable-portfolio/badge.svelte'
-  
+import BrandImage from '$lib/components/ui/BrandImage.svelte'
+import { reveal } from '$lib/actions/reveal'
+import ProjectDexPage from './projects/+page.svelte'
+
+  type PortfolioView = 'experience' | 'dex'
+  let activeView = $state<PortfolioView>('experience')
+
   const allExperience = get(experienceStore)
-  
-  // Flatten experience into timeline items
-  const timelineItems = allExperience.flatMap(exp => 
-    exp.positions.map(pos => ({
-      company: exp.company,
-      img: exp.img,
-      position: pos.position,
-      duration: pos.duration,
-      listItems: pos.listItems,
-      description: pos.description,
-      badges: pos.badges ?? [],
-      buttons: pos.buttons ?? [],
-      tags: exp.tags,
-      // Parse year for sorting (take the end year or "Current")
-      sortYear: pos.duration.includes('Current') ? 9999 : 
-                parseInt(pos.duration.split('-')[1]?.trim() || pos.duration.split('-')[0]?.trim() || '0')
-    }))
-  ).sort((a, b) => b.sortYear - a.sortYear)
-  
-  function getCategoryClass(tags: string[]) {
-    if (tags.includes('Work')) return 'border-primary'
-    if (tags.includes('Education')) return 'border-secondary'
-    if (tags.includes('Extracurricular')) return 'border-accent'
-    return 'border-base-content/20'
+
+  function companyTenure(durations: string[]): string {
+    if (!durations.length) return ''
+    if (durations.length === 1) return durations[0]
+    return `${durations[durations.length - 1].split('-')[0].trim()} - ${durations[0].includes('Current') ? 'Current' : durations[0].split('-').at(-1)?.trim()}`
   }
 </script>
 
@@ -36,84 +21,286 @@ import Badge from '$lib/components/portable-portfolio/badge.svelte'
   <title>Portfolio | saikumarmk.com</title>
 </svelte:head>
 
-<div class="container mx-auto px-4 py-20">
-  <div class="max-w-6xl mx-auto">
-    <!-- Header -->
-    <div class="text-center mb-12">
-      <h1 class="text-5xl font-bold mb-4">Portfolio</h1>
+<div class="portfolio-page site-editorial-page">
+  <div class="wrap py-20">
+    <div class="text-center mb-12" use:reveal={{ direction: 'up', duration: 600 }}>
+      <p class="portfolio-eyebrow mb-3">portfolio</p>
+      <h1 class="text-5xl font-bold mb-4">Experience & projects</h1>
       <p class="text-lg opacity-70 mb-8">Experience, projects, and skills</p>
-      
-      <!-- View switcher -->
-      <div class="flex justify-center gap-2 flex-wrap">
-        <a href="/portfolio/projects" class="btn btn-primary gap-2">
+
+      <div class="join">
+        <button
+          class="btn join-item gap-2"
+          class:btn-primary={activeView === 'experience'}
+          class:btn-ghost={activeView !== 'experience'}
+          onclick={() => (activeView = 'experience')}
+        >
+          <span class="i-heroicons-outline-clock w-5 h-5"></span>
+          Experience
+        </button>
+        <button
+          class="btn join-item gap-2"
+          class:btn-primary={activeView === 'dex'}
+          class:btn-ghost={activeView !== 'dex'}
+          onclick={() => (activeView = 'dex')}
+        >
           <span class="i-heroicons-outline-squares-2x2 w-5 h-5"></span>
           Project Dex
-        </a>
-        <a href="/portfolio/list" class="btn btn-ghost gap-2">
-          <span class="i-heroicons-outline-list-bullet w-5 h-5"></span>
-          List View
-        </a>
+        </button>
       </div>
     </div>
-    
-    <!-- Timeline View -->
-    <div in:fade={{ duration: 300 }} class="relative">
-      <!-- Center line -->
-      <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-primary/30 to-transparent hidden md:block"></div>
-      
-      <div class="space-y-12">
-        {#each timelineItems as item, idx}
-          <div class="relative">
-            <div class="md:flex md:items-start {idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}">
-              <div class="md:w-1/2 {idx % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}">
-                <div class="card bg-base-200 hover:bg-base-300 transition-all p-6 shadow-lg hover:shadow-xl hover:-translate-y-1 duration-300 border-l-4 {getCategoryClass(item.tags)}">
-                  <!-- Company header -->
-                  <div class="flex items-center gap-3 mb-3">
-                    <img src={item.img} alt={item.company} class="h-10 w-auto rounded" />
-                    <div>
-                      <h3 class="font-bold text-lg">{item.position}</h3>
-                      <p class="text-sm opacity-70">{item.company}</p>
-                    </div>
-                  </div>
-                  
-                  <div class="text-sm opacity-60 mb-3">{item.duration}</div>
-                  
-                  <!-- Content -->
-                  {#if item.listItems?.length}
-                    <ul class="space-y-2 text-sm mb-4">
-                      {#each item.listItems as li}
-                        <li class="flex gap-2">
-                          <span class="i-heroicons-outline-chevron-right w-4 h-4 flex-shrink-0 mt-0.5 text-primary"></span>
-                          <span>{li}</span>
-                        </li>
-                      {/each}
-                    </ul>
-                  {:else if item.description}
-                    <p class="text-sm mb-4">{item.description}</p>
-                  {/if}
-                  
-                  <!-- Footer -->
-                  <div class="flex flex-wrap gap-2">
-                    {#each item.badges as badge}
-                      <Badge name={badge} />
-                    {/each}
-                    {#each item.buttons as btn}
-                      <a href={btn.href} target="_blank" rel="noopener noreferrer" class="text-sm underline opacity-70 hover:opacity-100">
-                        {btn.label}
-                      </a>
-                    {/each}
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Timeline dot -->
-              <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 top-8 w-4 h-4 rounded-full ring-4 ring-base-100 z-10 {item.tags.includes('Work') ? 'bg-primary' : item.tags.includes('Education') ? 'bg-secondary' : 'bg-accent'}"></div>
-              
-              <div class="hidden md:block md:w-1/2"></div>
+
+    {#if activeView === 'experience'}
+    <div class="experience-list">
+      {#each allExperience as company, idx}
+        <section class="xp-company" use:reveal={{ direction: 'up', delay: idx * 70, duration: 500 }}>
+          <div class="xp-head">
+            <BrandImage src={company.img} alt={company.company} class="xp-logo" fallbackText={company.company} />
+            <div>
+              <h2>{company.company}</h2>
+              <p>{company.tags.join(' / ')} · {companyTenure(company.positions.map(position => position.duration))}</p>
             </div>
           </div>
-        {/each}
+          <div class="xp-roles">
+            {#each company.positions as position}
+              <article class="xp-role">
+                <div class="xp-role-top">
+                  <h3>{position.position}</h3>
+                  <time>{position.duration}</time>
+                </div>
+                {#if position.listItems?.length}
+                  <ul>
+                    {#each position.listItems as item}
+                      <li>{item}</li>
+                    {/each}
+                  </ul>
+                {:else if position.description}
+                  <p>{position.description}</p>
+                {/if}
+                <div class="xp-links">
+                  {#each position.badges ?? [] as badge}
+                    <span>{badge}</span>
+                  {/each}
+                  {#each position.buttons ?? [] as button}
+                    <a href={button.href} target="_blank" rel="noopener noreferrer">{button.label} ↗</a>
+                  {/each}
+                </div>
+              </article>
+            {/each}
+          </div>
+        </section>
+      {/each}
       </div>
-    </div>
+    {:else}
+      <div class="dex-shell">
+        <ProjectDexPage />
+      </div>
+    {/if}
   </div>
 </div>
+
+<style>
+  .portfolio-page {
+    --bg: var(--site-bg);
+    --bg-tint: var(--site-bg-tint);
+    --panel: var(--site-panel);
+    --panel-2: var(--site-panel-2);
+    --line: var(--site-line);
+    --line-strong: var(--site-line-strong);
+    --fg: var(--site-fg);
+    --fg-2: var(--site-fg-2);
+    --muted: var(--site-muted);
+    --dim: var(--site-dim);
+    --accent: var(--site-accent);
+    --accent-ink: var(--site-accent-ink);
+    --mono: var(--site-mono);
+    --mono2: var(--site-mono2);
+    --sans: var(--site-sans);
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-inline: clamp(20px, 5vw, 84px);
+  }
+
+  :global(.portfolio-page .btn-primary) {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  :global(.portfolio-page .btn-ghost) {
+    color: var(--muted);
+  }
+
+  .portfolio-eyebrow {
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  .portfolio-page h1 {
+    font-family: var(--sans);
+    letter-spacing: -0.04em;
+  }
+
+  .experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .xp-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  :global(.xp-logo) {
+    width: 46px;
+    height: 46px;
+    flex: none;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--panel-2);
+    object-fit: cover;
+  }
+
+  .xp-head h2 {
+    font-family: var(--mono);
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--fg);
+  }
+
+  .xp-head p {
+    color: var(--dim);
+    font-size: 13px;
+  }
+
+  .xp-roles {
+    border-left: 1px solid var(--line);
+    margin-left: 23px;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .xp-role {
+    position: relative;
+  }
+
+  .xp-role::before {
+    content: "";
+    position: absolute;
+    left: -34.5px;
+    top: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+
+  .xp-role-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .xp-role h3 {
+    font-family: var(--mono);
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--fg);
+  }
+
+  .xp-role time {
+    color: var(--dim);
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+
+  .xp-role ul {
+    list-style: none;
+    margin: 10px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .xp-role li,
+  .xp-role p {
+    color: var(--fg-2);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 70ch;
+  }
+
+  .xp-role li {
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .xp-role li::before {
+    content: "›";
+    position: absolute;
+    left: 2px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .xp-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    margin-top: 12px;
+    align-items: center;
+  }
+
+  .xp-links span {
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 9px;
+  }
+
+  .xp-links a {
+    color: var(--muted);
+    border-bottom: 1px solid var(--line-strong);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    transition: color .15s, border-color .15s;
+  }
+
+  .xp-links a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .dex-shell {
+    --p: inherit;
+    --pc: inherit;
+    --b1: inherit;
+    --b2: inherit;
+    --b3: inherit;
+    --bc: inherit;
+    --er: 0 74% 58%;
+  }
+
+  :global(.dex-shell .pokedex-container) {
+    min-height: auto;
+    padding-top: 3rem;
+    padding-bottom: 0;
+  }
+</style>
