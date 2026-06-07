@@ -1,10 +1,13 @@
 <script lang="ts" module>
-  import Image from '$lib/components/prose/img.svelte'
-  import table from '$lib/components/prose/table.svelte'
-  import Mermaid from '$lib/components/prose/mermaid.svelte'
-  import PythonCode from '$lib/components/prose/code.svelte'
-  import SlabTitle from '$lib/components/slab_title.svelte'
-  import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
+  import {
+    Image,
+    table,
+    Mermaid,
+    PythonCode,
+    SlabTitle,
+    PokemonSprite,
+    SpriteAscii
+  } from '$lib/mdsvex/embed-registry'
   /**
    * mdsvex rewrites tags to `Components.Name` using **exported names**; HTML/rehype lowercases tag names,
    * so we export PascalCase + lowercase aliases (e.g. SlabTitle + slabtitle).
@@ -19,7 +22,9 @@
     SlabTitle,
     SlabTitle as slabtitle,
     PokemonSprite,
-    PokemonSprite as pokemonsprite
+    PokemonSprite as pokemonsprite,
+    SpriteAscii,
+    SpriteAscii as spriteascii
   }
 </script>
 

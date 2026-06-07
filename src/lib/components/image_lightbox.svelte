@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { afterNavigate } from '$app/navigation'
   import { browser } from '$app/environment'
   
   let isOpen = false
@@ -10,7 +11,6 @@
     currentImage = src
     currentAlt = alt
     isOpen = true
-    // Prevent body scroll when lightbox is open
     if (browser) {
       document.body.style.overflow = 'hidden'
     }
@@ -34,11 +34,9 @@
   function attachClickHandlers() {
     if (!browser) return
     
-    // Find all images in prose content (blog posts)
     const images = document.querySelectorAll('.urara-prose img, .prose img')
     
     images.forEach((img) => {
-      // Skip if already has handler
       if (img.classList.contains('lightbox-enabled')) return
       
       img.classList.add('lightbox-enabled', 'cursor-zoom-in')
@@ -52,44 +50,23 @@
   
   onMount(() => {
     attachClickHandlers()
-    
-    // Re-attach handlers when content changes
-    const observer = new MutationObserver((mutations) => {
-      // Only re-attach if new images are added
-      const hasNewImages = mutations.some(mutation => 
-        Array.from(mutation.addedNodes).some(node => 
-          node instanceof HTMLElement && (
-            node.tagName === 'IMG' || 
-            node.querySelector?.('img')
-          )
-        )
-      )
-      if (hasNewImages) {
-        attachClickHandlers()
-      }
+
+    afterNavigate(() => {
+      requestAnimationFrame(attachClickHandlers)
     })
-    
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    })
-    
-    return () => observer.disconnect()
   })
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
 
 {#if isOpen}
-  <!-- Lightbox overlay -->
   <div
-    class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
+    class="fixed inset-0 z-[100] overlay-dim overlay-dim--heavy flex items-center justify-center p-4 animate-in fade-in duration-200"
     onclick={closeLightbox}
     onkeydown={(e) => e.key === 'Enter' && closeLightbox()}
     role="button"
     tabindex="0"
     aria-label="Close lightbox">
-    <!-- Close button -->
     <button
       onclick={closeLightbox}
       class="absolute top-4 right-4 btn btn-circle btn-ghost text-white hover:bg-white/20 z-10"
@@ -97,7 +74,6 @@
       <span class="i-heroicons-outline-x w-6 h-6"></span>
     </button>
     
-    <!-- Image container -->
     <div
       class="relative max-w-7xl max-h-full flex items-center justify-center"
       onclick={e => e.stopPropagation()}
@@ -117,7 +93,6 @@
       {/if}
     </div>
     
-    <!-- Instructions -->
     <div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm flex items-center gap-2">
       <kbd class="kbd kbd-sm">ESC</kbd>
       <span>or click outside to close</span>
@@ -167,4 +142,3 @@
     }
   }
 </style>
-

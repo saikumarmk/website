@@ -1,3 +1,8 @@
+<!--
+  Legacy slide deck: markdown `slides: true` + remark-slide-split → <section class="slide">.
+  Query-string presentation mode (`?mode=slides`). Kept for existing decks; not the target
+  architecture for new presentations.
+-->
 <script lang="ts">
   import { onMount, onDestroy, tick } from 'svelte'
   import { browser } from '$app/environment'

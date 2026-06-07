@@ -9,7 +9,6 @@
   import Image from '$lib/components/prose/img.svelte'
   import RandomPokemonSprite from '$lib/components/pkmn/random_pokemon.svelte'
   import Pagination from '$lib/components/post_pagination.svelte'
-  import Comment from '$lib/components/post_comment.svelte'
   import RelatedPosts from '$lib/components/related_posts.svelte'
   import SlabTitle from '$lib/components/slab_title.svelte'
 
@@ -60,9 +59,9 @@
   class:group={preview}
   class:image-full={preview && post.type === 'article' && post.image}
   class:before:!rounded-none={preview && post.image}
-  class="h-entry z-10 {deckPresentation
+  class="h-entry post-surface z-10 {deckPresentation
     ? 'w-full max-w-none bg-transparent shadow-none p-0 m-0 flex flex-col flex-1 min-h-0 min-h-[100dvh] overflow-hidden border-0'
-    : 'card bg-base-100 rounded-none md:rounded-box md:shadow-xl overflow-hidden'}">
+    : 'card ds-card rounded-none md:rounded-box overflow-hidden'}">
   {#if !preview && !deckPresentation}
     {#if breadcrumb}{@render breadcrumb()}{/if}
   {/if}
@@ -150,7 +149,7 @@
       {/if}
     </main>
     {#if !preview && post.tags && !deckPresentation}
-      <div class="divider mt-4 mb-0" />
+      <div class="divider mt-4 mb-0"></div>
       <div>
         {#each post.tags as tag}
           <a href="/?tags={tag}" class="btn btn-sm btn-ghost normal-case mt-2 mr-2 p-category">
@@ -169,8 +168,26 @@
     {#if (prev || next) && !post.flags?.includes('pagination-disabled') && !post.flags?.includes('unlisted')}
       <Pagination {next} {prev} />
     {/if}
-    {#if browser && postConfig.comment && !post.flags?.includes('comment-disabled')}
-      <Comment {post} config={postConfig.comment} />
-    {/if}
   {/if}
 </svelte:element>
+
+<style>
+  :global(.site-editorial-surface) .post-surface {
+    color: var(--site-fg);
+  }
+
+  :global(.site-editorial-surface) .post-surface :global(.card-body) {
+    background: transparent;
+  }
+
+  :global(.site-editorial-surface) .post-surface :global(.card-title) {
+    font-family: var(--site-sans);
+    letter-spacing: -0.035em;
+    color: var(--site-fg);
+  }
+
+  :global(.site-editorial-surface) .post-surface :global(.divider)::before,
+  :global(.site-editorial-surface) .post-surface :global(.divider)::after {
+    background-color: var(--site-line);
+  }
+</style>

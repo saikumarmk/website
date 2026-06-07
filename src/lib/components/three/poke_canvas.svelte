@@ -247,6 +247,8 @@
   function animate(): void {
     animationFrameId = requestAnimationFrame(animate)
 
+    if (document.hidden) return
+
     const deltaTime = 1 / 60 // 60 FPS target
     const bounds = getScreenBounds()
     const halfWidth = bounds.width / 2
@@ -305,10 +307,10 @@
     camera.position.z = 100
 
     // Renderer
-    renderer = new THREE.WebGLRenderer({ alpha: false, antialias: true })
-    //renderer.outputColorSpace = THREE.SRGBColorSpace
+    const isFirefox = /firefox/i.test(navigator.userAgent)
+    renderer = new THREE.WebGLRenderer({ alpha: false, antialias: !isFirefox })
     renderer.setSize(width, height)
-    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isFirefox ? 1.25 : 2))
     renderer.setClearColor(0x000000, 0) // Transparent background
     container.appendChild(renderer.domElement)
 

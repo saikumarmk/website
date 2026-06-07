@@ -301,6 +301,7 @@
     // Animate
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate)
+      if (document.hidden) return
       const time = Date.now() * 0.001
 
       starfield.rotation.y += 0.0001

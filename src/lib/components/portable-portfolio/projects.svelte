@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { projects } from '$lib/stores/portfolio' // store with data
-  import { fly } from 'svelte/transition'
+  import { projects } from '$lib/stores/portfolio'
   import { get } from 'svelte/store'
   import Badge from '$lib/components/portable-portfolio/badge.svelte'
+  import { reveal } from '$lib/actions/reveal'
   let color = 'teal'
 
-  /* --- tag list --- */
   const options = [
     'All',
     ...new Set(
@@ -23,13 +22,11 @@
 </script>
 
 <section id="projects" class="max-w-3xl mx-auto pb-36 px-4 text-center">
-  <!-- heading -->
-  <div class="text-left mb-6">
+  <div class="text-left mb-6" use:reveal={{ direction: 'up' }}>
     <h2 class="text-xl font-bold mb-4">Projects</h2>
   </div>
 
-  <!-- filter buttons -->
-  <div class="flex justify-center my-8 gap-2">
+  <div class="flex justify-center my-8 gap-2" use:reveal={{ direction: 'up', delay: 100 }}>
     {#each options as tag}
       <button
         class={`bg-base-100 px-3 py-1 rounded border md:rounded-box ${selected === tag ? 'md:shadow-xl' : 'border-gray-300'}`}
@@ -39,11 +36,12 @@
     {/each}
   </div>
 
-  <!-- projects grid -->
   <div class="grid gap-5 px-4" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
-    {#each filteredProjects as project (project.id)}
-      <div in:fly={{ y: 24, duration: 250 }} class="rounded-lg shadow p-4 bg-base-100 h-full flex flex-col">
-        <!-- GitHub link icon (if link exists) -->
+    {#each filteredProjects as project, i (project.id)}
+      <div
+        class="rounded-lg shadow p-4 bg-base-100 h-full flex flex-col"
+        use:reveal={{ direction: 'up', delay: i * 60 }}
+      >
         {#if project.link}
           <div class="flex justify-end">
             <a href={project.link} target="_blank" rel="noopener noreferrer" class="hover:text-gray-600">

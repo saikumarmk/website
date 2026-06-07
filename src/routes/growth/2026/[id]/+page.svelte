@@ -18,6 +18,7 @@
   <title>{node ? node.title : 'Node Not Found'} - Yggdrasil 2026</title>
 </svelte:head>
 
+<div class="growth-detail site-editorial-page">
 <div class="container mx-auto px-4 py-8 max-w-4xl">
   <div class="mb-4">
     <a href="/growth/2026" class="btn btn-sm btn-ghost">← Back to Yggdrasil</a>
@@ -25,7 +26,7 @@
 
   {#if node}
     {@const pokemon = BRANCH_POKEMON[node.branch]}
-    <div class="card bg-base-200 shadow-xl">
+    <div class="card ds-card">
       <div class="card-body">
         <div class="flex items-center gap-4 mb-4">
           {#if pokemon}
@@ -77,7 +78,7 @@
       </div>
     </div>
   {:else}
-    <div class="card bg-base-200 shadow-xl">
+    <div class="card ds-card">
       <div class="card-body text-center">
         <h1 class="card-title text-3xl justify-center mb-4">Node Not Found</h1>
         <p class="text-lg mb-4">
@@ -88,3 +89,11 @@
     </div>
   {/if}
 </div>
+</div>
+
+<style>
+  .growth-detail {
+    color: var(--site-fg);
+    font-family: var(--site-mono2);
+  }
+</style>

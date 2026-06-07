@@ -1,4 +1,6 @@
 /* tailwind */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700;9..40,800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
 /* Pokemon sprites lazy-loaded per page - see homepage and growth tree */
 @import 'styles/pokesprite-inventory.css';
 @import 'styles/pokesprite-misc.css';
@@ -20,8 +22,17 @@
 /* global */
 
 html {
+  --editorial-root-bg: hsl(240 11% 5%);
   @apply !bg-base-200 scroll-smooth overflow-y-scroll;
   cursor: url('/assets/fatpika-cursor.png'), auto;
+}
+
+html.site-editorial-root {
+  background: var(--editorial-root-bg) !important;
+}
+
+html.site-editorial-root body {
+  background: var(--editorial-root-bg);
 }
 
 * {
@@ -34,6 +45,183 @@ a, button, [role="button"], input[type="submit"], input[type="button"] {
 
 ::selection {
   @apply bg-primary/20;
+}
+
+/* Editorial route theme: DaisyUI-style tokens shared by home/archive/about/portfolio and header chrome. */
+html.site-editorial-root,
+.site-editorial-surface {
+  --p: 260 100% 83%;
+  --pc: 263 65% 10%;
+  --s: 188 91% 57%;
+  --sc: 220 24% 8%;
+  --a: 42 97% 72%;
+  --ac: 240 11% 5%;
+  --n: 240 15% 13%;
+  --nc: 40 14% 90%;
+  --b1: 240 11% 5%;
+  --b2: 240 15% 9%;
+  --b3: 240 15% 13%;
+  --bc: 40 14% 90%;
+  --er: 0 74% 58%;
+  --site-bg: hsl(var(--b1));
+  --site-bg-tint: hsl(244 19% 8%);
+  --site-bg-image: radial-gradient(135% 90% at 50% -10%, var(--site-bg-tint), var(--site-bg) 55%);
+  --site-panel: hsl(var(--b2));
+  --site-panel-2: hsl(var(--b3));
+  --site-line: hsl(var(--bc) / 0.08);
+  --site-line-strong: hsl(var(--bc) / 0.15);
+  --site-fg: hsl(var(--bc));
+  --site-fg-2: hsl(var(--bc) / 0.8);
+  --site-muted: hsl(var(--bc) / 0.6);
+  --site-dim: hsl(var(--bc) / 0.42);
+  --site-accent: hsl(var(--p));
+  --site-accent-ink: hsl(var(--pc));
+  --site-mono: 'Space Mono', ui-monospace, monospace;
+  --site-mono2: 'JetBrains Mono', ui-monospace, monospace;
+  --site-sans: 'DM Sans', system-ui, sans-serif;
+  color: var(--site-fg);
+  background: var(--site-bg);
+  color-scheme: dark;
+}
+
+:root[data-theme='cmyk'] {
+  --editorial-root-bg: hsl(40 33% 96%);
+}
+
+:root[data-theme='cmyk'].site-editorial-root,
+:root[data-theme='cmyk'] .site-editorial-surface {
+  --p: 260 80% 52%;
+  --pc: 260 70% 98%;
+  --s: 194 85% 44%;
+  --sc: 210 30% 98%;
+  --a: 30 95% 52%;
+  --ac: 30 70% 10%;
+  --n: 240 8% 18%;
+  --nc: 40 20% 96%;
+  --b1: 40 33% 96%;
+  --b2: 40 22% 91%;
+  --b3: 38 16% 84%;
+  --bc: 235 12% 16%;
+  --site-bg-tint: hsl(260 70% 94%);
+  --site-bg-image: none;
+  color-scheme: light;
+}
+
+:root[data-editorial-accent='blue'].site-editorial-root,
+:root[data-editorial-accent='blue'] .site-editorial-surface {
+  --p: 211 100% 74%;
+  --pc: 220 70% 10%;
+  --site-bg-tint: hsl(224 24% 9%);
+}
+
+:root[data-editorial-accent='orange'].site-editorial-root,
+:root[data-editorial-accent='orange'] .site-editorial-surface {
+  --p: 28 100% 70%;
+  --pc: 25 70% 10%;
+  --site-bg-tint: hsl(25 22% 9%);
+}
+
+:root[data-editorial-accent='purple'].site-editorial-root,
+:root[data-editorial-accent='purple'] .site-editorial-surface {
+  --p: 260 100% 83%;
+  --pc: 263 65% 10%;
+  --site-bg-tint: hsl(244 19% 8%);
+}
+
+.site-editorial-page {
+  min-height: 100vh;
+  background: var(--site-bg-image), var(--site-bg);
+  color: var(--site-fg);
+  font-family: var(--site-mono2);
+}
+
+.site-editorial-surface .ds-wrap {
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5vw, 84px);
+}
+
+.site-editorial-surface .ds-card {
+  border: 1px solid var(--site-line);
+  background: color-mix(in srgb, var(--site-panel) 78%, transparent);
+  color: var(--site-fg);
+  box-shadow: none;
+}
+
+.site-editorial-surface .ds-card:hover {
+  border-color: color-mix(in srgb, var(--site-accent) 45%, transparent);
+}
+
+.site-editorial-surface .ds-panel {
+  border: 1px solid var(--site-line);
+  background: color-mix(in srgb, var(--site-panel-2) 82%, transparent);
+  color: var(--site-fg);
+}
+
+.site-editorial-surface .ds-muted {
+  color: var(--site-muted);
+}
+
+.site-editorial-surface .ds-link {
+  color: var(--site-muted);
+  transition: color 0.15s, border-color 0.15s, opacity 0.15s;
+}
+
+.site-editorial-surface .ds-link:hover {
+  color: var(--site-accent);
+}
+
+.site-editorial-surface .ds-btn,
+.site-editorial-surface .btn-primary {
+  border-color: var(--site-accent);
+  background: var(--site-accent);
+  color: var(--site-accent-ink);
+}
+
+.site-editorial-surface .btn-outline,
+.site-editorial-surface .btn-ghost {
+  color: var(--site-fg-2);
+}
+
+.site-editorial-surface .prose,
+.site-editorial-surface .urara-prose {
+  min-width: 0;
+  --tw-prose-body: var(--site-fg-2);
+  --tw-prose-headings: var(--site-fg);
+  --tw-prose-lead: var(--site-muted);
+  --tw-prose-links: var(--site-accent);
+  --tw-prose-bold: var(--site-fg);
+  --tw-prose-counters: var(--site-muted);
+  --tw-prose-bullets: var(--site-accent);
+  --tw-prose-hr: var(--site-line);
+  --tw-prose-quotes: var(--site-fg);
+  --tw-prose-quote-borders: var(--site-accent);
+  --tw-prose-captions: var(--site-muted);
+  --tw-prose-code: var(--site-fg);
+  --tw-prose-pre-code: var(--code-reveal-fg);
+  --tw-prose-pre-bg: var(--code-reveal-bg);
+  --tw-prose-th-borders: var(--site-line-strong);
+  --tw-prose-td-borders: var(--site-line);
+}
+
+.site-editorial-surface .post-surface,
+.site-editorial-surface .card-body,
+.site-editorial-surface .e-content {
+  min-width: 0;
+}
+
+.site-editorial-surface .urara-prose :where(.prose-table-wrap) {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.site-editorial-surface .urara-prose :where(table) {
+  border-color: var(--site-line);
+}
+
+.site-editorial-surface .urara-prose :where(th, td) {
+  border-color: var(--site-line);
+  white-space: normal;
 }
 
 /* .urara-prose */
@@ -384,26 +572,6 @@ a.button:active {
     text-decoration: none;
 }
 
-/* Giscus comment styling fixes */
-.giscus, .giscus-frame {
-  color-scheme: auto;
-}
-
-/* Fix hard-to-read gray text in light themes */
-:root .giscus .color-fg-muted,
-:root .giscus .color-text-secondary {
-  color: #57606a !important;
-}
-
-/* Improve contrast for reaction/comment counts */
-.giscus .Link--muted {
-  color: #57606a !important;
-}
-
-.giscus .Link--muted:hover {
-  color: #24292f !important;
-}
-
 /* Fullscreen slide deck (?mode=slides + slides: true) */
 body.deck-presentation-active #totop {
   display: none !important;
@@ -422,6 +590,36 @@ body.deck-presentation-active .layout-transition {
 
 body.deck-presentation-active .deck-presentation-shell {
   min-height: 100dvh;
+}
+
+/* Route changes — View Transitions API (Chrome/Edge/Safari); Firefox uses fade-in fallback in transition.svelte */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.22s;
+    animation-timing-function: ease-in-out;
+  }
+}
+
+/* Modal/lightbox overlays: solid dim by default; blur only when compositor-friendly */
+.overlay-dim--light {
+  background-color: rgb(0 0 0 / 0.5);
+}
+
+.overlay-dim--heavy {
+  background-color: rgb(0 0 0 / 0.9);
+}
+
+@supports (backdrop-filter: blur(4px)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .overlay-dim--light {
+      backdrop-filter: blur(4px);
+    }
+
+    .overlay-dim--heavy {
+      backdrop-filter: blur(6px);
+    }
+  }
 }
 
 /*# sourceMappingURL=styles/css-pokemon-gameboy.css.map */

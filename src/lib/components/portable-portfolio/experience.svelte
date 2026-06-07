@@ -1,50 +1,44 @@
 <script lang="ts">
   import { experience } from '$lib/stores/portfolio'
   import Badge from '$lib/components/portable-portfolio/badge.svelte'
-  import { fly } from 'svelte/transition'
+  import BrandImage from '$lib/components/ui/BrandImage.svelte'
   import { get } from 'svelte/store'
+  import { reveal } from '$lib/actions/reveal'
 
-  // Static categories
   const categories = ['Work', 'Education', 'Extracurricular']
-
-  // All data in the store
   const allEntries = get(experience)
-
-  // Helper to filter by tag
   const byCategory = (tag: string) => allEntries.filter(e => e.tags.includes(tag))
 </script>
 
 <section id="experience" class="relative z-10 max-w-3xl mx-auto pb-36 px-4 text-center">
-  <!-- top heading -->
-  <div class="text-left mb-6">
+  <div class="text-left mb-6" use:reveal={{ direction: 'up' }}>
     <h2 class="text-xl font-bold mb-4">My Portfolio</h2>
   </div>
 
   {#each categories as category}
     {#if byCategory(category).length}
       <div class="text-left mb-6">
-        <h2 class="text-xl font-bold mb-4">{category}</h2>
+        <h2 class="text-xl font-bold mb-4" use:reveal={{ direction: 'up' }}>{category}</h2>
 
         <div class="space-y-4">
-          {#each byCategory(category) as exp (exp.id)}
-            <div in:fly={{ y: 24, duration: 250 }} class="rounded-lg shadow p-4 bg-base-100">
-              <!-- company header -->
+          {#each byCategory(category) as exp, i (exp.id)}
+            <div
+              class="rounded-lg shadow p-4 bg-base-100"
+              use:reveal={{ direction: 'up', delay: i * 80 }}
+            >
               <div class="flex items-center gap-3 mb-4">
-                <img src={exp.img} alt={exp.company} class="h-12 w-auto rounded" />
+                <BrandImage src={exp.img} alt={exp.company} class="h-12 w-auto rounded" fallbackText={exp.company} />
                 <p class="font-semibold text-lg">{exp.company}</p>
               </div>
 
-              <!-- positions -->
               <div class="space-y-6">
                 {#each exp.positions as pos}
                   <div class="pl-4 border-l-2 border-base-300">
-                    <!-- position header -->
                     <div class="flex justify-between items-start mb-2">
                       <p class="font-medium">{pos.position}</p>
                       <p class="text-sm opacity-70">{pos.duration}</p>
                     </div>
 
-                    <!-- body -->
                     {#if pos.listItems?.length}
                       <ul class="mt-2 space-y-1 text-left">
                         {#each pos.listItems as li}
@@ -60,7 +54,6 @@
                       <p class="mt-2 text-left">{pos.description}</p>
                     {/if}
 
-                    <!-- footer -->
                     <div class="mt-3 flex flex-wrap gap-2">
                       {#each pos.badges ?? [] as b}
                         <Badge name={b} />

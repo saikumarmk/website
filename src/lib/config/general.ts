@@ -1,4 +1,5 @@
-import type { ThemeConfig, HeadConfig, HeaderConfig, FooterConfig, DateConfig, FeedConfig } from '$lib/types/general'
+import type { ThemeConfig, HeadConfig, HeaderConfig, FooterConfig, DateConfig, FeedConfig } from '../types/general'
+import { assets } from './assets'
 
 export const theme: ThemeConfig = [
   {
@@ -8,18 +9,6 @@ export const theme: ThemeConfig = [
   {
     name: 'dracula',
     text: 'Dark'
-  },
-  {
-    name: 'retro',
-    text: 'Retro'
-  },
-  {
-    name: 'pastel',
-    text: 'Pastel'
-  },
-  {
-    name: 'black',
-    text: 'Black'
   }
 ]
 
@@ -46,45 +35,18 @@ export const header: HeaderConfig = {
       children: [
         {
           text: 'Rizzume',
-          link: '/assets/resume.pdf'
+          link: assets.resume
         },
         {
           text: 'Thesis',
-          link: '/assets/honours_thesis.pdf'
+          link: assets.thesis
         }
       ]
     },
 
     {
-      text: 'The Playbook',
-      children: [
-        {
-          text: 'FAQ',
-          link: '/guide-to-tech-faq'
-        },
-        {
-          text: 'Part 1. Timeline',
-          link: '/guide-to-tech-1'
-        },
-        {
-          text: 'Part 2. Improving',
-          link: '/guide-to-tech-2'
-        },
-        {
-          text: 'Part 2.5. Résumé',
-          link: '/guide-to-tech-2.5'
-        },
-        {
-          text: 'Part 3. Applying',
-          link: '/guide-to-tech-3'
-        }
-
-      ]
-    },
-
-    {
-      text: 'Monash Unit Graph',
-      link: 'https://saikumarmk.github.io/monash-handbook-plus/graph'
+      text: 'Playbook',
+      link: '/playbook'
     },
     {
       text: 'Yggdrasil',

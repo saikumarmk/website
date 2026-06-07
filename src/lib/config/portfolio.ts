@@ -1,4 +1,5 @@
-import type { Experience, Project } from '$lib/types/portfolio';
+import type { Experience, Project } from '$lib/types/portfolio'
+import { assets } from '$lib/config/assets'
 
 export const projects: Project[] = [
     {
@@ -189,7 +190,7 @@ export const experience: Experience[] = [
     {
         id: 'canva',
         company: 'Canva',
-        img: 'https://public.canva.site/logo/media/dfb96cc174513093cd6ed61489ccb750.svg',
+        img: assets.canvaLogo,
         tags: ['Work'],
         positions: [
             {

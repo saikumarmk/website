@@ -23,6 +23,17 @@
 
   let res = $derived(data.res)
   let path = $derived(data.path)
+  let normalizedPath = $derived(path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path)
+  let isPostPath = $derived((res ?? []).some(post => post.path === normalizedPath))
+  let isEditorialPath = $derived(
+    path === '/' ||
+      path.startsWith('/archive') ||
+      path.startsWith('/about') ||
+      path.startsWith('/portfolio') ||
+      path.startsWith('/playbook') ||
+      path.startsWith('/growth/2026') ||
+      isPostPath
+  )
 
   let currentMode = $state('none')
   $effect(() => {
@@ -53,6 +64,11 @@
     tags.set(genTags(data.res ?? []))
   })
 
+  $effect(() => {
+    if (!browser) return
+    document.documentElement.classList.toggle('site-editorial-root', isEditorialPath)
+  })
+
   onMount(
     () =>
       !dev &&
@@ -73,11 +89,13 @@
 <Head />
 
 <!-- 3) then render all your UI -->
-<Header {path} bind:searchModal />
+<div class:site-editorial-surface={isEditorialPath}>
+  <Header {path} bind:searchModal />
 
-<Transition {path}>
-  {@render children()}
-</Transition>
+  <Transition {path}>
+    {@render children()}
+  </Transition>
+</div>
 
 <CodeCopyButton />
 <ImageLightbox />

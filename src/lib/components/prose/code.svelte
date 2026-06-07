@@ -1,91 +1,21 @@
 <script lang="ts">
-  // @ts-nocheck
-
   import { onMount } from 'svelte'
   import { processMarkdown } from './mdsvex_processor.js'
   import hljs from 'highlight.js'
+  import 'highlight.js/styles/github-dark.min.css'
+  import { parsePythonToSections, processDocstring } from './parse-python-sections'
 
-  let { sourceUrl = '', title = 'Python Code Renderer' } = $props()
+  type RenderedSection = {
+    docs: string
+    code: string
+    renderedDocs: string
+  }
 
-  let sections = $state([])
+  let { sourceUrl = '', title = 'Annotated Code' } = $props()
+
+  let sections = $state<RenderedSection[]>([])
   let loading = $state(true)
-  let error = $state(null)
-
-  function parseCodeToSections(code) {
-    const lines = code.split('\n')
-    const sections = []
-    let docsBuffer = []
-    let codeBuffer = []
-
-    const flushSection = () => {
-      if (docsBuffer.length > 0 || codeBuffer.length > 0) {
-        sections.push({
-          docs: docsBuffer.join('\n'),
-          code: codeBuffer.join('\n')
-        })
-      }
-      docsBuffer = []
-      codeBuffer = []
-    }
-
-    let inDocstring = false
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i]
-      const trimmed = line.trim()
-
-      if (inDocstring) {
-        docsBuffer.push(line)
-        if (trimmed.endsWith('"""') || trimmed.endsWith("'''")) {
-          inDocstring = false
-        }
-      } else if (trimmed.startsWith('"""') || trimmed.startsWith("'''")) {
-        if (codeBuffer.length > 0 && !/^\s*(class|def)/.test(codeBuffer[codeBuffer.length - 1].trim())) {
-          flushSection()
-        }
-        docsBuffer.push(line)
-        if (!(trimmed.length > 3 && trimmed.endsWith(trimmed.substring(0, 3)))) {
-          inDocstring = true
-        }
-      } else if (trimmed.startsWith('#')) {
-        flushSection()
-        while (i < lines.length && (lines[i].trim().startsWith('#') || lines[i].trim() === '')) {
-          docsBuffer.push(lines[i])
-          i++
-        }
-        i--
-      } else {
-        if (trimmed.startsWith('def ') || trimmed.startsWith('class ')) {
-          flushSection()
-        }
-        codeBuffer.push(line)
-      }
-    }
-
-    flushSection()
-    return sections
-  }
-
-  function processDocstring(docContent) {
-    const trimmed = docContent.trim()
-
-    if (trimmed.startsWith('"""') || trimmed.startsWith("'''")) {
-      const content = trimmed.slice(3, -3)
-      const lines = content.split('\n')
-      const firstLine = lines.find(line => line.trim() !== '') || ''
-      const indentation = firstLine ? firstLine.match(/^\s*/)[0].length : 0
-      return lines.map(line => line.substring(indentation)).join('\n')
-    }
-
-    if (trimmed.startsWith('#')) {
-      return docContent
-        .split('\n')
-        .map(line => line.trim().replace(/^#\s?/, ''))
-        .join('\n')
-    }
-
-    return docContent
-  }
+  let error = $state<string | null>(null)
 
   async function loadAndParseCode() {
     try {
@@ -98,7 +28,7 @@
       }
 
       const pythonCode = await response.text()
-      const parsedSections = parseCodeToSections(pythonCode)
+      const parsedSections = parsePythonToSections(pythonCode)
 
       sections = await Promise.all(
         parsedSections.map(async section => {
@@ -115,18 +45,17 @@
 
       loading = false
 
-      // Highlight code blocks after DOM update
-      setTimeout(() => {
-        document.querySelectorAll('.python-code-renderer .code-panel pre code').forEach(block => {
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.annotated-code .code-panel pre code').forEach(block => {
           if (block.textContent?.trim()) {
-            hljs.highlightElement(block)
+            hljs.highlightElement(block as HTMLElement)
           }
         })
-      }, 100)
+      })
     } catch (err) {
-      error = err.message
+      error = err instanceof Error ? err.message : String(err)
       loading = false
-      console.error('Error loading code:', err)
+      console.error('Error loading annotated code:', err)
     }
   }
 
@@ -137,12 +66,8 @@
   })
 </script>
 
-<svelte:head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
-</svelte:head>
-
-<div class="python-code-renderer not-prose">
-  <h1 class="renderer-title">{title}</h1>
+<div class="annotated-code not-prose">
+  <h2 class="renderer-title">{title}</h2>
 
   <div class="renderer-container">
     {#if loading}
@@ -167,7 +92,7 @@
 </div>
 
 <style>
-  .python-code-renderer {
+  .annotated-code {
     width: 100%;
     margin: 0 auto;
     padding: 1rem;
@@ -178,14 +103,14 @@
     font-weight: 700;
     text-align: center;
     margin-bottom: 1.5rem;
+    color: hsl(var(--bc));
   }
 
   .renderer-container {
-    box-shadow:
-      0 10px 15px -3px rgb(0 0 0 / 0.1),
-      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
     border-radius: 0.5rem;
     overflow: hidden;
+    border: 1px solid hsl(var(--bc) / 0.15);
   }
 
   .loading-state,
@@ -196,15 +121,13 @@
   }
 
   .error-state {
-    color: #ef4444;
-    border-radius: 0.5rem;
-    margin: 1rem;
+    color: hsl(var(--er));
   }
 
   .code-section {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid hsl(var(--bc) / 0.15);
     min-height: 100px;
   }
 
@@ -221,21 +144,21 @@
   .docs-panel {
     min-width: 0;
     padding: 1.5rem;
-    background-color: white;
-    border-right: 1px solid #e5e7eb;
-    color: #374151;
+    background-color: hsl(var(--b1));
+    border-right: 1px solid hsl(var(--bc) / 0.15);
+    color: hsl(var(--bc));
   }
 
   .code-panel {
     min-width: 0;
     padding: 1.5rem;
-    background-color: #f9fafb;
+    background-color: hsl(var(--b2));
   }
 
   .code-panel pre {
     margin: 0;
     max-width: 100%;
-    background-color: #1f2937;
+    background-color: var(--code-reveal-bg, #272822);
     border-radius: 0.5rem;
     padding: 1rem;
     overflow-x: auto;
@@ -244,31 +167,29 @@
   .code-panel pre code {
     font-size: 0.875rem;
     line-height: 1.5;
-    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-family: 'Fira Code', monospace;
     background-color: transparent;
     padding: 0;
-    color: #f9fafb;
+    color: var(--code-reveal-fg, #dddddd);
     white-space: pre;
   }
 
-  /* Mobile responsive */
   @media (max-width: 768px) {
     .docs-panel {
       border-right: none;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid hsl(var(--bc) / 0.15);
     }
 
-    .python-code-renderer {
+    .annotated-code {
       padding: 0.5rem;
     }
   }
 
-  /* Documentation content styling */
   .docs-panel :global(h1) {
     font-size: 1.875rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: #1f2937;
+    color: hsl(var(--bc));
   }
 
   .docs-panel :global(h2) {
@@ -276,9 +197,9 @@
     font-weight: 600;
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid hsl(var(--bc) / 0.15);
     padding-bottom: 0.5rem;
-    color: #374151;
+    color: hsl(var(--bc));
   }
 
   .docs-panel :global(h3) {
@@ -286,26 +207,26 @@
     font-weight: 500;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
-    color: #4b5563;
+    color: hsl(var(--bc) / 0.9);
   }
 
   .docs-panel :global(p) {
     margin-bottom: 1rem;
     line-height: 1.625;
-    color: #374151;
+    color: hsl(var(--bc) / 0.9);
   }
 
   .docs-panel :global(code) {
-    background-color: #f3f4f6;
+    background-color: hsl(var(--b3));
     padding: 0.125rem 0.375rem;
     border-radius: 0.25rem;
     font-size: 0.875rem;
-    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-    color: #1f2937;
+    font-family: 'Fira Code', monospace;
+    color: hsl(var(--bc));
   }
 
   .docs-panel :global(pre) {
-    background-color: #f3f4f6;
+    background-color: hsl(var(--b3));
     padding: 1rem;
     border-radius: 0.5rem;
     overflow-x: auto;
@@ -331,23 +252,23 @@
 
   .docs-panel :global(li) {
     margin-bottom: 0.5rem;
-    color: #374151;
+    color: hsl(var(--bc) / 0.9);
   }
 
   .docs-panel :global(a) {
-    color: #2563eb;
+    color: hsl(var(--p));
     text-decoration: underline;
   }
 
   .docs-panel :global(a:hover) {
-    color: #1d4ed8;
+    opacity: 0.85;
   }
 
   .docs-panel :global(blockquote) {
-    border-left: 4px solid #e5e7eb;
+    border-left: 4px solid hsl(var(--bc) / 0.2);
     padding-left: 1rem;
     margin: 1rem 0;
-    color: #6b7280;
+    color: hsl(var(--bc) / 0.7);
     font-style: italic;
   }
 
@@ -359,17 +280,13 @@
 
   .docs-panel :global(th),
   .docs-panel :global(td) {
-    border: 1px solid #e5e7eb;
+    border: 1px solid hsl(var(--bc) / 0.15);
     padding: 0.5rem;
     text-align: left;
   }
 
   .docs-panel :global(th) {
-    background-color: #f3f4f6;
+    background-color: hsl(var(--b3));
     font-weight: 600;
-  }
-
-  .docs-panel :global(td) {
-    color: #374151;
   }
 </style>

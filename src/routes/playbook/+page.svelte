@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { fly, fade } from 'svelte/transition'
+  import { fly } from 'svelte/transition'
   import { onMount } from 'svelte'
   
   interface PlaybookPart {
@@ -60,10 +60,10 @@
   <meta name="description" content="A comprehensive guide to landing your first tech internship or graduate role" />
 </svelte:head>
 
-<div class="min-h-screen">
+<div class="playbook-page site-editorial-page">
   <!-- Hero Section -->
-  <div class="hero min-h-[60vh] bg-gradient-to-br from-primary/20 via-base-200 to-secondary/20">
-    <div class="hero-content text-center">
+  <div class="playbook-hero min-h-[60vh]">
+    <div class="playbook-hero-content text-center">
       <div class="max-w-3xl">
         {#if mounted}
           <div in:fly={{ y: 20, duration: 600, delay: 100 }}>
@@ -73,7 +73,7 @@
                 Complete Guide
               </span>
             </div>
-            <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
               The Grad/Intern Playbook
             </h1>
             <p class="text-xl md:text-2xl mb-4 opacity-80">
@@ -112,7 +112,7 @@
         {#each parts as part, i}
           <a 
             href="/{part.slug}"
-            class="card bg-base-200 hover:bg-base-300 transition-all hover:shadow-xl hover:scale-[1.02] group"
+            class="card playbook-card transition-all hover:shadow-xl hover:scale-[1.02] group"
             in:fly={{ x: -20, duration: 400, delay: 700 + i * 100 }}>
             <div class="card-body">
               <div class="flex items-start gap-4">
@@ -152,4 +152,50 @@
     </div>
   {/if}
 </div>
+
+<style>
+  .playbook-page {
+    font-family: var(--site-mono2);
+    color: var(--site-fg);
+  }
+
+  .playbook-hero {
+    display: grid;
+    place-items: center;
+    padding: 6rem 1rem 3rem;
+  }
+
+  .playbook-hero-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .playbook-page h1,
+  .playbook-page h2,
+  .playbook-page h3 {
+    font-family: var(--site-sans);
+    letter-spacing: -0.04em;
+  }
+
+  .playbook-page h1 {
+    color: var(--site-fg);
+  }
+
+  .playbook-page h1::after {
+    content: ".";
+    color: var(--site-accent);
+  }
+
+  .playbook-card {
+    background: color-mix(in srgb, var(--site-panel) 78%, transparent);
+    border: 1px solid var(--site-line);
+    color: var(--site-fg);
+  }
+
+  .playbook-card:hover {
+    border-color: color-mix(in srgb, var(--site-accent) 55%, transparent);
+    background: var(--site-panel-2);
+  }
+</style>
 

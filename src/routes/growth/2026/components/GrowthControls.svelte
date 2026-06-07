@@ -25,7 +25,7 @@
     nodeMap: Map<string, GrowthNode>;
   } = $props();
 
-  const branches = data.branches;
+  let branches = $derived(data.branches);
   const tiers = ['roots', 'trunk', 'branch', 'crown'];
   const statuses = ['locked', 'available', 'in_progress', 'complete'];
 
@@ -84,7 +84,7 @@
   }
 </script>
 
-<div class="h-full flex flex-col bg-base-200 p-4 overflow-y-auto">
+<div class="growth-controls h-full flex flex-col p-4 overflow-y-auto">
   <h2 class="text-2xl font-bold mb-4">Yggdrasil 2026</h2>
 
   <!-- Search -->
@@ -98,7 +98,7 @@
   </div>
 
   <!-- Layout Mode (static display) -->
-  <div class="mb-4 p-3 bg-base-300 rounded-lg">
+  <div class="mb-4 p-3 ds-panel rounded-lg">
     <div class="text-xs font-semibold text-base-content/60 mb-1">LAYOUT MODE</div>
     <div class="text-sm font-bold">LAYERED DAG</div>
   </div>
@@ -167,7 +167,7 @@
   <!-- Node Info Section -->
   {#if selectedNode}
     {@const pokemon = BRANCH_POKEMON[selectedNode.branch]}
-    <div class="flex flex-col gap-3 p-3 bg-base-300 rounded-lg">
+    <div class="flex flex-col gap-3 p-3 ds-panel rounded-lg">
       <!-- Title with Pokemon -->
       <div class="flex items-start gap-3">
         {#if pokemon}
@@ -245,6 +245,14 @@
     </div>
   {/if}
 </div>
+
+<style>
+  .growth-controls {
+    background: color-mix(in srgb, var(--site-panel) 88%, transparent);
+    border-right: 1px solid var(--site-line);
+    color: var(--site-fg);
+  }
+</style>
 
 
 

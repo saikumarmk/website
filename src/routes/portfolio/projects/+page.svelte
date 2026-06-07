@@ -6,10 +6,10 @@
   import { getTechColors } from '$lib/config/tech-colors'
   import Head from '$lib/components/head.svelte'
   import { title as storedTitle } from '$lib/stores/title'
+  import { reveal, staggerReveal } from '$lib/actions/reveal'
 
   storedTitle.set('Projects')
 
-  // Category/subtitle for each project
   const categoryMap: Record<string, string> = {
     'pokered-tournament': 'Tournament Simulator',
     'monash-handbook-scraper': 'Web Scraper',
@@ -31,26 +31,22 @@
   let selectedProject = $state<string | null>(null)
   let currentDescriptionPage = $state(0)
   let displayedText = $state('')
-  let fullText = $state('')
+  let fullText = ''
   let isTyping = $state(false)
-  let typingInterval = $state<ReturnType<typeof setInterval> | null>(null)
+  let typingInterval: ReturnType<typeof setInterval> | null = null
+  let typingComplete = $state(false)
 
   function getDescriptionPages(description: string): string[] {
-    // Split by periods, but keep the period with the sentence
     const sentences = description.match(/[^.!?]+[.!?]+/g) || [description];
-    
-    // Group sentences into pages of 2-3 sentences each
     const pages: string[] = [];
     for (let i = 0; i < sentences.length; i += 2) {
       const page = sentences.slice(i, i + 2).join(' ').trim();
       if (page) pages.push(page);
     }
-    
     return pages.length > 0 ? pages : [description]
   }
 
   function startTyping(text: string) {
-    // Clear any existing typing animation
     if (typingInterval) {
       clearInterval(typingInterval)
     }
@@ -58,6 +54,7 @@
     fullText = text
     displayedText = ''
     isTyping = true
+    typingComplete = false
 
     let index = 0
     const speed = 30
@@ -68,6 +65,7 @@
         index++
       } else {
         isTyping = false
+        typingComplete = true
         if (typingInterval) {
           clearInterval(typingInterval)
           typingInterval = null
@@ -145,25 +143,14 @@
 
 <div class="pokedex-container">
   <!-- Header -->
-  <div class="pokedex-header">
+  <div class="pokedex-header" use:reveal={{ direction: 'up', duration: 500 }}>
     <h1 class="pokedex-title">PROJECT DEX</h1>
     <p class="pokedex-subtitle">Select a project to view details</p>
-    
-    <!-- Navigation -->
-    <div class="flex justify-center gap-2 flex-wrap mt-6">
-      <a href="/portfolio" class="btn btn-secondary gap-2">
-        <span class="i-heroicons-outline-clock w-5 h-5"></span>
-        Timeline
-      </a>
-      <a href="/portfolio/list" class="btn btn-ghost gap-2">
-        <span class="i-heroicons-outline-list-bullet w-5 h-5"></span>
-        List View
-      </a>
-    </div>
+
   </div>
 
-  <!-- Grid of project squares (always visible) -->
-  <div class="pokedex-grid">
+  <!-- Grid with staggered entrance -->
+  <div class="pokedex-grid" use:staggerReveal={{ selector: ':scope > button', staggerMs: 40, direction: 'scale' }}>
     {#each projects as project, idx}
         <button
           class="pokedex-square"
@@ -203,6 +190,7 @@
         onkeydown={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
+        tabindex="-1"
       >
         <!-- Close button -->
         <button class="close-button" onclick={() => (selectedProject = null)} aria-label="Close">
@@ -249,7 +237,6 @@
               <p class="description-text">{displayedText}</p>
               
               {#if isLastPage}
-                <!-- Show buttons on last page -->
                 <div class="project-buttons">
                   {#if project.link}
                     <a href={project.link} target="_blank" rel="noopener noreferrer" class="project-link">
@@ -269,7 +256,6 @@
               {/if}
             </div>
             <div class="frame-border-right">
-              <!-- Floating arrow on right side (only show if not last page and not typing) -->
               {#if !isLastPage && !isTyping}
                 <button class="side-arrow-container" onclick={nextPage} aria-label="Next page">
                   <div class="floating-arrow">
@@ -317,7 +303,7 @@
   .pokedex-title {
     font-family: 'Press Start 2P', monospace;
     font-size: 3rem;
-    color: var(--p);
+    color: hsl(var(--p));
     text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
     margin-bottom: 1rem;
   }
@@ -344,7 +330,6 @@
     }
   }
 
-  /* Grid Layout */
   .pokedex-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -354,7 +339,7 @@
 
   .pokedex-square {
     aspect-ratio: 1;
-    background: var(--b2);
+    background: hsl(var(--b2));
     border: 3px solid transparent;
     border-radius: 8px;
     cursor: pointer;
@@ -372,14 +357,14 @@
 
   .pokedex-square.selected {
     border-color: hsl(var(--er));
-    background: var(--b3);
+    background: hsl(var(--b3));
     box-shadow: 0 0 20px hsl(var(--er) / 0.5);
   }
 
   .square-id {
     font-family: 'Press Start 2P', monospace;
     font-size: 1.25rem;
-    color: var(--bc);
+    color: hsl(var(--bc));
     opacity: 0.5;
     display: flex;
     justify-content: flex-end;
@@ -407,7 +392,6 @@
     image-rendering: auto;
   }
 
-  /* Modal Overlay */
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -503,7 +487,6 @@
   }
 
   @media (max-width: 768px) {
-    /* Switch to pokemondppt font on mobile to prevent overflow */
     .title-name {
       font-family: 'pokemondppt', monospace;
       flex-direction: column;
@@ -607,7 +590,6 @@
     object-fit: contain;
   }
 
-  /* Title Card */
   .title-card {
     background: white;
     border: 2px solid #333;
@@ -652,7 +634,6 @@
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
   }
 
-  /* Tech Stack */
   .tech-stack {
     margin-top: 2rem;
   }
@@ -661,7 +642,7 @@
     font-family: 'Press Start 2P', monospace;
     font-size: 0.875rem;
     margin-bottom: 1rem;
-    color: var(--bc);
+    color: hsl(var(--bc));
     opacity: 0.7;
   }
 
@@ -671,7 +652,6 @@
     gap: 0.5rem;
   }
 
-  /* Description Frame */
   .description-frame {
     display: grid;
     grid-template-columns: 16px 1fr 16px;
@@ -724,10 +704,6 @@
     0% { transform: translateY(0); }
     50% { transform: translateY(4px); }
     100% { transform: translateY(0); }
-  }
-
-  .arrow-container {
-    display: none;
   }
 
   .frame-content {
