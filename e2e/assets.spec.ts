@@ -18,6 +18,12 @@ test.describe('static assets', () => {
     const res = await request.get(assets.canvaLogo)
     expect(res.ok(), `${assets.canvaLogo} → HTTP ${res.status()}`).toBeTruthy()
   })
+
+  test('Canva wordmark SVG is served', async ({ request }) => {
+    const res = await request.get(assets.canvaWordmark)
+    expect(res.ok(), `${assets.canvaWordmark} → HTTP ${res.status()}`).toBeTruthy()
+    expect(res.headers()['content-type']).toMatch(/svg/i)
+  })
 })
 
 test.describe('portfolio images', () => {
