@@ -35,7 +35,9 @@
     "test:e2e:install": "playwright install chromium firefox",
     "test:perf": "playwright test -c playwright.perf.config.ts",
     "test:perf:preview": "E2E_PERF_PREVIEW=1 playwright test -c playwright.perf.config.ts",
-    "prepare": "tsc -p tsconfig.node.json && node urara.js build"
+    "verify:assets": "node scripts/verify-assets.mjs",
+    "hooks:install": "node scripts/install-git-hooks.mjs",
+    "prepare": "tsc -p tsconfig.node.json && node urara.js build && node scripts/install-git-hooks.mjs"
   },
   "devDependencies": {
     "@iconify-json/heroicons-outline": "^1.1.6",
