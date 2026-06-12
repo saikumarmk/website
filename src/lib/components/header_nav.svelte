@@ -1,5 +1,6 @@
 <script lang="ts">
   import { backgroundMode } from '$lib/stores/background'
+  import { staticDocumentLinkAttrs } from '$lib/utils/static-links'
   
   let {
     nav,
@@ -48,7 +49,7 @@
           <ul class="bg-base-100 text-base-content shadow-lg p-2">
             {#each children as { text, link }}
               <li>
-                <a class:font-bold={link === path} href={link}>{text}</a>
+                <a class:font-bold={link === path} href={link} {...staticDocumentLinkAttrs(link)}>{text}</a>
               </li>
             {/each}
           </ul>
@@ -93,7 +94,7 @@
           <ul tabindex="0" class="menu rounded-box bg-base-100 text-base-content shadow-lg p-2">
             {#each children as { text, link }}
               <li>
-                <a class:font-bold={link === path} href={link}>{text}</a>
+                <a class:font-bold={link === path} href={link} {...staticDocumentLinkAttrs(link)}>{text}</a>
               </li>
             {/each}
           </ul>

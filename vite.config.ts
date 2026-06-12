@@ -149,6 +149,8 @@ export default defineConfig({
         // Don't precache large images/files
         globPatterns: ['posts.json', '**/*.{js,css,html,svg,ico}'],
         globIgnores: ['**/sw*', '**/workbox-*'],
+        // Never serve the SPA shell for PDFs under /assets/ (breaks ./_app relative URLs)
+        navigateFallbackDenylist: [/^\/assets\/.*\.pdf$/i],
         // Runtime caching for images
         runtimeCaching: [
           {

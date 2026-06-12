@@ -3,6 +3,7 @@
   import { site } from '$lib/config/site'
   import { homeContent } from '$lib/config/home'
   import { assets } from '$lib/config/assets'
+  import { staticDocumentLinkAttrs } from '$lib/utils/static-links'
   import { getReadingTime } from '$lib/utils/reading-time'
   import Head from '$lib/components/head.svelte'
   import BrandImage from '$lib/components/ui/BrandImage.svelte'
@@ -141,7 +142,7 @@
         <p>Experience at Canva, research, and open source laid out as a compact project-forward index.</p>
         <b>Open the Dex →</b>
       </a>
-      <a class="pin" href={assets.thesis} target="_blank" rel="noopener noreferrer">
+      <a class="pin" href={assets.thesis} {...staticDocumentLinkAttrs(assets.thesis)}>
         <span>Research</span><h3>Honours Thesis</h3>
         <p>Bias modelling mitigation in diffusion models. First Class Honours, Monash 2023.</p>
         <b>Read the PDF →</b>

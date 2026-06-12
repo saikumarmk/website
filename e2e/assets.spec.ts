@@ -24,6 +24,14 @@ test.describe('static assets', () => {
     expect(res.ok(), `${assets.canvaWordmark} → HTTP ${res.status()}`).toBeTruthy()
     expect(res.headers()['content-type']).toMatch(/svg/i)
   })
+
+  test('résumé links bypass SvelteKit client routing', async ({ page }) => {
+    await page.goto('/about/', { waitUntil: 'domcontentloaded' })
+    const link = page.getByRole('link', { name: /^Résumé$/i }).first()
+    await expect(link).toHaveAttribute('href', assets.resume)
+    await expect(link).toHaveAttribute('data-sveltekit-reload', '')
+    await expect(link).toHaveAttribute('target', '_blank')
+  })
 })
 
 test.describe('portfolio images', () => {
