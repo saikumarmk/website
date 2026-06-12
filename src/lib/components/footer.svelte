@@ -3,6 +3,7 @@
   import { browser } from '$app/environment'
   import { site } from '$lib/config/site'
   import { assets } from '$lib/config/assets'
+  import { staticDocumentLinkAttrs } from '$lib/utils/static-links'
 
   let { class: className = '', rounded = false } = $props()
 
@@ -107,7 +108,7 @@
         </a>
         <a 
           href={assets.resume}
-          target="_blank"
+          {...staticDocumentLinkAttrs(assets.resume)}
           class="ds-link opacity-60 hover:opacity-100 transition-all"
           title="Résumé"
         >

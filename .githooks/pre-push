@@ -17,4 +17,7 @@ pnpm run verify:assets
 echo "pre-push: running production build (this may take a minute)..."
 pnpm run build
 
+echo "pre-push: verifying build output contains mirrored assets..."
+pnpm run verify:assets -- --build
+
 echo "pre-push: ok"

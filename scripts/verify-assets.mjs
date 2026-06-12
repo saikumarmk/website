@@ -3,11 +3,14 @@
  * Ensure every URL in src/lib/config/assets.ts has a committed source under urara/assets/.
  * static/ is gitignored and rebuilt from urara on `pnpm build`, so assets must be tracked
  * in git — a local untracked copy is not enough (CI / fresh clones will miss it).
+ *
+ * Pass --build to also verify files landed in build/assets/ after `pnpm build`.
  */
 import { readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { execSync } from 'node:child_process'
 
+const checkBuild = process.argv.includes('--build')
 const root = new URL('..', import.meta.url).pathname
 const assetsTs = readFileSync(join(root, 'src/lib/config/assets.ts'), 'utf8')
 const urls = [...assetsTs.matchAll(/'(\/assets\/[^']+)'/g)].map((m) => m[1])
@@ -32,6 +35,7 @@ try {
 
 const missingOnDisk = []
 const untracked = []
+const missingInBuild = []
 
 for (const url of urls) {
   const rel = url.replace(/^\/assets\//, '')
@@ -44,6 +48,12 @@ for (const url of urls) {
   }
   if (!tracked.has(gitPath)) {
     untracked.push({ url, source: gitPath })
+  }
+  if (checkBuild) {
+    const built = join(root, 'build', 'assets', rel)
+    if (!existsSync(built)) {
+      missingInBuild.push({ url, built: `build/assets/${rel}` })
+    }
   }
 }
 
@@ -61,8 +71,16 @@ if (untracked.length > 0) {
   }
 }
 
-if (missingOnDisk.length > 0 || untracked.length > 0) {
+if (missingInBuild.length > 0) {
+  console.error('verify-assets: missing from production build output:')
+  for (const { url, built } of missingInBuild) {
+    console.error(`  ${url} → ${built}`)
+  }
+}
+
+if (missingOnDisk.length > 0 || untracked.length > 0 || missingInBuild.length > 0) {
   process.exit(1)
 }
 
-console.log(`verify-assets: ok (${urls.length} mirrored assets tracked in git)`)
+const buildNote = checkBuild ? ' and build/' : ''
+console.log(`verify-assets: ok (${urls.length} mirrored assets tracked in git${buildNote})`)

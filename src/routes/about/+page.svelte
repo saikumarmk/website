@@ -4,6 +4,7 @@
   import TrainerCard from '$lib/components/about/TrainerCard.svelte'
   import { reveal } from '$lib/actions/reveal'
   import { assets } from '$lib/config/assets'
+  import { staticDocumentLinkAttrs } from '$lib/utils/static-links'
   let { data }: { data: { res?: Urara.Post[] } } = $props()
   let allPosts = $derived((data.res ?? []).filter(post => !post.flags?.includes('unlisted')))
   let postCount = $derived(allPosts.length)
@@ -138,7 +139,7 @@
         </div>
 
         <div class="flex gap-3 flex-wrap items-center">
-          <a href={assets.resume} class="btn btn-primary gap-2">
+          <a href={assets.resume} class="btn btn-primary gap-2" {...staticDocumentLinkAttrs(assets.resume)}>
             <span class="i-heroicons-outline-document-text w-5 h-5"></span>
             Résumé
           </a>
@@ -256,7 +257,7 @@
             <span class="i-heroicons-outline-code-bracket w-5 h-5"></span>
             GitHub: @saikumarmk
           </a>
-          <a href={assets.resume} target="_blank" class="btn btn-outline gap-2 justify-start">
+          <a href={assets.resume} class="btn btn-outline gap-2 justify-start" {...staticDocumentLinkAttrs(assets.resume)}>
             <span class="i-heroicons-outline-document-text w-5 h-5"></span>
             Download Résumé
           </a>
