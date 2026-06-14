@@ -121,7 +121,7 @@ The trick is to isolate the recursive leap of faith. Assume the suffix starting 
 
 ## Worked: Binary Tree Maximum Path Sum
 
-This one trips people up because you track two different things:
+This one tripped me up because you track two different things:
 
 - **Global best:** the best path seen anywhere in the tree (updated at each node)
 - **Local best:** the best *continuous* path rooted at this node that a *parent* can extend
