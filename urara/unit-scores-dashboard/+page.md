@@ -2,7 +2,6 @@
 title: Prompting a Unit Score Dashboard with Claude
 author: Sai kumar Murali Krishnan
 created: 2024-12-15 
-categories: [Data visualisation]
 tags: [blog-post]
 ---
 

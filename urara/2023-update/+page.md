@@ -2,8 +2,7 @@
 title: Year in review - 2022
 author: Sai kumar Murali Krishnan
 created: 2023-01-29
-categories: [Update]
-tags: []
+tags: [update]
 ---
 
 <script>

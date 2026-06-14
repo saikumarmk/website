@@ -115,21 +115,20 @@
           Hi, I'm <span class="text-primary">Sai</span>
         </h1>
         <p class="text-lg lg:text-xl opacity-80 mb-4">
-          Machine Learning Engineer working on generative AI at Canva
+          Machine Learning Engineer | Research Engineer | Applied Scientist working on generative AI in video at Canva
         </p>
 
         <div class="prose max-w-none mb-6 opacity-85">
           <p>
-            I'm a graduate from Monash University, having completed my honours year in Applied Data Science, with my thesis on
-            "Bias Modelling Mitigation in Diffusion Models". I was also the former president of the Monash Association of Coding (MAC),
+            I'm a senior applied scientist at Canva in the video space, having graduated from Monash aon my thesis on "Bias Modelling Mitigation in Diffusion Models".  
+            I was also the former president of the Monash Association of Coding (MAC),
             where we saw record growth to over 1000 members, more significant flagship events such as our Tech Careers Evening and MACathon,
             mock interviews, and more frequent events.
           </p>
           <p>
-            Separate from my university experience, I also interned at Canva, a beginner-friendly web design company. I'll be returning
-            there as a Machine Learning Engineer (MLE), focusing on generative AI in text-to-image models such as Stable Diffusion, Imagen,
-            Midjourney, and so on. My interests lie in the intersection of natural language processing and computer vision, specifically in
-            the form of diffusion-based text-to-image models, which my thesis is based on; however, I am interested in all areas of machine learning.
+            As for what I do? I do it all, my story started in reverse engineering, but I studied applied mathematics in university, then worked in computer vision in the photo and video space.
+            I'm a research engineer at heart, building training infrastructure for large-scale problems that Canva has for improving their product experience for users, but I also work extensively on 
+            making models go brr - I love the idea of making services faster, as I often end up upgrading services incidentally!
           </p>
           <p>
             If you have any questions about my experiences at Canva or want to explore my personal projects and blog pieces, feel free to reach out.

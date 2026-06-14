@@ -2,8 +2,7 @@
 title: Year in review - 2023
 author: Sai kumar Murali Krishnan
 created: 2024-01-15
-categories: [Update]
-tags: []
+tags: [update]
 ---
 
 # The year in review

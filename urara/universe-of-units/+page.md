@@ -2,7 +2,6 @@
 title: "A Universe of Units - An exploration into Monash Handbook Scraping"
 author: Sai Kumar Murali Krishnan
 created: 2023-11-03 
-categories: [Technical]
 tags: [scraping, visualisation]
 ---
 

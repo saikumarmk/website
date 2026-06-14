@@ -30,6 +30,7 @@
     "growth:new": "node scripts/new-growth-node.mjs",
     "growth:backfill": "node scripts/backfill-growth-pages.mjs",
     "growth:page": "node scripts/create-growth-page.mjs",
+    "post:new": "node scripts/new-post.mjs",
     "test:e2e": "playwright test",
     "test:e2e:dev": "E2E_DEV=1 playwright test",
     "test:e2e:install": "playwright install chromium firefox",

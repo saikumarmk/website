@@ -2,7 +2,6 @@
 title: "Building a Circles Clone for Monash"
 author: Sai Kumar Murali Krishnan
 created: 2024-10-09 
-categories: [University, Graphs]
 tags: [university, graph]
 ---
 

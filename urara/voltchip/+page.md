@@ -2,7 +2,6 @@
 title: VoltChip
 author: Sai kumar Murali Krishnan
 created: 2021-01-24 
-categories: [C]
 tags: [webassembly,emulation,C,blog-post]
 ---
 

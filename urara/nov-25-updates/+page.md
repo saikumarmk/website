@@ -2,7 +2,6 @@
 title: Some software I've been working on and other updates
 author: Sai Kumar Murali Krishnan
 created: 2025-11-04 
-categories: [software]
 tags: [software]
 summary: "A summary of some software I've been working on, and other updates."
 ---

@@ -3,7 +3,6 @@ title: "Elements of this Website"
 slab_title: true
 author: Sai Kumar Murali Krishnan
 created: 2025-07-14
-categories: [random, web-dev]
 tags: [random, web-dev, slides, meta]
 summary: "Kitchen sink for this site: nav map, search, themes, Mermaid, PythonCode, SlabTitle, Poké sprites, math, and slide layout demos—article or fullscreen deck."
 slides: true

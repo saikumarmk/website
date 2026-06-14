@@ -2,8 +2,7 @@
 title: Neochomp - Blog 1
 author: Sai Kumar Murali Krishnan 
 created: 2023-03-04
-categories: [hobby, esp32]
-tags: [C,Python,SBC]
+tags: [C, Python, SBC]
 ---
 
 

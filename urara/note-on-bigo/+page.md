@@ -2,7 +2,6 @@
 title: "A Brief, Mathematical Explanation of Big O"
 author: Sai kumar Murali Krishnan
 created: 2024-05-31
-categories: [Computer Science]
 tags: [technical]
 ---
 

@@ -2,7 +2,6 @@
 title: More Pokemon Red Elo World
 author: Sai Kumar Murali Krishnan
 created: 2025-07-14 
-categories: [assembly, pokemon, simulation]
 tags: [pokemon, simulation]
 summary: "An explanation on Elo"
 ---

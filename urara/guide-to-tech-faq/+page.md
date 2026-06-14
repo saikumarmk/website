@@ -2,7 +2,6 @@
 title: "The Grad/Intern Playbook: FAQ"
 author: Sai kumar Murali Krishnan
 created: 2023-06-24
-categories: [University, Career]
 tags: [university, career]
 ---
 

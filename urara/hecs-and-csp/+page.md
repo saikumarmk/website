@@ -2,7 +2,6 @@
 title: HECS and CSP explained
 author: Sai Kumar Murali Krishnan
 created: 2023-02-19 
-categories: [University]
 tags: [university]
 ---
 <script>

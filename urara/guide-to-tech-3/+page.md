@@ -2,7 +2,6 @@
 title: "The Grad/Intern Playbook: Part 3 - Acing the Interviews"
 author: Sai kumar Murali Krishnan
 created: 2024-03-18
-categories: [University, Career]
 tags: [university, career, playbook]
 ---
 

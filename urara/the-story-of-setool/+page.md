@@ -2,7 +2,6 @@
 title: The story of SETool
 author: Sai kumar Murali Krishnan
 created: 2022-06-24 
-categories: [Python,Dash,Data visualisation]
 tags: [Python,Dash, Data visualisation,blog-post]
 ---
 
