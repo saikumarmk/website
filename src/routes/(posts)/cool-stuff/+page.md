@@ -19,14 +19,14 @@ topic: journal
 ## Quick links
 
 - **[Portfolio](/portfolio)** · **[Archive](/archive)** · **[Playbook](/playbook)** · **[About](/about)**
-- **Project Dex** — [`/portfolio/projects`](/portfolio/projects) · **Yggdrasil 2026** — [`/growth/2026`](/growth/2026)
+- **Project Dex** — [`/dex`](/dex) · **Yggdrasil 2026** — [`/growth/2026`](/growth/2026)
 
 ---
 
 ## Navigation & main pages
 
 - **About** — [`/about`](/about)
-- **Portfolio** — [`/portfolio`](/portfolio) · **Project Dex** — [`/portfolio/projects`](/portfolio/projects)
+- **Portfolio** — [`/portfolio`](/portfolio) · **Project Dex** — [`/dex`](/dex)
 - **Archive** — [`/archive`](/archive) (all posts)
 - **Playbook** — [`/playbook`](/playbook) → FAQ, timeline, résumé, interviews (`guide-to-tech-*`)
 - **Documents** (header) — résumé PDF, thesis

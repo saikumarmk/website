@@ -20,7 +20,7 @@ export const STATIC_SEARCH_PAGES = [
   },
   { title: 'About', path: '/about', summary: 'Learn more about me', content: '', type: 'page' },
   { title: 'Portfolio', path: '/portfolio', summary: 'View my work and projects', content: '', type: 'page' },
-  { title: 'Project Dex', path: '/portfolio/projects', summary: 'Browse all projects in Pokedex style', content: '', type: 'page' },
+  { title: 'Project Dex', path: '/dex', summary: 'Browse all projects in Pokedex style', content: '', type: 'page' },
   { title: 'Yggdrasil 2026', path: '/growth/2026', summary: 'Interactive skill tree and learning roadmap', content: '', type: 'page' },
   { title: 'Archive', path: '/archive', summary: 'Browse all posts by tag and year', content: '', type: 'page' }
 ] as const

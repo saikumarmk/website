@@ -8,7 +8,7 @@
 
   const links: { href: string; label: string; match: (p: string) => boolean; wide?: boolean }[] = [
     { href: '/archive', label: 'Writing', match: (p) => p.startsWith('/archive') },
-    { href: '/portfolio/projects', label: 'Dex', match: (p) => p.startsWith('/portfolio/projects') },
+    { href: '/dex', label: 'Dex', match: (p) => p.startsWith('/dex') },
     { href: '/portfolio', label: 'Experience', match: (p) => /^\/portfolio\/?$/.test(p), wide: true },
     { href: '/about', label: 'About', match: (p) => p.startsWith('/about') }
   ]

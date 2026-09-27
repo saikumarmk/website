@@ -25,26 +25,15 @@ This site features several custom interactive components beyond the standard blo
 
 ### Project Dex
 
-A Pokedex-inspired project showcase at `/portfolio/projects`.
+A Pokédex of projects at `/dex` (`/projects` and `/portfolio/projects` redirect there).
 
-**Source:** `src/routes/portfolio/projects/+page.svelte`
+**Source:** `src/routes/dex/+page.svelte`, data in `src/lib/config/portfolio.ts`
 
 **Features:**
-- Grid of project squares with Pokemon sprites as icons
-- Modal popup styled like a Pokedex entry with Pokemon Game Boy grid background
-- Typing effect that displays description text character-by-character (30ms/char)
-- Pagination system that splits long descriptions into 2-sentence pages
-- Red bouncing arrow indicator for "more text" navigation
-- Responsive design with different fonts for mobile (`pokemondppt`) vs desktop (`Press Start 2P`)
-
-**How it works:**
-```
-1. Projects defined in src/lib/config/portfolio.ts
-2. Each project has a Pokemon sprite (from pokesprite CSS classes)
-3. On click, modal opens and triggers startTyping() animation
-4. getDescriptionPages() splits text by sentences for pagination
-5. Arrow appears when more pages available
-```
+- Type tabs, a numbered list and a "screen": an embroidery hoop with the entry's flower (grown from its name) and its partner Pokémon
+- ↑/↓ move through the list, ←/→ switch type
+- `/dex#<project id>` selects an entry, and selecting one updates the hash
+- Retired projects set `retired: '<successor id>'`, and their habitat links to the successor
 
 ### TechBadge Component
 
