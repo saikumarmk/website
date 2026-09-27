@@ -79,6 +79,12 @@ declare global {
           slides?: boolean
           /** shelf on the writing index; falls back to the first tag */
           topic?: string
+          /** series key (e.g. `playbook`); parts are gathered from the posts that set it */
+          series?: string
+          /** the part's one-word subject on the series page, e.g. "Timeline" */
+          series_topic?: string
+          /** listed under the series as an appendix rather than a numbered part */
+          series_appendix?: boolean
           /**
            * word count of the post's prose.
            * @remarks auto-generated

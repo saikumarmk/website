@@ -18,6 +18,7 @@
   <a href={assets.resume}>CV</a>
   <a href="/atom.xml">RSS</a>
   <a href="/playbook">Playbook</a>
+  <a href="/garden">Garden</a>
   <a href="/growth/2026">Yggdrasil</a>
   <span class="set-in">Set in Newsreader &amp; IBM Plex Mono</span>
 </footer>

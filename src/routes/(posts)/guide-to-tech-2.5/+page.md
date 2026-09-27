@@ -4,6 +4,9 @@ author: Sai Kumar Murali Krishnan
 created: 2023-06-24
 tags: [university, career, playbook]
 topic: playbook
+summary: "Crafting a compelling résumé that gets you interviews."
+series: playbook
+series_topic: Résumé
 ---
 
 

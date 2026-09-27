@@ -18,6 +18,9 @@
   import SlabTitle from '$lib/components/slab_title.svelte'
   import ReadingVine from '$lib/components/reading_vine.svelte'
   import Specimen from '$lib/components/thread/Specimen.svelte'
+  import SeriesStrip from '$lib/components/series/SeriesStrip.svelte'
+  import SeriesNext from '$lib/components/series/SeriesNext.svelte'
+  import { markRead } from '$lib/stores/read'
 
   let { post, children }: { post: Blog.Post | null; children?: Snippet } = $props()
 
@@ -100,6 +103,9 @@
           </div>
         </header>
 
+        <!-- series strip (renders nothing outside a series) -->
+        <SeriesStrip {post} />
+
         {#if post.in_reply_to}<Reply in_reply_to={post.in_reply_to} />{/if}
 
         {#if sections.length > 1}
@@ -127,12 +133,15 @@
           </div>
         {/if}
 
-        <div class="fin">
+        <div class="fin" use:markRead={post.path}>
           <Specimen {seed} width={130} height={96} R={32} cy={0.42} fit={false} class="fin-flower" />
           {#if words}
             <span class="fin-cap">grown from this post's {words.toLocaleString('en-AU')} words · seed {seedLabel(seeded(seed).hash)}</span>
           {/if}
         </div>
+
+        <!-- next-part card (renders nothing outside a series) -->
+        <SeriesNext {post} />
 
         {#if nearby.length}
           <nav class="art-end" aria-label="Nearby">
@@ -140,7 +149,7 @@
             <div use:satinSelect={{ items: 'li' }}>
             <ol class="toc">
               {#each nearby as p (p.path)}
-                <li>
+                <li data-slug={p.path}>
                   <div class="row">
                     <Specimen seed={p.seed ?? p.path} width={130} height={96} R={32} cy={0.42} fit={false} leaves={false} class="near-bloom" />
                     <a href={p.path}><span class="t">{p.title}</span></a>
