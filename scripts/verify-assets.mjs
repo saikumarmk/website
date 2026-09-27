@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
- * Ensure every URL in src/lib/config/assets.ts has a committed source under urara/assets/.
- * static/ is gitignored and rebuilt from urara on `pnpm build`, so assets must be tracked
- * in git — a local untracked copy is not enough (CI / fresh clones will miss it).
+ * Ensure every URL in src/lib/config/assets.ts has a committed file under static/assets/.
+ * A local untracked copy is not enough (CI / fresh clones will miss it).
  *
  * Pass --build to also verify files landed in build/assets/ after `pnpm build`.
  */
@@ -23,7 +22,7 @@ if (urls.length === 0) {
 let tracked = new Set()
 try {
   tracked = new Set(
-    execSync('git ls-files urara/assets', { cwd: root, encoding: 'utf8' })
+    execSync('git ls-files static/assets', { cwd: root, encoding: 'utf8' })
       .trim()
       .split('\n')
       .filter(Boolean)
@@ -39,7 +38,7 @@ const missingInBuild = []
 
 for (const url of urls) {
   const rel = url.replace(/^\/assets\//, '')
-  const gitPath = `urara/assets/${rel}`
+  const gitPath = `static/assets/${rel}`
   const source = join(root, gitPath)
 
   if (!existsSync(source)) {
@@ -58,7 +57,7 @@ for (const url of urls) {
 }
 
 if (missingOnDisk.length > 0) {
-  console.error('verify-assets: missing source files (add them under urara/assets/):')
+  console.error('verify-assets: missing source files (add them under static/assets/):')
   for (const { url, source } of missingOnDisk) {
     console.error(`  ${url} → ${source}`)
   }
@@ -83,4 +82,4 @@ if (missingOnDisk.length > 0 || untracked.length > 0 || missingInBuild.length > 
 }
 
 const buildNote = checkBuild ? ' and build/' : ''
-console.log(`verify-assets: ok (${urls.length} mirrored assets tracked in git${buildNote})`)
+console.log(`verify-assets: ok (${urls.length} assets tracked in git${buildNote})`)

@@ -8,50 +8,50 @@ const root = join(__dirname, '..');
 
 const imagesToCompress = [
   {
-    input: 'urara/assets/guide-to-tech/mac_committee_2023.png',
-    output: 'urara/assets/guide-to-tech/mac_committee_2023.webp',
+    input: 'static/assets/guide-to-tech/mac_committee_2023.png',
+    output: 'static/assets/guide-to-tech/mac_committee_2023.webp',
     maxWidth: 1200,
     quality: 85
   },
   {
-    input: 'urara/assets/sai_red.png',
-    output: 'urara/assets/sai_red.webp',
+    input: 'static/assets/sai_red.png',
+    output: 'static/assets/sai_red.webp',
     maxWidth: 400,
     quality: 90
   },
   {
-    input: 'urara/assets/neochomp/blog-1/newgenesis.png',
-    output: 'urara/assets/neochomp/blog-1/newgenesis.webp',
+    input: 'static/assets/neochomp/blog-1/newgenesis.png',
+    output: 'static/assets/neochomp/blog-1/newgenesis.webp',
     maxWidth: 1000,
     quality: 85
   },
   {
-    input: 'urara/assets/neochomp/blog-1/teardown.png',
-    output: 'urara/assets/neochomp/blog-1/teardown.webp',
+    input: 'static/assets/neochomp/blog-1/teardown.png',
+    output: 'static/assets/neochomp/blog-1/teardown.webp',
     maxWidth: 1000,
     quality: 85
   },
   {
-    input: 'urara/assets/update/siggraph.jpg',
-    output: 'urara/assets/update/siggraph.webp',
+    input: 'static/assets/update/siggraph.jpg',
+    output: 'static/assets/update/siggraph.webp',
     maxWidth: 1200,
     quality: 85
   },
   {
-    input: 'urara/assets/neochomp/blog-1/ado.png',
-    output: 'urara/assets/neochomp/blog-1/ado.webp',
+    input: 'static/assets/neochomp/blog-1/ado.png',
+    output: 'static/assets/neochomp/blog-1/ado.webp',
     maxWidth: 800,
     quality: 85
   },
   {
-    input: 'urara/assets/neochomp/blog-1/banana.png',
-    output: 'urara/assets/neochomp/blog-1/banana.webp',
+    input: 'static/assets/neochomp/blog-1/banana.png',
+    output: 'static/assets/neochomp/blog-1/banana.webp',
     maxWidth: 800,
     quality: 85
   },
   {
-    input: 'urara/assets/neochomp/blog-1/pricey.png',
-    output: 'urara/assets/neochomp/blog-1/pricey.webp',
+    input: 'static/assets/neochomp/blog-1/pricey.png',
+    output: 'static/assets/neochomp/blog-1/pricey.webp',
     maxWidth: 800,
     quality: 85
   },

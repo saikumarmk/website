@@ -14,10 +14,19 @@ export default defineConfig({
     baseURL,
     trace: 'on-first-retry'
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        // any local Chromium-based browser, e.g. when Playwright's own download is unavailable
+        launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH || undefined }
+      }
+    }
+  ],
   webServer: dev
     ? {
-        command: 'pnpm urara:build && pnpm exec vite dev --host 127.0.0.1 --port 5173 --strictPort',
+        command: 'pnpm exec vite dev --host 127.0.0.1 --port 5173 --strictPort',
         url: baseURL,
         reuseExistingServer: true,
         timeout: 120_000

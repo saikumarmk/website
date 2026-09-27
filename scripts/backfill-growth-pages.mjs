@@ -18,7 +18,7 @@ async function main() {
   let skipped = 0;
 
   for (const node of growthData.nodes) {
-    const nodeDir = path.join(rootDir, 'urara', 'growth', '2026', node.id);
+    const nodeDir = path.join(rootDir, 'src', 'routes', 'growth', '2026', node.id);
     const pagePath = path.join(nodeDir, '+page.md');
 
     // Check if page already exists
@@ -34,7 +34,7 @@ async function main() {
     }
 
     // Create page
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = new Date().toLocaleDateString('en-CA');
     const pageContent = `---
 title: '${node.title}'
 created: ${currentDate}

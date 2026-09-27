@@ -2,8 +2,8 @@ import type { FFFFlavoredFrontmatter } from 'fff-flavored-frontmatter'
 import { render } from 'svelte/server'
 
 interface GenPostsOptions {
-  /** import.meta.glob<Urara.Post.Module> https://vitejs.dev/guide/features.html#glob-import */
-  modules?: { [path: string]: Urara.Post.Module }
+  /** import.meta.glob<Blog.Post.Module> https://vitejs.dev/guide/features.html#glob-import */
+  modules?: { [path: string]: Blog.Post.Module }
   /** set to true to output html */
   postHtml?: boolean
   /** limit a certain number of posts */
@@ -12,12 +12,12 @@ interface GenPostsOptions {
   filterUnlisted?: boolean
 }
 
-type GenPostsFunction = (options?: GenPostsOptions) => Urara.Post[]
+type GenPostsFunction = (options?: GenPostsOptions) => Blog.Post[]
 
-type GenTagsFunction = (posts: Urara.Post[]) => string[]
+type GenTagsFunction = (posts: Blog.Post[]) => string[]
 
 /** Same ordering/filter as genPosts (used by search index prerender). */
-export function filterAndSortPosts<T extends Urara.Post>(
+export function filterAndSortPosts<T extends Blog.Post>(
   posts: T[],
   filterUnlisted = false,
   postLimit?: number
@@ -64,12 +64,12 @@ export const typeOfPost = (
  * @returns - posts list
  */
 export const genPosts: GenPostsFunction = ({
-  modules = import.meta.glob<Urara.Post.Module>('/src/routes/**/*.{md,svelte.md}', { eager: true }),
+  modules = import.meta.glob<Blog.Post.Module>('/src/routes/**/*.{md,svelte.md}', { eager: true }),
   postHtml = false,
   postLimit = undefined,
   filterUnlisted = false
 } = {}) => {
-  function renderHtml(module: Urara.Post.Module): string {
+  function renderHtml(module: Blog.Post.Module): string {
     if (!(postHtml || typeOfPost(module.metadata) !== 'article')) return ''
     try {
       const body = render(module.default, { props: {} })
@@ -94,7 +94,7 @@ export const genPosts: GenPostsFunction = ({
     }
   }
 
-  const posts: Urara.Post[] = []
+  const posts: Blog.Post[] = []
   for (const [, module] of Object.entries(modules)) {
     if (module?.metadata == null) continue
     try {
@@ -102,7 +102,7 @@ export const genPosts: GenPostsFunction = ({
         ...module.metadata,
         type: typeOfPost(module.metadata),
         html: renderHtml(module)
-      } as Urara.Post)
+      } as Blog.Post)
     } catch (e) {
       console.warn(`[genPosts] skipping broken post ${module.metadata?.slug ?? '?'}:`, (e as Error).message)
     }

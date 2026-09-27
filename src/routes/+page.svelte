@@ -8,7 +8,7 @@
   import Head from '$lib/components/head.svelte'
   import BrandImage from '$lib/components/ui/BrandImage.svelte'
 
-  let { data }: { data: { res?: Urara.Post[] } } = $props()
+  let { data }: { data: { res?: Blog.Post[] } } = $props()
   let allPosts = $derived((data.res ?? []).filter(post => !post.flags?.includes('unlisted')))
   let nowIndex = $state(0)
   let nowText = $state('')
@@ -17,7 +17,7 @@
 
   const { tagline, interests, appCards, statusMessages } = homeContent
 
-  function isLearningNote(post: Urara.Post): boolean {
+  function isLearningNote(post: Blog.Post): boolean {
     return (
       post.path?.startsWith('/growth/2026/') ||
       post.tags?.includes('yggdrasil') ||
@@ -26,7 +26,7 @@
     )
   }
 
-  function postDate(post: Urara.Post): Date {
+  function postDate(post: Blog.Post): Date {
     return new Date(post.published ?? post.created)
   }
 

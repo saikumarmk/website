@@ -13,8 +13,8 @@ function generateRandomBio(): string {
   return `${randomBio} <span class="pokesprite pokemon ${shinyClass} ${randomPokemon}"></span>`;
 }
 export const site: SiteConfig = {
-  protocol: 'https://',
-  domain: import.meta.env.URARA_SITE_PROTOCOL ?? import.meta.env.DEV ? 'http://' : 'https://',
+  protocol: import.meta.env.SITE_PROTOCOL ?? 'https://',
+  domain: import.meta.env.SITE_DOMAIN ?? 'www.saikumarmk.com',
   title: 'saikumarmk.com',
   subtitle: '',
   lang: 'en-US',

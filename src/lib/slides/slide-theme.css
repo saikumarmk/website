@@ -94,7 +94,7 @@
 /* ── Prose overrides in presenting mode ───────────────────────────── */
 
 .slide-deck-viewport--presenting .prose,
-.slide-deck-viewport--presenting .urara-prose {
+.slide-deck-viewport--presenting .post-prose {
   --tw-prose-body: hsl(var(--bc));
   --tw-prose-headings: hsl(var(--bc));
   --tw-prose-links: hsl(var(--p));

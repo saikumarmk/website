@@ -29,18 +29,18 @@ export function plaintextFromRawMarkdown(source: string): string {
   return s
 }
 
-type PostWithFile = Urara.Post & { __filePath: string }
+type PostWithFile = Blog.Post & { __filePath: string }
 
 export function genSearchIndexPayload(): Array<{
   path: string
   title: string
   summary: string
   tags: string[]
-  created: Urara.Post['created']
+  created: Blog.Post['created']
   content: string
 }> {
   // Glob pattern must be a string literal (Vite import analysis).
-  const modules = import.meta.glob<Urara.Post.Module>('/src/routes/**/*.{md,svelte.md}', { eager: true })
+  const modules = import.meta.glob<Blog.Post.Module>('/src/routes/**/*.{md,svelte.md}', { eager: true })
   const rawByPath = import.meta.glob<string>('/src/routes/**/*.{md,svelte.md}', {
     query: '?raw',
     import: 'default',

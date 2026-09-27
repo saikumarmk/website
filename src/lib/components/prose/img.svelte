@@ -1,19 +1,9 @@
 <script lang="ts">
   /* @see {@link https://github.com/sveltejs/kit/issues/241#issuecomment-1363621896} */
 
-  type Image = {
-    src: string
-    w: number
-    h: number
-  }
-
-  const sources = import.meta.glob<Image[]>(['/static/**/*.{jpg,jpeg,png,webp,avif}', '!/static/assets'], {
-    query: {
-      format: 'avif',
-      quality: '80',
-      width: '736',
-      source: ''
-    },
+  /** srcset strings ("… 736w, … 1472w"), keyed by /static/… path */
+  const sources = import.meta.glob<string>('/static/assets/**/*.{jpg,jpeg,png,webp}', {
+    query: { format: 'avif', quality: '80', w: '736;1472', withoutEnlargement: '', as: 'srcset' },
     import: 'default',
     eager: true
   })
@@ -32,12 +22,12 @@
     decoding?: 'async' | 'sync' | 'auto'
   } = $props()
 
-  let source: Image[] | undefined = $derived(sources[`/static${src}`])
+  let srcset: string | undefined = $derived(sources[`/static${src}`])
 </script>
 
-{#if source}
+{#if srcset}
   <picture>
-    <source srcset={source.map(({ src, w }) => `${src} ${w}w`).join(', ')} type="image/avif" />
+    <source {srcset} sizes="(min-width: 800px) 736px, 100vw" type="image/avif" />
     <img {src} {alt} class={className ?? 'rounded-lg my-2 max-w-full h-auto'} {loading} {decoding} style="max-width: 800px; margin-left: auto; margin-right: auto;" />
   </picture>
 {:else}

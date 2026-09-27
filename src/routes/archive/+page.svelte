@@ -6,14 +6,14 @@
 
   storedTitle.set('Archive')
 
-  let { data }: { data: { res?: Urara.Post[] } } = $props()
+  let { data }: { data: { res?: Blog.Post[] } } = $props()
   let allPosts = $derived((data.res ?? []).filter(post => !post.flags?.includes('unlisted')))
   let allTags = $derived(genTags(allPosts))
   let selectedTag = $state<string | null>(null)
   let searchQuery = $state('')
   let activeView = $state<'all' | 'learning' | 'blog'>('all')
 
-  function isLearningNote(post: Urara.Post): boolean {
+  function isLearningNote(post: Blog.Post): boolean {
     return (
       post.path?.startsWith('/growth/2026/') ||
       post.tags?.includes('yggdrasil') ||
@@ -22,7 +22,7 @@
     )
   }
 
-  function date(post: Urara.Post): Date {
+  function date(post: Blog.Post): Date {
     return new Date(post.published ?? post.created)
   }
 
@@ -52,7 +52,7 @@
         acc[year].push(post)
         return acc
       },
-      {} as Record<number, Urara.Post[]>
+      {} as Record<number, Blog.Post[]>
     )
   )
   let years = $derived(Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a)))

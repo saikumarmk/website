@@ -29,12 +29,12 @@ async function main() {
     process.exit(1);
   }
 
-  const nodeDir = path.join(rootDir, 'urara', 'growth', '2026', node.id);
+  const nodeDir = path.join(rootDir, 'src', 'routes', 'growth', '2026', node.id);
   const pagePath = path.join(nodeDir, '+page.md');
 
   // Check if page already exists
   if (fs.existsSync(pagePath)) {
-    console.log(`Page already exists: urara/growth/2026/${node.id}/+page.md`);
+    console.log(`Page already exists: src/routes/growth/2026/${node.id}/+page.md`);
     process.exit(0);
   }
 
@@ -44,7 +44,7 @@ async function main() {
   }
 
   // Create page
-  const currentDate = new Date().toISOString().split('T')[0];
+  const currentDate = new Date().toLocaleDateString('en-CA');
   const tags = node.tags || [];
   if (!tags.includes('yggdrasil')) tags.unshift('yggdrasil');
   if (!tags.includes(node.branch)) tags.push(node.branch);
@@ -81,7 +81,7 @@ Content here...
 `;
 
   fs.writeFileSync(pagePath, pageContent);
-  console.log(`Created: urara/growth/2026/${node.id}/+page.md`);
+  console.log(`Created: src/routes/growth/2026/${node.id}/+page.md`);
 }
 
 main().catch(error => {

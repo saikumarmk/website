@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -147,8 +147,12 @@ export async function measureSearchModalReady(page: Page): Promise<{ openMs: num
   await page.goto('/', { waitUntil: 'domcontentloaded' })
 
   const openStart = Date.now()
-  await page.getByRole('button', { name: 'search' }).click()
-  await page.locator('[role="dialog"][aria-modal="true"]').waitFor({ state: 'visible' })
+  const dialog = page.locator('[role="dialog"][aria-modal="true"]')
+  // The button only works once the page has hydrated, so retry until the dialog opens.
+  await expect(async () => {
+    await page.getByRole('button', { name: 'search' }).click()
+    await expect(dialog).toBeVisible({ timeout: 250 })
+  }).toPass({ timeout: 10_000 })
   const openMs = Date.now() - openStart
 
   const indexStart = Date.now()
@@ -174,13 +178,13 @@ export async function measureLightboxAttach(page: Page, postPath: string): Promi
 
   const attachStart = Date.now()
   await page.waitForFunction(() => {
-    const img = document.querySelector('.urara-prose img.lightbox-enabled, .prose img.lightbox-enabled')
+    const img = document.querySelector('.post-prose img.lightbox-enabled, .prose img.lightbox-enabled')
     return !!img
   }, { timeout: 15_000 })
   const attachMs = Date.now() - attachStart
 
   const openStart = Date.now()
-  await page.locator('.urara-prose img.lightbox-enabled, .prose img.lightbox-enabled').first().click()
+  await page.locator('.post-prose img.lightbox-enabled, .prose img.lightbox-enabled').first().click()
   await page.getByRole('button', { name: 'Close lightbox' }).first().waitFor({ state: 'visible' })
   const openMs = Date.now() - openStart
 

@@ -6,7 +6,8 @@
     PythonCode,
     SlabTitle,
     PokemonSprite,
-    SpriteAscii
+    SpriteAscii,
+    Sidenote
   } from '$lib/mdsvex/embed-registry'
   /**
    * mdsvex rewrites tags to `Components.Name` using **exported names**; HTML/rehype lowercases tag names,
@@ -24,7 +25,9 @@
     PokemonSprite,
     PokemonSprite as pokemonsprite,
     SpriteAscii,
-    SpriteAscii as spriteascii
+    SpriteAscii as spriteascii,
+    Sidenote,
+    Sidenote as sidenote
   }
 </script>
 
@@ -49,6 +52,9 @@
     slab_title = undefined,
     slideSegmentCount: _slideSegmentCount = undefined,
     slides = undefined,
+    topic = undefined,
+    words = undefined,
+    seed = undefined,
     children
   } = $props()
 
@@ -67,7 +73,10 @@
       image,
       in_reply_to,
       slab_title,
-      slides
+      slides,
+      topic,
+      words,
+      seed
     }
     return { type: typeOfPost(fm), ...fm }
   })

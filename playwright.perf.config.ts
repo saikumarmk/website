@@ -31,7 +31,7 @@ export default defineConfig({
       }
     : {
         command:
-          'pnpm urara:build && pnpm exec vite dev --host 127.0.0.1 --port 5173 --strictPort',
+          'pnpm exec vite dev --host 127.0.0.1 --port 5173 --strictPort',
         url: baseURL,
         reuseExistingServer: true,
         timeout: 120_000

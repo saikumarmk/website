@@ -3,9 +3,9 @@ command = "pnpm rebuild sharp && pnpm run build"
 publish = "build"
 
 [build.environment]
-NODE_VERSION = "20"
+NODE_VERSION = "22"
 SHARP_IGNORE_GLOBAL_LIBVIPS = "1"
-AWS_LAMBDA_JS_RUNTIME = "nodejs20.x"
+AWS_LAMBDA_JS_RUNTIME = "nodejs22.x"
 
 [functions]
 node_bundler = "esbuild"

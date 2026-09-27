@@ -11,7 +11,7 @@
 
   <meta name="author" content={site.author?.name} />
   {#if post}
-    <link rel="canonical" href={site.protocol + site.domain + post.path} />
+    <link rel="canonical" href={site.protocol + site.domain + post.path.replace(/\/?$/, '/')} />
     {#if post.type === 'article'}
       <title>{post.title} | {site.title}</title>
     {:else if post.type === 'note'}
@@ -24,7 +24,7 @@
     <meta name="keywords" content={site.keywords?.join(', ')} />
     {#if page}
       <title>{page.title ?? page.path.slice(1)} | {site.title}</title>
-      <link rel="canonical" href={site.protocol + site.domain + page.path} />
+      <link rel="canonical" href={site.protocol + site.domain + page.path.replace(/\/?$/, '/')} />
     {:else}
       <title>{site.subtitle ? `${site.title} - ${site.subtitle}` : site.title}</title>
       <link rel="canonical" href={site.protocol + site.domain} />

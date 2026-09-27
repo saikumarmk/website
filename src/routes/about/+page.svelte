@@ -5,7 +5,7 @@
   import { reveal } from '$lib/actions/reveal'
   import { assets } from '$lib/config/assets'
   import { staticDocumentLinkAttrs } from '$lib/utils/static-links'
-  let { data }: { data: { res?: Urara.Post[] } } = $props()
+  let { data }: { data: { res?: Blog.Post[] } } = $props()
   let allPosts = $derived((data.res ?? []).filter(post => !post.flags?.includes('unlisted')))
   let postCount = $derived(allPosts.length)
 
@@ -93,7 +93,7 @@
   </div>
 
   <div class="w-full lg:w-1/2 lg:ml-auto relative">
-    <div class="sticky top-[4.125rem] z-30 border-b about-sticky-nav">
+    <div class="sticky top-0 z-30 border-b about-sticky-nav">
       <div class="flex justify-center gap-2 p-4">
         {#each sections as section, i}
           <button

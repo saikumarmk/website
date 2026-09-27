@@ -34,7 +34,7 @@
   function attachClickHandlers() {
     if (!browser) return
     
-    const images = document.querySelectorAll('.urara-prose img, .prose img')
+    const images = document.querySelectorAll('.post-prose img, .prose img')
     
     images.forEach((img) => {
       if (img.classList.contains('lightbox-enabled')) return

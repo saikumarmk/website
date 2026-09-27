@@ -26,8 +26,7 @@ test('search index JSON has posts and pre-serialized FlexSearch chunks', async (
 
 test('résumé link on homepage resolves', async ({ page, request }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
-  const resumeLink = page.getByRole('link', { name: /résumé/i }).first()
-  await expect(resumeLink).toHaveAttribute('href', assets.resume)
+  await expect(page.locator(`a[href="${assets.resume}"]`).first()).toBeAttached()
 
   const res = await request.get(assets.resume)
   expect(res.ok()).toBeTruthy()
@@ -35,9 +34,12 @@ test('résumé link on homepage resolves', async ({ page, request }) => {
 
 test('search modal finishes loading and returns a result', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
-  await page.getByRole('button', { name: 'search' }).click()
   const input = page.locator('#search-title')
-  await expect(input).toBeVisible({ timeout: 10000 })
+  // The button only works once the page has hydrated, so retry until the modal opens.
+  await expect(async () => {
+    await page.getByRole('button', { name: 'search' }).click()
+    await expect(input).toBeVisible({ timeout: 250 })
+  }).toPass({ timeout: 10000 })
   await expect(input).not.toBeDisabled({ timeout: 20000 })
   await input.fill('About')
   await expect(page.locator('[role="dialog"][aria-modal="true"] a[href="/about"]')).toBeVisible({

@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures'
 
-/** `urara/cool-stuff/+page.md`: `---`-separated segments (see remark-slide-split). */
+/** `src/routes/(posts)/cool-stuff/+page.md`: `---`-separated segments (see remark-slide-split). */
 const SLIDES_EXAMPLE_COUNT = 12
 
 const counter = (n: number) => new RegExp(`${n}\\s*/\\s*${SLIDES_EXAMPLE_COUNT}`)

@@ -11,13 +11,13 @@ fi
 root="$(git rev-parse --show-toplevel)"
 cd "$root"
 
-echo "pre-push: verifying urara asset mirrors..."
+echo "pre-push: verifying assets are committed..."
 pnpm run verify:assets
 
 echo "pre-push: running production build (this may take a minute)..."
 pnpm run build
 
-echo "pre-push: verifying build output contains mirrored assets..."
+echo "pre-push: verifying build output contains the assets..."
 pnpm run verify:assets -- --build
 
 echo "pre-push: ok"

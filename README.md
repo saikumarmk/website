@@ -1,8 +1,22 @@
 ## Personal Site
 
-Personal website and blog built with SvelteKit, based on the [Urara](https://github.com/importantimport/urara) template.
+Personal website and blog built with SvelteKit (originally forked from the [Urara](https://github.com/importantimport/urara) template).
 
 Visit at [https://www.saikumarmk.com](https://www.saikumarmk.com)
+
+## Development
+
+Requires Node 22.18+ and pnpm 9.
+
+```bash
+pnpm install
+pnpm dev                     # http://127.0.0.1:5173
+pnpm build && pnpm preview   # static build in build/
+pnpm test                    # unit tests (Vitest)
+pnpm exec playwright test    # e2e against a production build
+```
+
+If Playwright can't download its own Chromium, point it at any installed Chromium-based browser with `PW_CHROMIUM_PATH=/path/to/browser`.
 
 
 ## Notable Components
@@ -221,7 +235,7 @@ The parser detects:
 
 ## Content Structure
 
-`urara/*` contains all posts rendered via the standard route. Each post has a `+page.md` with frontmatter and content.
+Posts live in `src/routes/(posts)/<slug>/+page.md` (the `(posts)` group doesn't appear in URLs). Create one with `pnpm new-post`. Images and PDFs go in `static/assets/` and are referenced as `/assets/...`. If `updated` is omitted from frontmatter it's taken from the file's last git commit.
 
 **Importing components in markdown:**
 ```js
@@ -241,7 +255,7 @@ import Framed from '$lib/components/pkmn/frame.svelte'
 
 ## Yggdrasil Commands
 
-Growth pages live in `urara/growth/2026/` and get copied to `src/routes/` during dev/build.
+Growth pages live in `src/routes/growth/2026/<node-id>/+page.md`.
 
 ### Creating a New Node
 
@@ -260,7 +274,7 @@ This will prompt for:
 - Estimated hours
 
 The script creates:
-- `urara/growth/2026/<node-id>/+page.md` - The markdown page
+- `src/routes/growth/2026/<node-id>/+page.md` - The markdown page
 - Updates `src/resources/growth2026.json` with the new node and edges
 
 ### Creating a Page for a Single Existing Node
@@ -287,11 +301,8 @@ pnpm run growth:backfill
 ### File Structure
 
 ```
-urara/growth/2026/
-└── <node-id>/
-    └── +page.md              # Node content (copied to src/routes/ on build)
-
 src/routes/growth/2026/
+├── <node-id>/+page.md        # Node content
 ├── +page.svelte              # Main graph visualization
 ├── types.ts                  # TypeScript types
 ├── components/               # Graph UI components (GrowthGraph2D, GrowthControls)

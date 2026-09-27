@@ -1,22 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="ivory">
 
 <head prefix="og: https://ogp.me/ns#">
   <meta charset="utf-8" />
-  <meta name="generator" content="gh:importantimport/urara" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  
-  <!-- Preconnect to external domains for faster loading -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#f5f1e7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#15141b" media="(prefers-color-scheme: dark)" />
+
+  <!-- Before first paint: the stored theme (old Light/Dark choices carry over), else the OS preference.
+       `js` lets CSS hide unsewn embroidery until it's played; without JS the finished piece shows. -->
+  <script>
+    (function () {
+      var root = document.documentElement
+      root.classList.add('js')
+      var legacy = { cmyk: 'ivory', dracula: 'ink' }
+      var t = null
+      try { t = localStorage.getItem('theme') } catch (e) {}
+      if (t && legacy[t]) t = legacy[t]
+      if (t !== 'ivory' && t !== 'ink') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'ink' : 'ivory'
+      root.dataset.theme = t
+    })()
+  </script>
+
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  
-  <!-- Preload critical fonts -->
-  <link rel="preload" href="https://fonts.gstatic.com/s/firacode/v22/uU9eCBsR6Z2vfE9aq3bL0fxyUs4tcw4W_D1sJVD7Ng.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/firacode/v27/uU9NCBsR6Z2vfE9aq3bh3dSD.woff2" as="font" type="font/woff2" crossorigin>
-  
-  <!-- KaTeX CSS - include directly for Firefox compatibility -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
-  
+
   <link rel="manifest" crossorigin="use-credentials" href="/manifest.webmanifest" />
   <link rel="alternate" type="application/feed+json" href="/feed.json" />
   <link rel="alternate" type="application/atom+xml" href="/atom.xml" />

@@ -6,7 +6,7 @@ import adapterNode from '@sveltejs/adapter-node'
 import adapterStatic from '@sveltejs/adapter-static'
 // svelte preprocessor
 import { mdsvex } from 'mdsvex'
-import mdsvexConfig from './mdsvex.config.js'
+import mdsvexConfig from './mdsvex.config.ts'
 import { injectMdsvexLayoutComponentImports } from './src/lib/mdsvex/inject-layout-component-imports.js'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 

@@ -3,8 +3,8 @@
 import type { FFFBase, FFFMention } from 'fff-flavored-frontmatter'
 
 interface ImportMetaEnv extends Readonly<Record<string, string>> {
-  readonly URARA_SITE_PROTOCOL?: 'http://' | 'https://'
-  readonly URARA_SITE_DOMAIN?: string
+  readonly SITE_PROTOCOL?: 'http://' | 'https://'
+  readonly SITE_DOMAIN?: string
 }
 
 interface ImportMeta {
@@ -13,7 +13,7 @@ interface ImportMeta {
 }
 
 declare global {
-  namespace Urara {
+  namespace Blog {
     namespace Post {
       type Frontmatter = Omit<FFFBase, 'flags'> &
         Pick<FFFMention, 'in_reply_to'> & {
@@ -77,6 +77,18 @@ declare global {
            * Split markdown on `---` into slides; deck mode uses `?mode=slides` on the client (see `/cool-stuff/deck/` handoff for static-safe links).
            */
           slides?: boolean
+          /** shelf on the writing index; falls back to the first tag */
+          topic?: string
+          /**
+           * word count of the post's prose.
+           * @remarks auto-generated
+           */
+          words?: number
+          /**
+           * FNV-1a hash of the post's prose; grows its flower (`Specimen seed={post.seed}`).
+           * @remarks auto-generated
+           */
+          seed?: number
         }
       type Toc = {
         depth: number

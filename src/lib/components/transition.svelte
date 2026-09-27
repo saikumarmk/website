@@ -42,42 +42,20 @@
 </script>
 
 {#if useVt || policy === 'none' || prefersReducedMotion()}
-  <div class="layout-transition pt-16 md:pb-8 lg:pb-16">
+  <div class="layout-transition">
     {@render children?.()}
   </div>
 {:else if useFade}
   {#key path}
     <div
-      class="layout-transition pt-16 md:pb-8 lg:pb-16"
+      class="layout-transition"
       in:fade={{ duration: 220 }}
     >
       {@render children?.()}
     </div>
   {/key}
 {:else}
-  <div class="layout-transition pt-16 md:pb-8 lg:pb-16">
+  <div class="layout-transition">
     {@render children?.()}
   </div>
 {/if}
-
-<style>
-  .layout-transition {
-    background: hsl(var(--b1));
-  }
-
-  @media (min-width: 768px) {
-    .layout-transition {
-      background: hsl(var(--b2));
-    }
-  }
-
-  :global(.site-editorial-surface) .layout-transition {
-    background: var(--site-bg);
-  }
-
-  @media (min-width: 768px) {
-    :global(.site-editorial-surface) .layout-transition {
-      padding-bottom: 0;
-    }
-  }
-</style>

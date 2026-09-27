@@ -57,7 +57,7 @@ export function detectSeries(slug: string): { series: SeriesConfig; part: number
 /**
  * Get series information for a post
  */
-export function getSeriesInfo(post: Urara.Post): { series: SeriesConfig; part: number } | undefined {
+export function getSeriesInfo(post: Blog.Post): { series: SeriesConfig; part: number } | undefined {
   // Try both slug and path
   return detectSeries(post.slug) || detectSeries(post.path)
 }

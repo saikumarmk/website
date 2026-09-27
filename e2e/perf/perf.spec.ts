@@ -11,9 +11,9 @@ import {
 } from './helpers'
 
 const NAV_ROUTES: { name: RegExp | string; path: string }[] = [
-  { name: 'About Me', path: '/about' },
-  { name: 'Portfolio', path: '/portfolio' },
-  { name: /^Blog$/i, path: '/archive' }
+  { name: /^About$/, path: '/about' },
+  { name: /^Experience$/, path: '/portfolio' },
+  { name: /^Writing$/, path: '/archive' }
 ]
 
 const DIRECT_ROUTES = ['/growth/2026/', '/playbook/']

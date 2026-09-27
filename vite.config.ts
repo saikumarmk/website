@@ -1,5 +1,4 @@
 // vite define config
-import { execSync } from 'node:child_process'
 import { defineConfig, type ViteDevServer } from 'vite'
 // vite plugin
 import UnoCSS from 'unocss/vite'
@@ -12,58 +11,29 @@ import { sveltekit as SvelteKit } from '@sveltejs/kit/vite'
 import { SvelteKitPWA } from '@vite-pwa/sveltekit'
 // postcss & tailwindcss
 import TailwindCSS from 'tailwindcss'
-import tailwindConfig from './tailwind.config'
+import tailwindConfig from './tailwind.config.ts'
 import autoprefixer from 'autoprefixer'
 import cssnano from 'cssnano'
-import fs from 'fs'
 import path from 'path'
-/**
- * Mirror `urara/` → `src/routes/` + `static/` before SvelteKit resolves `import.meta.glob` for posts.
- * Without this, `pnpm build` (which runs `clean` at the end) leaves no `+page.md` copies and dev shows 0 posts.
- */
-let uraraMirrorRan = false
-function runUraraMirror() {
-  if (process.env.VITE_SKIP_URARA_MIRROR === '1') return
-  if (uraraMirrorRan) return
-  uraraMirrorRan = true
-  try {
-    execSync('node urara.js build', { stdio: 'inherit', cwd: process.cwd() })
-  } catch {
-    console.error('[urara-mirror] node urara.js build failed — posts may be empty until this succeeds.')
-    throw new Error('urara.js build failed')
-  }
-}
-
-function uraraMirrorPlugin() {
+/** Annotated-code posts fetch their source from static/annotations at runtime, so reload when one changes. */
+function reloadOnAnnotations() {
   return {
-    name: 'urara-mirror',
-    enforce: 'pre' as const,
-    /** Dev server: mirror before any glob-based post scan */
-    configureServer() {
-      runUraraMirror()
-    },
-    /** `vite build` (no configureServer) */
-    buildStart() {
-      runUraraMirror()
-    }
-  }
-}
-
-function watchExtraFiles() {
-  return {
-    name: 'watch-extra-files',
+    name: 'reload-on-annotations',
     configureServer(server: ViteDevServer) {
-      const fileToWatch = path.resolve('./urara/annotations/elo_calculator.py') // 👈 update path
-      fs.watch(fileToWatch, () => {
-        console.log(`[watch-extra-files] File changed: ${fileToWatch}`)
-        server.ws.send({ type: 'full-reload' })
+      const dir = path.resolve('static/annotations')
+      server.watcher.add(dir)
+      server.watcher.on('change', file => {
+        if (file.startsWith(dir)) server.ws.send({ type: 'full-reload' })
       })
     }
   }
 }
 
 export default defineConfig({
-  envPrefix: 'URARA_',
+  envPrefix: 'SITE_',
+  test: {
+    include: ['src/**/*.test.ts']
+  },
   /**
    * mdsvex emits `import Layout, * as Components from 'src/lib/components/post_layout.svelte'`.
    * Without this alias Rollup treats it as an unresolved bare import; with it, layout + namespace
@@ -119,7 +89,6 @@ export default defineConfig({
     }
   },
   plugins: [
-    uraraMirrorPlugin(),
     UnoCSS({
       include: [/\.svelte$/, /\.md?$/, /\.ts$/],
       extractors: [extractorSvelte],
@@ -138,7 +107,7 @@ export default defineConfig({
     } as any),
     imagetools(),
     SvelteKit(),
-    watchExtraFiles(),
+    reloadOnAnnotations(),
     SvelteKitPWA({
       registerType: 'autoUpdate',
       manifest: false,

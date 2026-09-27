@@ -1,14 +1,14 @@
-import type { ThemeConfig, HeadConfig, HeaderConfig, FooterConfig, DateConfig, FeedConfig } from '../types/general'
-import { assets } from './assets'
+import type { ThemeConfig, HeadConfig, HeaderConfig, FooterConfig, DateConfig, FeedConfig } from '../types/general.ts'
+import { assets } from './assets.ts'
 
 export const theme: ThemeConfig = [
   {
-    name: 'cmyk',
-    text: 'Light'
+    name: 'ivory',
+    text: 'Ivory'
   },
   {
-    name: 'dracula',
-    text: 'Dark'
+    name: 'ink',
+    text: 'Ink'
   }
 ]
 

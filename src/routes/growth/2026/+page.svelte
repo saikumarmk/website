@@ -41,7 +41,7 @@
 </script>
 
 <AppShell title={app?.title ?? 'Yggdrasil 2026'} embedMode="fullscreen" hideSiteChrome={true}>
-  <div class="yggdrasil-shell h-screen flex flex-col overflow-hidden">
+  <div class="yggdrasil-shell h-full flex flex-col overflow-hidden">
     <div class="flex-1 flex overflow-hidden relative">
       <div class="w-80 flex-none absolute lg:relative h-full z-30 shadow-xl" style="left: 0;">
         <GrowthControls
