@@ -304,3 +304,29 @@ export const experience: Experience[] = [
         ]
     }
 ];
+
+export interface TrainerBadge {
+    id: string
+    /** first word of the organisation in resume.json; the badge links to Experience only when it's there */
+    org?: string
+    role: string
+    period: string
+    blurb: string
+    link?: { href: string; label: string }
+}
+
+/** The home page's Trainer Card. Everything else about work comes from resume.json. */
+export const trainerCard = {
+    no: '025',
+    types: ['ML', 'HPC', 'Research', 'Maths', 'Reverse eng'],
+    since: 2021,
+    badges: [
+        { id: 'Monash', org: 'monash', role: 'Applied Data Science (Adv. Hons)', period: '2020 – 2023', blurb: 'First Class Honours, final grade 90 · thesis on bias modelling and mitigation in diffusion models.' },
+        { id: 'MAC', org: 'mac', role: 'President · Monash Association of Coding', period: '2021 – 2023', blurb: 'Grew the club past 1,100 members; ran a tech careers evening and Python workshops.' },
+        { id: 'Playbook', role: 'Grad / intern guide', period: 'living doc', blurb: 'Everything I wish someone had told me about breaking into tech in Australia.', link: { href: '/playbook', label: 'Read it' } },
+        { id: 'Canva', org: 'canva', role: 'Sr. Applied Scientist', period: '2022 – now', blurb: 'Photo and video generative models, research through to production.' }
+    ] satisfies TrainerBadge[]
+};
+
+/** Home page "Project dex · highlights", by project id */
+export const dexHighlights = ['monash-handbook-plus', 'saikumarmk-website', 'mini-melbourne-3d', 'pokered-tournament'];
