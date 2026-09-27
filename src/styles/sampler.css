@@ -131,6 +131,10 @@ footer.site .set-in { margin-left: auto; }
 /* ---------- selection: a slanted bar, stitched in satin ($lib/actions/satin-select) ---------- */
 .menu { position: relative; }
 .menu > :not(.sel-bar) { position: relative; z-index: 1; }
+/* DaisyUI has its own .menu component; undo it so satin menus keep their list styles */
+.menu { display: block; }
+.menu :where(li) > :where(:not(ul)) { display: revert; padding: 0; gap: normal; cursor: auto; user-select: auto; align-items: normal; transition: none; border-radius: 0; }
+.menu :where(li) > :where(:not(ul)):is(:hover, :focus, :active, .active) { background-color: transparent; color: inherit; }
 .sel-bar { position: absolute; left: 0; top: 0; height: 0; width: 100%; pointer-events: none; z-index: 0; opacity: 0;
   transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.25, 1.15), height 0.2s, opacity 0.2s, width 0.28s cubic-bezier(0.2, 0.9, 0.25, 1.15); }
 .sel-bar::before { content: ''; position: absolute; inset: 0; clip-path: polygon(0.8rem 0, 100% 0, calc(100% - 0.8rem) 100%, 0 100%);

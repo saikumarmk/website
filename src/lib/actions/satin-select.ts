@@ -3,6 +3,8 @@ export interface SatinSelectOptions {
   items: string
   /** index the bar returns to when the pointer and focus leave; -1 hides it */
   selected?: number
+  /** change this when the items are re-rendered to re-seat the bar even while hovered */
+  key?: unknown
 }
 
 /**
@@ -56,8 +58,10 @@ export function satinSelect(node: HTMLElement, options: SatinSelectOptions) {
   return {
     update(next: SatinSelectOptions) {
       const moved = next.selected !== opts.selected
+      const rekeyed = next.key !== opts.key
       opts = next
-      if (moved && !node.matches(':hover, :focus-within')) rest()
+      if (rekeyed) requestAnimationFrame(rest)
+      else if (moved && !node.matches(':hover, :focus-within')) rest()
     },
     destroy() {
       node.removeEventListener('pointerover', pick)
