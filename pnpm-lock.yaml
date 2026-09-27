@@ -18,9 +18,6 @@ importers:
 
   .:
     dependencies:
-      '@chenglou/pretext':
-        specifier: ^0.0.5
-        version: 0.0.5
       '@fiddle-digital/string-tune':
         specifier: ^1.1.55
         version: 1.1.55
@@ -840,9 +837,6 @@ packages:
 
   '@braintree/sanitize-url@7.1.1':
     resolution: {integrity: sha512-i1L7noDNxtFyL5DmZafWy1wRVhGehQmzZaz1HiN5e7iylJMSZR7ekOV7NsIqa5qBldlLrsKv4HbgFUVlQrz8Mw==}
-
-  '@chenglou/pretext@0.0.5':
-    resolution: {integrity: sha512-A8GZN10REdFGsyuiUgLV8jjPDDFMg5GmgxGWV0I3igxBOnzj+jgz2VMmVD7g+SFyoctfeqHFxbNatKSzVRWtRg==}
 
   '@chevrotain/cst-dts-gen@11.0.3':
     resolution: {integrity: sha512-BvIKpRLeS/8UbfxXxgC33xOumsacaeCKAjAeLyOn7Pcp95HiRbrpl14S+9vaZLolnbssPIUuiUd8IvgkRyt6NQ==}
@@ -5865,8 +5859,6 @@ snapshots:
       '@babel/helper-validator-identifier': 7.28.5
 
   '@braintree/sanitize-url@7.1.1': {}
-
-  '@chenglou/pretext@0.0.5': {}
 
   '@chevrotain/cst-dts-gen@11.0.3':
     dependencies:

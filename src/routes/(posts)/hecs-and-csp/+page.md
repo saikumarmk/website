@@ -6,9 +6,7 @@ tags: [university]
 topic: playbook
 ---
 <script>
-import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
-import Sprite from '$lib/components/pkmn/sprite.svelte'
-import Framed from '$lib/components/pkmn/frame.svelte'
+import Patch from '$lib/components/prose/patch.svelte'
 </script>
 
 Congrats! You're a fresh university student who likely chose a course on a coin flip, with regrets yet to come. Before you spend years transferring universities because it's "practically free", have a look at this [reddit post](https://www.reddit.com/r/AusFinance/comments/y2eixt/borrowing_power_limited_due_to_hecs/), or [this one](https://www.reddit.com/r/AusFinance/comments/10fnsdv/crippled_by_hecs_debt_will_take_a_lifetime_to_pay/).
@@ -46,9 +44,9 @@ It's worth noting that at an undergraduate level if you're a domestic student, y
 
 ## Lifetime limit on study
 
-<Framed>
+<Patch>
 From 2022 onwards, you are allowed a lifetime of 7 full-time university years. Any more, and you will pay the full domestic fee. In addition, there is a completion rate requirement, which means that if you don't pass at least 50 per cent of the units you have attempted, you will have to pay the total fee rate until you get that completion rate back up.
-</Framed>
+</Patch>
 
 ## Moral of the story
 
@@ -62,8 +60,3 @@ If you can afford to, take university seriously. If you don't believe you can ta
 ## Addendum - Full Fee Costs Across Universities
 
 For the more curious, if you're a full fee paying student, domestic, or international, university tuition fees will vary across the university and degree you're enrolled in.
-
-
-
-
-<Sprite name="medicine.rare-candy", size="medium"/>

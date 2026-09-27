@@ -55,18 +55,14 @@ export default defineConfig({
       // Rollup cache enabled (default); disabling was likely a workaround — re-enable for faster rebuilds
       output: {
         manualChunks(id) {
-          // Split large libraries into separate chunks
+          // Split large libraries into separate chunks. No catch-all vendor chunk: it would pull the
+          // dependencies of lazily imported libraries (mermaid's d3, cytoscape, dayjs…) into every page.
           if (id.includes('node_modules')) {
-            // Let mermaid be handled naturally by Rollup to avoid Firefox TDZ issues
-            if (id.includes('mermaid')) return undefined
             if (id.includes('elkjs')) return 'elk'
             if (id.includes('three')) return 'three'
             if (id.includes('force-graph')) return 'force-graph-2d'
-            if (id.includes('d3')) return 'd3'
             if (id.includes('katex')) return 'katex'
             if (id.includes('svelte')) return 'svelte-vendor'
-            // Other node_modules go to common vendor chunk
-            return 'vendor'
           }
         }
       }

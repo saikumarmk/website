@@ -5,8 +5,7 @@
     Mermaid,
     PythonCode,
     SlabTitle,
-    PokemonSprite,
-    SpriteAscii,
+    Patch,
     Sidenote
   } from '$lib/mdsvex/embed-registry'
   /**
@@ -22,10 +21,8 @@
     PythonCode as pythoncode,
     SlabTitle,
     SlabTitle as slabtitle,
-    PokemonSprite,
-    PokemonSprite as pokemonsprite,
-    SpriteAscii,
-    SpriteAscii as spriteascii,
+    Patch,
+    Patch as patch,
     Sidenote,
     Sidenote as sidenote
   }

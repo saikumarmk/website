@@ -7,9 +7,7 @@ topic: playbook
 ---
 
 <script>
-import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
-import Sprite from '$lib/components/pkmn/sprite.svelte'
-import Framed from '$lib/components/pkmn/frame.svelte'
+import Patch from '$lib/components/prose/patch.svelte'
 </script>
 
 
@@ -20,9 +18,9 @@ Welcome to The Grad/Intern Playbook! This is a set of articles I wrote documenti
 
 ![The MAC committee of 2023](/assets/guide-to-tech/mac_committee_2023.webp)
 
-<Framed>
+<Patch>
 The best committee I could have asked for...
-</Framed>
+</Patch>
 
 
 ### Inspirations
@@ -35,9 +33,9 @@ There already exist articles on getting a grad/intern role in the tech industry,
 
 
 ### Preface
-<Framed>
+<Patch>
 Before you read further, this will be an extremely opinionated article that won't shy away from making concrete points. So, if you've got an eye for making real big bucks out of university (in Australia), here's my guide to software engineering as a university student in Australia. This will also be split into multiple parts, with the first part being an introduction to some of the more prominent companies in Australia and the timeline for when you apply to these companies.
-</Framed>
+</Patch>
 
 
 ### What do you want out of tech?
@@ -128,11 +126,11 @@ I'd recommend noting companies and what they do so that you can apply in future 
 In Australia, unpaid internships are considered [unlawful if the intern is considered to be doing "productive" work](https://www.fairwork.gov.au/tools-and-resources/fact-sheets/unpaid-work/unpaid-work-unpaid-work). If you're undertaking work experience that is considered vocational, i.e contributes to your education, the internship is considered lawful. For this reason, teachers and nurses embark on unpaid internships. So, internships that you seek out should be paid, and some of the previously mentioned companies pay their interns a very good amount. Some services require you to pay for internship experience; these are illegal and predatory.
 
 
-<Framed>
+<Patch>
 
 So typically internships offered as part of some university capstone unit aren't illegal (The IBL program at Monash for instance), and if they do offer any payment, it's typically through a tax-free scholarship.
 
-</Framed>
+</Patch>
 
 ## The timeline
 
@@ -309,5 +307,3 @@ To summarise this article, actively work to learn more about the industry and pr
 
 
 ![A future me (Domain Expansion) can surpass his limit](/assets/guide-to-tech/surpass.jpg)
-
-<PokemonSprite pokemonName="marshadow-gen7" size="medium"/>

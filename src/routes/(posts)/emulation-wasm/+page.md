@@ -8,9 +8,7 @@ topic: building
 
 
 <script>
-import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
-import Sprite from '$lib/components/pkmn/sprite.svelte'
-import Framed from '$lib/components/pkmn/frame.svelte'
+import Patch from '$lib/components/prose/patch.svelte'
 </script>
 
 # WebAssembly and Emulation - Chip 8
@@ -19,11 +17,11 @@ import Framed from '$lib/components/pkmn/frame.svelte'
 
 In recent times, deploying compiled languages such as C, Rust and other languages to web pages has been made possible due to WebAssembly. The technology allows for compiled code on a webpage without much code in JavaScript, which this tutorial intends to go through. In my testing, Emscripten was awkward to set up due to the variety of software required, however, proved to be straightforward when compiling. For the task, I built a basic emulator for Chip-8, which has few opcodes to implement.
 
-<Framed>
+<Patch>
 <h3>Chip-8</h3>
 Chip-8 is an interpreted system developed in the 1970s and ran on the Chip-8 VM and could run basic video-games, including Pacman (Blinky game), Pong and Space Invaders. It often serves as an excellent introduction to emulation development as there are only 35 opcodes to implement, but still offers a glimpse into how emulators work.
 
-</Framed>
+</Patch>
 
 ## Building the Emulator
 
@@ -103,6 +101,3 @@ While the initial Emscripten process proved to be lengthy and convoluted for beg
 ### Future Considerations
 
 Some JS and HTML knowledge is required to implement a drop-down menu for changing ROMs to increase useability. Additionally, having a view of registers and the RAM could also be interesting to implement.
-
-
-<PokemonSprite pokemonName="magneton", size="medium"/>
