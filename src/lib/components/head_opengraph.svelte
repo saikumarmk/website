@@ -1,24 +1,25 @@
 <script lang="ts">
   import { site } from '$lib/config/site'
-  import { any, maskable } from '$lib/config/icon'
+  import { ogImage, siteOgImage } from '$lib/utils/og'
   let { post = undefined, page = undefined } = $props()
+
+  let image = $derived(site.protocol + site.domain + (post ? (post.image ?? ogImage(post.path)) : siteOgImage))
 </script>
 
 <svelte:head>
   <meta property="og:site_name" content={site.title} />
   <meta property="og:locale" content={site.lang} />
+  <meta property="og:image" content={image} />
+  {#if !post?.image}
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+  {/if}
+  <meta name="twitter:card" content="summary_large_image" />
   {#if post}
     <meta property="og:type" content="article" />
     <meta property="og:title" content={post.title ?? post.summary ?? post.path.slice(1)} />
     {#if post.summary}
       <meta property="og:description" content={post.summary} />
-    {/if}
-    {#if post.image}
-      <meta property="og:image" content={site.protocol + site.domain + post.image} />
-      <meta name="twitter:card" content="summary_large_image" />
-    {:else}
-      <meta property="og:image" content={maskable['512'].src ?? any['512'].src ?? any['192'].src} />
-      <meta name="twitter:card" content="summary" />
     {/if}
     {#if post.tags}
       {#each post.tags as tag}
@@ -31,7 +32,6 @@
     <meta property="article:modified_time" content={post.updated ?? post.published ?? post.created} />
   {:else}
     <meta property="og:type" content="website" />
-    <meta property="og:image" content={maskable['512'].src ?? any['512'].src ?? any['192'].src} />
     <meta property="og:description" content={site.description} />
     {#if page}
       <meta property="og:title" content={page.title ?? page.path.slice(1)} />
