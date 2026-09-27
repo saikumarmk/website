@@ -25,8 +25,8 @@ Contains all the SvelteKit application code that builds the site.
   - `pkmn/` - Pokemon sprite and frame components (unique feature of this site)
   - `portable-portfolio/` - Portfolio badge, experience, and project components
   - `prose/` - Markdown rendering components (code blocks, images, tables, Mermaid diagrams)
-  - `three/` - Three.js canvas components for 3D visualizations
-  - Layout components: `header.svelte`, `footer.svelte`, `post_container.svelte`, etc.
+  - `thread/` - Embroidery components (`Embroidery.svelte`, `Specimen.svelte`) over `$lib/thread`
+  - Layout components: `header.svelte`, `footer.svelte`, `post_container.svelte`, `reading_vine.svelte`, `sidenote.svelte`
 
 - **`config/`** - Configuration files
   - `site.ts` - Site metadata, author info, theme
@@ -37,7 +37,6 @@ Contains all the SvelteKit application code that builds the site.
   - `icon.ts` - Icon configurations
 
 - **`stores/`** - Svelte stores for state management
-  - `background.ts` - Background state
   - `portfolio.ts` - Portfolio state
   - `posts.ts` - Posts/blog state
   - `title.ts` - Page title state
@@ -120,12 +119,11 @@ Config files import each other with explicit `.ts` extensions (e.g. `./mdsvex.co
 - Dedicated portfolio page at `/portfolio`
 
 ### 4. Code Syntax Highlighting
-- Uses `rehype-pretty-code` with Shiki
-- GitHub theme styling in `src/styles/github.css`
-- Configured in `mdsvex.config.ts`
+- `shiki-twoslash` with the `css-variables` theme, configured in `mdsvex.config.ts`
+- Token colours come from `--shiki-*` variables mapped to the Sampler tokens in `src/styles/sampler.css`
+- `code_copy_button.svelte` wraps each block in `.codewrap` with a language tab and copy button
 
-### 5. 3D Visualizations
-- Three.js components in `src/lib/components/three/`
+### 5. Graph Visualizations
 - Special routes like `/monash-graph-2d` and `/monash-graph-3d` use force graphs
 - Network data in `src/resources/network2022.json` and `network2024.json`
 
@@ -278,10 +276,12 @@ Configuration in `svelte.config.ts` automatically selects adapter based on envir
 - **Named slots in cards:** When adding breadcrumbs or other elements to cards, use named slots (`<svelte:fragment slot="breadcrumb">`)
 - **Check for slot content:** Not all posts may provide slot content, so components should handle empty slots gracefully
 
-### Spacing and Layout
-- **Fixed header height:** Header is fixed with `max-h-[4.125rem]`, content should have matching `pt-[4.125rem]` to avoid overlap
-- **Card padding:** Default card-body has padding, align breadcrumbs with `px-4 md:px-8` to match
-- **Margin vs Padding:** Use padding (`pt-*`) instead of margin (`mt-*`) on main containers to avoid creating gaps above content
+### Spacing and Layout (Sampler design)
+- **The header is not fixed.** It scrolls with the page, so content needs no top offset. Full-screen apps (`/growth/2026`) get the header plus the rest of the viewport via `.app-frame` in `+layout.svelte`.
+- **Measure:** text columns use `.col` (`max-width: var(--measure)`); margin notes use `.with-notes` and `<Sidenote>`. The fluid variables (`--padl`, `--measure`, `--gap`, `--margin`, `--rail`) live in `src/styles/sampler.css`.
+- **Colours:** use the Sampler tokens (`--bg`, `--fg`, `--muted`, `--rule`, `--r1…--r4`, `--g1/--g2`, `--c1…--c3`) rather than DaisyUI classes. Themes are `ivory` and `ink` via `data-theme` on `<html>`; `--g1` gold is decoration only, never text.
+- **Menus:** lists, tabs and contents highlight with `use:satinSelect` (`$lib/actions/satin-select.ts`); articles run `use:settleMargins` so margin notes avoid wide blocks.
+- **Embroidery:** `$lib/thread` (pure, SSR-safe) with `Embroidery.svelte` / `Specimen.svelte`; posts carry `seed` and `words` from `mdsvex.config.ts`.
 
 ## Code Review Findings & Best Practices (Nov 2025)
 
