@@ -6,12 +6,6 @@ tags: [blog-post]
 topic: building
 ---
 
-<script>
-import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
-import Sprite from '$lib/components/pkmn/sprite.svelte'
-import Framed from '$lib/components/pkmn/frame.svelte'
-</script>
-
 
 A couple of weeks ago, I wanted to test out Claude Sonnet's capabilities for generating web applications, as my attention had been brought to [bolt.new](https://bolt.new/), a prompt system that allows you to prompt full-stack web applications. Word on the street, according to people I work with was that Claude's Sonnet was very powerful for generating entire applications, and I had yet to trial Sonnet on my personal account. I tested Sonnet's capabilities by asking the model to replicate the heat map of [SETool](https://www.saikumarmk.com/the-story-of-setool/), a now-defunct [^1] piece of software that deploys a Dash application to Heroku for visualising unit outcomes.
 
@@ -41,9 +35,6 @@ After the initial prompt, I asked it to refine the web application and allow use
 ![SETool v3 in React](/assets/setool/setool_v3.png)
 
 Anyway, if you're a Monash student, go check it out and let me know what you think! As of now, the comparison table is a bit bugged, but otherwise it's pretty functional and looks good! I will try to update the dashboard here and there, but I also wouldn't mind any prospective students taking it off my hands (and you get a free project on your resume).
-
-
-<PokemonSprite pokemonName="porygon-z", size="medium"/>
 
 
 [^1]: Heroku stopped their free plan, and I always intended to get rid of Python and make it a pure web-app.

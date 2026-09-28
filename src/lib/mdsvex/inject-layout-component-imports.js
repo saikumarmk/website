@@ -9,7 +9,7 @@ const OPTIONAL_IMPORTS = [
   `import SlabTitle from '$lib/components/slab_title.svelte'`,
   `import Mermaid from '$lib/components/prose/mermaid.svelte'`,
   `import PythonCode from '$lib/components/prose/code.svelte'`,
-  `import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'`,
+  `import Patch from '$lib/components/prose/patch.svelte'`,
   `import Sidenote from '$lib/components/sidenote.svelte'`
 ]
 

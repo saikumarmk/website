@@ -87,7 +87,7 @@
           </div>
           {#if post.slab_title}
             <div itemprop="name headline" class="p-name">
-              <SlabTitle title={post.title ?? post.path.slice(1)} slug={post.path} config={typeof post.slab_title === 'string' ? post.slab_title : ''} />
+              <SlabTitle title={post.title ?? post.path.slice(1)} slug={post.path} config={typeof post.slab_title === 'string' ? post.slab_title : ''} level={1} />
             </div>
           {:else}
             <h1 itemprop="name headline" class="p-name">{post.title ?? post.path.slice(1)}</h1>

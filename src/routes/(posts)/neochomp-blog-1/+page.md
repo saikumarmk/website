@@ -8,9 +8,7 @@ topic: building
 
 
 <script>
-import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
-import Sprite from '$lib/components/pkmn/sprite.svelte'
-import Framed from '$lib/components/pkmn/frame.svelte'
+import Patch from '$lib/components/prose/patch.svelte'
 </script>
 
 # Origins, and starting off
@@ -73,9 +71,9 @@ And so, our goose chase for this phantom SBC which we couldn’t even be sure if
 
 !['Hell yeah looks like a mostly shameless clone' - Shin](/assets/neochomp/blog-1/banana.webp)
 
-<Framed>
+<Patch>
 “Hell yeah looks like a mostly shameless clone” - Shin
-</Framed>
+</Patch>
 
 
 Now, the Banana had some heating issues, though that was definitely the least of our concerns. At this time, a cheap little SBC called the Radxa Zero came to our attention, for an insanely affordable USD 30. It’s also important to note that this was a quad-core SBC, which was on par with the Raspberry Pi 4, for a quarter of the price, and could go up to 4GB RAM (Starting at 512 Mb). We were dealing with one beast of a board. So, we put in an order for all the parts.
@@ -89,9 +87,9 @@ As far as major costs were concerned, we were well under $100 per potential prod
 The engineering process always consists of terrible ideas that somehow made it to our brains.
 
 ![The hardware experience. None of these things was actual concerns for us.](/assets/neochomp/blog-1/experience.png)
-<Framed>
+<Patch>
 The hardware experience. Most of the project was fine and we didn't have that many hiccups.
-</Framed>
+</Patch>
 
 ## Cool Ideas I
 
@@ -104,6 +102,3 @@ We found a [website](https://vic.transportsg.me/mockups) that also creates mocku
 ![Untitled](/assets/neochomp/blog-1/ptv.png)
 
 Another idea we had was having events trigger on google calendar events. This [project](https://www.youtube.com/watch?v=BIGsW0TYSuU&ab_channel=VEEBProjects) creates coffee automatically at certain times, and it would be very interesting to have the display be programmed in advance.
-
-
-<PokemonSprite pokemonName="meloetta", size="large"/>

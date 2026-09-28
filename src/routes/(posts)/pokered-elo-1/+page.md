@@ -7,12 +7,6 @@ summary: "A brief introduction to pkmn/engine"
 topic: games
 ---
 
-<script>
-import PokemonSprite from '$lib/components/pkmn/pokemon.svelte'
-import Sprite from '$lib/components/pkmn/sprite.svelte'
-import Framed from '$lib/components/pkmn/frame.svelte'
-</script>
-
 In case it's not already clear to the reader, I love Pokemon. Part of my obsession with Pokemon included simulating the trainer AI from the older games. pimanrules has a series of videos which simulate all $\sim 391^2$ possible trainer AI battles in [Pokemon Red](https://www.youtube.com/watch?v=8yUPhRJtNJM), [equalising all trainer levels to level 50](https://www.youtube.com/watch?v=247qD1qulSQ), and running the same tournament for [Pokemon Crystal](https://www.youtube.com/watch?v=Q6E6OaWb7LQ). The simulation is done directly via a Gameboy emulator, with the memory addresses swapped to make battle decisions. That means the hours required to simulate all the battles come to around 192 hours. My goal was to see if I could achieve this speed-up. Battling is the heart of Pokemon, and being able to analyse the trials set before the player is a very interesting way to to look at the way the games were design for players. In the end, I cut down the simulation time for all $391^2$ battles in Pokemon Red from 192 hours (computing hours) to **two and a half minutes**. The GitHub project can be found at [saikumarmk/pokered-trainer-tournament](https://github.com/saikumarmk/pokered-trainer-tournament), and the necessary bindings are available at [saikumarmk/PyKMN](https://github.com/saikumarmk/PyKMN/).
 
 My journey began years ago, with the [pokered](https://github.com/pret/pokered) dissassembly project. The first idea that came to mind would be simulating the [core](https://github.com/pret/pokered/blob/master/engine/battle/core.asm) battle system by implementing a rudimentary ASM interpreter, however, I realised that the complexity of the project would shoot up because I'd need to go from ASM to some higher level language.
@@ -133,9 +127,6 @@ So while not exactly the same in terms of results (due to some minor implementat
 ## Conclusion - Features to implement
 
 I have yet to implement trainer AI features such as using potions, switching out Pokemon, or Gym Leader AI which may bias the results. I would also like to make nice visualisations for this project, though it's not nearly a top priority as pimanrules' video does that already. It would be very cool to see how `pkmn/engine` develops, and whether we can recreate the same setup for Pokemon Crystal.
-
-
-<PokemonSprite pokemonName="alakazam" size="medium"/>
 
 [^1]: Dragon Rage, Fly, Psywave, and Super Fang are some examples of these special damage moves.
 [^2]: It's a little more complicated than this - you can check the AI Pokemon move sets section of the [Gamefaqs guide](https://gamefaqs.gamespot.com/gameboy/367023-pokemon-red-version/faqs/64175/ai)

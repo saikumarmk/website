@@ -115,48 +115,6 @@ a, button, [role="button"], input[type="submit"], input[type="button"] {
   color: var(--site-accent-ink);
 }
 
-/* Game Boy frame, until posts move to <Patch> */
-.framed {
-  @apply relative border-solid border-[21px] p-4 my-4 w-full max-w-full;
-  border-image: url('styles/images/frame-hd.png') 42 round;
-}
-
-html[data-theme='ink'] .framed {
-  border-image: url('styles/images/dark-frame-hd.png') 42 round;
-}
-
-.framed.no-hd {
-  border-image: url('styles/images/frame.png') 7 round;
-  border-width: 7px;
-}
-
-.framed.neutral {
-  background: #f8f3f8;
-  color: #181010;
-}
-
-.framed.primary {
-  background: #48a058;
-  color: #f8f3f8;
-  text-shadow: -1px -1px 0 #181010, 1px -1px 0 #181010, -1px 1px 0 #181010, 1px 1px 0 #181010;
-}
-
-.framed.secondary {
-  background: #f0b088;
-  color: #f8f3f8;
-  text-shadow: -1px -1px 0 #181010, 1px -1px 0 #181010, -1px 1px 0 #181010, 1px 1px 0 #181010;
-}
-
-.framed.danger {
-  background: #b3181c;
-  color: #f8f3f8;
-  text-shadow: -1px -1px 0 #181010, 1px -1px 0 #181010, -1px 1px 0 #181010, 1px 1px 0 #181010;
-}
-
-.framed:is(.neutral, .primary, .secondary, .danger).exclude-border {
-  background-clip: padding-box;
-}
-
 /* Fullscreen slide deck (?mode=slides + slides: true) */
 body.deck-presentation-active {
   overflow: hidden;

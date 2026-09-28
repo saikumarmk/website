@@ -4,7 +4,7 @@ slab_title: true
 author: Sai Kumar Murali Krishnan
 created: 2025-07-14
 tags: [random, web-dev, slides, meta]
-summary: "Kitchen sink for this site: nav map, search, themes, Mermaid, PythonCode, SlabTitle, Poké sprites, math, and slide layout demos—article or fullscreen deck."
+summary: "Kitchen sink for this site: nav map, search, themes, Mermaid, PythonCode, SlabTitle, patches, math, and slide layout demos—article or fullscreen deck."
 slides: true
 toc: false
 topic: journal
@@ -12,7 +12,7 @@ topic: journal
 
 # This site in one deck
 
-**Article** at this URL · **present** with [**Present Slides** on this page](/cool-stuff/deck/) (or the button above) for fullscreen. **Mermaid**, **PythonCode**, **SlabTitle**, and **PokemonSprite** come from `post_layout.svelte` (mdsvex layout exports)—works in **split slides** and **SSR**.
+**Article** at this URL · **present** with [**Present Slides** on this page](/cool-stuff/deck/) (or the button above) for fullscreen. **Mermaid**, **PythonCode**, **SlabTitle** and **Patch** come from `post_layout.svelte` (mdsvex layout exports)—works in **split slides** and **SSR**.
 
 ---
 
@@ -47,14 +47,10 @@ topic: journal
 
 <SlabTitle title="Diagrams & code" slug="cool-elements" config="3c 2.5 3c 2.5i" />
 
-<div class="not-prose max-w-full overflow-hidden">
-
 <Mermaid graph="graph LR
   site[saikumarmk.com] --> archive[Archive]
   site --> portfolio[Portfolio]
   archive --> posts[Posts]" />
-
-</div>
 
 <Mermaid graph='sequenceDiagram
     Alice ->> Bob: Hello Bob, how are you?
@@ -73,22 +69,14 @@ topic: journal
 
 ---
 
-## Sprites (layout component)
+## Patches
 
-**PokemonSprite** uses the same mdsvex layout mapping as Mermaid—no per-file `<script>` import.
+**Patch** (the old Game Boy frame) is an aside stitched onto the page, from the same mdsvex layout mapping as Mermaid.
 
-<div class="not-prose flex flex-wrap items-end gap-8">
-
-<div class="flex flex-col items-center gap-2">
-  <PokemonSprite pokemonName="pikachu" />
-  <span class="text-sm opacity-70">Block</span>
-</div>
-
-<div class="flex flex-col gap-2">
-  <p class="text-sm opacity-90">Inline next to text: <PokemonSprite pokemonName="eevee" inline={true} /></p>
-</div>
-
-</div>
+<Patch>
+<h3>Chip-8</h3>
+Chip-8 is an interpreted system from the 1970s that could run basic video games, including Pacman, Pong and Space Invaders. It only has 35 opcodes to implement.
+</Patch>
 
 ---
 
