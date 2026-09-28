@@ -44,13 +44,6 @@ const ink = {
 
 export default {
   content: ['./src/**/*.{html,md,js,svelte,ts}'],
-  theme: {
-    extend: {
-      fontFamily: {
-        pokemonGB: ['"Pokemon GB"', 'sans-serif']
-      }
-    }
-  },
   plugins: [typography, daisyui],
   daisyui: { themes: [{ ivory }, { ink }] }
 }

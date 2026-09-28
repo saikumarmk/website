@@ -321,7 +321,7 @@
   .stitched::after { content: ''; position: absolute; inset: 6px; border: 1.5px dashed var(--g1); border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.2s; }
   .stitched:hover::after, .stitched.on::after, .stitched:focus-visible::after { opacity: 1; }
   .stitched:focus-visible { outline-color: color-mix(in srgb, var(--r3) 45%, transparent); }
-  .about-grid { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr); gap: var(--gap); align-items: start; scroll-margin-top: 1.5rem; }
+  .about-grid { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr); gap: var(--gap); align-items: start; scroll-margin-top: 4rem; }
   @media (max-width: 59.99rem) { .about-grid { grid-template-columns: 1fr; } }
 
   /* a woven card (twill texture); the attractors are sewn into its cloth and thin out toward the name */
@@ -368,7 +368,7 @@
   .dex-all { font-size: 15px; margin: 0.7rem 0 0; }
 
   /* ---------- experience: the old portfolio page, rows open like drawers ---------- */
-  #experience { scroll-margin-top: 1.5rem; }
+  #experience { scroll-margin-top: 4rem; }
   .exp-h { font-size: 1.9rem; font-weight: 400; margin: 0 0 0.5rem; }
   .exp-lede { margin: 0 0 1.4rem; color: var(--fg2); }
   .exp-lede b { font-weight: 500; color: var(--fg); }

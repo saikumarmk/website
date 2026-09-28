@@ -103,15 +103,7 @@ declare global {
         children?: Toc[]
       }
       interface Module {
-        default: {
-          render: () => {
-            html: string
-            head: string
-            css: {
-              code: string
-            }
-          }
-        }
+        default: import('svelte').Component
         metadata: Frontmatter
       }
     }

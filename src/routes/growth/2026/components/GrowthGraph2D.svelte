@@ -126,7 +126,7 @@
     ctx.strokeRect(badgeX, badgeY, badgeSize, badgeSize);
 
     ctx.fillStyle = '#f0f0f0';
-    ctx.font = 'bold 9px "Pokemon GB", monospace';
+    ctx.font = 'bold 9px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.imageSmoothingEnabled = false;
@@ -143,7 +143,7 @@
 
     // Draw title (centered, wrapped, truncated)
     ctx.fillStyle = textColor;
-    ctx.font = '11px "Pokemon GB", monospace';
+    ctx.font = '11px "IBM Plex Mono", monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.imageSmoothingEnabled = false;

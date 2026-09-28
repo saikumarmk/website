@@ -59,9 +59,9 @@ Contains all the SvelteKit application code that builds the site.
 - **API routes:** Folders ending with `/+server.ts` (e.g., `atom.xml/`, `feed.json/`, `sitemap.xml/`)
 
 #### `src/styles/` - Stylesheets
-- CSS files for Pokemon Game Boy styling, syntax highlighting (GitHub theme)
-- Custom fonts (Pokemon GB, PressStart2P)
-- Pokesprite sprite sheets and CSS
+- `sampler.css`: the design system (tokens, themes, measure, prose, Shiki token colours)
+- Pokesprite sprite sheet and CSS (`pokesprite-pokemon-gen8.css`, `images/`)
+- Fonts are Newsreader and IBM Plex Mono from `@fontsource`, imported in `+layout.svelte`
 
 #### `src/resources/` - Static Resources
 - `favicon.png`
@@ -277,7 +277,7 @@ Configuration in `svelte.config.ts` automatically selects adapter based on envir
 - **Check for slot content:** Not all posts may provide slot content, so components should handle empty slots gracefully
 
 ### Spacing and Layout (Sampler design)
-- **The header is not fixed.** It scrolls with the page, so content needs no top offset. Full-screen apps (`/growth/2026`) get the header plus the rest of the viewport via `.app-frame` in `+layout.svelte`.
+- **The header is only pinned on the home page** (`.pinned`, so the Experience/About scroll-spy stays visible; home anchors use `scroll-margin-top: 4rem`). Elsewhere it scrolls with the page, so content needs no top offset and pages can pin their own panels at the top. Full-screen apps (`/growth/2026`) get the header plus the rest of the viewport via `.app-frame` in `+layout.svelte`.
 - **Measure:** text columns use `.col` (`max-width: var(--measure)`); margin notes use `.with-notes` and `<Sidenote>`. The fluid variables (`--padl`, `--measure`, `--gap`, `--margin`, `--rail`) live in `src/styles/sampler.css`.
 - **Colours:** use the Sampler tokens (`--bg`, `--fg`, `--muted`, `--rule`, `--r1…--r4`, `--g1/--g2`, `--c1…--c3`) rather than DaisyUI classes. Themes are `ivory` and `ink` via `data-theme` on `<html>`; `--g1` gold is decoration only, never text.
 - **Cursor:** the site uses the fat Pikachu cursor (`src/app.pcss`). For clickable things write `cursor: var(--pointer)`, never plain `cursor: pointer`, or the Pikachu disappears on hover.
@@ -712,7 +712,7 @@ Content here...
 - Branch color strips on left edge
 - Tier badges (RT, TK, BR, CR)
 - Status symbols (locked: dim + dashed, available: bright, complete: checkmark)
-- Font: 'Pokemon GB' with pixelated rendering
+- Font: IBM Plex Mono (the site mono)
 
 **Edge Rendering:**
 - Orthogonal elbow paths (right edge → left edge)

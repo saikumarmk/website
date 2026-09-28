@@ -23,4 +23,4 @@
   }).toString()}`)
 </script>
 
-<iframe title="SoundCloud music player" class="mb-4" {width} {height} scrolling="no" frameborder="no" allow="autoplay" {src} />
+<iframe title="SoundCloud music player" class="mb-4" {width} {height} scrolling="no" frameborder="no" allow="autoplay" {src}></iframe>

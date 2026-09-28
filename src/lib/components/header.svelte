@@ -17,9 +17,11 @@
   const sections = links.flatMap((l) => (l.section ? [l.section] : []))
 
   let inView = $state<string | null>(null)
+  let scrolled = $state(false)
   let raf = 0
   function spy() {
     raf = 0
+    scrolled = scrollY > 8
     if (location.pathname !== '/') return (inView = null)
     let current: string | null = null
     let top = -Infinity
@@ -55,7 +57,8 @@
   }
 </script>
 
-<header class="site">
+<!-- Only the home page pins the header: its sections are what the nav tracks, and other pages pin their own panels to the top. -->
+<header class="site" class:pinned={$page.url.pathname === '/'} class:scrolled>
   <a class="name" href="/">Sai Kumar M.K.</a>
   <nav aria-label="Site">
     {#each links as l (l.href)}

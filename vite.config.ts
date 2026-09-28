@@ -1,5 +1,6 @@
 // vite define config
-import { defineConfig, type ViteDevServer } from 'vite'
+import { defineConfig } from 'vitest/config'
+import type { ViteDevServer } from 'vite'
 // vite plugin
 import UnoCSS from 'unocss/vite'
 import { presetTagify, presetIcons } from 'unocss'

@@ -60,11 +60,7 @@ topic: journal
     Bob-->Alice: Checking with John...
     Alice->John: Yes... John, how are you?'/>
 
-<div class="not-prose slide-code-focus">
-
 <PythonCode sourceUrl="/annotations/ponder.py" title="PonderNet (annotated Python)" />
-
-</div>
 
 ---
 

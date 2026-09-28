@@ -83,8 +83,7 @@
       <img
         src={currentImage}
         alt={currentAlt}
-        class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl animate-in zoom-in-95 duration-300"
-        onclick={e => e.stopPropagation()} />
+        class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl animate-in zoom-in-95 duration-300" />
       
       {#if currentAlt}
         <div class="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-4 text-center rounded-b-lg">
