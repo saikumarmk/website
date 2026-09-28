@@ -4,7 +4,7 @@ export type ThemeConfig = {
 }[]
 
 export type HeadConfig = {
-  custom?: (params: { dev: boolean; post?: Urara.Post; page?: Urara.Page }) => string[]
+  custom?: (params: { dev: boolean; post?: Blog.Post; page?: Blog.Page }) => string[]
   me?: string[]
 }
 

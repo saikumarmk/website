@@ -1,0 +1,10 @@
+{
+  "dir": "/Volumes/disk4s2/@home/saikumarmk/Code/knowledge/resume",
+  "source": "resume_mle_styled.tex",
+  "sections": ["Experience", "Education", "Technical Skills"],
+  "omit": [],
+  "replace": {
+    "Thesis:": "Thesis: <a href=\"https://saikumarmk.com/assets/honours_thesis.pdf\"><i>Bias Modelling and Mitigation in Diffusion Models</i></a>."
+  },
+  "links": {}
+}

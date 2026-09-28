@@ -1,5 +1,5 @@
 /**
- * Canonical static asset URLs mirrored from `urara/assets/` → `static/assets/`.
+ * Canonical URLs for files in `static/assets/`.
  * Import this instead of hardcoding `/assets/...` in components.
  */
 export const assets = {
@@ -11,5 +11,5 @@ export const assets = {
   monashLogo: '/assets/monash.jpeg'
 } as const
 
-/** Fallback when a PDF mirror is missing (e.g. before Urara build). */
+/** Fallback when a PDF is missing. */
 export const resumeFallbackHref = '/about'

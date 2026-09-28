@@ -1,8 +1,22 @@
 ## Personal Site
 
-Personal website and blog built with SvelteKit, based on the [Urara](https://github.com/importantimport/urara) template.
+Personal website and blog built with SvelteKit (originally forked from the [Urara](https://github.com/importantimport/urara) template).
 
 Visit at [https://www.saikumarmk.com](https://www.saikumarmk.com)
+
+## Development
+
+Requires Node 22.18+ and pnpm 9.
+
+```bash
+pnpm install
+pnpm dev                     # http://127.0.0.1:5173
+pnpm build && pnpm preview   # static build in build/
+pnpm test                    # unit tests (Vitest)
+pnpm exec playwright test    # e2e against a production build
+```
+
+If Playwright can't download its own Chromium, point it at any installed Chromium-based browser with `PW_CHROMIUM_PATH=/path/to/browser`.
 
 
 ## Notable Components
@@ -11,26 +25,15 @@ This site features several custom interactive components beyond the standard blo
 
 ### Project Dex
 
-A Pokedex-inspired project showcase at `/portfolio/projects`.
+A Pokédex of projects at `/dex` (`/projects` and `/portfolio/projects` redirect there).
 
-**Source:** `src/routes/portfolio/projects/+page.svelte`
+**Source:** `src/routes/dex/+page.svelte`, data in `src/lib/config/portfolio.ts`
 
 **Features:**
-- Grid of project squares with Pokemon sprites as icons
-- Modal popup styled like a Pokedex entry with Pokemon Game Boy grid background
-- Typing effect that displays description text character-by-character (30ms/char)
-- Pagination system that splits long descriptions into 2-sentence pages
-- Red bouncing arrow indicator for "more text" navigation
-- Responsive design with different fonts for mobile (`pokemondppt`) vs desktop (`Press Start 2P`)
-
-**How it works:**
-```
-1. Projects defined in src/lib/config/portfolio.ts
-2. Each project has a Pokemon sprite (from pokesprite CSS classes)
-3. On click, modal opens and triggers startTyping() animation
-4. getDescriptionPages() splits text by sentences for pagination
-5. Arrow appears when more pages available
-```
+- Type tabs, a numbered list and a "screen": an embroidery hoop with the entry's flower (grown from its name) and its partner Pokémon
+- ↑/↓ move through the list, ←/→ switch type
+- `/dex#<project id>` selects an entry, and selecting one updates the hash
+- Retired projects set `retired: '<successor id>'`, and their habitat links to the successor
 
 ### TechBadge Component
 
@@ -179,10 +182,10 @@ Side-by-side documentation and code display, inspired by literate programming.
 **Source:** `src/lib/components/prose/code.svelte`
 
 **Features:**
-- Fetches Python file from URL at runtime
+- Rendered at build time by `/annotations/<name>.json` from `static/annotations/<name>.py`, fetched when scrolled near
 - Parses docstrings and comments as documentation
-- Renders docs as markdown (via `mdsvex_processor.js`)
-- Syntax highlights code with highlight.js
+- Renders docs as Markdown with KaTeX maths (`src/lib/server/annotated.ts`)
+- Syntax highlights code with Shiki, sharing the site's code colours
 - Two-column layout: docs left, code right
 - Responsive: stacks vertically on mobile
 
@@ -221,7 +224,7 @@ The parser detects:
 
 ## Content Structure
 
-`urara/*` contains all posts rendered via the standard route. Each post has a `+page.md` with frontmatter and content.
+Posts live in `src/routes/(posts)/<slug>/+page.md` (the `(posts)` group doesn't appear in URLs). Create one with `pnpm new-post`. Images and PDFs go in `static/assets/` and are referenced as `/assets/...`. If `updated` is omitted from frontmatter it's taken from the file's last git commit.
 
 **Importing components in markdown:**
 ```js
@@ -241,7 +244,7 @@ import Framed from '$lib/components/pkmn/frame.svelte'
 
 ## Yggdrasil Commands
 
-Growth pages live in `urara/growth/2026/` and get copied to `src/routes/` during dev/build.
+Growth pages live in `src/routes/growth/2026/<node-id>/+page.md`.
 
 ### Creating a New Node
 
@@ -260,7 +263,7 @@ This will prompt for:
 - Estimated hours
 
 The script creates:
-- `urara/growth/2026/<node-id>/+page.md` - The markdown page
+- `src/routes/growth/2026/<node-id>/+page.md` - The markdown page
 - Updates `src/resources/growth2026.json` with the new node and edges
 
 ### Creating a Page for a Single Existing Node
@@ -287,11 +290,8 @@ pnpm run growth:backfill
 ### File Structure
 
 ```
-urara/growth/2026/
-└── <node-id>/
-    └── +page.md              # Node content (copied to src/routes/ on build)
-
 src/routes/growth/2026/
+├── <node-id>/+page.md        # Node content
 ├── +page.svelte              # Main graph visualization
 ├── types.ts                  # TypeScript types
 ├── components/               # Graph UI components (GrowthGraph2D, GrowthControls)

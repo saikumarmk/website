@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const dev = process.env.E2E_DEV === '1'
-const baseURL = dev ? 'http://127.0.0.1:5173' : 'http://127.0.0.1:4173'
+// set E2E_PORT when several checkouts run e2e at once, since an existing server is reused
+const port = Number(process.env.E2E_PORT) || (dev ? 5173 : 4173)
+const baseURL = `http://127.0.0.1:${port}`
 
 export default defineConfig({
   testDir: './e2e',
@@ -14,16 +16,25 @@ export default defineConfig({
     baseURL,
     trace: 'on-first-retry'
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        // any local Chromium-based browser, e.g. when Playwright's own download is unavailable
+        launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH || undefined }
+      }
+    }
+  ],
   webServer: dev
     ? {
-        command: 'pnpm urara:build && pnpm exec vite dev --host 127.0.0.1 --port 5173 --strictPort',
+        command: `pnpm exec vite dev --host 127.0.0.1 --port ${port} --strictPort`,
         url: baseURL,
         reuseExistingServer: true,
         timeout: 120_000
       }
     : {
-        command: 'pnpm run build && pnpm exec vite preview --host 127.0.0.1 --port 4173',
+        command: `pnpm run build && pnpm exec vite preview --host 127.0.0.1 --port ${port} --strictPort`,
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 600_000

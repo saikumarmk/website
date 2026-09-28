@@ -1,43 +1,40 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
+  import { onMount } from 'svelte'
+  import { browser } from '$app/environment'
 
-  let {
-    nodeId,
-    concepts = []
-  }: { nodeId: string; concepts?: Array<{ id: string; title: string }> } = $props();
+  let { nodeId, concepts = [] }: { nodeId: string; concepts?: Array<{ id: string; title: string }> } = $props()
 
-  let completedConcepts = $state(new Set<string>());
+  let completedConcepts = $state(new Set<string>())
 
   // Load completion state from localStorage
   onMount(() => {
-    if (!browser) return;
-    
-    concepts.forEach((concept) => {
-      const key = `growth-concept-${nodeId}-${concept.id}`;
+    if (!browser) return
+
+    concepts.forEach(concept => {
+      const key = `growth-concept-${nodeId}-${concept.id}`
       if (localStorage.getItem(key) === 'true') {
-        completedConcepts.add(concept.id);
+        completedConcepts.add(concept.id)
       }
-    });
-    completedConcepts = new Set(completedConcepts);
-  });
+    })
+    completedConcepts = new Set(completedConcepts)
+  })
 
   function toggleConcept(conceptId: string) {
-    if (!browser) return;
-    
-    const key = `growth-concept-${nodeId}-${conceptId}`;
+    if (!browser) return
+
+    const key = `growth-concept-${nodeId}-${conceptId}`
     if (completedConcepts.has(conceptId)) {
-      completedConcepts.delete(conceptId);
-      localStorage.removeItem(key);
+      completedConcepts.delete(conceptId)
+      localStorage.removeItem(key)
     } else {
-      completedConcepts.add(conceptId);
-      localStorage.setItem(key, 'true');
+      completedConcepts.add(conceptId)
+      localStorage.setItem(key, 'true')
     }
-    completedConcepts = new Set(completedConcepts);
+    completedConcepts = new Set(completedConcepts)
   }
 
-  let progress = $derived(concepts.length > 0 ? completedConcepts.size / concepts.length : 0);
-  let progressPercent = $derived(Math.round(progress * 100));
+  let progress = $derived(concepts.length > 0 ? completedConcepts.size / concepts.length : 0)
+  let progressPercent = $derived(Math.round(progress * 100))
 </script>
 
 {#if concepts.length > 0}
@@ -69,14 +66,12 @@
         <label
           class="flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all hover:bg-base-200"
           class:bg-success={isComplete}
-          class:bg-opacity-10={isComplete}
-        >
+          class:bg-opacity-10={isComplete}>
           <input
             type="checkbox"
             class="checkbox checkbox-primary"
             checked={isComplete}
-            onchange={() => toggleConcept(concept.id)}
-          />
+            onchange={() => toggleConcept(concept.id)} />
           <span class="flex-1" class:line-through={isComplete} class:opacity-60={isComplete}>
             {concept.title}
           </span>
@@ -101,10 +96,3 @@
     padding-left: 1rem;
   }
 </style>
-
-
-
-
-
-
-

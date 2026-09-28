@@ -25,8 +25,7 @@ export function remarkSlideSplit() {
     if (!fm?.slides) return
 
     const children = tree.children
-    const isFrontmatter = (n: Content) =>
-      n.type === 'yaml' || (n as { type: string }).type === 'toml'
+    const isFrontmatter = (n: Content) => n.type === 'yaml' || (n as { type: string }).type === 'toml'
     const preserved = children.filter(isFrontmatter)
     const body = children.filter(n => !isFrontmatter(n))
 

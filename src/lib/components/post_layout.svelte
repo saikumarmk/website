@@ -1,13 +1,4 @@
 <script lang="ts" module>
-  import {
-    Image,
-    table,
-    Mermaid,
-    PythonCode,
-    SlabTitle,
-    PokemonSprite,
-    SpriteAscii
-  } from '$lib/mdsvex/embed-registry'
   /**
    * mdsvex rewrites tags to `Components.Name` using **exported names**; HTML/rehype lowercases tag names,
    * so we export PascalCase + lowercase aliases (e.g. SlabTitle + slabtitle).
@@ -21,15 +12,15 @@
     PythonCode as pythoncode,
     SlabTitle,
     SlabTitle as slabtitle,
-    PokemonSprite,
-    PokemonSprite as pokemonsprite,
-    SpriteAscii,
-    SpriteAscii as spriteascii
-  }
+    Patch,
+    Patch as patch,
+    Sidenote,
+    Sidenote as sidenote
+  } from '$lib/mdsvex/embed-registry'
 </script>
 
 <script lang="ts">
-  import { typeOfPost } from '$lib/utils/posts'
+  import { typeOfPost } from '$lib/utils/post-meta'
   import Container from '$lib/components/post_container.svelte'
   import SlideDeck from '$lib/slides/SlideDeck.svelte'
 
@@ -49,6 +40,9 @@
     slab_title = undefined,
     slideSegmentCount: _slideSegmentCount = undefined,
     slides = undefined,
+    topic = undefined,
+    words = undefined,
+    seed = undefined,
     children
   } = $props()
 
@@ -67,7 +61,10 @@
       image,
       in_reply_to,
       slab_title,
-      slides
+      slides,
+      topic,
+      words,
+      seed
     }
     return { type: typeOfPost(fm), ...fm }
   })

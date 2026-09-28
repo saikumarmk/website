@@ -1,6 +1,5 @@
 # build output
 build
-static
 .svelte-kit
 .netlify
 .vercel
@@ -18,19 +17,12 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# temp file
-src/routes/**/+page.svelte.md
-src/routes/**/+page.md
-*.config.js
-!mdsvex.config.js
-urara.js
-
 # Things to hide
 src/styles/css-pokemon-gameboy.css
 src/styles/css-pokemon-gameboy.css.map
 src/styles/github.css
 src/styles/github.css.map
-src/styles/poke-gb.css 
+src/styles/poke-gb.css
 src/styles/fonts
 generateClasses.js
 
@@ -39,11 +31,6 @@ test-results/
 docs/
 example.html
 
-# Unfinished blog posts
-urara/uni-journey-1/
-urara/uni-journey-2/
-urara/university-advice/
-urara/css-dump/
-urara/twenty-datascience-degrees/
-urara/silicon-valley/
-urara/assets/tournament_agents.png
+# Unfinished posts: build locally, never committed
+src/routes/(drafts)/
+static/assets/tournament_agents.png

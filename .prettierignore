@@ -5,3 +5,13 @@ node_modules/**
 pnpm-lock.yaml
 .netlify/**
 .vercel_build_output/**
+design-prototypes/**
+design-handoff/**
+test-results/**
+playwright-report/**
+# hand-set: one rule per line, aligned
+src/styles/sampler.css
+# vendored sprite sheet
+src/styles/pokesprite-pokemon-gen8.css
+# mdsvex content: prettier would rewrap prose and break Svelte-in-Markdown
+*.md

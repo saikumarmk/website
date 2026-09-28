@@ -18,17 +18,9 @@
 {#if failed}
   <span
     class="inline-flex items-center justify-center rounded bg-base-300 text-xs font-semibold uppercase tracking-wide px-2 py-1 {className}"
-    title={alt}
-  >
+    title={alt}>
     {label.slice(0, 3)}
   </span>
 {:else}
-  <img
-    {src}
-    {alt}
-    class={className}
-    loading="lazy"
-    decoding="async"
-    onerror={() => (failed = true)}
-  />
+  <img {src} {alt} class={className} loading="lazy" decoding="async" onerror={() => (failed = true)} />
 {/if}

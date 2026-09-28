@@ -9,5 +9,3 @@ export const trailingSlash = 'never'
 export const GET: RequestHandler = async () => {
   return json(buildSearchIndexJson())
 }
-
-

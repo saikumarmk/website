@@ -1,536 +1,445 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import { browser } from '$app/environment'
+  import { onMount, tick } from 'svelte'
   import { goto } from '$app/navigation'
   import FlexSearch from 'flexsearch'
-  import { FLEXSEARCH_DOCUMENT_OPTIONS, STATIC_SEARCH_PAGES } from '$lib/search/flexsearch-config'
-  
-  let isOpen = $state(false)
+  import { FLEXSEARCH_DOCUMENT_OPTIONS } from '$lib/search/flexsearch-config'
+  import { SEARCH_EVENT } from '$lib/search/open'
+  import { satinSelect } from '$lib/actions/satin-select'
+  import type { SearchEntry, SearchGroup, SearchIndexJson } from '$lib/utils/search-index-data'
+  import Specimen from '$lib/components/thread/Specimen.svelte'
 
-  let searchQuery = $state('')
-  let searchResults = $state<any[]>([])
-  let selectedIndex = $state(0)
-  let searchInput = $state<HTMLInputElement | undefined>(undefined)
-  
-  // FlexSearch index (must be $state so loading UI and $effect react after async load)
-  let searchIndex: any = null
-  let searchablePosts: any[] = []
+  const GROUPS: SearchGroup[] = ['Writing', 'Project Dex', 'Pages']
+  const FIELD_SCORE: Record<string, number> = { title: 100, tags: 50, summary: 30, content: 10 }
+
+  let isOpen = $state(false)
+  let query = $state('')
+  let selected = $state(0)
+  let input = $state<HTMLInputElement>()
+  let opener: HTMLElement | null = null
+
+  let entries: SearchEntry[] = []
+  let byPath = new Map<string, SearchEntry>()
+  let searchIndex: InstanceType<typeof FlexSearch.Document> | null = null
   let indexLoading = $state(false)
   let indexLoaded = $state(false)
-  
-  const staticPages = STATIC_SEARCH_PAGES
-  
-  // Load and build search index (lazy, only when modal opens)
+  let indexFailed = $state(false)
+
   async function loadSearchIndex() {
     if (indexLoaded || indexLoading) return
-    
     indexLoading = true
-    
+    indexFailed = false
     try {
-      const response = await fetch('/search-index.json')
-      const data = await response.json()
-
-      // New format: { posts, serializedIndex }; legacy: plain array of posts
-      searchablePosts = Array.isArray(data) ? data : (data.posts ?? [])
-
+      const data: SearchIndexJson = await (await fetch('/search-index.json')).json()
+      entries = [...(data.posts ?? []), ...(data.dex ?? []), ...(data.pages ?? [])]
+      byPath = new Map(entries.map(e => [e.path, e]))
       searchIndex = new FlexSearch.Document(FLEXSEARCH_DOCUMENT_OPTIONS)
-
-      const serialized = !Array.isArray(data) && data.serializedIndex
-      if (Array.isArray(serialized) && serialized.length > 0) {
-        for (const pair of serialized) {
-          if (!Array.isArray(pair) || pair.length < 2) continue
-          searchIndex.import(pair[0], pair[1])
-        }
-      } else {
-        for (const post of searchablePosts) {
-          searchIndex.add({
-            ...post,
-            tags: post.tags?.join(' ') || ''
-          })
-        }
-        for (const page of staticPages) {
-          searchIndex.add({
-            ...page,
-            tags: ''
-          })
-        }
-      }
-
+      for (const [key, chunk] of data.serializedIndex ?? []) searchIndex.import(key, chunk)
       indexLoaded = true
     } catch (error) {
       console.error('Failed to load search index:', error)
+      indexFailed = true
     } finally {
       indexLoading = false
     }
   }
-  
-  // Extract a snippet around the matched text
-  function getContentSnippet(content: string, query: string): string | null {
-    if (!content) return null
-    
-    const lowerContent = content.toLowerCase()
-    const lowerQuery = query.toLowerCase()
-    const matchIndex = lowerContent.indexOf(lowerQuery)
-    
-    if (matchIndex === -1) return null
-    
-    // Get ~40 chars before and after the match
-    const snippetStart = Math.max(0, matchIndex - 40)
-    const snippetEnd = Math.min(content.length, matchIndex + query.length + 60)
-    
-    let snippet = content.slice(snippetStart, snippetEnd).trim()
-    
-    // Add ellipsis if truncated
-    if (snippetStart > 0) snippet = '...' + snippet
-    if (snippetEnd < content.length) snippet = snippet + '...'
-    
-    return snippet
-  }
-  
-  // Highlight matched text in a string
-  function highlightMatch(text: string, query: string): string {
-    if (!text || !query) return text
-    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
-    return text.replace(regex, '<mark class="search-mark">$1</mark>')
+
+  type Hit = SearchEntry & { snippet?: string }
+
+  const words = $derived(
+    [...new Set(query.trim().toLowerCase().split(/\s+/).filter(Boolean))].sort((a, b) => b.length - a.length)
+  )
+
+  function snippetOf(content: string, word: string) {
+    const at = content.toLowerCase().indexOf(word)
+    if (at < 0) return undefined
+    const start = Math.max(0, at - 24)
+    const end = Math.min(content.length, at + word.length + 80)
+    return (start > 0 ? '…' : '') + content.slice(start, end).trim() + (end < content.length ? '…' : '')
   }
 
-  function normalizeTags(doc: { tags?: string | string[] }) {
-    const t = doc?.tags
-    if (Array.isArray(t)) return t.filter(Boolean)
-    if (typeof t === 'string') return t.split(/\s+/).filter(Boolean)
-    return []
-  }
-
-  // Search function using FlexSearch
-  function performSearch(query: string) {
-    if (!query.trim() || !searchIndex) {
-      searchResults = []
-      return
-    }
-
-    let results: any[]
+  /** FlexSearch covers post bodies; a plain every-word match over the short fields catches the rest */
+  function find(q: string, ws: string[]): Hit[] {
+    const scores = new Map<string, number>()
+    const add = (path: string, s: number) => byPath.has(path) && scores.set(path, (scores.get(path) ?? 0) + s)
     try {
-      const raw = searchIndex.search(query, {
-        limit: 15,
-        enrich: true
-      }) as any
-      results = Array.isArray(raw) ? raw : []
+      const raw = searchIndex?.search(q, { limit: 30 })
+      for (const field of Array.isArray(raw) ? raw : []) {
+        for (const id of field.result ?? []) add(String(id), FIELD_SCORE[field.field ?? ''] ?? 10)
+      }
     } catch (e) {
       console.error('FlexSearch search failed:', e)
-      searchResults = []
+    }
+    for (const e of entries) {
+      const tl = e.title.toLowerCase()
+      const hay = `${tl} ${e.summary} ${e.meta} ${e.tags.join(' ')}`.toLowerCase()
+      if (ws.every(w => hay.includes(w)))
+        add(
+          e.path,
+          ws.reduce((a, w) => a + (tl.startsWith(w) ? 60 : tl.includes(w) ? 30 : 10), 0)
+        )
+    }
+    return [...scores]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 12)
+      .map(([path]) => {
+        const e = byPath.get(path)!
+        const shown = `${e.title} ${e.summary}`.toLowerCase()
+        const missing = ws.find(w => !shown.includes(w))
+        return { ...e, snippet: missing && e.content ? snippetOf(e.content, missing) : undefined }
+      })
+  }
+
+  const hits = $derived.by<Hit[]>(() => {
+    if (!indexLoaded) return []
+    const found = words.length
+      ? find(query.trim(), words)
+      : [
+          ...entries.filter(e => e.group === 'Writing' && e.meta && e.meta !== 'Yggdrasil').slice(0, 4),
+          ...entries.filter(e => e.group === 'Pages')
+        ]
+    return GROUPS.flatMap(g => found.filter(h => h.group === g))
+  })
+  const groups = $derived(
+    GROUPS.map(g => ({ g, start: hits.findIndex(h => h.group === g), items: hits.filter(h => h.group === g) })).filter(
+      x => x.items.length
+    )
+  )
+  const active = $derived(hits.length ? Math.min(selected, hits.length - 1) : -1)
+
+  const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  function segments(text: string, ws: string[]) {
+    if (!ws.length || !text) return [{ t: text, m: false }]
+    const re = new RegExp(`(${ws.map(escapeRe).join('|')})`, 'ig')
+    return text
+      .split(re)
+      .filter(Boolean)
+      .map(t => ({ t, m: ws.includes(t.toLowerCase()) }))
+  }
+
+  export function open(prefill = '') {
+    if (isOpen) {
+      if (prefill) query = prefill
+      input?.focus()
       return
     }
-
-    const resultMap = new Map<string, { item: any; score: number; matchedFields: string[] }>()
-
-    results.forEach((fieldResult: any) => {
-      const fieldName = fieldResult.field ?? 'content'
-      const fieldScore =
-        fieldName === 'title' ? 100
-        : fieldName === 'tags' ? 50
-        : fieldName === 'summary' ? 30
-        : 10
-
-      const row = fieldResult.result
-      if (!Array.isArray(row)) return
-
-      row.forEach((match: any) => {
-        const path = match.id
-        const doc = match.doc
-        if (!doc || path == null) return
-
-        if (resultMap.has(path)) {
-          const existing = resultMap.get(path)!
-          existing.score += fieldScore
-          if (!existing.matchedFields.includes(fieldName)) {
-            existing.matchedFields.push(fieldName)
-          }
-        } else {
-          const staticPage = staticPages.find(p => p.path === path)
-          const fullPost = searchablePosts.find(p => p.path === path)
-
-          resultMap.set(path, {
-            item: {
-              path: doc.path,
-              title: doc.title,
-              summary: doc.summary,
-              tags: normalizeTags(doc),
-              created: doc.created,
-              isStatic: !!staticPage,
-              content: fullPost?.content || ''
-            },
-            score: fieldScore + (staticPage ? 50 : 0),
-            matchedFields: [fieldName]
-          })
-        }
-      })
-    })
-    
-    // Sort by score and convert to array, adding snippet if content matched
-    searchResults = Array.from(resultMap.values())
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10)
-      .map(({ item, matchedFields }) => ({
-        ...item,
-        matchedInContent: matchedFields.includes('content') && !matchedFields.includes('title') && !matchedFields.includes('summary'),
-        contentSnippet: matchedFields.includes('content') ? getContentSnippet(item.content, query) : null,
-        query // Pass query for highlighting
-      }))
-    
-    selectedIndex = 0
-  }
-  
-  $effect(() => {
-    if (indexLoaded) performSearch(searchQuery)
-  })
-  
-  // Open/close handlers
-  export function open() {
+    opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    query = prefill
+    selected = 0
     isOpen = true
-    if (browser) {
-      document.body.style.overflow = 'hidden'
-      loadSearchIndex() // Load index when modal opens
-      setTimeout(() => searchInput?.focus(), 100)
-    }
+    const page = document.querySelector<HTMLElement>('.page')
+    if (page) page.inert = true
+    document.body.style.overflow = 'hidden'
+    loadSearchIndex()
+    tick().then(() => input?.focus())
   }
-  
+
   export function close() {
-    isOpen = false
-    searchQuery = ''
-    searchResults = []
-    selectedIndex = 0
-    if (browser) {
-      document.body.style.overflow = ''
-    }
-  }
-  
-  // Keyboard navigation for the search input
-  function handleInputKeydown(e: KeyboardEvent) {
     if (!isOpen) return
-    
-    switch (e.key) {
-      case 'Escape':
-        e.preventDefault()
-        close()
-        break
-      case 'ArrowDown':
-        e.preventDefault()
-        selectedIndex = Math.min(selectedIndex + 1, searchResults.length - 1)
-        scrollToSelected()
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        selectedIndex = Math.max(selectedIndex - 1, 0)
-        scrollToSelected()
-        break
-      case 'Enter':
-        e.preventDefault()
-        if (searchResults[selectedIndex]) {
-          goto(searchResults[selectedIndex].path)
-          close()
-        }
-        break
-    }
+    isOpen = false
+    query = ''
+    const page = document.querySelector<HTMLElement>('.page')
+    if (page) page.inert = false
+    document.body.style.overflow = ''
+    opener?.focus({ preventScroll: true })
+    opener = null
   }
-  
-  function scrollToSelected() {
-    if (browser) {
-      const selected = document.querySelector(`[data-search-index="${selectedIndex}"]`)
-      if (selected) {
-        selected.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-      }
-    }
+
+  function choose(k: number) {
+    const h = hits[k]
+    if (!h) return
+    close()
+    goto(h.path)
   }
-  
-  // Global ⌘/Ctrl+K — use e.code (layout-independent); capture so we beat focused inputs / other handlers
-  function handleGlobalKeydown(e: KeyboardEvent) {
-    if (!(e.ctrlKey || e.metaKey)) return
-    if (e.altKey || e.shiftKey) return
-    const isK = e.code === 'KeyK' || e.key === 'k' || e.key === 'K'
-    if (!isK) return
-    e.preventDefault()
-    e.stopPropagation()
-    if (isOpen) {
+
+  function move(step: number) {
+    if (!hits.length) return
+    selected = (active + step + hits.length) % hits.length
+    document.getElementById(`sr-${selected}`)?.scrollIntoView({ block: 'nearest' })
+  }
+
+  function onInputKey(e: KeyboardEvent) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault()
+      move(e.key === 'ArrowDown' ? 1 : -1)
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      choose(active)
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
       close()
-    } else {
+    }
+  }
+
+  const typing = (el: Element | null) =>
+    !!el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || (el as HTMLElement).isContentEditable)
+
+  function onGlobalKey(e: KeyboardEvent) {
+    const isK = e.code === 'KeyK' || e.key.toLowerCase() === 'k'
+    if ((e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey && isK) {
+      e.preventDefault()
+      e.stopPropagation()
+      if (isOpen) close()
+      else open()
+    } else if (e.key === 'Escape' && isOpen) {
+      e.preventDefault()
+      close()
+    } else if (e.key === '/' && !isOpen && !e.metaKey && !e.ctrlKey && !e.altKey && !typing(document.activeElement)) {
+      e.preventDefault()
       open()
     }
   }
 
   onMount(() => {
-    if (browser) {
-      window.addEventListener('keydown', handleGlobalKeydown, true)
-      return () => window.removeEventListener('keydown', handleGlobalKeydown, true)
+    const onEvent = (e: Event) => open((e as CustomEvent<{ query?: string }>).detail?.query ?? '')
+    // capture, so ⌘K beats focused inputs and other handlers
+    window.addEventListener('keydown', onGlobalKey, true)
+    window.addEventListener(SEARCH_EVENT, onEvent)
+    return () => {
+      window.removeEventListener('keydown', onGlobalKey, true)
+      window.removeEventListener(SEARCH_EVENT, onEvent)
     }
   })
 </script>
 
+{#snippet marked(text: string)}
+  {#each segments(text, words) as s, i (i)}{#if s.m}<mark>{s.t}</mark>{:else}{s.t}{/if}{/each}
+{/snippet}
+
 {#if isOpen}
-  <!-- Modal overlay -->
-  <div
-    class="search-overlay fixed inset-0 z-[60] flex items-start justify-center pt-[10vh] px-4 animate-in fade-in duration-200"
-    onclick={close}
-    onkeydown={(e) => e.key === 'Enter' && close()}
-    role="button"
-    tabindex="0"
-    aria-label="Close search">
-    
-    <!-- Search modal -->
-    <div
-      class="search-dialog w-full max-w-2xl rounded-lg shadow-2xl animate-in slide-in-from-top-4 duration-300"
-      onclick={e => e.stopPropagation()}
-      onkeydown={e => e.stopPropagation()}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="search-title"
-      tabindex="-1">
-      
-      <!-- Search input -->
-      <div class="search-bar flex items-center gap-3 px-4 py-3 border-b">
-        <span class="i-heroicons-outline-search w-5 h-5 opacity-50"></span>
+  <div class="search">
+    <div class="search-scrim" aria-hidden="true" onclick={close}></div>
+    <div class="search-box" role="dialog" aria-modal="true" aria-label="Search">
+      <div class="search-in">
         <input
-          bind:this={searchInput}
-          bind:value={searchQuery}
-          onkeydown={handleInputKeydown}
-          type="text"
-          placeholder={indexLoading ? "Loading search..." : "Search posts..."}
-          class="search-input flex-1 bg-transparent outline-none text-base"
+          bind:this={input}
+          bind:value={query}
+          oninput={() => (selected = 0)}
+          onkeydown={onInputKey}
           id="search-title"
+          type="search"
+          placeholder="Posts, projects, pages…"
           autocomplete="off"
           spellcheck="false"
-          disabled={indexLoading} />
-        <kbd class="search-kbd">ESC</kbd>
+          role="combobox"
+          aria-expanded="true"
+          aria-autocomplete="list"
+          aria-controls="sr"
+          aria-activedescendant={active >= 0 ? `sr-${active}` : undefined}
+          aria-label="Search the site" />
+        <kbd>esc</kbd>
       </div>
-      
-      <!-- Search results -->
-      <div class="search-results max-h-[60vh] overflow-y-auto">
-        {#if indexLoading}
-          <div class="px-4 py-8 text-center opacity-60">
-            <span class="loading loading-spinner loading-md"></span>
-            <p class="mt-2">Loading search…</p>
-          </div>
-        {:else if searchQuery && searchResults.length === 0}
-          <div class="px-4 py-8 text-center opacity-60">
-            <span class="i-heroicons-outline-document-search w-12 h-12 mx-auto mb-2"></span>
-            <p>No results found for "{searchQuery}"</p>
-          </div>
-        {:else if searchResults.length > 0}
-          <ul class="py-2">
-            {#each searchResults as post, index}
-              <li>
-                <a
-                  href={post.path}
-                  onclick={close}
-                  data-search-index={index}
-                  class="search-result flex flex-col px-4 py-3 transition-colors cursor-pointer {index === selectedIndex ? 'selected' : ''}"
-                  onmouseenter={() => selectedIndex = index}>
-                  <div class="flex items-start justify-between gap-2">
-                    <div class="flex items-center gap-2">
-                      {#if post.isStatic}
-                        <span class="i-heroicons-outline-star w-4 h-4 opacity-50"></span>
-                      {:else}
-                        <span class="i-heroicons-outline-document-text w-4 h-4 opacity-50"></span>
-                      {/if}
-                      <span class="font-semibold">{post.title ?? post.path.slice(1)}</span>
-                      {#if post.isStatic}
-                        <span class="search-badge">Page</span>
-                      {/if}
-                    </div>
-                    {#if index === selectedIndex}
-                      <span class="i-heroicons-outline-arrow-right w-4 h-4 flex-shrink-0 mt-1"></span>
-                    {/if}
-                  </div>
-                  {#if post.contentSnippet && post.matchedInContent}
-                    <!-- Show content snippet when match is in body -->
-                    <p class="text-sm opacity-70 mt-1 line-clamp-2 italic">
-                      {@html highlightMatch(post.contentSnippet, post.query)}
-                    </p>
-                  {:else if post.summary}
-                    <p class="text-sm opacity-70 mt-1 line-clamp-2">{post.summary}</p>
-                  {/if}
-                  {#if post.tags && post.tags.length > 0}
-                    <div class="flex gap-2 mt-2 flex-wrap">
-                      {#each post.tags.slice(0, 3) as tag}
-                        <span class="search-tag">#{tag}</span>
-                      {/each}
-                    </div>
-                  {/if}
-                </a>
-              </li>
+
+      <div class="sr-scroll">
+        <div class="sr-menu" use:satinSelect={{ items: '.hit', selected: active, key: `${query}|${active}|${hits.length}` }}>
+          <div class="sr" id="sr" role="listbox" aria-label="Results">
+            {#each groups as { g, start, items } (g)}
+              <div role="group" aria-labelledby="sr-g-{g.replace(' ', '-')}">
+                <div class="grp" id="sr-g-{g.replace(' ', '-')}">{!words.length && g === 'Writing' ? 'Recently' : g}</div>
+                {#each items as h, i (h.path)}
+                  {@const k = start + i}
+                  <a
+                    class="hit"
+                    role="option"
+                    id="sr-{k}"
+                    href={h.path}
+                    tabindex="-1"
+                    aria-selected={k === active}
+                    onpointermove={() => (selected = k)}
+                    onclick={close}>
+                    <Specimen seed={h.seed} size={60} R={30} cy={0.5} leaves={false} speed={2} class="hit-bloom" />
+                    <span class="t">
+                      {@render marked(h.title)}
+                      {#if h.snippet || h.summary}<span class="d">{@render marked(h.snippet ?? h.summary)}</span>{/if}
+                    </span>
+                    <span class="m">{h.meta}</span>
+                  </a>
+                {/each}
+              </div>
             {/each}
-          </ul>
-        {:else}
-          <div class="px-4 py-8 text-center opacity-60">
-            <span class="i-heroicons-outline-search-circle w-12 h-12 mx-auto mb-2"></span>
-            <p class="mb-1">Full-text search</p>
-            <p class="text-sm">Search by title, tags, summary, or content</p>
           </div>
+        </div>
+        {#if indexLoading}
+          <p class="none">Threading the index…</p>
+        {:else if indexFailed}
+          <p class="none">The search index didn't load. Try again in a moment.</p>
+        {:else if indexLoaded && words.length && !hits.length}
+          <p class="none">Nothing matches "{query.trim()}". Try a topic, a language, or a project name.</p>
         {/if}
       </div>
-      
-      <!-- Footer -->
-      <div class="search-footer px-4 py-3 border-t flex items-center justify-between text-xs">
-        <div class="flex items-center gap-4">
-          <span class="flex items-center gap-1">
-            <kbd class="search-kbd small">↑</kbd>
-            <kbd class="search-kbd small">↓</kbd>
-            Navigate
-          </span>
-          <span class="flex items-center gap-1">
-            <kbd class="search-kbd small">↵</kbd>
-            Select
-          </span>
-        </div>
-        <span class="flex items-center gap-1">
-          <kbd class="search-kbd small">ESC</kbd>
-          Close
+
+      <div class="search-foot">
+        <span>
+          <kbd>↑</kbd>
+          <kbd>↓</kbd>
+          move ·
+          <kbd>↵</kbd>
+          open
         </span>
+        <span aria-live="polite">{words.length && indexLoaded ? `${hits.length} found` : ''}</span>
       </div>
     </div>
   </div>
 {/if}
 
 <style>
-  .line-clamp-2 {
-    display: -webkit-box;
-    line-clamp: 2;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+  .search {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    justify-items: center;
+    align-items: start;
+    padding: 12vh 1rem 1rem;
+  }
+  .search-scrim {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    backdrop-filter: blur(3px);
+  }
+  .search-box {
+    position: relative;
+    width: min(40rem, 100%);
+    max-height: 72vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid color-mix(in srgb, var(--fg2) 60%, transparent);
+    border-radius: 14px;
+    box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--fg) 45%, transparent);
     overflow: hidden;
   }
-
-  :global(.search-mark) {
-    background: hsl(var(--p) / 0.22);
-    color: inherit;
-    border-radius: 0.25rem;
-    padding-inline: 0.125rem;
+  .search-box::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1.5px dashed color-mix(in srgb, var(--g1) 70%, transparent);
+    border-radius: 10px;
+    pointer-events: none;
   }
-
-  .search-overlay {
-    background: rgb(0 0 0 / 0.62);
-    backdrop-filter: blur(8px);
+  @media (prefers-reduced-motion: no-preference) {
+    .search-scrim {
+      animation: search-fade 0.18s ease both;
+    }
+    .search-box {
+      animation: search-rise 0.22s ease both;
+    }
   }
-
-  .search-dialog {
-    border: 1px solid hsl(var(--bc) / 0.14);
-    background: hsl(var(--b1));
-    color: hsl(var(--bc));
-    overflow: hidden;
+  @keyframes search-fade {
+    from {
+      opacity: 0;
+    }
   }
-
-  .search-bar,
-  .search-footer {
-    border-color: hsl(var(--bc) / 0.12);
+  @keyframes search-rise {
+    from {
+      opacity: 0;
+      transform: translateY(-0.6rem);
+    }
   }
-
-  .search-footer {
-    color: hsl(var(--bc) / 0.62);
-  }
-
-  .search-result:hover,
-  .search-result.selected {
-    background: hsl(var(--b2));
-  }
-
-  .search-kbd {
-    border: 1px solid hsl(var(--bc) / 0.16);
-    border-bottom-width: 2px;
-    border-radius: 0.35rem;
-    background: hsl(var(--b2));
-    color: hsl(var(--bc) / 0.72);
-    padding: 0.12rem 0.45rem;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.72rem;
-    line-height: 1.2;
-  }
-
-  .search-kbd.small {
-    font-size: 0.65rem;
-    padding: 0.08rem 0.32rem;
-  }
-
-  .search-badge,
-  .search-tag {
-    display: inline-flex;
+  .search-in {
+    display: flex;
     align-items: center;
-    border-radius: 999px;
-    border: 1px solid hsl(var(--p) / 0.38);
-    color: hsl(var(--p));
-    font-size: 0.68rem;
-    line-height: 1;
-    padding: 0.15rem 0.45rem;
+    gap: 0.6rem;
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid var(--rule);
   }
-
-  .search-badge {
-    background: hsl(var(--p) / 0.14);
+  .search-in input {
+    flex: 1;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 1.15rem;
+    color: var(--fg);
+    outline: none;
+    min-width: 0;
   }
-
-  :global(html.site-editorial-root) .search-dialog {
-    border-color: var(--site-line-strong);
-    background: color-mix(in srgb, var(--site-panel) 94%, transparent);
-    color: var(--site-fg);
-    box-shadow: 0 24px 80px rgb(0 0 0 / 0.4);
+  .search-in input::-webkit-search-cancel-button {
+    display: none;
   }
-
-  :global(html.site-editorial-root) .search-bar,
-  :global(html.site-editorial-root) .search-footer {
-    border-color: var(--site-line);
+  .search-in kbd,
+  .search-foot kbd {
+    font-size: 10.5px;
+    padding: 0 0.3rem;
+    color: var(--fg2);
   }
-
-  :global(html.site-editorial-root) .search-footer {
-    color: var(--site-muted);
+  .sr-scroll {
+    overflow-y: auto;
+    padding: 0.4rem 1.2rem 0.6rem;
   }
-
-  :global(html.site-editorial-root) .search-result:hover,
-  :global(html.site-editorial-root) .search-result.selected {
-    background: var(--site-panel-2);
+  .grp {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.8rem 0 0.25rem;
   }
-
-  :global(html.site-editorial-root) .search-kbd {
-    border-color: var(--site-line-strong);
-    background: var(--site-panel-2);
-    color: var(--site-muted);
+  .hit {
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    gap: 0.6rem;
+    align-items: center;
+    padding: 0.35rem 0.9rem;
+    margin: 0 -0.9rem;
+    cursor: var(--pointer);
+    text-decoration: none;
+    color: var(--fg);
   }
-
-  :global(html.site-editorial-root) .search-badge,
-  :global(html.site-editorial-root) .search-tag {
-    border-color: color-mix(in srgb, var(--site-accent) 38%, transparent);
-    color: var(--site-accent);
+  .hit :global(.hit-bloom) {
+    width: 30px;
+    height: 30px;
   }
-
-  :global(html.site-editorial-root) .search-badge {
-    background: color-mix(in srgb, var(--site-accent) 14%, transparent);
+  .hit .t {
+    line-height: 1.3;
+    min-width: 0;
   }
-  
-  .animate-in {
-    animation-fill-mode: both;
+  .hit .d {
+    display: block;
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.35;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  
-  .fade-in {
-    animation: fadeIn 0.2s ease;
+  .hit .m {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
   }
-  
-  .slide-in-from-top-4 {
-    animation: slideInFromTop 0.3s ease;
+  .hit mark {
+    background: none;
+    color: inherit;
+    text-decoration: underline 1.5px var(--g1);
+    text-underline-offset: 3px;
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
+  .none {
+    padding: 1.2rem 0;
+    margin: 0;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .search-foot {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 1.2rem 0.8rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+  @media (max-width: 40rem) {
+    .search {
+      padding-top: 4vh;
     }
-    to {
-      opacity: 1;
+    .hit .m {
+      display: none;
     }
-  }
-  
-  @keyframes slideInFromTop {
-    from {
-      transform: translateY(-1rem);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
+    .hit {
+      grid-template-columns: 30px 1fr;
     }
   }
 </style>

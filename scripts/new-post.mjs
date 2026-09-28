@@ -1,22 +1,21 @@
 #!/usr/bin/env node
 /**
- * Scaffold a new blog post under urara/<slug>/+page.md and mirror into src/routes/.
+ * Scaffold a new post at src/routes/(posts)/<slug>/+page.md.
  */
 import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
-import { execSync } from 'child_process'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.join(__dirname, '..')
-const uraraDir = path.join(rootDir, 'urara')
+const postsDir = path.join(rootDir, 'src', 'routes', '(posts)')
 const defaultAuthor = 'Sai Kumar Murali Krishnan'
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 
 function question(query) {
-  return new Promise((resolve) => rl.question(query, resolve))
+  return new Promise(resolve => rl.question(query, resolve))
 }
 
 function kebabCase(str) {
@@ -29,12 +28,12 @@ function kebabCase(str) {
 function parseList(value) {
   return value
     .split(',')
-    .map((item) => item.trim())
+    .map(item => item.trim())
     .filter(Boolean)
 }
 
 function yamlQuote(value) {
-  if (/[:#\[\]{}&*!|>'"%@`]/.test(value) || value.includes('\n')) {
+  if (/[:#[\]{}&*!|>'"%@`]/.test(value) || value.includes('\n')) {
     return `"${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
   }
   return value.includes(' ') ? `"${value}"` : value
@@ -46,7 +45,7 @@ function yamlInlineList(items) {
 }
 
 function today() {
-  return new Date().toISOString().slice(0, 10)
+  return new Date().toLocaleDateString('en-CA')
 }
 
 function parseArgs(argv) {
@@ -68,14 +67,14 @@ function parseArgs(argv) {
 
 function listExisting(field) {
   const values = new Set()
-  for (const entry of fs.readdirSync(uraraDir, { withFileTypes: true })) {
+  for (const entry of fs.readdirSync(postsDir, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue
-    const pagePath = path.join(uraraDir, entry.name, '+page.md')
+    const pagePath = path.join(postsDir, entry.name, '+page.md')
     if (!fs.existsSync(pagePath)) continue
     const text = fs.readFileSync(pagePath, 'utf8')
-    const match = text.match(new RegExp(`^${field}:\\s*\\[(.*?)\\]`, 'm'))
+    const match = text.match(new RegExp(`^${field}:\\s*(?:\\[(.*?)\\]|(.+))$`, 'm'))
     if (!match) continue
-    for (const item of match[1].split(',')) {
+    for (const item of (match[1] ?? match[2]).split(',')) {
       const cleaned = item.trim().replace(/^["']|["']$/g, '')
       if (cleaned) values.add(cleaned)
     }
@@ -101,6 +100,7 @@ async function collectInteractive() {
   if (existingTags.length) {
     console.log(`Tags used before: ${existingTags.join(', ')}\n`)
   }
+  const topics = listExisting('topic')
 
   const title = await promptValue('Title', { required: true })
   const suggestedSlug = kebabCase(title)
@@ -108,13 +108,12 @@ async function collectInteractive() {
   const slug = kebabCase(slugInput || suggestedSlug)
   const author = await promptValue('Author', { defaultValue: defaultAuthor })
   const created = await promptValue('Created date (YYYY-MM-DD)', { defaultValue: today() })
+  const topic = await promptValue(`Topic (${topics.join(', ')})`, { required: true })
   const tags = parseList(await promptValue('Tags (comma-separated)', { defaultValue: 'blog' }))
   const summary = await promptValue('Summary (optional)')
-  const draftAnswer = (await promptValue('Draft / unlisted? (y/N)', { defaultValue: 'n' }))
-    .toLowerCase()
-    .startsWith('y')
+  const draftAnswer = (await promptValue('Draft / unlisted? (y/N)', { defaultValue: 'n' })).toLowerCase().startsWith('y')
 
-  return { title, slug, author, created, tags, summary, draft: draftAnswer }
+  return { title, slug, author, created, topic, tags, summary, draft: draftAnswer }
 }
 
 function collectFromArgs(args) {
@@ -124,24 +123,30 @@ function collectFromArgs(args) {
     process.exit(1)
   }
   const slug = kebabCase(args.slug || title)
+  if (!args.topic) {
+    console.error(`Missing --topic (one of: ${listExisting('topic').join(', ')}).`)
+    process.exit(1)
+  }
   return {
     title,
     slug,
     author: args.author || defaultAuthor,
     created: args.created || today(),
+    topic: args.topic,
     tags: parseList(args.tags || 'blog'),
     summary: args.summary || '',
     draft: Boolean(args.draft || args.unlisted)
   }
 }
 
-function buildFrontmatter({ title, author, created, tags, summary, draft }) {
+function buildFrontmatter({ title, author, created, topic, tags, summary, draft }) {
   const lines = [
     '---',
     `title: ${yamlQuote(title)}`,
     `author: ${author}`,
     `created: ${created}`,
-    `tags: ${yamlInlineList(tags)}`
+    `tags: ${yamlInlineList(tags)}`,
+    `topic: ${topic}`
   ]
   if (summary) lines.push(`summary: ${yamlQuote(summary)}`)
   if (draft) lines.push('flags: [unlisted]')
@@ -167,11 +172,11 @@ async function main() {
   const interactive = process.argv.length <= 2 && !args.title
   const input = interactive ? await collectInteractive() : collectFromArgs(args)
 
-  const postDir = path.join(uraraDir, input.slug)
+  const postDir = path.join(postsDir, input.slug)
   const pagePath = path.join(postDir, '+page.md')
 
   if (fs.existsSync(pagePath)) {
-    console.error(`Post already exists: urara/${input.slug}/+page.md`)
+    console.error(`Post already exists: src/routes/(posts)/${input.slug}/+page.md`)
     process.exit(1)
   }
 
@@ -179,13 +184,11 @@ async function main() {
   const content = `${buildFrontmatter(input)}${buildBody(input.title)}`
   fs.writeFileSync(pagePath, content)
 
-  console.log(`\n✓ Created urara/${input.slug}/+page.md`)
-  console.log('  Mirroring into src/routes/ ...')
-  execSync('node urara.js build', { cwd: rootDir, stdio: 'inherit' })
+  console.log(`\n✓ Created src/routes/(posts)/${input.slug}/+page.md`)
 
   const visibility = input.draft ? ' (unlisted draft)' : ''
   console.log(`\n✅ Post ready${visibility}`)
-  console.log(`   Edit: urara/${input.slug}/+page.md`)
+  console.log(`   Edit: src/routes/(posts)/${input.slug}/+page.md`)
   console.log(`   URL:  http://localhost:5173/${input.slug}`)
   if (input.draft) {
     console.log('   Draft posts are hidden from archive/home until you remove flags: [unlisted]')
@@ -194,7 +197,7 @@ async function main() {
   rl.close()
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error('Error:', error)
   rl.close()
   process.exit(1)

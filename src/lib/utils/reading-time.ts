@@ -7,13 +7,13 @@
 export function calculateReadingTime(text: string, wordsPerMinute: number = 200): number {
   // Remove HTML tags
   const cleanText = text.replace(/<[^>]*>/g, '')
-  
+
   // Count words (split by whitespace and filter empty strings)
   const words = cleanText.trim().split(/\s+/).filter(Boolean).length
-  
+
   // Calculate minutes, minimum 1 minute
   const minutes = Math.ceil(words / wordsPerMinute)
-  
+
   return Math.max(1, minutes)
 }
 
@@ -33,8 +33,7 @@ export function formatReadingTime(minutes: number): string {
  */
 export function getReadingTime(html?: string): string | null {
   if (!html) return null
-  
+
   const minutes = calculateReadingTime(html)
   return formatReadingTime(minutes)
 }
-

@@ -1,0 +1,6 @@
+export { Builder, GOLDEN, NAMES } from './builder'
+export type { SpecimenOptions } from './builder'
+export { hash, rng, seeded, seedLabel, PALETTES } from './seed'
+export { render, sew } from './render'
+export type { Compose, Rendered, SewOptions } from './render'
+export type * from './types'

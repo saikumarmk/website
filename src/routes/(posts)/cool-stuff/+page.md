@@ -1,0 +1,145 @@
+---
+title: "Elements of this Website"
+slab_title: true
+author: Sai Kumar Murali Krishnan
+created: 2025-07-14
+tags: [random, web-dev, slides, meta]
+summary: "Kitchen sink for this site: nav map, search, themes, Mermaid, PythonCode, SlabTitle, patches, math, and slide layout demos—article or fullscreen deck."
+slides: true
+toc: false
+topic: journal
+---
+
+# This site in one deck
+
+**Article** at this URL · **present** fullscreen by pressing `p`, the present button, or opening [`?present`](/cool-stuff/?present). **Mermaid**, **PythonCode**, **SlabTitle** and **Patch** come from `post_layout.svelte` (mdsvex layout exports)—works in **split slides** and **SSR**.
+
+---
+
+## Quick links
+
+- **[Portfolio](/portfolio)** · **[Archive](/archive)** · **[Playbook](/playbook)** · **[About](/about)**
+- **Project Dex** — [`/dex`](/dex) · **Yggdrasil 2026** — [`/growth/2026`](/growth/2026)
+
+---
+
+## Navigation & main pages
+
+- **About** — [`/about`](/about)
+- **Portfolio** — [`/portfolio`](/portfolio) · **Project Dex** — [`/dex`](/dex)
+- **Archive** — [`/archive`](/archive) (all posts)
+- **Playbook** — [`/playbook`](/playbook) → FAQ, timeline, résumé, interviews (`guide-to-tech-*`)
+- **CV** — [`/cv`](/cv), printable · **Garden** — [`/garden`](/garden), every post's flower
+
+---
+
+## Features
+
+- **⌘K / Ctrl+K** — full-text search (posts + static pages)
+- **Theme** — ivory / ink toggle in the header
+- **RSS** — footer
+- **Slides** — `slides: true` in frontmatter, then `p` or `?present` for deck mode (this page)
+
+---
+
+## Diagrams & code embeds
+
+<SlabTitle title="Diagrams & code" slug="cool-elements" config="3c 2.5 3c 2.5i" />
+
+<Mermaid graph="graph LR
+  site[saikumarmk.com] --> archive[Archive]
+  site --> portfolio[Portfolio]
+  archive --> posts[Posts]" />
+
+<Mermaid graph='sequenceDiagram
+    Alice ->> Bob: Hello Bob, how are you?
+    Bob-->>John: How about you John?
+    Bob--x Alice: I am good thanks!
+    Bob-x John: I am good thanks!
+    Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+    Bob-->Alice: Checking with John...
+    Alice->John: Yes... John, how are you?'/>
+
+<PythonCode sourceUrl="/annotations/ponder.py" title="PonderNet (annotated Python)" />
+
+---
+
+## Patches
+
+**Patch** (the old Game Boy frame) is an aside stitched onto the page, from the same mdsvex layout mapping as Mermaid.
+
+<Patch>
+<h3>Chip-8</h3>
+Chip-8 is an interpreted system from the 1970s that could run basic video games, including Pacman, Pong and Space Invaders. It only has 35 opcodes to implement.
+</Patch>
+
+---
+
+## Math and prose
+
+Inline: $e^{i\pi} + 1 = 0$.
+
+Display:
+
+$$
+\nabla \cdot \mathbf{E} = \frac{\rho}{\varepsilon_0}
+$$
+
+---
+
+## Code-heavy slide
+
+```python
+def hello():
+    return "minimal · code-first"
+```
+
+Use class `slide-code-focus` on a wrapper for tighter code slides (theme CSS).
+
+---
+
+## Two columns (HTML)
+
+<div class="slide-two-col not-prose">
+
+<div>
+
+### Left
+
+Bullet one  
+Bullet two
+
+</div>
+
+<div>
+
+### Right
+
+More content here.
+
+</div>
+
+</div>
+
+---
+
+## Stagger utility
+
+Apply classes `stagger-1` … `stagger-6` to block elements for delayed fade (see `slide-theme.css`).
+
+<p class="stagger-1 opacity-90">First point</p>
+<p class="stagger-2 opacity-90">Second point</p>
+
+---
+
+## Full bleed
+
+Wrap content in `class="slide-full-bleed"` for edge-to-edge (theme variable `--slide-bleed`).
+
+---
+
+## Next steps
+
+- **Browse** [Portfolio](/portfolio) and [Archive](/archive)
+- **Search** with ⌘K — try company names, tags, or post titles
+- **Deck mode**: press `p`, or open [`?present`](/cool-stuff/?present) for fullscreen slides

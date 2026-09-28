@@ -9,7 +9,7 @@ export type SeriesConfig = {
 }
 
 export const SERIES_CONFIGS: Record<string, SeriesConfig> = {
-  'playbook': {
+  playbook: {
     name: 'The Grad/Intern Playbook',
     parts: [
       { title: 'FAQ', slug: 'guide-to-tech-faq', part: 0 },
@@ -44,8 +44,8 @@ export function detectSeries(slug: string): { series: SeriesConfig; part: number
     .replace(/\\/g, '/') // Replace backslashes with forward slashes
     .replace(/\/\+page\.(md|svelte\.md)$/g, '') // Remove +page.md or +page.svelte.md
     .replace(/^\/+|\/+$/g, '') // Remove leading/trailing slashes
-  
-  for (const [key, config] of Object.entries(SERIES_CONFIGS)) {
+
+  for (const config of Object.values(SERIES_CONFIGS)) {
     const part = config.parts.find(p => p.slug === cleanSlug)
     if (part) {
       return { series: config, part: part.part }
@@ -57,8 +57,7 @@ export function detectSeries(slug: string): { series: SeriesConfig; part: number
 /**
  * Get series information for a post
  */
-export function getSeriesInfo(post: Urara.Post): { series: SeriesConfig; part: number } | undefined {
+export function getSeriesInfo(post: Blog.Post): { series: SeriesConfig; part: number } | undefined {
   // Try both slug and path
   return detectSeries(post.slug) || detectSeries(post.path)
 }
-

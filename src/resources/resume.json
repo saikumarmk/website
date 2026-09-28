@@ -1,0 +1,95 @@
+{
+  "name": "Sai Kumar Murali Krishnan",
+  "links": [
+    ["saikumarmuralikrishnan@gmail.com", "mailto:saikumarmuralikrishnan@gmail.com"],
+    ["LinkedIn", "https://www.linkedin.com/in/saikumarmk/"],
+    ["GitHub", "https://github.com/saikumarmk"],
+    ["saikumarmk.com", "https://saikumarmk.com"]
+  ],
+  "source": "resume_mle_styled.tex",
+  "sections": [
+    {
+      "title": "Experience",
+      "orgs": [
+        {
+          "org": "<a href=\"https://canva.com\">Canva</a>",
+          "where": "Melbourne, VIC",
+          "roles": [
+            {
+              "role": "Senior Applied Scientist",
+              "when": "March 2026 – Present",
+              "pts": [
+                "Built a video-agent evaluation platform spanning 104 tasks across seven suites, with multi-turn checks, LLM-based scoring, tracing, and a results viewer; enabled engineers and partner research teams to inspect changes and evaluate models independently.",
+                "Compared automated judgments with human reviews to identify gaps in creative-quality assessment; supported release evaluations and lower-cost model experiments, including separating narrative planning from execution.",
+                "Implemented and tested transcription serving changes using vLLM and integrated forced alignment; helped reduce processing time for an hour-long video from approximately five minutes to one minute while improving recognition quality and word timing.",
+                "Reduced LLM cost by 46% on a dialog evaluation by caching system prompts and tool definitions; deployed the caching integration to production.",
+                "Profiled document deserialization and removed repeated stack inspection, reducing validation time from 1,484 ms to 1.3 ms on the measured workload."
+              ]
+            },
+            {
+              "role": "Applied Scientist / Machine Learning Engineer",
+              "when": "February 2024 – February 2026",
+              "pts": [
+                "Developed detail-preserving Background Generation methods to restore high-frequency image detail for a widely used Canva feature; named inventor on the resulting filed patent application.",
+                "Shipped a distilled-SDXL upgrade for Magic Expand before a release freeze, reducing end-to-end latency by approximately 50% through fewer denoising steps and GPU-resident image processing; evaluations showed fewer hallucinated people.",
+                "Adapted a SLURM/<code>torchrun</code> training stack to Ray/Anyscale, replacing local-data assumptions with an S3-streaming loader and validating distributed training with platform and research teams."
+              ]
+            },
+            {
+              "role": "Machine Learning Engineer Intern",
+              "when": "November 2022 – February 2023",
+              "pts": [
+                "Developed and evaluated bias-mitigation methods for Stable Diffusion in Canva's text-to-image product, focusing on representation across gender and ethnicity.",
+                "Presented internship research as part of <i>Generation Gap: Addressing Bias in Generative AI</i>, SIGGRAPH Asia 2023."
+              ]
+            }
+          ]
+        },
+        {
+          "org": "<a href=\"https://www.monash.edu/it\">Monash University</a>",
+          "where": "Melbourne, VIC",
+          "roles": [
+            {
+              "role": "Research Assistant",
+              "when": "November 2021 – July 2022",
+              "pts": [
+                "Built a genetic-programming and simulation framework in Julia to investigate a game-theoretic problem in scientific publishing.",
+                "Analyzed commit data from more than 30,000 deep-learning repositories using Python and the GitHub API to study the evolution of ML libraries for AutoML."
+              ]
+            }
+          ]
+        }
+      ],
+      "skills": []
+    },
+    {
+      "title": "Education",
+      "orgs": [
+        {
+          "org": "Monash University",
+          "where": "2020 – 2023",
+          "roles": [
+            {
+              "role": "Bachelor of Applied Data Science Advanced (Honours)",
+              "when": "Melbourne, VIC",
+              "pts": [
+                "First Class Honours (final honours grade: 90); Dean's List for academic excellence in 2021, 2022, and 2023.",
+                "Thesis: <a href=\"https://saikumarmk.com/assets/honours_thesis.pdf\"><i>Bias Modelling and Mitigation in Diffusion Models</i></a>."
+              ]
+            }
+          ]
+        }
+      ],
+      "skills": []
+    },
+    {
+      "title": "Technical Skills",
+      "orgs": [],
+      "skills": [
+        ["Languages", "Python, C/C++, Rust, Julia"],
+        ["Machine Learning", "PyTorch, diffusion models, video agents, LLM evaluation, model training"],
+        ["Systems", "Ray, Anyscale, SLURM, vLLM, AWS/S3, Weights &amp; Biases, distributed training, efficient inference"]
+      ]
+    }
+  ]
+}

@@ -1,178 +1,214 @@
 <!--
-  Legacy slide deck: markdown `slides: true` + remark-slide-split → <section class="slide">.
-  Query-string presentation mode (`?mode=slides`). Kept for existing decks; not the target
-  architecture for new presentations.
+  "Present": an article's `---`-separated sections (remark-slide-split) shown one at a time, full screen.
+  The article is never re-rendered: slides are the same nodes, restyled. Inactive slides stay laid out (only
+  `visibility: hidden`), so embeds inside them measure real sizes; `slide-deck-active` fires on every change.
+  Enter with `p`, the button, `?present` or the older `?mode=slides`; `slide=N` picks the slide.
 -->
 <script lang="ts">
-  import { onMount, onDestroy, tick } from 'svelte'
-  import { browser } from '$app/environment'
-  import { goto } from '$app/navigation'
-  import { page } from '$app/stores'
+  import type { Snippet } from 'svelte'
+  import { onMount, tick } from 'svelte'
+  import { replaceState } from '$app/navigation'
   import '$lib/slides/slide-theme.css'
 
-  let { title = '', path = '', children } = $props()
+  let { children }: { title?: string; path?: string; children?: Snippet } = $props()
 
-  let viewport: HTMLElement
+  let viewport = $state<HTMLElement>()
   let slides: HTMLElement[] = []
-  let current = $state(0)
-  let slideCount = $state(0)
-  let slidesMode = $state(false)
-  let touchStartX = 0
+  let count = $state(0)
+  let cur = $state(0)
+  let presenting = $state(false)
 
-  let progressPct = $derived(slideCount > 1 ? (current / (slideCount - 1)) * 100 : 0)
+  let lastFocus: HTMLElement | null = null
+  let lastScroll = 0
+  let entered = 0
+  let benched: HTMLElement[] = []
+  let touch: { x: number; y: number } | null = null
 
-  function collectSlides() {
-    if (!viewport) return
-    // Only top-level slides (direct children). Nested `section.slide` inside a slide breaks
-    // index/active sync and deck CSS if we match descendants.
-    slides = Array.from(viewport.querySelectorAll(':scope > section.slide'))
-    slideCount = slides.length
-  }
+  let progress = $derived(count > 1 ? (cur / (count - 1)) * 100 : 0)
 
-  function notifySlideChange() {
-    if (!browser || !viewport) return
-    viewport.dispatchEvent(new CustomEvent('slide-deck-active', { bubbles: true }))
-  }
+  const SELF_PANNING = 'pre, canvas, .mermaid, .mm, .katex-display, .an-code, .yk-stage, [data-no-swipe]'
 
-  function readSlideIndexFromSearch(search: string): number {
-    const raw = new URLSearchParams(search).get('slide')
-    const n = raw === null || raw === '' ? 0 : parseInt(raw, 10)
-    return Number.isFinite(n) ? n : 0
-  }
+  const typing = (t: EventTarget | null) =>
+    t instanceof HTMLElement && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)
+  const modalOpen = () => !!document.querySelector('[aria-modal="true"], dialog[open]')
 
-  function applyMode(presenting: boolean) {
-    collectSlides()
-    if (slides.length === 0) return
-
-    if (presenting) {
-      document.body.classList.add('deck-presentation-active')
-      for (const s of slides) s.classList.remove('active', 'exit-up')
-      const search = browser ? window.location.search : ''
-      const idx = Math.max(0, Math.min(slides.length - 1, readSlideIndexFromSearch(search)))
-      current = idx
-      slides[current].classList.add('active')
-    } else {
-      document.body.classList.remove('deck-presentation-active')
-      for (const s of slides) s.classList.remove('active', 'exit-up')
+  function setUrl(on: boolean) {
+    const q = new URLSearchParams(location.search)
+    for (const k of ['present', 'mode', 'slide']) q.delete(k)
+    const rest = q.toString()
+    const deck = on ? ['present', cur ? `slide=${cur}` : ''] : []
+    const search = [...deck, rest].filter(Boolean).join('&')
+    try {
+      replaceState(`${location.pathname}${search ? `?${search}` : ''}${location.hash}`, {})
+    } catch {
+      // the router isn't ready during the first mount; the next change writes the URL
     }
-    notifySlideChange()
   }
 
-  function goTo(index: number, opts?: { fromUrl?: boolean }) {
-    if (index < 0 || index >= slides.length) return
-    const prevSlide = slides[current]
-    prevSlide.classList.remove('active')
-    if (index > current) prevSlide.classList.add('exit-up')
-    setTimeout(() => prevSlide.classList.remove('exit-up'), 450)
+  /** Everything around the deck, up to the page shell, is inert while presenting. Modals at the body stay usable. */
+  function bench(on: boolean) {
+    if (!on) {
+      benched.forEach(el => (el.inert = false))
+      benched = []
+      return
+    }
+    const stop = viewport!.closest('.page') ?? document.body
+    for (let el: HTMLElement = viewport!; el !== stop && el.parentElement; el = el.parentElement) {
+      for (const sib of el.parentElement.children) {
+        if (sib !== el && sib instanceof HTMLElement && !sib.inert) {
+          sib.inert = true
+          benched.push(sib)
+        }
+      }
+    }
+  }
 
-    current = index
-    slides[current].classList.add('active')
-    notifySlideChange()
-    if (slidesMode && browser && !opts?.fromUrl) {
-      void goto(`?mode=slides&slide=${index}`, { replaceState: true, noScroll: true })
+  function paint(focus = true) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', presenting && i === cur)
+      s.classList.toggle('gone', presenting && i < cur)
+      s.inert = presenting && i !== cur
+    })
+    if (!presenting) return
+    slides[cur].scrollTop = 0
+    if (focus) slides[cur].focus({ preventScroll: true })
+    viewport!.dispatchEvent(new CustomEvent('slide-deck-active', { bubbles: true, detail: cur }))
+  }
+
+  function go(i: number) {
+    if (i < 0 || i >= count || i === cur) return
+    cur = i
+    paint()
+    setUrl(true)
+  }
+
+  async function present(on: boolean, at?: number) {
+    if (on === presenting || !count) return
+    if (on) {
+      lastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+      lastScroll = scrollY
+      const y = innerHeight * 0.3
+      cur =
+        at ??
+        Math.max(
+          0,
+          slides.findIndex(s => s.getBoundingClientRect().bottom > y)
+        )
+      cur = Math.min(count - 1, Math.max(0, cur))
+      entered = cur
+      presenting = true
+      document.body.classList.add('deck-presentation-active')
+      bench(true)
+      await tick()
+      if (!viewport) return
+      paint()
+      setUrl(true)
+    } else {
+      presenting = false
+      bench(false)
+      paint(false)
+      document.body.classList.remove('deck-presentation-active')
+      setUrl(false)
+      await tick()
+      // back where the reader left off, unless they moved to another slide
+      if (cur === entered) scrollTo({ top: lastScroll, behavior: 'instant' })
+      else slides[cur].scrollIntoView({ block: 'start', behavior: 'instant' })
+      const back =
+        lastFocus?.isConnected && lastFocus !== document.body ? lastFocus : viewport?.querySelector<HTMLElement>('.deck-go')
+      back?.focus({ preventScroll: true })
     }
   }
 
   function onKeydown(e: KeyboardEvent) {
-    if (!slidesMode) return
-    switch (e.key) {
-      case 'ArrowRight':
-      case ' ':
+    if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey || typing(e.target) || modalOpen()) return
+    if (!presenting) {
+      if (e.key === 'p' && !e.repeat) {
         e.preventDefault()
-        goTo(current + 1)
-        break
-      case 'ArrowLeft':
-        e.preventDefault()
-        goTo(current - 1)
-        break
-      case 'Home':
-        e.preventDefault()
-        goTo(0)
-        break
-      case 'End':
-        e.preventDefault()
-        goTo(slides.length - 1)
-        break
-      case 'Escape':
-        e.preventDefault()
-        window.location.href = path
-        break
+        void present(true)
+      }
+      return
     }
+    const onControl = e.target instanceof Element && !!e.target.closest('button, a, summary, [role="button"]')
+    const k = e.key
+    if (k === 'ArrowRight' || k === 'PageDown' || (k === ' ' && !onControl)) go(cur + 1)
+    else if (k === 'ArrowLeft' || k === 'PageUp') go(cur - 1)
+    else if (k === 'Home') go(0)
+    else if (k === 'End') go(count - 1)
+    else if (k === 'Escape') void present(false)
+    else return
+    e.preventDefault()
   }
 
   function onTouchStart(e: TouchEvent) {
-    if (!slidesMode) return
-    touchStartX = e.touches[0].clientX
+    const t = e.target instanceof Element ? e.target : null
+    touch =
+      presenting && e.touches.length === 1 && !t?.closest(SELF_PANNING)
+        ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+        : null
   }
 
   function onTouchEnd(e: TouchEvent) {
-    if (!slidesMode) return
-    const dx = e.changedTouches[0].clientX - touchStartX
-    if (Math.abs(dx) > 50) {
-      dx < 0 ? goTo(current + 1) : goTo(current - 1)
-    }
-  }
-
-  /** Avoid `?` in `href` — static prerender crawlers emit invalid filenames for query URLs. */
-  function openPresent(e: MouseEvent) {
-    e.preventDefault()
-    const u = new URL(path || '/', window.location.origin)
-    u.searchParams.set('mode', 'slides')
-    void goto(`${u.pathname}${u.search}`, { replaceState: false })
+    if (!touch) return
+    const dx = e.changedTouches[0].clientX - touch.x
+    const dy = e.changedTouches[0].clientY - touch.y
+    touch = null
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(cur + (dx < 0 ? 1 : -1))
   }
 
   onMount(() => {
-    let unsub: (() => void) | undefined
-    slidesMode = browser && window.location.search.includes('mode=slides')
-    void tick().then(async () => {
-      applyMode(slidesMode)
-      await tick()
-      unsub = page.subscribe($p => {
-        if (!browser) return
-        const newMode = $p.url.searchParams.get('mode') === 'slides'
-        if (newMode !== slidesMode) {
-          slidesMode = newMode
-          applyMode(slidesMode)
-          return
-        }
-        if (!newMode || slides.length === 0) return
-        const idx = Math.max(
-          0,
-          Math.min(slides.length - 1, readSlideIndexFromSearch($p.url.search))
-        )
-        if (idx !== current) goTo(idx, { fromUrl: true })
-      })
+    // direct children only: embeds can contain their own <section class="slide">
+    slides = [...viewport!.querySelectorAll<HTMLElement>(':scope > section.slide')]
+    count = slides.length
+    slides.forEach((s, i) => {
+      s.tabIndex = -1
+      s.setAttribute('aria-roledescription', 'slide')
+      s.setAttribute('aria-label', `${i + 1} of ${count}`)
     })
-    return () => unsub?.()
-  })
-
-  onDestroy(() => {
-    if (browser) document.body.classList.remove('deck-presentation-active')
+    const q = new URLSearchParams(location.search)
+    if (q.has('present') || q.get('mode') === 'slides') {
+      const n = parseInt(q.get('slide') ?? '', 10)
+      void present(true, Number.isFinite(n) ? n : 0)
+    }
+    // plain listeners: as a delegated <svelte:window> handler this ran several times per key press
+    addEventListener('keydown', onKeydown)
+    addEventListener('touchstart', onTouchStart, { passive: true })
+    addEventListener('touchend', onTouchEnd, { passive: true })
+    return () => {
+      removeEventListener('keydown', onKeydown)
+      removeEventListener('touchstart', onTouchStart)
+      removeEventListener('touchend', onTouchEnd)
+      bench(false)
+      document.body.classList.remove('deck-presentation-active')
+    }
   })
 </script>
 
-<svelte:window onkeydown={onKeydown} ontouchstart={onTouchStart} ontouchend={onTouchEnd} />
-
-{#if !slidesMode}
-  <a href={path} class="slide-deck-present-btn btn btn-primary btn-sm gap-2" onclick={openPresent}>
-    <span class="i-heroicons-outline-presentation-chart-bar w-4 h-4" />
-    Present Slides
-  </a>
-{/if}
-
 <div
   class="slide-deck-viewport"
-  class:slide-deck-viewport--presenting={slidesMode}
-  class:deck-root={slidesMode}
-  class:deck-slides={slidesMode}
-  role={slidesMode ? 'region' : undefined}
-  aria-label={slidesMode ? 'Slide deck' : undefined}
+  class:slide-deck-viewport--presenting={presenting}
+  role={presenting ? 'region' : undefined}
+  aria-roledescription={presenting ? 'slide deck' : undefined}
+  aria-label={presenting ? 'Slide deck' : undefined}
   bind:this={viewport}>
+  <p class="deck-cue" hidden={presenting}>
+    <button class="pill deck-go" type="button" aria-keyshortcuts="p" onclick={() => present(true)}>present ▸</button>
+    <span>
+      or press <kbd>p</kbd>
+      to read this as slides
+    </span>
+  </p>
   {@render children?.()}
-  {#if slidesMode}
-    <div class="slide-deck-progress-bar" aria-hidden="true" style="width: {progressPct}%;" />
-    <div class="slide-deck-counter font-mono" aria-live="polite">
-      {current + 1} / {slideCount || '…'}
+  <div class="deck-ui" hidden={!presenting}>
+    <div class="deck-thread" aria-hidden="true">
+      <b style="width: {progress}%"></b>
+      {#each { length: count } as _, i}
+        <i class:on={i < cur} class:here={i === cur} style="left: {count > 1 ? (i / (count - 1)) * 100 : 0}%"></i>
+      {/each}
     </div>
-  {/if}
+    <div class="deck-n" aria-live="polite" aria-atomic="true">{cur + 1} / {count}</div>
+    <button class="pill deck-x" type="button" onclick={() => present(false)}>
+      esc
+      <span class="deck-x-more">· back to article</span>
+    </button>
+  </div>
 </div>

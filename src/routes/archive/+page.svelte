@@ -1,224 +1,339 @@
 <script lang="ts">
+  import { afterNavigate, replaceState } from '$app/navigation'
   import { title as storedTitle } from '$lib/stores/title'
-  import { getReadingTime } from '$lib/utils/reading-time'
-  import { genTags } from '$lib/utils/posts'
+  import { topics, topicOf, readMins, type Topic } from '$lib/config/topics'
+  import { getSeriesInfo } from '$lib/utils/series'
+  import { satinSelect } from '$lib/actions/satin-select'
   import Head from '$lib/components/head.svelte'
+  import Embroidery from '$lib/components/thread/Embroidery.svelte'
+  import type { Builder } from '$lib/thread'
 
-  storedTitle.set('Archive')
+  storedTitle.set('Writing')
 
-  let { data }: { data: { res?: Urara.Post[] } } = $props()
-  let allPosts = $derived((data.res ?? []).filter(post => !post.flags?.includes('unlisted')))
-  let allTags = $derived(genTags(allPosts))
-  let selectedTag = $state<string | null>(null)
-  let searchQuery = $state('')
-  let activeView = $state<'all' | 'learning' | 'blog'>('all')
+  let { data }: { data: { res?: Blog.Post[] } } = $props()
 
-  function isLearningNote(post: Urara.Post): boolean {
-    return (
-      post.path?.startsWith('/growth/2026/') ||
-      post.tags?.includes('yggdrasil') ||
-      post.tags?.includes('learning-note') ||
-      (post as any).growth !== undefined
-    )
+  type Shelf = Topic | 'elsewhere'
+  type Tab = 'all' | Topic
+
+  const listed = $derived((data.res ?? []).filter(p => !p.flags?.includes('unlisted')))
+  /** Yggdrasil notes have their own index at /growth, and their tags can collide with shelf names */
+  const onShelf = (p: Blog.Post) => !!topicOf(p) && !p.path.startsWith('/growth/')
+  const writing = $derived(listed.filter(onShelf))
+
+  let tab = $state<Tab>('all')
+  let tag = $state<string | null>(null)
+
+  const matches = (p: Blog.Post) => !tag || !!p.tags?.includes(tag)
+
+  /** series parts in order, the FAQ after them, then anything else in the topic by date */
+  const partOf = (p: Blog.Post) => getSeriesInfo(p)?.part
+  const rank = (p: Blog.Post) => {
+    const part = partOf(p)
+    return part === undefined ? Infinity : part === 0 ? 1000 : part
+  }
+  const inShelf = (s: Shelf) => {
+    const ps = (s === 'elsewhere' ? listed.filter(p => !onShelf(p)) : writing.filter(p => topicOf(p) === s)).filter(matches)
+    return s === 'playbook' ? [...ps].sort((a, b) => rank(a) - rank(b)) : ps
   }
 
-  function date(post: Urara.Post): Date {
-    return new Date(post.published ?? post.created)
-  }
+  const tabKeys = $derived<Tab[]>(['all', ...(Object.keys(topics) as Topic[]).filter(t => writing.some(p => topicOf(p) === t))])
+  const tabIndex = $derived(Math.max(0, tabKeys.indexOf(tab)))
+  const shelves = $derived.by<{ id: Shelf; posts: Blog.Post[] }[]>(() => {
+    const ids: Shelf[] =
+      tab === 'all' ? [...tabKeys.filter((t): t is Topic => t !== 'all'), ...(tag ? (['elsewhere'] as const) : [])] : [tab]
+    return ids.map(id => ({ id, posts: inShelf(id) })).filter(s => s.posts.length || tab !== 'all')
+  })
+  const countFor = (t: Tab) => (t === 'all' ? writing.filter(matches).length : inShelf(t).length)
+  const shelfLabel = (s: Shelf) => (s === 'elsewhere' ? 'Elsewhere' : topics[s].label)
+  const shelfBlurb = (s: Shelf) => (s === 'elsewhere' ? 'Learning notes and pages outside the shelves.' : topics[s].blurb)
 
-  let baseFilteredPosts = $derived(
-    allPosts.filter(post => {
-      const q = searchQuery.toLowerCase()
-      const matchesTag = !selectedTag || post.tags?.includes(selectedTag)
-      const matchesSearch =
-        !q ||
-        post.title?.toLowerCase().includes(q) ||
-        post.summary?.toLowerCase().includes(q) ||
-        post.tags?.some(tag => tag.toLowerCase().includes(q))
-      return matchesTag && matchesSearch
+  const partLabel = (p: Blog.Post) => {
+    const part = partOf(p)
+    return part === undefined ? '' : part === 0 ? 'FAQ' : `Pt ${part}`
+  }
+  const short = (p: Blog.Post) => {
+    const t = p.title ?? p.path.slice(1)
+    return t.replace(/^The Grad\/Intern Playbook: (Part [\d.]+( Final Mix)? - |FAQ$)/, '') || 'Common questions'
+  }
+  const when = (p: Blog.Post) =>
+    new Date(p.published ?? p.created).toLocaleDateString('en-AU', {
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'Australia/Melbourne'
     })
-  )
-  let learningNotes = $derived(baseFilteredPosts.filter(isLearningNote))
-  let blogPosts = $derived(baseFilteredPosts.filter(post => !isLearningNote(post)))
-  let visiblePosts = $derived(activeView === 'learning' ? learningNotes : activeView === 'blog' ? blogPosts : baseFilteredPosts)
-  let allLearningCount = $derived(allPosts.filter(isLearningNote).length)
-  let allBlogCount = $derived(allPosts.length - allLearningCount)
 
-  let postsByYear = $derived.by(() =>
-    visiblePosts.reduce(
-      (acc, post) => {
-        const year = date(post).getFullYear()
-        if (!acc[year]) acc[year] = []
-        acc[year].push(post)
-        return acc
-      },
-      {} as Record<number, Urara.Post[]>
-    )
+  const numberWords = [
+    'Zero',
+    'One',
+    'Two',
+    'Three',
+    'Four',
+    'Five',
+    'Six',
+    'Seven',
+    'Eight',
+    'Nine',
+    'Ten',
+    'Eleven',
+    'Twelve',
+    'Thirteen',
+    'Fourteen',
+    'Fifteen',
+    'Sixteen',
+    'Seventeen',
+    'Eighteen',
+    'Nineteen'
+  ]
+  const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
+  const spell = (n: number) =>
+    n < 20
+      ? numberWords[n]
+      : n < 100
+        ? tens[Math.floor(n / 10)] + (n % 10 ? '-' + numberWords[n % 10].toLowerCase() : '')
+        : String(n)
+  const since = $derived(
+    Math.min(...writing.map(p => new Date(p.published ?? p.created).getFullYear()), new Date().getFullYear())
   )
-  let years = $derived(Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a)))
-  let tagCounts = $derived.by(() =>
-    allPosts.reduce(
-      (acc, post) => {
-        post.tags?.forEach(tag => (acc[tag] = (acc[tag] || 0) + 1))
-        return acc
-      },
-      {} as Record<string, number>
-    )
-  )
-  let sortedTags = $derived.by(() => [...allTags].sort((a, b) => (tagCounts[b] || 0) - (tagCounts[a] || 0)))
 
-  function clearFilters() {
-    selectedTag = null
-    searchQuery = ''
+  /** query params are read in the browser, since prerendered pages have no search string */
+  function readParams(url: URL) {
+    const t = url.searchParams.get('topic')
+    tab = t && t in topics ? (t as Topic) : 'all'
+    tag = url.searchParams.get('tag') || null
+  }
+  afterNavigate(({ to }) => to?.url && readParams(to.url))
+  $effect(() => {
+    document.getElementById(`tab-${tab}`)?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+  })
+
+  function syncUrl() {
+    const url = new URL(location.href)
+    url.search = ''
+    if (tab !== 'all') url.searchParams.set('topic', tab)
+    if (tag) url.searchParams.set('tag', tag)
+    replaceState(url, {})
+  }
+  function choose(t: Tab) {
+    tab = t
+    syncUrl()
+  }
+  function clearTag() {
+    tag = null
+    syncUrl()
+  }
+
+  function onTabKey(e: KeyboardEvent) {
+    const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
+    const to =
+      e.key === 'Home'
+        ? 0
+        : e.key === 'End'
+          ? tabKeys.length - 1
+          : step
+            ? (tabIndex + step + tabKeys.length) % tabKeys.length
+            : -1
+    if (to < 0) return
+    e.preventDefault()
+    choose(tabKeys[to])
+    document.getElementById(`tab-${tabKeys[to]}`)?.focus()
+  }
+
+  const spray = (b: Builder, W: number, H: number) => {
+    b.stem(b.curve(W * 0.95, H, W * 0.7, H * 0.7, W * 0.5, H * 0.45))
+    b.leaf(W * 0.78, H * 0.86, W * 0.56, H * 0.72, 16, 0.2)
+    b.leaf(W * 0.7, H * 0.64, W * 0.86, H * 0.5, 13, -0.22)
+    b.rose(W * 0.46, H * 0.4, 52, { petals: 13, turn: 1.2 })
+    b.knot(W * 0.2, H * 0.2, 2, 'g1', b.tick(60))
+    b.knot(W * 0.26, H * 0.12, 2, 'g1', b.tick(60))
   }
 </script>
 
 <Head />
 
-<div class="archive-page site-editorial-page">
-  <header class="arch-head wrap">
-    <h1 class="sr-only">Archive</h1>
-    <span class="eyebrow">the archive</span>
-    <h2>Everything I've <span>written</span>.</h2>
-    <p>Browse every post by year, tag, or search.</p>
+<div class="index-head">
+  <Embroidery compose={spray} width={260} height={210} class="w-spray" />
+  <h1>Writing</h1>
+  <p class="col">
+    {spell(writing.length)} pieces since {since}, grouped by what they're about. Essays run long; notes are allowed to be short.
+  </p>
+</div>
 
-    <div class="type-pills">
-      <button class:active={activeView === 'all'} onclick={() => (activeView = 'all')}>All ({allPosts.length})</button>
-      <button class:active={activeView === 'blog'} onclick={() => (activeView = 'blog')}>Blog ({allBlogCount})</button>
-      <button class:active={activeView === 'learning'} onclick={() => (activeView = 'learning')}>Learning ({allLearningCount})</button>
+<div class="tabs-row">
+  <div class="tabs-menu" use:satinSelect={{ items: '[role=tab]', selected: tabIndex, key: tabKeys.join() }}>
+    <div class="tabs" role="tablist" aria-label="Topics" tabindex="-1" onkeydown={onTabKey}>
+      {#each tabKeys as t (t)}
+        <button
+          type="button"
+          role="tab"
+          id="tab-{t}"
+          aria-selected={t === tab}
+          aria-controls="writing-shelves"
+          tabindex={t === tab ? 0 : -1}
+          onclick={() => choose(t)}>
+          {t === 'all' ? 'Everything' : topics[t].label}
+          <sup>{countFor(t)}</sup>
+        </button>
+      {/each}
     </div>
-
-    <div class="stats-row">
-      <div><span>Showing</span><strong>{visiblePosts.length}</strong><small>matching posts</small></div>
-      <div><span>Total</span><strong>{allPosts.length}</strong><small>{allLearningCount} learning · {allBlogCount} blog</small></div>
-      <div><span>Tags</span><strong>{allTags.length}</strong><small>across the archive</small></div>
-    </div>
-  </header>
-
-  <div class="wrap arch-grid">
-    <aside class="sidebar">
-      <label for="arch-search">Search</label>
-      <div class="search-wrap">
-        <span class="i-heroicons-outline-magnifying-glass"></span>
-        <input id="arch-search" type="search" placeholder="Search posts..." bind:value={searchQuery} />
-      </div>
-      {#if selectedTag || searchQuery}
-        <button class="clear-btn" onclick={clearFilters}>Clear filters</button>
-      {/if}
-
-      <div class="side-label">Tags</div>
-      <div class="tags-list">
-        {#each sortedTags as tag}
-          <button class:active={selectedTag === tag} onclick={() => (selectedTag = selectedTag === tag ? null : tag)}>
-            <span>#{tag}</span><small>{tagCounts[tag]}</small>
-          </button>
-        {/each}
-      </div>
-    </aside>
-
-    <main>
-      {#if visiblePosts.length === 0}
-        <div class="empty">No posts match that. <button onclick={clearFilters}>Clear the filters</button> and try again.</div>
-      {:else}
-        <div class="feed">
-          {#each years as year}
-            <section class="feed-year">
-              <div class="year-head">
-                <span>{year}</span><i></i><small>{postsByYear[Number(year)].length} post{postsByYear[Number(year)].length === 1 ? '' : 's'}</small>
-              </div>
-              {#each postsByYear[Number(year)] as post}
-                {@const d = date(post)}
-                <a class="post-row" href={post.path}>
-                  <span class="post-date"><b>{d.getDate()}</b>{d.toLocaleDateString('en-US', { month: 'short' })}</span>
-                  <span class="post-main">
-                    <span class="post-title">
-                      <strong>{post.title || post.path.slice(1)}</strong>
-                      {#if isLearningNote(post)}<em>learning</em>{/if}
-                    </span>
-                    {#if post.summary}<span>{post.summary}</span>{/if}
-                    <span class="post-tags">
-                      {#each (post.tags ?? []).slice(0, 4) as tag}
-                        <i class:active={tag === selectedTag}>#{tag}</i>
-                      {/each}
-                    </span>
-                  </span>
-                  <span class="post-meta">{getReadingTime(post.html) ?? 'read'} →</span>
-                </a>
-              {/each}
-            </section>
-          {/each}
-        </div>
-      {/if}
-    </main>
   </div>
 </div>
 
+<div class="col" id="writing-shelves" role="tabpanel" aria-labelledby="tab-{tab}">
+  {#if tag}
+    <p class="filter smallcaps">
+      Tagged <b>#{tag}</b>
+      ·
+      <button type="button" class="linkish" onclick={clearTag}>show everything</button>
+    </p>
+  {/if}
+
+  {#each shelves as shelf (shelf.id)}
+    <section class="topic" aria-labelledby="shelf-{shelf.id}">
+      <h2 id="shelf-{shelf.id}">
+        {shelfLabel(shelf.id)}
+        <span class="count">{shelf.posts.length}</span>
+      </h2>
+      <p class="blurb">
+        {shelfBlurb(shelf.id)}
+        {#if shelf.id === 'playbook'}<a href="/playbook">The series page</a>
+          .{/if}
+      </p>
+      {#if shelf.posts.length}
+        <div use:satinSelect={{ items: 'li', key: `${tab}:${tag}` }}>
+          <ol class="toc">
+            {#each shelf.posts as p (p.path)}
+              <li data-slug={p.path}>
+                <div class="row">
+                  <a href={p.path}>
+                    {#if partLabel(p)}<span class="part">{partLabel(p)}</span>{/if}
+                    <span class="t">{short(p)}</span>
+                  </a>
+                  <span class="leader" aria-hidden="true"></span>
+                  {#if tab === 'all'}
+                    <span class="meta">{readMins(p.words)} min</span>
+                  {:else}
+                    <span class="meta"><time datetime={new Date(p.published ?? p.created).toISOString()}>{when(p)}</time></span>
+                  {/if}
+                </div>
+                {#if tab !== 'all' && p.summary}<div class="sum">{p.summary}</div>{/if}
+              </li>
+            {/each}
+          </ol>
+        </div>
+      {:else}
+        <p class="none">Nothing here{tag ? ` tagged #${tag}` : ''} yet.</p>
+      {/if}
+    </section>
+  {:else}
+    <p class="none">Nothing is tagged #{tag}.</p>
+  {/each}
+</div>
+
 <style>
-  .archive-page {
-    --panel: var(--site-panel);
-    --panel-2: var(--site-panel-2);
-    --line: var(--site-line);
-    --line-strong: var(--site-line-strong);
-    --fg: var(--site-fg);
-    --fg-2: var(--site-fg-2);
-    --muted: var(--site-muted);
-    --dim: var(--site-dim);
-    --accent: var(--site-accent);
-    --accent-ink: var(--site-accent-ink);
-    --mono: var(--site-mono);
-    --mono2: var(--site-mono2);
-    --sans: var(--site-sans);
-    padding-bottom: 80px;
+  .index-head {
+    margin: 4.5rem 0 1.5rem;
+    position: relative;
   }
-  .wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(20px, 5vw, 84px); }
-  .arch-head { padding-block: clamp(40px, 7vh, 80px) 8px; }
-  .eyebrow { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
-  .arch-head h2 { font-family: var(--sans); font-size: clamp(2.4rem, 6vw, 3.8rem); line-height: 1; letter-spacing: -.04em; margin: 16px 0 10px; font-weight: 800; }
-  .arch-head h2 span { color: var(--accent); }
-  .arch-head p { color: var(--muted); font-size: 15px; }
-  .type-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-  .type-pills button, .clear-btn {
-    font-family: var(--mono); font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: 999px;
-    border: 1px solid var(--line-strong); background: transparent; color: var(--muted); transition: .15s;
+  .index-head h1 {
+    font-size: 2.6rem;
+    margin: 0 0 0.6rem;
+    font-weight: 400;
   }
-  .type-pills button:hover, .clear-btn:hover { color: var(--fg); border-color: var(--accent); }
-  .type-pills button.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
-  .stats-row div { border: 1px solid var(--line); border-radius: 18px; padding: 18px 20px; background: color-mix(in srgb, var(--panel) 78%, transparent); }
-  .stats-row span, .sidebar label, .side-label { display: block; font-family: var(--mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--dim); }
-  .stats-row strong { display: block; color: var(--accent); font-family: var(--mono); font-size: 34px; line-height: 1.1; margin-top: 6px; }
-  .stats-row small { color: var(--muted); font-size: 12px; }
-  .arch-grid { display: grid; grid-template-columns: 248px 1fr; gap: clamp(28px, 5vw, 56px); padding-top: 44px; }
-  .sidebar { position: sticky; top: 88px; align-self: start; }
-  .search-wrap { position: relative; margin: 14px 0 18px; }
-  .search-wrap span { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--dim); }
-  .search-wrap input { width: 100%; background: var(--panel); color: var(--fg); border: 1px solid var(--line-strong); border-radius: 12px; padding: 11px 12px 11px 38px; outline: none; }
-  .search-wrap input:focus { border-color: var(--accent); }
-  .clear-btn { width: 100%; margin-bottom: 28px; }
-  .tags-list { display: flex; flex-direction: column; gap: 3px; max-height: 60vh; overflow: auto; margin-top: 14px; }
-  .tags-list button { display: flex; justify-content: space-between; gap: 10px; border: 0; background: transparent; color: var(--muted); border-radius: 8px; padding: 8px 10px; font-family: var(--mono); font-size: 13px; font-weight: 700; text-align: left; text-transform: uppercase; }
-  .tags-list button:hover { background: var(--panel); color: var(--fg); }
-  .tags-list button.active { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
-  .tags-list small { min-width: 22px; height: 20px; display: grid; place-items: center; border-radius: 999px; background: var(--panel-2); color: var(--muted); }
-  .feed { display: flex; flex-direction: column; gap: 18px; }
-  .year-head { display: flex; align-items: center; gap: 18px; margin: 6px 0 8px; }
-  .year-head span { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--accent); }
-  .year-head i { flex: 1; height: 1px; background: var(--line); }
-  .year-head small { color: var(--dim); font-family: var(--mono); font-size: 12px; }
-  .post-row { display: grid; grid-template-columns: 64px 1fr auto; gap: 20px; align-items: baseline; padding: 16px 12px; border-radius: 12px; border: 1px solid transparent; transition: .15s; }
-  .post-row:hover { background: var(--panel); border-color: var(--line); transform: translateX(4px); }
-  .post-date { font-family: var(--mono); color: var(--dim); font-size: 12px; text-transform: uppercase; text-align: right; }
-  .post-date b { display: block; color: var(--fg-2); font-size: 18px; }
-  .post-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .post-title strong { font-family: var(--mono); color: var(--fg); font-size: 16px; }
-  .post-title em { font-style: normal; font-size: 9px; text-transform: uppercase; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); border-radius: 999px; padding: 1px 7px; }
-  .post-main > span:not(.post-tags) { display: block; color: var(--muted); margin-top: 5px; font-size: 14px; line-height: 1.55; max-width: 62ch; }
-  .post-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
-  .post-tags i { color: var(--muted); border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px 10px; font-family: var(--mono); font-size: 11px; font-style: normal; }
-  .post-tags i.active { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
-  .post-meta { color: var(--dim); font-family: var(--mono); font-size: 12px; white-space: nowrap; }
-  .empty { color: var(--muted); padding: 40px 0; }
-  .empty button { color: var(--accent); text-decoration: underline; }
-  @media (max-width: 860px) { .arch-grid, .stats-row { grid-template-columns: 1fr; } .sidebar { position: static; } }
-  @media (max-width: 640px) { .post-row { grid-template-columns: 50px 1fr; } .post-meta { display: none; } }
+  .index-head p {
+    color: var(--fg2);
+    margin: 0;
+  }
+  .index-head :global(.w-spray) {
+    position: absolute;
+    left: calc(var(--measure) + var(--gap) - 1rem);
+    top: -2rem;
+    width: 16rem;
+    height: 13rem;
+  }
+  @media (max-width: 59.99rem) {
+    .index-head :global(.w-spray) {
+      display: none;
+    }
+  }
+  .tabs-row {
+    margin: 0 0 2.2rem -1rem;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1rem;
+  }
+  .tabs button {
+    background: none;
+    border: 0;
+    padding: 0.3rem 1rem;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    cursor: var(--pointer);
+    white-space: nowrap;
+  }
+  .tabs button[aria-selected='true'] {
+    color: var(--fg);
+  }
+  .tabs button sup {
+    font-size: 9.5px;
+    margin-left: 0.2rem;
+    opacity: 0.75;
+  }
+  /* one swipeable row; the bar sits inside the scrolled content so it scrolls with the tabs */
+  @media (max-width: 40rem) {
+    .tabs-row {
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-right: -1.25rem;
+      padding-bottom: 0.3rem;
+    }
+    .tabs-menu {
+      width: max-content;
+    }
+    .tabs {
+      flex-wrap: nowrap;
+    }
+  }
+  .filter {
+    margin: -1rem 0 2rem;
+  }
+  .filter b {
+    color: var(--fg);
+    font-weight: 500;
+  }
+  .filter .linkish {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .topic {
+    margin: 0 0 3rem;
+  }
+  .topic h2 {
+    display: flex;
+    gap: 0.8rem;
+    align-items: baseline;
+    font-size: 1.35rem;
+    margin: 0 0 0.4rem;
+  }
+  .topic h2 .count {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .topic .blurb {
+    font-size: 16px;
+    color: var(--muted);
+    margin: 0 0 0.5rem;
+    font-style: italic;
+  }
+  .topic .blurb a {
+    font-style: normal;
+  }
+  .none {
+    color: var(--muted);
+    font-style: italic;
+  }
 </style>

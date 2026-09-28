@@ -9,11 +9,11 @@
 </script>
 
 {#if inline}
-<span class={wrapperClass}>
-  <span class={spriteClass}></span>
-</span>
+  <span class={wrapperClass}>
+    <span class={spriteClass}></span>
+  </span>
 {:else}
-<div class={wrapperClass}>
-  <span class={spriteClass}></span>
-</div>
+  <div class={wrapperClass}>
+    <span class={spriteClass}></span>
+  </div>
 {/if}

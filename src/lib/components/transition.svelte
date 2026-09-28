@@ -4,11 +4,7 @@
   import { fade } from 'svelte/transition'
   import { browser } from '$app/environment'
   import { prefersReducedMotion } from '$lib/utils/motion'
-  import {
-    getRouteTransitionPolicy,
-    shouldUseViewTransition,
-    shouldAnimateFade
-  } from '$lib/utils/transition-policy'
+  import { getRouteTransitionPolicy, shouldUseViewTransition, shouldAnimateFade } from '$lib/utils/transition-policy'
 
   let { path = '', children } = $props()
 
@@ -27,12 +23,12 @@
     syncPolicy()
   })
 
-  onNavigate((navigation) => {
+  onNavigate(navigation => {
     if (!browser) return
     syncPolicy()
     if (!useVt) return
 
-    return new Promise<void>((resolve) => {
+    return new Promise<void>(resolve => {
       document.startViewTransition(async () => {
         resolve()
         await navigation.complete
@@ -42,42 +38,17 @@
 </script>
 
 {#if useVt || policy === 'none' || prefersReducedMotion()}
-  <div class="layout-transition pt-16 md:pb-8 lg:pb-16">
+  <div class="layout-transition">
     {@render children?.()}
   </div>
 {:else if useFade}
   {#key path}
-    <div
-      class="layout-transition pt-16 md:pb-8 lg:pb-16"
-      in:fade={{ duration: 220 }}
-    >
+    <div class="layout-transition" in:fade={{ duration: 220 }}>
       {@render children?.()}
     </div>
   {/key}
 {:else}
-  <div class="layout-transition pt-16 md:pb-8 lg:pb-16">
+  <div class="layout-transition">
     {@render children?.()}
   </div>
 {/if}
-
-<style>
-  .layout-transition {
-    background: hsl(var(--b1));
-  }
-
-  @media (min-width: 768px) {
-    .layout-transition {
-      background: hsl(var(--b2));
-    }
-  }
-
-  :global(.site-editorial-surface) .layout-transition {
-    background: var(--site-bg);
-  }
-
-  @media (min-width: 768px) {
-    :global(.site-editorial-surface) .layout-transition {
-      padding-bottom: 0;
-    }
-  }
-</style>

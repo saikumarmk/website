@@ -2,101 +2,91 @@
   import type { LayoutProps } from './$types'
   import { onMount } from 'svelte'
   import { browser, dev } from '$app/environment'
-  import { genTags } from '$lib/utils/posts'
+  import { genTags } from '$lib/utils/post-meta'
   import { posts, tags } from '$lib/stores/posts'
   import { registerSW } from 'virtual:pwa-register'
   import Head from '$lib/components/head_static.svelte'
   import Header from '$lib/components/header.svelte'
+  import Footer from '$lib/components/footer.svelte'
   import Transition from '$lib/components/transition.svelte'
-  import { backgroundMode } from '$lib/stores/background'
+  import '@fontsource-variable/newsreader/opsz.css'
+  import '@fontsource-variable/newsreader/opsz-italic.css'
+  import '@fontsource/ibm-plex-mono/400.css'
+  import '@fontsource/ibm-plex-mono/500.css'
+  import 'katex/dist/katex.min.css'
   import 'uno.css'
   import '../app.pcss'
+  import '../styles/sampler.css'
   import CodeCopyButton from '$lib/components/code_copy_button.svelte'
   import ImageLightbox from '$lib/components/image_lightbox.svelte'
   import SearchModal from '$lib/components/search_modal.svelte'
+  import Sky from '$lib/components/Sky.svelte'
+  import HoverBloom from '$lib/components/HoverBloom.svelte'
 
   let { data, children }: LayoutProps = $props()
 
-  let searchModal = $state<any>()
-  let ThreeCanvas = $state<any>(null)
-  let PokeCanvas = $state<any>(null)
+  let searchModal = $state<ReturnType<typeof SearchModal>>()
 
-  let res = $derived(data.res)
   let path = $derived(data.path)
-  let normalizedPath = $derived(path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path)
-  let isPostPath = $derived((res ?? []).some(post => post.path === normalizedPath))
-  let isEditorialPath = $derived(
-    path === '/' ||
-      path.startsWith('/archive') ||
-      path.startsWith('/about') ||
-      path.startsWith('/portfolio') ||
-      path.startsWith('/playbook') ||
-      path.startsWith('/growth/2026') ||
-      isPostPath
-  )
+  /** Full-screen apps get the masthead and the rest of the viewport, with no footer. */
+  let isApp = $derived(/^\/growth\/2026\/?$/.test(path))
 
-  let currentMode = $state('none')
-  $effect(() => {
-    const unsub = backgroundMode.subscribe(mode => {
-      currentMode = mode
-    })
-    return unsub
-  })
-
-  $effect(() => {
-    if (browser && currentMode === 'three' && !ThreeCanvas) {
-      import('$lib/components/three/astro_canvas.svelte').then(module => {
-        ThreeCanvas = module.default
-      })
-    }
-  })
-
-  $effect(() => {
-    if (browser && currentMode === 'poke' && !PokeCanvas) {
-      import('$lib/components/three/poke_canvas.svelte').then(module => {
-        PokeCanvas = module.default
-      })
-    }
-  })
-
-  $effect(() => {
+  // Set synchronously so post pages can render Nearby during SSR.
+  const syncPosts = () => {
     posts.set(data.res ?? [])
     tags.set(genTags(data.res ?? []))
-  })
+  }
+  syncPosts()
+  $effect(syncPosts)
 
-  $effect(() => {
-    if (!browser) return
-    document.documentElement.classList.toggle('site-editorial-root', isEditorialPath)
+  onMount(() => {
+    if (dev || !browser || !('serviceWorker' in navigator)) return
+    registerSW({
+      immediate: true,
+      onRegistered: r => r && setInterval(async () => await r.update(), 198964),
+      onRegisterError: error => console.error(error)
+    })
   })
-
-  onMount(
-    () =>
-      !dev &&
-      browser &&
-      registerSW({
-        immediate: true,
-        onRegistered: r => r && setInterval(async () => await r.update(), 198964),
-        onRegisterError: error => console.error(error)
-      })
-  )
 </script>
 
-{#if currentMode === 'three' && ThreeCanvas}
-  <ThreeCanvas />
-{:else if currentMode === 'poke' && PokeCanvas}
-  <PokeCanvas />
-{/if}
 <Head />
 
-<!-- 3) then render all your UI -->
-<div class:site-editorial-surface={isEditorialPath}>
-  <Header {path} bind:searchModal />
+<div class="page" class:app-frame={isApp}>
+  <a class="skip" href="#main">Skip to content</a>
+  <Header onsearch={() => searchModal?.open()} />
 
-  <Transition {path}>
-    {@render children()}
-  </Transition>
+  <main id="main" tabindex="-1">
+    <Transition {path}>
+      {@render children()}
+    </Transition>
+  </main>
+
+  {#if !isApp}<Footer />{/if}
+  {#if !isApp}<HoverBloom />{/if}
 </div>
 
+{#if !isApp}<Sky />{/if}
 <CodeCopyButton />
 <ImageLightbox />
 <SearchModal bind:this={searchModal} />
+
+<style>
+  #main:focus {
+    outline: none;
+  }
+  .app-frame {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    max-width: none;
+    padding: 0 1.5rem;
+  }
+  .app-frame > #main {
+    flex: 1;
+    min-height: 0;
+    margin-top: 1rem;
+  }
+  .app-frame > #main > :global(.layout-transition) {
+    height: 100%;
+  }
+</style>
