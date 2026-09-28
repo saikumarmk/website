@@ -7,7 +7,7 @@ import FlexSearch from 'flexsearch'
 import { FLEXSEARCH_DOCUMENT_OPTIONS, STATIC_SEARCH_PAGES } from '$lib/search/flexsearch-config'
 import { projects } from '$lib/config/portfolio'
 import { topics, topicOf } from '$lib/config/topics'
-import { filterAndSortPosts, typeOfPost } from './posts'
+import { filterAndSortPosts, typeOfPost } from './post-meta'
 
 function stripFrontmatter(source: string): string {
   return source.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '')

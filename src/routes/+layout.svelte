@@ -2,7 +2,7 @@
   import type { LayoutProps } from './$types'
   import { onMount } from 'svelte'
   import { browser, dev } from '$app/environment'
-  import { genTags } from '$lib/utils/posts'
+  import { genTags } from '$lib/utils/post-meta'
   import { posts, tags } from '$lib/stores/posts'
   import { registerSW } from 'virtual:pwa-register'
   import Head from '$lib/components/head_static.svelte'

@@ -29,7 +29,7 @@
 </script>
 
 <script lang="ts">
-  import { typeOfPost } from '$lib/utils/posts'
+  import { typeOfPost } from '$lib/utils/post-meta'
   import Container from '$lib/components/post_container.svelte'
   import SlideDeck from '$lib/slides/SlideDeck.svelte'
 
