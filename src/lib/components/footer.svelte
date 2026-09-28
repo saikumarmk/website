@@ -1,6 +1,5 @@
 <script lang="ts">
   import Embroidery from '$lib/components/thread/Embroidery.svelte'
-  import { assets } from '$lib/config/assets'
 </script>
 
 <footer class="site">
@@ -15,7 +14,7 @@
       b.knot(W * 0.26, H * 0.62, 2.2, 'g1', b.tick(60))
     }} />
   <a href="https://github.com/saikumarmk">GitHub</a>
-  <a href={assets.resume}>CV</a>
+  <a href="/cv">CV</a>
   <a href="/atom.xml">RSS</a>
   <a href="/playbook">Playbook</a>
   <a href="/growth/2026">Yggdrasil</a>

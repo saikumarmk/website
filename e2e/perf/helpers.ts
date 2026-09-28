@@ -150,7 +150,7 @@ export async function measureSearchModalReady(page: Page): Promise<{ openMs: num
   const dialog = page.locator('[role="dialog"][aria-modal="true"]')
   // The button only works once the page has hydrated, so retry until the dialog opens.
   await expect(async () => {
-    await page.getByRole('button', { name: 'search' }).click()
+    await page.getByRole('button', { name: /^search/i }).click()
     await expect(dialog).toBeVisible({ timeout: 250 })
   }).toPass({ timeout: 10_000 })
   const openMs = Date.now() - openStart
