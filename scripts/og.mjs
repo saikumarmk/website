@@ -118,7 +118,6 @@ const H = 630
 const h = (type, style, ...children) => ({ type, props: { style, children: children.length > 1 ? children : children[0] } })
 const mono = { fontFamily: 'Plex' }
 
-/** laid out like design-prototypes/og-cards.html */
 async function card({ seed, theme = 'ivory', kicker, title, summary, meta }) {
   const c = colours(theme, 'base')
   const flower = bloom(seed, theme, c.panel)
