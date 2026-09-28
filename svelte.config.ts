@@ -28,7 +28,12 @@ export default defineConfig({
           strict: false
         }),
     prerender: {
-      handleMissingId: 'warn'
+      handleMissingId: 'warn',
+      // /og/ images are drawn after prerendering by scripts/og.mjs, which then checks every link resolves
+      handleHttpError: ({ path, status, message }) => {
+        if (status === 404 && path.startsWith('/og/')) return
+        throw new Error(message)
+      }
     },
     csp: { mode: 'auto' }
   }
