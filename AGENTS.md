@@ -8,7 +8,7 @@ This is a personal website and blog built with SvelteKit (originally forked from
 - **Framework:** SvelteKit 2 + Svelte 5 (runes) with TypeScript
 - **Styling:** TailwindCSS, DaisyUI, UnoCSS
 - **Markdown:** MDSvex (Svelte + MDX) for content rendering
-- **3D Graphics:** Three.js for interactive visualizations
+- **Graphs:** force-graph (Yakuza explorer, Yggdrasil) and ELK.js (Yggdrasil layout); Mermaid for diagrams
 - **Build Tool:** Vite 8 (Rolldown); tests with Vitest and Playwright
 - **Node:** 22.18+ (config files are `.ts` and loaded by Node's built-in type stripping; there is no compile step)
 - **Deployment:** Supports Netlify, Vercel, static hosting, and Node adapter

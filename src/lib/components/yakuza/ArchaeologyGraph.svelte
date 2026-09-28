@@ -4,7 +4,8 @@
 -->
 <script lang="ts">
   import { onMount } from 'svelte'
-  import type { ForceGraphInstance, LinkObject, NodeObject } from 'force-graph'
+  import type ForceGraphInstance from 'force-graph'
+  import type { LinkObject, NodeObject } from 'force-graph'
   import { whenNear } from '$lib/actions/when-near'
 
   type GNode = NodeObject & { id: string; label: string; group: string; [field: string]: unknown }
@@ -129,7 +130,7 @@
       readColours()
 
       const touches = (l: LinkObject) => !!selected && (endId(l.source) === selected.id || endId(l.target) === selected.id)
-      fg = ForceGraph()(canvas)
+      fg = new ForceGraph(canvas)
         .width(stage.clientWidth)
         .height(stage.clientHeight)
         .backgroundColor('rgba(0,0,0,0)')

@@ -60,7 +60,6 @@ export default defineConfig({
           // dependencies of lazily imported libraries (mermaid's d3, cytoscape, dayjs…) into every page.
           if (id.includes('node_modules')) {
             if (id.includes('elkjs')) return 'elk'
-            if (id.includes('three')) return 'three'
             if (id.includes('force-graph')) return 'force-graph-2d'
             if (id.includes('katex')) return 'katex'
             if (id.includes('svelte')) return 'svelte-vendor'

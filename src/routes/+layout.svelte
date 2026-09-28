@@ -13,6 +13,7 @@
   import '@fontsource-variable/newsreader/opsz-italic.css'
   import '@fontsource/ibm-plex-mono/400.css'
   import '@fontsource/ibm-plex-mono/500.css'
+  import 'katex/dist/katex.min.css'
   import 'uno.css'
   import '../app.pcss'
   import '../styles/sampler.css'
@@ -38,16 +39,14 @@
   syncPosts()
   $effect(syncPosts)
 
-  onMount(
-    () =>
-      !dev &&
-      browser &&
-      registerSW({
-        immediate: true,
-        onRegistered: r => r && setInterval(async () => await r.update(), 198964),
-        onRegisterError: error => console.error(error)
-      })
-  )
+  onMount(() => {
+    if (dev || !browser || !('serviceWorker' in navigator)) return
+    registerSW({
+      immediate: true,
+      onRegistered: r => r && setInterval(async () => await r.update(), 198964),
+      onRegisterError: error => console.error(error)
+    })
+  })
 </script>
 
 <Head />

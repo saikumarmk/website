@@ -283,7 +283,7 @@
       const bgColor =
         getComputedStyle(document.documentElement).getPropertyValue('--b3').trim() || '#1a1a1a'
 
-      const instance = ForceGraph()(container)
+      const instance = new ForceGraph(container)
         .width(container.clientWidth)
         .height(container.clientHeight)
         .backgroundColor(bgColor)
