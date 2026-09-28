@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte'
   import { goto } from '$app/navigation'
-  import FlexSearch from 'flexsearch'
+  import type { Document } from 'flexsearch'
   import { FLEXSEARCH_DOCUMENT_OPTIONS } from '$lib/search/flexsearch-config'
   import { SEARCH_EVENT } from '$lib/search/open'
   import { satinSelect } from '$lib/actions/satin-select'
@@ -19,7 +19,7 @@
 
   let entries: SearchEntry[] = []
   let byPath = new Map<string, SearchEntry>()
-  let searchIndex: InstanceType<typeof FlexSearch.Document> | null = null
+  let searchIndex: Document | null = null
   let indexLoading = $state(false)
   let indexLoaded = $state(false)
   let indexFailed = $state(false)
@@ -29,7 +29,10 @@
     indexLoading = true
     indexFailed = false
     try {
-      const data: SearchIndexJson = await (await fetch('/search-index.json')).json()
+      const [{ default: FlexSearch }, data] = await Promise.all([
+        import('flexsearch'),
+        fetch('/search-index.json').then(async response => (await response.json()) as SearchIndexJson)
+      ])
       entries = [...(data.posts ?? []), ...(data.dex ?? []), ...(data.pages ?? [])]
       byPath = new Map(entries.map(e => [e.path, e]))
       searchIndex = new FlexSearch.Document(FLEXSEARCH_DOCUMENT_OPTIONS)

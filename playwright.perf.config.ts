@@ -19,7 +19,13 @@ export default defineConfig({
     video: 'off'
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: { executablePath: process.env.E2E_CHROMIUM_EXECUTABLE }
+      }
+    },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } }
   ],
   webServer: usePreview

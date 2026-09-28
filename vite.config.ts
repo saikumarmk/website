@@ -61,7 +61,6 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             if (id.includes('elkjs')) return 'elk'
             if (id.includes('force-graph')) return 'force-graph-2d'
-            if (id.includes('katex')) return 'katex'
             if (id.includes('svelte')) return 'svelte-vendor'
           }
         }
