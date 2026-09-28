@@ -48,7 +48,7 @@
   /** Everything around the deck, up to the page shell, is inert while presenting. Modals at the body stay usable. */
   function bench(on: boolean) {
     if (!on) {
-      benched.forEach((el) => (el.inert = false))
+      benched.forEach(el => (el.inert = false))
       benched = []
       return
     }
@@ -88,7 +88,12 @@
       lastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
       lastScroll = scrollY
       const y = innerHeight * 0.3
-      cur = at ?? Math.max(0, slides.findIndex((s) => s.getBoundingClientRect().bottom > y))
+      cur =
+        at ??
+        Math.max(
+          0,
+          slides.findIndex(s => s.getBoundingClientRect().bottom > y)
+        )
       cur = Math.min(count - 1, Math.max(0, cur))
       entered = cur
       presenting = true
@@ -108,7 +113,8 @@
       // back where the reader left off, unless they moved to another slide
       if (cur === entered) scrollTo({ top: lastScroll, behavior: 'instant' })
       else slides[cur].scrollIntoView({ block: 'start', behavior: 'instant' })
-      const back = lastFocus?.isConnected && lastFocus !== document.body ? lastFocus : viewport?.querySelector<HTMLElement>('.deck-go')
+      const back =
+        lastFocus?.isConnected && lastFocus !== document.body ? lastFocus : viewport?.querySelector<HTMLElement>('.deck-go')
       back?.focus({ preventScroll: true })
     }
   }
@@ -135,7 +141,10 @@
 
   function onTouchStart(e: TouchEvent) {
     const t = e.target instanceof Element ? e.target : null
-    touch = presenting && e.touches.length === 1 && !t?.closest(SELF_PANNING) ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null
+    touch =
+      presenting && e.touches.length === 1 && !t?.closest(SELF_PANNING)
+        ? { x: e.touches[0].clientX, y: e.touches[0].clientY }
+        : null
   }
 
   function onTouchEnd(e: TouchEvent) {
@@ -183,7 +192,10 @@
   bind:this={viewport}>
   <p class="deck-cue" hidden={presenting}>
     <button class="pill deck-go" type="button" aria-keyshortcuts="p" onclick={() => present(true)}>present ▸</button>
-    <span>or press <kbd>p</kbd> to read this as slides</span>
+    <span>
+      or press <kbd>p</kbd>
+      to read this as slides
+    </span>
   </p>
   {@render children?.()}
   <div class="deck-ui" hidden={!presenting}>
@@ -194,6 +206,9 @@
       {/each}
     </div>
     <div class="deck-n" aria-live="polite" aria-atomic="true">{cur + 1} / {count}</div>
-    <button class="pill deck-x" type="button" onclick={() => present(false)}>esc<span class="deck-x-more"> · back to article</span></button>
+    <button class="pill deck-x" type="button" onclick={() => present(false)}>
+      esc
+      <span class="deck-x-more">· back to article</span>
+    </button>
   </div>
 </div>

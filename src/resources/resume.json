@@ -1,22 +1,10 @@
 {
   "name": "Sai Kumar Murali Krishnan",
   "links": [
-    [
-      "saikumarmuralikrishnan@gmail.com",
-      "mailto:saikumarmuralikrishnan@gmail.com"
-    ],
-    [
-      "LinkedIn",
-      "https://www.linkedin.com/in/saikumarmk/"
-    ],
-    [
-      "GitHub",
-      "https://github.com/saikumarmk"
-    ],
-    [
-      "saikumarmk.com",
-      "https://saikumarmk.com"
-    ]
+    ["saikumarmuralikrishnan@gmail.com", "mailto:saikumarmuralikrishnan@gmail.com"],
+    ["LinkedIn", "https://www.linkedin.com/in/saikumarmk/"],
+    ["GitHub", "https://github.com/saikumarmk"],
+    ["saikumarmk.com", "https://saikumarmk.com"]
   ],
   "source": "resume_mle_styled.tex",
   "sections": [
@@ -98,18 +86,9 @@
       "title": "Technical Skills",
       "orgs": [],
       "skills": [
-        [
-          "Languages",
-          "Python, C/C++, Rust, Julia"
-        ],
-        [
-          "Machine Learning",
-          "PyTorch, diffusion models, video agents, LLM evaluation, model training"
-        ],
-        [
-          "Systems",
-          "Ray, Anyscale, SLURM, vLLM, AWS/S3, Weights &amp; Biases, distributed training, efficient inference"
-        ]
+        ["Languages", "Python, C/C++, Rust, Julia"],
+        ["Machine Learning", "PyTorch, diffusion models, video agents, LLM evaluation, model training"],
+        ["Systems", "Ray, Anyscale, SLURM, vLLM, AWS/S3, Weights &amp; Biases, distributed training, efficient inference"]
       ]
     }
   ]

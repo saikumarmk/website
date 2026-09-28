@@ -15,8 +15,9 @@
 
   const dateOf = (p: Blog.Post) => new Date(p.published ?? p.created)
   const radius = (words = 0) => Math.max(9, Math.min(34, 9 + 8 * Math.log2(Math.max(1, words) / 350)))
-  const fmt = (d: Date) => d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Australia/Melbourne' })
-  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
+  const fmt = (d: Date) =>
+    d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Australia/Melbourne' })
+  const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
   interface Hit {
     post: Blog.Post
@@ -27,18 +28,19 @@
   }
 
   const listed = $derived(
-    ($posts ?? []).filter((p) => p.type === 'article' && !p.flags?.includes('unlisted') && !p.path.startsWith('/growth/'))
+    ($posts ?? []).filter(p => p.type === 'article' && !p.flags?.includes('unlisted') && !p.path.startsWith('/growth/'))
   )
 
   const rows = $derived.by(() => {
-    const years = [...new Set(listed.map((p) => dateOf(p).getUTCFullYear()))].sort((a, b) => b - a)
-    return years.map((year) => {
-      const ps = listed.filter((p) => dateOf(p).getUTCFullYear() === year).sort((a, b) => +dateOf(a) - +dateOf(b))
-      const rs = ps.map((p) => radius(p.words))
+    const years = [...new Set(listed.map(p => dateOf(p).getUTCFullYear()))].sort((a, b) => b - a)
+    return years.map(year => {
+      const ps = listed.filter(p => dateOf(p).getUTCFullYear() === year).sort((a, b) => +dateOf(a) - +dateOf(b))
+      const rs = ps.map(p => radius(p.words))
       const y0 = Date.UTC(year, 0, 1)
-      const xs = ps.map((p) => 50 + 620 * ((+dateOf(p) - y0) / 31536e6))
+      const xs = ps.map(p => 50 + 620 * ((+dateOf(p) - y0) / 31536e6))
       for (let i = 1; i < xs.length; i++) xs[i] = Math.max(xs[i], xs[i - 1] + (rs[i] + rs[i - 1]) * 1.25)
-      for (let i = xs.length - 1; i >= 0; i--) xs[i] = Math.min(xs[i], i === xs.length - 1 ? W - 30 - rs[i] : xs[i + 1] - (rs[i] + rs[i + 1]) * 1.25)
+      for (let i = xs.length - 1; i >= 0; i--)
+        xs[i] = Math.min(xs[i], i === xs.length - 1 ? W - 30 - rs[i] : xs[i + 1] - (rs[i] + rs[i + 1]) * 1.25)
       const piece = render(
         (b, w, h) => {
           const g = h - 14
@@ -47,7 +49,9 @@
           ps.forEach((p, i) => {
             const sd = seeded(p.seed ?? p.path)
             const jig = rng(sd.hash ^ 0x9e3779b9)
-            const x = xs[i], R = rs[i], top = g - (26 + R * 1.1 + jig() * 10)
+            const x = xs[i],
+              R = rs[i],
+              top = g - (26 + R * 1.1 + jig() * 10)
             b.raw(`<g class="pal-${esc(sd.palette)}">`)
             b.stem(b.curve(x + (jig() - 0.5) * 6, g, x + (jig() - 0.5) * 22, (g + top) / 2, x, top))
             const kind = b.specimen(x, top, R, sd.rng, { box: [w, h] })
@@ -135,7 +139,8 @@
   <h1>The garden</h1>
   <p>
     Every post's flower, sewn onto one cloth. Each row is a year, and longer posts grow bigger flowers.
-    <span class="wide-only">Hover for the label; click to read.</span><span class="narrow-only">Swipe along the rows; tap a flower to read.</span>
+    <span class="wide-only">Hover for the label; click to read.</span>
+    <span class="narrow-only">Swipe along the rows; tap a flower to read.</span>
   </p>
 </div>
 
@@ -151,7 +156,13 @@
   {#each rows as row, r (row.year)}
     <div class="bed">
       <div class="yr" aria-hidden="true">{row.year}</div>
-      <svg class="thread-svg" viewBox="0 0 {W} {H}" data-sew role="group" aria-label={String(row.year)} use:sewInTurn={row.duration}>
+      <svg
+        class="thread-svg"
+        viewBox="0 0 {W} {H}"
+        data-sew
+        role="group"
+        aria-label={String(row.year)}
+        use:sewInTurn={row.duration}>
         <g aria-hidden="true">{@html row.html}</g>
         {#each row.hits as h, i (h.post.path)}
           <a href={h.post.path} data-hit="{r}:{i}" aria-label="{h.post.title}, {fmt(dateOf(h.post))}">
@@ -165,7 +176,12 @@
     <div class="tip" style:left="{tip.left}px" style:top="{tip.top}px" aria-hidden="true">
       <b>{tip.hit.post.title}</b>
       <small>
-        {fmt(dateOf(tip.hit.post))} · {readMins(tip.hit.post.words)} min · {NAMES[tip.hit.kind]}{isRead($readSlugs, tip.hit.post.path) ? ' · read' : ''}
+        {fmt(dateOf(tip.hit.post))} · {readMins(tip.hit.post.words)} min · {NAMES[tip.hit.kind]}{isRead(
+          $readSlugs,
+          tip.hit.post.path
+        )
+          ? ' · read'
+          : ''}
       </small>
     </div>
   {/if}

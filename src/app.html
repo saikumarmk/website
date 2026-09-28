@@ -1,39 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="ivory">
+  <head prefix="og: https://ogp.me/ns#">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f5f1e7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15141b" media="(prefers-color-scheme: dark)" />
 
-<head prefix="og: https://ogp.me/ns#">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light dark" />
-  <meta name="theme-color" content="#f5f1e7" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#15141b" media="(prefers-color-scheme: dark)" />
-
-  <!-- Before first paint: the stored theme (old Light/Dark choices carry over), else the OS preference.
+    <!-- Before first paint: the stored theme (old Light/Dark choices carry over), else the OS preference.
        `js` lets CSS hide unsewn embroidery until it's played; without JS the finished piece shows. -->
-  <script>
-    (function () {
-      var root = document.documentElement
-      root.classList.add('js')
-      var legacy = { cmyk: 'ivory', dracula: 'ink' }
-      var t = null
-      try { t = localStorage.getItem('theme') } catch (e) {}
-      if (t && legacy[t]) t = legacy[t]
-      if (t !== 'ivory' && t !== 'ink') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'ink' : 'ivory'
-      root.dataset.theme = t
-    })()
-  </script>
+    <script>
+      ;(function () {
+        var root = document.documentElement
+        root.classList.add('js')
+        var legacy = { cmyk: 'ivory', dracula: 'ink' }
+        var t = null
+        try {
+          t = localStorage.getItem('theme')
+        } catch (e) {}
+        if (t && legacy[t]) t = legacy[t]
+        if (t !== 'ivory' && t !== 'ink') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'ink' : 'ivory'
+        root.dataset.theme = t
+      })()
+    </script>
 
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="manifest" crossorigin="use-credentials" href="/manifest.webmanifest" />
-  <link rel="alternate" type="application/feed+json" href="/feed.json" />
-  <link rel="alternate" type="application/atom+xml" href="/atom.xml" />
-  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="manifest" crossorigin="use-credentials" href="/manifest.webmanifest" />
+    <link rel="alternate" type="application/feed+json" href="/feed.json" />
+    <link rel="alternate" type="application/atom+xml" href="/atom.xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
-  %sveltekit.head%
-</head>
+    %sveltekit.head%
+  </head>
 
-<body itemscope itemtype="https://schema.org/WebPage">
-  <div style="display: contents">%sveltekit.body%</div>
-</body>
-
+  <body itemscope itemtype="https://schema.org/WebPage">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
 </html>

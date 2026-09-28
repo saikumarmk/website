@@ -15,7 +15,7 @@
   type Shelf = Topic | 'elsewhere'
   type Tab = 'all' | Topic
 
-  const listed = $derived((data.res ?? []).filter((p) => !p.flags?.includes('unlisted')))
+  const listed = $derived((data.res ?? []).filter(p => !p.flags?.includes('unlisted')))
   /** Yggdrasil notes have their own index at /growth, and their tags can collide with shelf names */
   const onShelf = (p: Blog.Post) => !!topicOf(p) && !p.path.startsWith('/growth/')
   const writing = $derived(listed.filter(onShelf))
@@ -32,15 +32,16 @@
     return part === undefined ? Infinity : part === 0 ? 1000 : part
   }
   const inShelf = (s: Shelf) => {
-    const ps = (s === 'elsewhere' ? listed.filter((p) => !onShelf(p)) : writing.filter((p) => topicOf(p) === s)).filter(matches)
+    const ps = (s === 'elsewhere' ? listed.filter(p => !onShelf(p)) : writing.filter(p => topicOf(p) === s)).filter(matches)
     return s === 'playbook' ? [...ps].sort((a, b) => rank(a) - rank(b)) : ps
   }
 
-  const tabKeys = $derived<Tab[]>(['all', ...(Object.keys(topics) as Topic[]).filter((t) => writing.some((p) => topicOf(p) === t))])
+  const tabKeys = $derived<Tab[]>(['all', ...(Object.keys(topics) as Topic[]).filter(t => writing.some(p => topicOf(p) === t))])
   const tabIndex = $derived(Math.max(0, tabKeys.indexOf(tab)))
   const shelves = $derived.by<{ id: Shelf; posts: Blog.Post[] }[]>(() => {
-    const ids: Shelf[] = tab === 'all' ? [...tabKeys.filter((t): t is Topic => t !== 'all'), ...(tag ? (['elsewhere'] as const) : [])] : [tab]
-    return ids.map((id) => ({ id, posts: inShelf(id) })).filter((s) => s.posts.length || tab !== 'all')
+    const ids: Shelf[] =
+      tab === 'all' ? [...tabKeys.filter((t): t is Topic => t !== 'all'), ...(tag ? (['elsewhere'] as const) : [])] : [tab]
+    return ids.map(id => ({ id, posts: inShelf(id) })).filter(s => s.posts.length || tab !== 'all')
   })
   const countFor = (t: Tab) => (t === 'all' ? writing.filter(matches).length : inShelf(t).length)
   const shelfLabel = (s: Shelf) => (s === 'elsewhere' ? 'Elsewhere' : topics[s].label)
@@ -55,13 +56,44 @@
     return t.replace(/^The Grad\/Intern Playbook: (Part [\d.]+( Final Mix)? - |FAQ$)/, '') || 'Common questions'
   }
   const when = (p: Blog.Post) =>
-    new Date(p.published ?? p.created).toLocaleDateString('en-AU', { month: 'short', year: 'numeric', timeZone: 'Australia/Melbourne' })
+    new Date(p.published ?? p.created).toLocaleDateString('en-AU', {
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'Australia/Melbourne'
+    })
 
-  const numberWords = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
+  const numberWords = [
+    'Zero',
+    'One',
+    'Two',
+    'Three',
+    'Four',
+    'Five',
+    'Six',
+    'Seven',
+    'Eight',
+    'Nine',
+    'Ten',
+    'Eleven',
+    'Twelve',
+    'Thirteen',
+    'Fourteen',
+    'Fifteen',
+    'Sixteen',
+    'Seventeen',
+    'Eighteen',
+    'Nineteen'
+  ]
   const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
   const spell = (n: number) =>
-    n < 20 ? numberWords[n] : n < 100 ? tens[Math.floor(n / 10)] + (n % 10 ? '-' + numberWords[n % 10].toLowerCase() : '') : String(n)
-  const since = $derived(Math.min(...writing.map((p) => new Date(p.published ?? p.created).getFullYear()), new Date().getFullYear()))
+    n < 20
+      ? numberWords[n]
+      : n < 100
+        ? tens[Math.floor(n / 10)] + (n % 10 ? '-' + numberWords[n % 10].toLowerCase() : '')
+        : String(n)
+  const since = $derived(
+    Math.min(...writing.map(p => new Date(p.published ?? p.created).getFullYear()), new Date().getFullYear())
+  )
 
   /** query params are read in the browser, since prerendered pages have no search string */
   function readParams(url: URL) {
@@ -92,7 +124,14 @@
 
   function onTabKey(e: KeyboardEvent) {
     const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
-    const to = e.key === 'Home' ? 0 : e.key === 'End' ? tabKeys.length - 1 : step ? (tabIndex + step + tabKeys.length) % tabKeys.length : -1
+    const to =
+      e.key === 'Home'
+        ? 0
+        : e.key === 'End'
+          ? tabKeys.length - 1
+          : step
+            ? (tabIndex + step + tabKeys.length) % tabKeys.length
+            : -1
     if (to < 0) return
     e.preventDefault()
     choose(tabKeys[to])
@@ -131,7 +170,8 @@
           aria-controls="writing-shelves"
           tabindex={t === tab ? 0 : -1}
           onclick={() => choose(t)}>
-          {t === 'all' ? 'Everything' : topics[t].label}<sup>{countFor(t)}</sup>
+          {t === 'all' ? 'Everything' : topics[t].label}
+          <sup>{countFor(t)}</sup>
         </button>
       {/each}
     </div>
@@ -141,16 +181,22 @@
 <div class="col" id="writing-shelves" role="tabpanel" aria-labelledby="tab-{tab}">
   {#if tag}
     <p class="filter smallcaps">
-      Tagged <b>#{tag}</b> · <button type="button" class="linkish" onclick={clearTag}>show everything</button>
+      Tagged <b>#{tag}</b>
+      ·
+      <button type="button" class="linkish" onclick={clearTag}>show everything</button>
     </p>
   {/if}
 
   {#each shelves as shelf (shelf.id)}
     <section class="topic" aria-labelledby="shelf-{shelf.id}">
-      <h2 id="shelf-{shelf.id}">{shelfLabel(shelf.id)} <span class="count">{shelf.posts.length}</span></h2>
+      <h2 id="shelf-{shelf.id}">
+        {shelfLabel(shelf.id)}
+        <span class="count">{shelf.posts.length}</span>
+      </h2>
       <p class="blurb">
         {shelfBlurb(shelf.id)}
-        {#if shelf.id === 'playbook'}<a href="/playbook">The series page</a>.{/if}
+        {#if shelf.id === 'playbook'}<a href="/playbook">The series page</a>
+          .{/if}
       </p>
       {#if shelf.posts.length}
         <div use:satinSelect={{ items: 'li', key: `${tab}:${tag}` }}>
@@ -159,7 +205,8 @@
               <li data-slug={p.path}>
                 <div class="row">
                   <a href={p.path}>
-                    {#if partLabel(p)}<span class="part">{partLabel(p)}</span>{/if}<span class="t">{short(p)}</span>
+                    {#if partLabel(p)}<span class="part">{partLabel(p)}</span>{/if}
+                    <span class="t">{short(p)}</span>
                   </a>
                   <span class="leader" aria-hidden="true"></span>
                   {#if tab === 'all'}

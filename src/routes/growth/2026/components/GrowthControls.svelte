@@ -1,11 +1,6 @@
 <script lang="ts">
-  import type { GrowthData, GrowthNode, GraphNode } from '../types';
-  import {
-    getStatusBadgeClass,
-    TIER_LABELS,
-    getArtifactIcon,
-    BRANCH_POKEMON
-  } from '../utils/nodeUtils';
+  import type { GrowthData, GrowthNode, GraphNode } from '../types'
+  import { getStatusBadgeClass, TIER_LABELS, getArtifactIcon, BRANCH_POKEMON } from '../utils/nodeUtils'
 
   let {
     data,
@@ -16,71 +11,71 @@
     selectedNode = $bindable(null),
     nodeMap
   }: {
-    data: GrowthData;
-    searchQuery: string;
-    selectedBranches: string[];
-    selectedTiers: string[];
-    selectedStatuses: string[];
-    selectedNode: GraphNode | null;
-    nodeMap: Map<string, GrowthNode>;
-  } = $props();
+    data: GrowthData
+    searchQuery: string
+    selectedBranches: string[]
+    selectedTiers: string[]
+    selectedStatuses: string[]
+    selectedNode: GraphNode | null
+    nodeMap: Map<string, GrowthNode>
+  } = $props()
 
-  let branches = $derived(data.branches);
-  const tiers = ['roots', 'trunk', 'branch', 'crown'];
-  const statuses = ['locked', 'available', 'in_progress', 'complete'];
+  let branches = $derived(data.branches)
+  const tiers = ['roots', 'trunk', 'branch', 'crown']
+  const statuses = ['locked', 'available', 'in_progress', 'complete']
 
   const branchLabels: Record<string, string> = {
     'systems-hpc': 'Systems & HPC',
     'gen-media': 'Gen Media',
-    'rl': 'RL',
-    'maths': 'Maths',
-    'swe': 'SWE',
-    'physics': 'Physics'
-  };
+    rl: 'RL',
+    maths: 'Maths',
+    swe: 'SWE',
+    physics: 'Physics'
+  }
 
   const tierLabels: Record<string, string> = {
     roots: 'Roots',
     trunk: 'Trunks',
     branch: 'Branches',
     crown: 'Crowns'
-  };
+  }
 
   const statusLabels: Record<string, string> = {
     locked: 'Locked',
     available: 'Available',
     in_progress: 'In Progress',
     complete: 'Complete'
-  };
+  }
 
   function toggleBranch(branch: string) {
     if (selectedBranches.includes(branch)) {
-      selectedBranches = selectedBranches.filter(b => b !== branch);
+      selectedBranches = selectedBranches.filter(b => b !== branch)
     } else {
-      selectedBranches = [...selectedBranches, branch];
+      selectedBranches = [...selectedBranches, branch]
     }
   }
 
   function toggleTier(tier: string) {
     if (selectedTiers.includes(tier)) {
-      selectedTiers = selectedTiers.filter(t => t !== tier);
+      selectedTiers = selectedTiers.filter(t => t !== tier)
     } else {
-      selectedTiers = [...selectedTiers, tier];
+      selectedTiers = [...selectedTiers, tier]
     }
   }
 
   function toggleStatus(status: string) {
     if (selectedStatuses.includes(status)) {
-      selectedStatuses = selectedStatuses.filter(s => s !== status);
+      selectedStatuses = selectedStatuses.filter(s => s !== status)
     } else {
-      selectedStatuses = [...selectedStatuses, status];
+      selectedStatuses = [...selectedStatuses, status]
     }
   }
 
   function clearFilters() {
-    searchQuery = '';
-    selectedBranches = [];
-    selectedTiers = [];
-    selectedStatuses = [];
+    searchQuery = ''
+    selectedBranches = []
+    selectedTiers = []
+    selectedStatuses = []
   }
 </script>
 
@@ -89,12 +84,7 @@
 
   <!-- Search -->
   <div class="form-control mb-4">
-    <input
-      type="text"
-      placeholder="Search skills..."
-      class="input input-bordered w-full"
-      bind:value={searchQuery}
-    />
+    <input type="text" placeholder="Search skills..." class="input input-bordered w-full" bind:value={searchQuery} />
   </div>
 
   <!-- Layout Mode (static display) -->
@@ -112,8 +102,7 @@
           class="btn btn-xs"
           class:btn-primary={selectedBranches.includes(branch)}
           class:btn-ghost={!selectedBranches.includes(branch)}
-          onclick={() => toggleBranch(branch)}
-        >
+          onclick={() => toggleBranch(branch)}>
           {branchLabels[branch] || branch}
         </button>
       {/each}
@@ -129,8 +118,7 @@
           class="btn btn-xs"
           class:btn-primary={selectedTiers.includes(tier)}
           class:btn-ghost={!selectedTiers.includes(tier)}
-          onclick={() => toggleTier(tier)}
-        >
+          onclick={() => toggleTier(tier)}>
           {tierLabels[tier]}
         </button>
       {/each}
@@ -146,8 +134,7 @@
           class="btn btn-xs"
           class:btn-primary={selectedStatuses.includes(status)}
           class:btn-ghost={!selectedStatuses.includes(status)}
-          onclick={() => toggleStatus(status)}
-        >
+          onclick={() => toggleStatus(status)}>
           {statusLabels[status]}
         </button>
       {/each}
@@ -155,9 +142,7 @@
   </div>
 
   <!-- Clear Filters -->
-  <button class="btn btn-sm btn-outline w-full mb-4" onclick={clearFilters}>
-    Clear All Filters
-  </button>
+  <button class="btn btn-sm btn-outline w-full mb-4" onclick={clearFilters}>Clear All Filters</button>
 
   <!-- Divider -->
   {#if selectedNode}
@@ -228,20 +213,13 @@
 
       <!-- Artifact Link -->
       {#if selectedNode.artifact.url}
-        <a
-          href={selectedNode.artifact.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn-sm btn-outline"
-        >
+        <a href={selectedNode.artifact.url} target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline">
           {getArtifactIcon(selectedNode.artifact.type)} View {selectedNode.artifact.type}
         </a>
       {/if}
 
       <!-- View Page Button -->
-      <a href={selectedNode.page_path} class="btn btn-sm btn-primary">
-        📄 View Page
-      </a>
+      <a href={selectedNode.page_path} class="btn btn-sm btn-primary">📄 View Page</a>
     </div>
   {/if}
 </div>
@@ -253,6 +231,3 @@
     color: var(--site-fg);
   }
 </style>
-
-
-

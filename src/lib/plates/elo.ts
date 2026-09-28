@@ -1,7 +1,13 @@
 import { rand, type Grid, type Plate } from './types'
 
 /** Pokémon Red Elo: ratings start level and the Elo update sorts them into the hidden order. */
-const N = 391, LO = 216, HI = 2713, MEAN = (LO + HI) / 2, ALPHA = 24, PER_FRAME = 180, RESTART = 900
+const N = 391,
+  LO = 216,
+  HI = 2713,
+  MEAN = (LO + HI) / 2,
+  ALPHA = 24,
+  PER_FRAME = 180,
+  RESTART = 900
 
 let s: number[] = []
 let R = new Float64Array(N)
@@ -26,9 +32,11 @@ export default {
   step(_t, g) {
     if (++frame > RESTART) init()
     for (let b = 0; b < PER_FRAME; b++) {
-      const i = (Math.random() * N) | 0, j = (Math.random() * N) | 0
+      const i = (Math.random() * N) | 0,
+        j = (Math.random() * N) | 0
       if (i === j) continue
-      const pTrue = 1 / (1 + 10 ** ((s[j] - s[i]) / 400)), pExp = 1 / (1 + 10 ** ((R[j] - R[i]) / 400))
+      const pTrue = 1 / (1 + 10 ** ((s[j] - s[i]) / 400)),
+        pExp = 1 / (1 + 10 ** ((R[j] - R[i]) / 400))
       const d = ALPHA * ((Math.random() < pTrue ? 1 : 0) - pExp)
       R[i] += d
       R[j] -= d

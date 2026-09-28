@@ -20,7 +20,7 @@
   let slug = $state<string | null>(null)
 
   const norm = (p: string) => '/' + p.replace(/^\/+|\/+$/g, '')
-  const post = $derived(slug ? ($posts ?? []).find((p) => norm(p.path) === slug) : undefined)
+  const post = $derived(slug ? ($posts ?? []).find(p => norm(p.path) === slug) : undefined)
   const piece = $derived.by(() => {
     if (!post) return undefined
     const sd = seeded(post.seed ?? post.path)

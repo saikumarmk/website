@@ -7,7 +7,7 @@ export type Section = Required<TocEntry>
  */
 export function sectionsOf(toc: TocEntry[] | false | undefined): Section[] {
   const flat = (toc || []).filter((t): t is Section => !!t.slug && !!t.title)
-  const depths = [...new Set(flat.map((t) => t.depth))].sort((a, b) => a - b)
-  const top = depths.find((d) => flat.filter((t) => t.depth === d).length > 1) ?? depths[0]
-  return flat.filter((t) => t.depth === top)
+  const depths = [...new Set(flat.map(t => t.depth))].sort((a, b) => a - b)
+  const top = depths.find(d => flat.filter(t => t.depth === d).length > 1) ?? depths[0]
+  return flat.filter(t => t.depth === top)
 }

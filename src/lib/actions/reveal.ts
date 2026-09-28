@@ -39,7 +39,7 @@ export function reveal(node: HTMLElement, options: RevealOptions = {}) {
   node.style.willChange = 'opacity, transform'
 
   const observer = new IntersectionObserver(
-    (entries) => {
+    entries => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
           node.style.opacity = '1'
@@ -67,7 +67,10 @@ export function reveal(node: HTMLElement, options: RevealOptions = {}) {
   }
 }
 
-export function staggerReveal(node: HTMLElement, options: { selector?: string; staggerMs?: number; direction?: RevealOptions['direction'] } = {}) {
+export function staggerReveal(
+  node: HTMLElement,
+  options: { selector?: string; staggerMs?: number; direction?: RevealOptions['direction'] } = {}
+) {
   if (!browser) return
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 

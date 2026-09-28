@@ -1,6 +1,4 @@
-// @ts-ignore Could not find a declaration file for module '@tailwindcss/typography'.
 import typography from '@tailwindcss/typography'
-// @ts-ignore Could not find a declaration file for module 'daisyui'.
 import daisyui from 'daisyui'
 
 // Same colours as the Sampler tokens in src/styles/sampler.css, so leftover DaisyUI pieces don't clash.

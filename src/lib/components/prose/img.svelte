@@ -28,8 +28,20 @@
 {#if srcset}
   <picture>
     <source {srcset} sizes="(min-width: 800px) 736px, 100vw" type="image/avif" />
-    <img {src} {alt} class={className ?? 'rounded-lg my-2 max-w-full h-auto'} {loading} {decoding} style="max-width: 800px; margin-left: auto; margin-right: auto;" />
+    <img
+      {src}
+      {alt}
+      class={className ?? 'rounded-lg my-2 max-w-full h-auto'}
+      {loading}
+      {decoding}
+      style="max-width: 800px; margin-left: auto; margin-right: auto;" />
   </picture>
 {:else}
-  <img {src} {alt} class={className ?? 'rounded-lg my-2 max-w-full h-auto'} {loading} {decoding} style="max-width: 800px; margin-left: auto; margin-right: auto;" />
+  <img
+    {src}
+    {alt}
+    class={className ?? 'rounded-lg my-2 max-w-full h-auto'}
+    {loading}
+    {decoding}
+    style="max-width: 800px; margin-left: auto; margin-right: auto;" />
 {/if}

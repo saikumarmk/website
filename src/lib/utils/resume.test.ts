@@ -16,6 +16,6 @@ describe('experienceRows', () => {
     expect(rows.length).toBeGreaterThan(0)
     expect(rows[0].now).toBe(true)
     for (let i = 1; i < rows.length; i++) expect(rows[i - 1].start).toBeGreaterThanOrEqual(rows[i].start)
-    expect(rows.every((r) => !/<[^>]+>/.test(r.at))).toBe(true)
+    expect(rows.every(r => !/<[^>]+>/.test(r.at))).toBe(true)
   })
 })

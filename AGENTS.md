@@ -206,7 +206,7 @@ Implemented as SvelteKit server endpoints (`+server.ts` files).
 ## Testing & Linting
 
 - **Format:** `npm run format` (Prettier)
-- **Lint:** `npm run lint` (ESLint + Prettier check)
+- **Lint:** `npm run lint` (Prettier check + ESLint flat config in `eslint.config.js`). Prettier skips Markdown (it would rewrap MDsveX content) and the hand-aligned `sampler.css`
 - **Type check:** `npm run check` (svelte-check)
 
 ## Deployment

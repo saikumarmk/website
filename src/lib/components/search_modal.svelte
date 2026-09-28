@@ -19,7 +19,7 @@
 
   let entries: SearchEntry[] = []
   let byPath = new Map<string, SearchEntry>()
-  let searchIndex: any = null
+  let searchIndex: InstanceType<typeof FlexSearch.Document> | null = null
   let indexLoading = $state(false)
   let indexLoaded = $state(false)
   let indexFailed = $state(false)
@@ -31,7 +31,7 @@
     try {
       const data: SearchIndexJson = await (await fetch('/search-index.json')).json()
       entries = [...(data.posts ?? []), ...(data.dex ?? []), ...(data.pages ?? [])]
-      byPath = new Map(entries.map((e) => [e.path, e]))
+      byPath = new Map(entries.map(e => [e.path, e]))
       searchIndex = new FlexSearch.Document(FLEXSEARCH_DOCUMENT_OPTIONS)
       for (const [key, chunk] of data.serializedIndex ?? []) searchIndex.import(key, chunk)
       indexLoaded = true
@@ -64,7 +64,7 @@
     try {
       const raw = searchIndex?.search(q, { limit: 30 })
       for (const field of Array.isArray(raw) ? raw : []) {
-        for (const id of field.result ?? []) add(String(id), FIELD_SCORE[field.field] ?? 10)
+        for (const id of field.result ?? []) add(String(id), FIELD_SCORE[field.field ?? ''] ?? 10)
       }
     } catch (e) {
       console.error('FlexSearch search failed:', e)
@@ -72,7 +72,11 @@
     for (const e of entries) {
       const tl = e.title.toLowerCase()
       const hay = `${tl} ${e.summary} ${e.meta} ${e.tags.join(' ')}`.toLowerCase()
-      if (ws.every((w) => hay.includes(w))) add(e.path, ws.reduce((a, w) => a + (tl.startsWith(w) ? 60 : tl.includes(w) ? 30 : 10), 0))
+      if (ws.every(w => hay.includes(w)))
+        add(
+          e.path,
+          ws.reduce((a, w) => a + (tl.startsWith(w) ? 60 : tl.includes(w) ? 30 : 10), 0)
+        )
     }
     return [...scores]
       .sort((a, b) => b[1] - a[1])
@@ -80,7 +84,7 @@
       .map(([path]) => {
         const e = byPath.get(path)!
         const shown = `${e.title} ${e.summary}`.toLowerCase()
-        const missing = ws.find((w) => !shown.includes(w))
+        const missing = ws.find(w => !shown.includes(w))
         return { ...e, snippet: missing && e.content ? snippetOf(e.content, missing) : undefined }
       })
   }
@@ -89,11 +93,16 @@
     if (!indexLoaded) return []
     const found = words.length
       ? find(query.trim(), words)
-      : [...entries.filter((e) => e.group === 'Writing' && e.meta && e.meta !== 'Yggdrasil').slice(0, 4), ...entries.filter((e) => e.group === 'Pages')]
-    return GROUPS.flatMap((g) => found.filter((h) => h.group === g))
+      : [
+          ...entries.filter(e => e.group === 'Writing' && e.meta && e.meta !== 'Yggdrasil').slice(0, 4),
+          ...entries.filter(e => e.group === 'Pages')
+        ]
+    return GROUPS.flatMap(g => found.filter(h => h.group === g))
   })
   const groups = $derived(
-    GROUPS.map((g) => ({ g, start: hits.findIndex((h) => h.group === g), items: hits.filter((h) => h.group === g) })).filter((x) => x.items.length)
+    GROUPS.map(g => ({ g, start: hits.findIndex(h => h.group === g), items: hits.filter(h => h.group === g) })).filter(
+      x => x.items.length
+    )
   )
   const active = $derived(hits.length ? Math.min(selected, hits.length - 1) : -1)
 
@@ -104,7 +113,7 @@
     return text
       .split(re)
       .filter(Boolean)
-      .map((t) => ({ t, m: ws.includes(t.toLowerCase()) }))
+      .map(t => ({ t, m: ws.includes(t.toLowerCase()) }))
   }
 
   export function open(prefill = '') {
@@ -169,7 +178,8 @@
     if ((e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey && isK) {
       e.preventDefault()
       e.stopPropagation()
-      isOpen ? close() : open()
+      if (isOpen) close()
+      else open()
     } else if (e.key === 'Escape' && isOpen) {
       e.preventDefault()
       close()
@@ -197,7 +207,6 @@
 
 {#if isOpen}
   <div class="search">
-    <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
     <div class="search-scrim" aria-hidden="true" onclick={close}></div>
     <div class="search-box" role="dialog" aria-modal="true" aria-label="Search">
       <div class="search-in">
@@ -259,7 +268,13 @@
       </div>
 
       <div class="search-foot">
-        <span><kbd>↑</kbd> <kbd>↓</kbd> move · <kbd>↵</kbd> open</span>
+        <span>
+          <kbd>↑</kbd>
+          <kbd>↓</kbd>
+          move ·
+          <kbd>↵</kbd>
+          open
+        </span>
         <span aria-live="polite">{words.length && indexLoaded ? `${hits.length} found` : ''}</span>
       </div>
     </div>

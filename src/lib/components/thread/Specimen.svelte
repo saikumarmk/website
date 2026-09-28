@@ -46,4 +46,4 @@
   class={klass}
   palette={sd.palette}
   compose={(b, W, H) => b.specimen(W / 2, H * cy, R, seeded(seed).rng, { leaves, box: fit ? [W, H] : null, species })}
-  onrender={(kind) => onrender?.({ species: kind, hash: sd.hash })} />
+  onrender={kind => onrender?.({ species: kind, hash: sd.hash })} />

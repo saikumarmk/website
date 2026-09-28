@@ -10,9 +10,7 @@ import {
   writePerfReport
 } from './helpers'
 
-const NAV_ROUTES: { name: RegExp | string; path: string }[] = [
-  { name: /^Writing$/, path: '/archive' }
-]
+const NAV_ROUTES: { name: RegExp | string; path: string }[] = [{ name: /^Writing$/, path: '/archive' }]
 
 const DIRECT_ROUTES = ['/growth/2026/', '/playbook/']
 
@@ -36,25 +34,31 @@ test('navigation: header tab swaps', async ({ page }, testInfo) => {
 
   for (const route of NAV_ROUTES) {
     const ms = await measureSpaNavigation(page, route.name, route.path)
-    record({
-      scenario: 'navigation',
-      metric: route.path,
-      value: ms,
-      unit: 'ms'
-    }, browser)
+    record(
+      {
+        scenario: 'navigation',
+        metric: route.path,
+        value: ms,
+        unit: 'ms'
+      },
+      browser
+    )
   }
 
   for (const routePath of DIRECT_ROUTES) {
     const start = Date.now()
     await page.goto(routePath, { waitUntil: 'domcontentloaded' })
     await page.locator('.layout-transition').waitFor({ state: 'visible' })
-    record({
-      scenario: 'navigation',
-      metric: routePath,
-      value: Date.now() - start,
-      unit: 'ms',
-      meta: { kind: 'direct' }
-    }, browser)
+    record(
+      {
+        scenario: 'navigation',
+        metric: routePath,
+        value: Date.now() - start,
+        unit: 'ms',
+        meta: { kind: 'direct' }
+      },
+      browser
+    )
   }
 })
 
@@ -63,7 +67,10 @@ test('scroll: home page frame pacing', async ({ page }, testInfo) => {
   await preparePerfPage(page)
 
   const sample = await sampleScrollFramePacing(page, '/', 14, 220)
-  record({ scenario: 'scroll', metric: 'home_p50', value: sample.p50, unit: 'ms', meta: { frameCount: sample.frameCount } }, browser)
+  record(
+    { scenario: 'scroll', metric: 'home_p50', value: sample.p50, unit: 'ms', meta: { frameCount: sample.frameCount } },
+    browser
+  )
   record({ scenario: 'scroll', metric: 'home_p95', value: sample.p95, unit: 'ms' }, browser)
   record({ scenario: 'scroll', metric: 'home_jank_frames', value: sample.jankFrames, unit: 'frames' }, browser)
   record({ scenario: 'scroll', metric: 'home_max_gap', value: sample.maxGap, unit: 'ms' }, browser)
@@ -74,7 +81,10 @@ test('scroll: archive page frame pacing', async ({ page }, testInfo) => {
   await preparePerfPage(page)
 
   const sample = await sampleScrollFramePacing(page, '/archive/', 10, 280)
-  record({ scenario: 'scroll', metric: 'archive_p50', value: sample.p50, unit: 'ms', meta: { frameCount: sample.frameCount } }, browser)
+  record(
+    { scenario: 'scroll', metric: 'archive_p50', value: sample.p50, unit: 'ms', meta: { frameCount: sample.frameCount } },
+    browser
+  )
   record({ scenario: 'scroll', metric: 'archive_p95', value: sample.p95, unit: 'ms' }, browser)
   record({ scenario: 'scroll', metric: 'archive_jank_frames', value: sample.jankFrames, unit: 'frames' }, browser)
 })

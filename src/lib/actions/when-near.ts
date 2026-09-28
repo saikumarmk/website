@@ -5,8 +5,8 @@ export function whenNear(node: Element, fn: () => void, margin = '300px'): () =>
     return () => {}
   }
   const io = new IntersectionObserver(
-    (entries) => {
-      if (!entries.some((e) => e.isIntersecting)) return
+    entries => {
+      if (!entries.some(e => e.isIntersecting)) return
       io.disconnect()
       fn()
     },

@@ -20,7 +20,7 @@
     { name: 'Arena', test: /^EndlessArena/, token: '--c1' },
     { name: 'Tables', test: /./, token: '--muted' }
   ]
-  const familyOf = (group: string) => FAMILIES.find((f) => f.test.test(group))!
+  const familyOf = (group: string) => FAMILIES.find(f => f.test.test(group))!
   const SKIP = new Set(['id', 'label', 'group', 'x', 'y', 'vx', 'vy', 'fx', 'fy', 'index', '__indexColor'])
   const SHOW_LINKED = 8
   const uid = `yk-${Math.random().toString(36).slice(2, 9)}`
@@ -68,7 +68,7 @@
   function readColours() {
     const css = getComputedStyle(document.documentElement)
     const v = (name: string) => css.getPropertyValue(name).trim()
-    col = Object.fromEntries(FAMILIES.map((f) => [f.name, v(f.token)]))
+    col = Object.fromEntries(FAMILIES.map(f => [f.name, v(f.token)]))
     Object.assign(col, { rule: v('--rule'), gold: v('--g1'), fg: v('--fg'), panel: v('--panel') })
   }
 
@@ -81,7 +81,7 @@
     hot = n ? new Set([n.id, ...(nbrs.get(n.id) ?? [])]) : new Set()
     const ids = n ? [...(nbrs.get(n.id) ?? [])] : []
     linkedTotal = ids.length
-    linked = ids.slice(0, SHOW_LINKED).map((id) => byId.get(id)!)
+    linked = ids.slice(0, SHOW_LINKED).map(id => byId.get(id)!)
     if (n && fly && n.x != null && n.y != null) {
       const z = Math.max(fg?.zoom() ?? 1, 2.4)
       // on narrow screens the detail sheet covers the lower half, so the knot sits higher
@@ -94,7 +94,7 @@
   function find(e: Event) {
     const q = (e.currentTarget as HTMLInputElement).value.trim().toLowerCase()
     if (!q) return
-    const n = nodes.find((m) => m.label.toLowerCase() === q) ?? nodes.find((m) => m.label.toLowerCase().includes(q))
+    const n = nodes.find(m => m.label.toLowerCase() === q) ?? nodes.find(m => m.label.toLowerCase().includes(q))
     if (n) select(n, true)
     else miss = `Nothing called “${q}” in the graph.`
   }
@@ -110,7 +110,7 @@
     status = 'Loading the graph…'
     try {
       const [data, { default: ForceGraph }] = await Promise.all([
-        fetch('/data/yakuza0-archaeology-graph.json').then((r) => {
+        fetch('/data/yakuza0-archaeology-graph.json').then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`)
           return r.json() as Promise<Graph>
         }),
@@ -118,15 +118,15 @@
       ])
       if (!canvas || !stage) return
       nodes = data.nodes
-      const links = data.links.map((l) => ({ ...l }))
-      byId = new Map(nodes.map((n) => [n.id, n]))
-      nbrs = new Map(nodes.map((n) => [n.id, new Set<string>()]))
+      const links = data.links.map(l => ({ ...l }))
+      byId = new Map(nodes.map(n => [n.id, n]))
+      nbrs = new Map(nodes.map(n => [n.id, new Set<string>()]))
       for (const l of links) {
         nbrs.get(endId(l.source))?.add(endId(l.target))
         nbrs.get(endId(l.target))?.add(endId(l.source))
       }
       status = `${nodes.length} nodes · ${links.length.toLocaleString('en-AU')} edges · ${data.stats?.system_count ?? 0} table families`
-      options = [...new Set(nodes.filter((n) => n.group !== 'NawabariShopType').map((n) => n.label))]
+      options = [...new Set(nodes.filter(n => n.group !== 'NawabariShopType').map(n => n.label))]
       readColours()
 
       const touches = (l: LinkObject) => !!selected && (endId(l.source) === selected.id || endId(l.target) === selected.id)
@@ -136,13 +136,13 @@
         .backgroundColor('rgba(0,0,0,0)')
         .graphData({ nodes, links })
         .nodeId('id')
-        .nodeLabel((n) => N(n).label.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`))
-        .nodeVal((n) => size(N(n)))
+        .nodeLabel(n => N(n).label.replace(/[&<>"]/g, c => `&#${c.charCodeAt(0)};`))
+        .nodeVal(n => size(N(n)))
         .cooldownTime(4000)
         .d3VelocityDecay(0.35)
-        .linkColor((l) => (selected && hot.has(endId(l.source)) && hot.has(endId(l.target)) ? col.gold : col.rule))
-        .linkWidth((l) => (touches(l) ? 1.4 : 0.6))
-        .linkDirectionalArrowLength((l) => (touches(l) ? 3 : 0))
+        .linkColor(l => (selected && hot.has(endId(l.source)) && hot.has(endId(l.target)) ? col.gold : col.rule))
+        .linkWidth(l => (touches(l) ? 1.4 : 0.6))
+        .linkDirectionalArrowLength(l => (touches(l) ? 3 : 0))
         .linkDirectionalArrowRelPos(1)
         .nodeCanvasObject((node, ctx, scale) => {
           const n = N(node)
@@ -190,7 +190,7 @@
           ctx.arc(n.x ?? 0, n.y ?? 0, size(n) + 2, 0, 2 * Math.PI)
           ctx.fill()
         })
-        .onNodeClick((n) => select(N(n)))
+        .onNodeClick(n => select(N(n)))
         .onBackgroundClick(() => select(null))
 
       // capped repulsion keeps the isolated knots from drifting off and shrinking the fit to dust
@@ -241,7 +241,13 @@
     <span>{status}</span>
     <label class="yk-find">
       <span class="sr-only">Find a node</span>
-      <input type="search" placeholder="find a node…" list="{uid}-list" autocomplete="off" disabled={!options.length} onchange={find} />
+      <input
+        type="search"
+        placeholder="find a node…"
+        list="{uid}-list"
+        autocomplete="off"
+        disabled={!options.length}
+        onchange={find} />
     </label>
     <datalist id="{uid}-list">
       {#each options as label}<option value={label}></option>{/each}
@@ -258,26 +264,36 @@
         <aside class="yk-detail" aria-label="Selected node">
           <button class="close" type="button" aria-label="Close" onclick={() => select(null)}>×</button>
           <b>{selected.label}</b>
-          <div class="grp"><i style="color: var({fam.token}); background: var({fam.token})"></i>{selected.group}</div>
+          <div class="grp">
+            <i style="color: var({fam.token}); background: var({fam.token})"></i>
+            {selected.group}
+          </div>
           {#if fields.length}
             <dl>
-              {#each fields as [k, v]}<dt>{k}</dt><dd>{v}</dd>{/each}
+              {#each fields as [k, v]}<dt>{k}</dt>
+                <dd>{v}</dd>{/each}
             </dl>
           {/if}
           {#if linked.length}
             <div class="nb">
               Linked:
-              {#each linked as m, i}{#if i}{', '}{/if}<button type="button" onclick={() => select(m, true)}>{m.label}</button>{/each}
+              {#each linked as m, i}{#if i}{', '}{/if}
+                <button type="button" onclick={() => select(m, true)}>{m.label}</button>{/each}
               {#if linkedTotal > SHOW_LINKED}and {linkedTotal - SHOW_LINKED} more{/if}
             </div>
           {/if}
         </aside>
       {/if}
     </div>
-    {#if failed}<p class="yk-hint">Try reloading the page.</p>{:else}<p class="yk-hint">Drag to pan · scroll to zoom · click a knot</p>{/if}
+    {#if failed}<p class="yk-hint">Try reloading the page.</p>{:else}<p class="yk-hint">
+        Drag to pan · scroll to zoom · click a knot
+      </p>{/if}
   </div>
   <ul class="yk-legend" aria-label="Families">
-    {#each FAMILIES as f}<li><i style="color: var({f.token}); background: var({f.token})"></i>{f.name}</li>{/each}
+    {#each FAMILIES as f}<li>
+        <i style="color: var({f.token}); background: var({f.token})"></i>
+        {f.name}
+      </li>{/each}
   </ul>
 </figure>
 

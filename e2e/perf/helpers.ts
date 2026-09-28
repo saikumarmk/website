@@ -74,11 +74,7 @@ export async function preparePerfPage(page: Page) {
   })
 }
 
-export async function measureSpaNavigation(
-  page: Page,
-  linkText: RegExp | string,
-  expectedPath: string
-): Promise<number> {
+export async function measureSpaNavigation(page: Page, linkText: RegExp | string, expectedPath: string): Promise<number> {
   const link = page.getByRole('link', { name: linkText }).first()
   await link.waitFor({ state: 'visible' })
 
@@ -98,12 +94,7 @@ export type ScrollSample = {
   frameCount: number
 }
 
-export async function sampleScrollFramePacing(
-  page: Page,
-  targetPath: string,
-  steps = 12,
-  stepPx = 240
-): Promise<ScrollSample> {
+export async function sampleScrollFramePacing(page: Page, targetPath: string, steps = 12, stepPx = 240): Promise<ScrollSample> {
   await page.goto(targetPath, { waitUntil: 'domcontentloaded' })
   await page.waitForTimeout(300)
 
@@ -159,10 +150,13 @@ export async function measureSearchModalReady(page: Page): Promise<{ openMs: num
   const input = page.locator('#search-title')
   await input.waitFor({ state: 'visible' })
   await input.waitFor({ state: 'attached' })
-  await page.waitForFunction(() => {
-    const el = document.querySelector('#search-title') as HTMLInputElement | null
-    return el && !el.disabled
-  }, { timeout: 30_000 })
+  await page.waitForFunction(
+    () => {
+      const el = document.querySelector('#search-title') as HTMLInputElement | null
+      return el && !el.disabled
+    },
+    { timeout: 30_000 }
+  )
   const indexReadyMs = Date.now() - indexStart
 
   const resultStart = Date.now()
@@ -177,10 +171,13 @@ export async function measureLightboxAttach(page: Page, postPath: string): Promi
   await page.goto(postPath, { waitUntil: 'domcontentloaded' })
 
   const attachStart = Date.now()
-  await page.waitForFunction(() => {
-    const img = document.querySelector('.post-prose img.lightbox-enabled, .prose img.lightbox-enabled')
-    return !!img
-  }, { timeout: 15_000 })
+  await page.waitForFunction(
+    () => {
+      const img = document.querySelector('.post-prose img.lightbox-enabled, .prose img.lightbox-enabled')
+      return !!img
+    },
+    { timeout: 15_000 }
+  )
   const attachMs = Date.now() - attachStart
 
   const openStart = Date.now()

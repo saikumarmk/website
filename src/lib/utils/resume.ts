@@ -34,7 +34,7 @@ const text = (html: string) => html.replace(/<[^>]+>/g, '')
 export function shortYears(when: string) {
   const [a, b] = text(when)
     .split(/\s*–\s*/)
-    .map((x) => (/present/i.test(x) ? 'now' : (x.match(/\d{4}/) ?? [x])[0]))
+    .map(x => (/present/i.test(x) ? 'now' : (x.match(/\d{4}/) ?? [x])[0]))
   if (!b || a === b) return a
   if (b === 'now') return `${a} – now`
   return a.slice(0, 2) === b.slice(0, 2) ? `${a} – ${b.slice(2)}` : `${a} – ${b}`
@@ -43,9 +43,9 @@ export function shortYears(when: string) {
 /** One row per role across every section, newest first. Education rows keep their dates in `where`. */
 export function experienceRows(cv: Resume = resume): ExperienceRow[] {
   return cv.sections
-    .flatMap((s) =>
-      s.orgs.flatMap((o) =>
-        o.roles.map((r) => {
+    .flatMap(s =>
+      s.orgs.flatMap(o =>
+        o.roles.map(r => {
           const dated = /\d{4}/.test(text(r.when)) ? r.when : o.where
           return {
             org: text(o.org).split(/\s+/)[0].toLowerCase(),

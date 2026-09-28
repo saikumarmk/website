@@ -70,10 +70,7 @@ export function genSearchIndexPayload(): SearchEntry[] {
         __filePath: filePath
       } as PostWithFile)
     } catch (e) {
-      console.warn(
-        `[genSearchIndexPayload] skipping broken post ${module.metadata?.slug ?? '?'}`,
-        (e as Error).message
-      )
+      console.warn(`[genSearchIndexPayload] skipping broken post ${module.metadata?.slug ?? '?'}`, (e as Error).message)
     }
   }
 

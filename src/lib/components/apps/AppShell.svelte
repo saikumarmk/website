@@ -42,8 +42,7 @@
   class="app-shell"
   class:app-shell--fullscreen={embedMode === 'fullscreen'}
   class:app-shell--hide-chrome={hideSiteChrome}
-  data-embed-mode={embedMode}
->
+  data-embed-mode={embedMode}>
   {@render children?.()}
 </div>
 
@@ -57,5 +56,4 @@
     height: 100%;
     overflow: hidden;
   }
-
 </style>

@@ -4,8 +4,13 @@
   <meta name="robots" content="noindex" />
 </svelte:head>
 
-<p class="col moved">About now lives on <a href="/#about">the home page</a>.</p>
+<p class="col moved">
+  About now lives on <a href="/#about">the home page</a>
+  .
+</p>
 
 <style>
-  .moved { margin-top: 4.5rem; }
+  .moved {
+    margin-top: 4.5rem;
+  }
 </style>

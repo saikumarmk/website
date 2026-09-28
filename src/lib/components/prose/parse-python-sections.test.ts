@@ -60,7 +60,16 @@ describe('parsePythonToSections', () => {
   })
 
   it('dedents each section and leaves string assignments as code', () => {
-    const src = ['class A:', '    """A thing."""', '    def f(self):', '        # Explain', '        q = """', '        text', '        """', '        return q'].join('\n')
+    const src = [
+      'class A:',
+      '    """A thing."""',
+      '    def f(self):',
+      '        # Explain',
+      '        q = """',
+      '        text',
+      '        """',
+      '        return q'
+    ].join('\n')
     const [cls, f] = parsePythonToSections(src)
     expect(cls).toEqual({ docs: 'A thing.', code: 'class A:\n    def f(self):' })
     expect(f.docs).toBe('Explain')

@@ -47,12 +47,18 @@
     let raf = 0
 
     function measure() {
-      const dpr = Math.min(2, devicePixelRatio || 1), w = innerWidth, h = innerHeight
+      const dpr = Math.min(2, devicePixelRatio || 1),
+        w = innerWidth,
+        h = innerHeight
       canvas.width = w * dpr
       canvas.height = h * dpr
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       const cs = getComputedStyle(document.documentElement)
-      cols = { g1: cs.getPropertyValue('--g1').trim() || '#d6b25c', c2: cs.getPropertyValue('--c2').trim(), c1: cs.getPropertyValue('--c1').trim() }
+      cols = {
+        g1: cs.getPropertyValue('--g1').trim() || '#d6b25c',
+        c2: cs.getPropertyValue('--c2').trim(),
+        c1: cs.getPropertyValue('--c1').trim()
+      }
       const col = document.querySelector('#main .col')
       const page = document.querySelector<HTMLElement>('.page')
       let band: [number, number]
@@ -66,23 +72,38 @@
       }
       const vine = document.querySelector('.vine')
       const railR = vine && getComputedStyle(vine).display !== 'none' ? vine.getBoundingClientRect().right : 0
-      const rn = rng(0x5eed5a1), n = Math.round((w * h) / 7000)
+      const rn = rng(0x5eed5a1),
+        n = Math.round((w * h) / 7000)
       list = []
       for (let i = 0; i < n * 3 && list.length < n; i++) {
-        const x = rn() * w, y = rn() * h * 1.5, z = 0.3 + rn() * 0.7, t = rn()
+        const x = rn() * w,
+          y = rn() * h * 1.5,
+          z = 0.3 + rn() * 0.7,
+          t = rn()
         if ((x > band[0] && x < band[1]) || x < railR) continue
-        list.push({ x, y, z, tone: t < 0.82 ? 'g1' : t < 0.92 ? 'c2' : 'c1', ph: rn() * 6.28, sp: 0.6 + rn() * 1.2, r: 0.6 + z * 1.1 })
+        list.push({
+          x,
+          y,
+          z,
+          tone: t < 0.82 ? 'g1' : t < 0.92 ? 'c2' : 'c1',
+          ph: rn() * 6.28,
+          sp: 0.6 + rn() * 1.2,
+          r: 0.6 + z * 1.1
+        })
       }
     }
 
     function draw(now = 0) {
-      const w = innerWidth, h = innerHeight, span = h * 1.5
+      const w = innerWidth,
+        h = innerHeight,
+        span = h * 1.5
       ctx.clearRect(0, 0, w, h)
       const near: { x: number; y: number; d: number }[] = []
       for (const s of list) {
         const y = still ? s.y : (((s.y - scrollY * 0.06 * s.z) % span) + span) % span
         if (y > h + 4) continue
-        const d = Math.hypot(s.x - ptr.x, y - ptr.y), lift = d < 150 ? 1 - d / 150 : 0
+        const d = Math.hypot(s.x - ptr.x, y - ptr.y),
+          lift = d < 150 ? 1 - d / 150 : 0
         const a = (0.18 + 0.4 * s.z) * (still ? 1 : 0.65 + 0.35 * Math.sin(now * 0.0011 * s.sp + s.ph)) + lift * 0.5
         ctx.globalAlpha = Math.min(1, a)
         ctx.fillStyle = cols[s.tone]
@@ -107,7 +128,8 @@
       ctx.lineWidth = 0.8
       ctx.strokeStyle = cols.g1
       for (let i = 1; i < pts.length; i++) {
-        let best = pts[0], bd = 1e9
+        let best = pts[0],
+          bd = 1e9
         for (let j = 0; j < i; j++) {
           const dd = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y)
           if (dd < bd) {

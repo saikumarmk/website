@@ -1,7 +1,7 @@
 <script lang="ts" module>
   type Mermaid = typeof import('mermaid').default
   let lib: Promise<Mermaid> | undefined
-  const loadMermaid = () => (lib ??= import('mermaid').then((m) => m.default))
+  const loadMermaid = () => (lib ??= import('mermaid').then(m => m.default))
   let nextId = 0
 </script>
 
@@ -72,12 +72,14 @@
       mermaid.initialize({ startOnLoad: false, theme: 'base', securityLevel: 'strict', themeVariables: themeVariables() })
       const { svg } = await mermaid.render(`mermaid-${++nextId}`, graph)
       if (gen !== renderGeneration || !container?.isConnected) return
+      // eslint-disable-next-line svelte/no-dom-manipulating -- Mermaid hands back an SVG string for a container Svelte leaves empty
       container.innerHTML = svg
       container.querySelector('svg')?.setAttribute('aria-label', caption || 'Diagram')
       status = 'done'
     } catch (e) {
       console.error('[Mermaid]', e)
       if (gen !== renderGeneration || !container?.isConnected) return
+      // eslint-disable-next-line svelte/no-dom-manipulating
       container.textContent = 'This diagram could not be drawn.'
       status = 'failed'
     }
@@ -91,8 +93,8 @@
 
   onMount(() => {
     const io = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((e) => e.isIntersecting)) return
+      entries => {
+        if (!entries.some(e => e.isIntersecting)) return
         io.disconnect()
         seen = true
       },
@@ -120,7 +122,7 @@
       io.disconnect()
       themeObserver.disconnect()
       deckViewport?.removeEventListener('slide-deck-active', schedule)
-      deckObservers.forEach((mo) => mo.disconnect())
+      deckObservers.forEach(mo => mo.disconnect())
     }
   })
 </script>

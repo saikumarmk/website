@@ -27,7 +27,7 @@ export interface Series {
 export function seriesKeyOf(post: Blog.Post): string | undefined {
   if (post.series) return post.series
   const info = getSeriesInfo(post)
-  return info ? Object.keys(SERIES_CONFIGS).find((k) => SERIES_CONFIGS[k] === info.series) : undefined
+  return info ? Object.keys(SERIES_CONFIGS).find(k => SERIES_CONFIGS[k] === info.series) : undefined
 }
 
 const dateOf = (p: Blog.Post) => Date.parse(p.published ?? p.created)
@@ -35,9 +35,9 @@ const dateOf = (p: Blog.Post) => Date.parse(p.published ?? p.created)
 /** Parts come from the posts themselves; numbering from `SERIES_CONFIGS` if it has one, else date order. */
 export function seriesOf(key: string, posts: Blog.Post[]): Series {
   const name = SERIES_CONFIGS[key]?.name ?? key
-  const members = posts.filter((p) => !p.flags?.includes('unlisted') && seriesKeyOf(p) === key)
-  const appendix = members.filter((p) => p.series_appendix).sort((a, b) => dateOf(a) - dateOf(b))
-  const main = members.filter((p) => !p.series_appendix).sort((a, b) => dateOf(a) - dateOf(b))
+  const members = posts.filter(p => !p.flags?.includes('unlisted') && seriesKeyOf(p) === key)
+  const appendix = members.filter(p => p.series_appendix).sort((a, b) => dateOf(a) - dateOf(b))
+  const main = members.filter(p => !p.series_appendix).sort((a, b) => dateOf(a) - dateOf(b))
   const shortOf = (title = '') =>
     title
       .replace(new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')}:\\s*`), '')

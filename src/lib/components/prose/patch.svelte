@@ -33,7 +33,9 @@
     height: 11px;
     border-radius: 50%;
     background: var(--r3);
-    box-shadow: 0 0 0 2.5px var(--bg), -7px 5px 0 -2px var(--g1);
+    box-shadow:
+      0 0 0 2.5px var(--bg),
+      -7px 5px 0 -2px var(--g1);
   }
   .patch > :global(:first-child) {
     margin-top: 0;

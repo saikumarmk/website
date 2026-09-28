@@ -32,7 +32,11 @@ interface Particle {
 
 function hexToRgb(h: string): [number, number, number] {
   h = (h || '#888').trim().replace('#', '')
-  if (h.length === 3) h = h.split('').map((c) => c + c).join('')
+  if (h.length === 3)
+    h = h
+      .split('')
+      .map(c => c + c)
+      .join('')
   const n = parseInt(h, 16)
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
@@ -52,30 +56,45 @@ export function createField(canvas: HTMLCanvasElement, options: FieldOptions) {
   }
   const ctx = canvas.getContext('2d')!
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
-  let W = 0, H = 0, cols = 0, rows = 0, charW = 7.8
-  let B: Float32Array | undefined, Hu = new Float32Array(), Wt = new Float32Array()
+  let W = 0,
+    H = 0,
+    cols = 0,
+    rows = 0,
+    charW = 7.8
+  let B: Float32Array | undefined,
+    Hu = new Float32Array(),
+    Wt = new Float32Array()
   let particles: Particle[] = []
-  let colors: [number, number, number][] = [[194, 175, 245], [132, 203, 211], [233, 155, 198]]
+  let colors: [number, number, number][] = [
+    [194, 175, 245],
+    [132, 203, 211],
+    [233, 155, 198]
+  ]
   let running = !reduced
   let visible = true
-  let raf = 0, last = 0, simT = 0
+  let raf = 0,
+    last = 0,
+    simT = 0
   let destroyed = false
   const pointer = { x: -1e4, y: -1e4 }
 
   const readColors = () => {
     const cs = getComputedStyle(canvas)
-    colors = ['--c1', '--c2', '--c3'].map((v) => hexToRgb(cs.getPropertyValue(v)))
+    colors = ['--c1', '--c2', '--c3'].map(v => hexToRgb(cs.getPropertyValue(v)))
   }
 
   const colorAt = (h: number) => {
     h = Math.max(0, Math.min(2, h))
-    const i = Math.min(1, Math.floor(h)), f = h - i
-    const a = colors[i], b = colors[i + 1]
+    const i = Math.min(1, Math.floor(h)),
+      f = h - i
+    const a = colors[i],
+      b = colors[i + 1]
     return `rgb(${(a[0] + (b[0] - a[0]) * f) | 0},${(a[1] + (b[1] - a[1]) * f) | 0},${(a[2] + (b[2] - a[2]) * f) | 0})`
   }
 
   function splat(x: number, y: number, amt: number, hue: number) {
-    const c = (x / charW) | 0, r = (y / o.lineH) | 0
+    const c = (x / charW) | 0,
+      r = (y / o.lineH) | 0
     if (!B || c < 0 || r < 0 || c >= cols || r >= rows) return
     const i = r * cols + c
     B[i] += amt
@@ -83,18 +102,38 @@ export function createField(canvas: HTMLCanvasElement, options: FieldOptions) {
     Wt[i] += amt
     if (o.spread > 0) {
       const s = amt * o.spread
-      if (c > 0) { B[i - 1] += s; Hu[i - 1] += hue * s; Wt[i - 1] += s }
-      if (c < cols - 1) { B[i + 1] += s; Hu[i + 1] += hue * s; Wt[i + 1] += s }
+      if (c > 0) {
+        B[i - 1] += s
+        Hu[i - 1] += hue * s
+        Wt[i - 1] += s
+      }
+      if (c < cols - 1) {
+        B[i + 1] += s
+        Hu[i + 1] += hue * s
+        Wt[i + 1] += s
+      }
     }
   }
 
   const grid: Grid = {
-    get W() { return W },
-    get H() { return H },
-    get cols() { return cols },
-    get rows() { return rows },
-    get charW() { return charW },
-    get lineH() { return o.lineH },
+    get W() {
+      return W
+    },
+    get H() {
+      return H
+    },
+    get cols() {
+      return cols
+    },
+    get rows() {
+      return rows
+    },
+    get charW() {
+      return charW
+    },
+    get lineH() {
+      return o.lineH
+    },
     pointer,
     splat,
     cell: (c, r, amt, hue) => splat((c + 0.5) * charW, (r + 0.5) * o.lineH, amt, hue),
@@ -108,7 +147,8 @@ export function createField(canvas: HTMLCanvasElement, options: FieldOptions) {
     particles = []
     if (o.mode === 'plate') return o.plate?.init(grid)
     for (let i = 0; i < o.count; i++) {
-      const a = Math.random() * 6.283, r = Math.random() * 60 + 15
+      const a = Math.random() * 6.283,
+        r = Math.random() * 60 + 15
       particles.push({
         x: W / 2 + Math.cos(a) * r,
         y: H / 2 + Math.sin(a) * r,
@@ -139,7 +179,8 @@ export function createField(canvas: HTMLCanvasElement, options: FieldOptions) {
   }
 
   function stepAttractors(t: number) {
-    const cx = W / 2, cy = H / 2
+    const cx = W / 2,
+      cy = H / 2
     const at = [
       { x: Math.cos(t * 0.0005) * W * 0.3 + cx, y: Math.sin(t * 0.0008) * H * 0.3 + cy, f: 0.18, h: 0 },
       { x: Math.sin(t * 0.0003) * W * 0.35 + cx, y: Math.cos(t * 0.0006) * H * 0.35 + cy, f: 0.15, h: 1 },
@@ -147,7 +188,8 @@ export function createField(canvas: HTMLCanvasElement, options: FieldOptions) {
     ]
     if (pointer.x > -1e3) at.push({ x: pointer.x, y: pointer.y, f: 0.1, h: 1 })
     for (const p of particles) {
-      let best = at[0], bd = Infinity
+      let best = at[0],
+        bd = Infinity
       for (const a of at) {
         const d = (a.x - p.x) ** 2 + (a.y - p.y) ** 2
         if (d < bd) {
@@ -155,7 +197,9 @@ export function createField(canvas: HTMLCanvasElement, options: FieldOptions) {
           best = a
         }
       }
-      const dx = best.x - p.x, dy = best.y - p.y, dist = Math.sqrt(bd) + 1
+      const dx = best.x - p.x,
+        dy = best.y - p.y,
+        dist = Math.sqrt(bd) + 1
       p.vx += (dx / dist) * best.f + (Math.random() - 0.5) * 0.2
       p.vy += (dy / dist) * best.f + (Math.random() - 0.5) * 0.2
       const curl = Math.sin(t * 0.001 + p.x * 0.02) * 0.15
@@ -191,10 +235,12 @@ export function createField(canvas: HTMLCanvasElement, options: FieldOptions) {
     ctx.clearRect(0, 0, W, H)
     ctx.font = `${o.fontSize}px ${o.font}`
     ctx.textBaseline = 'top'
-    const ramp = o.ramp, n = ramp.length - 1
+    const ramp = o.ramp,
+      n = ramp.length - 1
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
-        const i = r * cols + c, b = B[i]
+        const i = r * cols + c,
+          b = B[i]
         if (b < 0.06) continue
         const v = Math.min(1, b / o.gain)
         ctx.globalAlpha = 0.3 + 0.7 * v

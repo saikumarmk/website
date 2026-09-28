@@ -10,7 +10,9 @@ test.describe('link previews and favicons', () => {
     expect(og).toMatch(/^https?:\/\/[^/]+\/og\/essence-associativity\.png$/)
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image')
 
-    const icons = await page.locator('link[rel="icon"]').evaluateAll(ls => ls.map(l => new URL((l as HTMLLinkElement).href).pathname))
+    const icons = await page
+      .locator('link[rel="icon"]')
+      .evaluateAll(ls => ls.map(l => new URL((l as HTMLLinkElement).href).pathname))
     expect(icons).toEqual(['/og/essence-associativity-32.png', '/og/essence-associativity-16.png'])
     for (const path of [new URL(og!).pathname, ...icons]) {
       const res = await request.get(path!)
@@ -21,7 +23,9 @@ test.describe('link previews and favicons', () => {
 
   test('other pages keep the site icon and share the site card', async ({ page, request }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
-    expect(new URL(await page.locator('link[rel="icon"]').getAttribute('href') ?? '', page.url()).pathname).toBe('/assets/fatpika.png')
+    expect(new URL((await page.locator('link[rel="icon"]').getAttribute('href')) ?? '', page.url()).pathname).toBe(
+      '/assets/fatpika.png'
+    )
     const og = await page.locator('meta[property="og:image"]').getAttribute('content')
     expect(og).toMatch(/\/og\/site\.png$/)
     expect((await request.get(new URL(og!).pathname)).ok()).toBeTruthy()

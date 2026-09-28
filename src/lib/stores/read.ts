@@ -20,9 +20,9 @@ function scan() {
 }
 
 /** slugs (paths without slashes) of the posts read on this device; empty during SSR */
-export const readSlugs = readable(current, (set) => {
+export const readSlugs = readable(current, set => {
   if (!browser) return
-  push = (s) => set((current = s))
+  push = s => set((current = s))
   push(scan())
   const onStorage = (e: StorageEvent) => (!e.key || e.key.startsWith(PREFIX)) && push?.(scan())
   addEventListener('storage', onStorage)

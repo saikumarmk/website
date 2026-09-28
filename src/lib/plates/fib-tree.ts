@@ -1,7 +1,9 @@
 import type { Grid, Plate } from './types'
 
 /** Recursion: fib(9) as a call tree, with the branches memoisation would skip. */
-const N = 9, SPEED = 1.1, HOLD = 150
+const N = 9,
+  SPEED = 1.1,
+  HOLD = 150
 
 interface Call {
   n: number
@@ -34,15 +36,15 @@ function build() {
   const mark = (node: Call, skipped: boolean) => {
     if (skipped) {
       node.state = 'skipped'
-      node.kids.forEach((c) => mark(c, true))
+      node.kids.forEach(c => mark(c, true))
       return
     }
     if (done.has(node.n)) {
       node.state = 'hit'
-      node.kids.forEach((c) => mark(c, true))
+      node.kids.forEach(c => mark(c, true))
       return
     }
-    node.kids.forEach((c) => mark(c, false))
+    node.kids.forEach(c => mark(c, false))
     done.add(node.n)
   }
   mark(root, false)
@@ -68,7 +70,8 @@ export default {
     const X = (c: Call) => 16 + (c.x / (leaves - 1)) * (g.W - 32)
     const Y = (c: Call) => 22 + (c.depth / (N - 1)) * (g.H - 38)
     for (let i = 0; i < shown; i++) {
-      const c = order[i], cur = i === shown - 1 && shown < order.length
+      const c = order[i],
+        cur = i === shown - 1 && shown < order.length
       const amt = cur ? 4 : c.state === 'skipped' ? 0.28 : 1.2
       const hue = c.state === 'skipped' ? 1 : c.state === 'hit' ? 2 : 0
       if (c.parent) g.line(X(c.parent), Y(c.parent), X(c), Y(c), c.state === 'skipped' ? 0.1 : 0.32, hue)

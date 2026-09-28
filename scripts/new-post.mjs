@@ -15,7 +15,7 @@ const defaultAuthor = 'Sai Kumar Murali Krishnan'
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 
 function question(query) {
-  return new Promise((resolve) => rl.question(query, resolve))
+  return new Promise(resolve => rl.question(query, resolve))
 }
 
 function kebabCase(str) {
@@ -28,12 +28,12 @@ function kebabCase(str) {
 function parseList(value) {
   return value
     .split(',')
-    .map((item) => item.trim())
+    .map(item => item.trim())
     .filter(Boolean)
 }
 
 function yamlQuote(value) {
-  if (/[:#\[\]{}&*!|>'"%@`]/.test(value) || value.includes('\n')) {
+  if (/[:#[\]{}&*!|>'"%@`]/.test(value) || value.includes('\n')) {
     return `"${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
   }
   return value.includes(' ') ? `"${value}"` : value
@@ -111,9 +111,7 @@ async function collectInteractive() {
   const topic = await promptValue(`Topic (${topics.join(', ')})`, { required: true })
   const tags = parseList(await promptValue('Tags (comma-separated)', { defaultValue: 'blog' }))
   const summary = await promptValue('Summary (optional)')
-  const draftAnswer = (await promptValue('Draft / unlisted? (y/N)', { defaultValue: 'n' }))
-    .toLowerCase()
-    .startsWith('y')
+  const draftAnswer = (await promptValue('Draft / unlisted? (y/N)', { defaultValue: 'n' })).toLowerCase().startsWith('y')
 
   return { title, slug, author, created, topic, tags, summary, draft: draftAnswer }
 }
@@ -199,7 +197,7 @@ async function main() {
   rl.close()
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error('Error:', error)
   rl.close()
   process.exit(1)

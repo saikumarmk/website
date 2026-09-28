@@ -25,7 +25,7 @@
 
   let { data, children }: LayoutProps = $props()
 
-  let searchModal = $state<any>()
+  let searchModal = $state<ReturnType<typeof SearchModal>>()
 
   let path = $derived(data.path)
   /** Full-screen apps get the masthead and the rest of the viewport, with no footer. */

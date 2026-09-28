@@ -76,10 +76,10 @@ export default defineConfig({
         autoprefixer() as any,
         ...(process.env.NODE_ENV === 'production'
           ? [
-            cssnano({
-              preset: ['default', { discardComments: { removeAll: true } }]
-            }) as any
-          ]
+              cssnano({
+                preset: ['default', { discardComments: { removeAll: true } }]
+              }) as any
+            ]
           : [])
       ]
     }

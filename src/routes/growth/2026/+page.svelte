@@ -4,7 +4,7 @@
   import GrowthGraph2D from './components/GrowthGraph2D.svelte'
   import AppShell from '$lib/components/apps/AppShell.svelte'
   import { getApp } from '$lib/apps/registry'
-  import type { GrowthData, GrowthNode, GraphNode } from './types'
+  import type { GrowthData, GraphNode } from './types'
   import { buildGraphData, filterNodes, filterEdges, createNodeMap } from './utils/graphHelpers'
   import { computeDerivedStatuses } from './utils/nodeUtils'
   import '../../../styles/pokesprite-pokemon-gen8.css'
@@ -21,9 +21,7 @@
 
   let selectedNode = $state<GraphNode | null>(null)
 
-  let filteredNodes = $derived(
-    filterNodes(nodesWithStatuses, searchQuery, selectedBranches, selectedTiers, selectedStatuses)
-  )
+  let filteredNodes = $derived(filterNodes(nodesWithStatuses, searchQuery, selectedBranches, selectedTiers, selectedStatuses))
 
   let visibleNodeIds = $derived(new Set(filteredNodes.map(n => n.id)))
 
@@ -51,8 +49,7 @@
           bind:selectedTiers
           bind:selectedStatuses
           bind:selectedNode
-          {nodeMap}
-        />
+          {nodeMap} />
       </div>
 
       <div class="flex-1 overflow-hidden relative">

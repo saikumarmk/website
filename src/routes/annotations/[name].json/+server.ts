@@ -10,8 +10,8 @@ const dir = resolve('static/annotations')
 
 export const entries: EntryGenerator = () =>
   readdirSync(dir)
-    .filter((f) => f.endsWith('.py'))
-    .map((f) => ({ name: f.slice(0, -3) }))
+    .filter(f => f.endsWith('.py'))
+    .map(f => ({ name: f.slice(0, -3) }))
 
 /** `/annotations/<name>.json` is the parsed, highlighted form of `/annotations/<name>.py`. */
 export const GET: RequestHandler = async ({ params }) => {

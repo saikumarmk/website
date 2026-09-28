@@ -3,16 +3,9 @@ import type { FFFFlavoredFrontmatter } from 'fff-flavored-frontmatter'
 /* Kept apart from posts.ts, whose eager glob of every post must never reach a client bundle. */
 
 /** Same ordering/filter as genPosts (used by search index prerender). */
-export function filterAndSortPosts<T extends Blog.Post>(
-  posts: T[],
-  filterUnlisted = false,
-  postLimit?: number
-): T[] {
+export function filterAndSortPosts<T extends Blog.Post>(posts: T[], filterUnlisted = false, postLimit?: number): T[] {
   return posts
-    .filter(
-      (post, index) =>
-        (!filterUnlisted || !post.flags?.includes('unlisted')) && (!postLimit || index < postLimit)
-    )
+    .filter((post, index) => (!filterUnlisted || !post.flags?.includes('unlisted')) && (!postLimit || index < postLimit))
     .sort((a, b) => Date.parse(b.published ?? b.created) - Date.parse(a.published ?? a.created))
 }
 
@@ -51,7 +44,5 @@ export const typeOfPost = (
  */
 export const genTags = (posts: Blog.Post[]): string[] => {
   if (!Array.isArray(posts)) return []
-  return [
-    ...new Set(posts.reduce((acc, posts) => (posts.tags ? [...acc, ...posts.tags] : acc), ['']).slice(1))
-  ]
+  return [...new Set(posts.reduce((acc, posts) => (posts.tags ? [...acc, ...posts.tags] : acc), ['']).slice(1))]
 }

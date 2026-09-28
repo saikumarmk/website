@@ -1,14 +1,16 @@
 import { rand, type Grid, type Plate } from './types'
 
 /** Associativity: build a sparse table for range-max, then answer queries with two overlapping windows. */
-const n = 32, K = 5
+const n = 32,
+  K = 5
 
 let T: number[][] = []
 let frame = 0
 let q: { l: number; r: number; k: number; a: number; b: number; at: number } | null = null
 
 const layout = (g: Grid) => {
-  const cw = Math.max(2, Math.floor((g.cols - 4) / n)), c0 = Math.floor((g.cols - cw * n) / 2)
+  const cw = Math.max(2, Math.floor((g.cols - 4) / n)),
+    c0 = Math.floor((g.cols - cw * n) / 2)
   const gap = Math.max(2, Math.floor((g.rows - 5) / K))
   return { cw, c0, row: (k: number) => 2 + k * gap, qRow: 2 + K * gap }
 }
@@ -17,7 +19,8 @@ const buildFrames = (k: number) => (n - (1 << k) + 1) * 1.2
 function init() {
   const v = Array.from({ length: n }, () => rand(0.12, 1))
   T = [v]
-  for (let k = 1; k < K; k++) T[k] = T[k - 1].map((x, i) => (i + (1 << (k - 1)) < n ? Math.max(x, T[k - 1][i + (1 << (k - 1))]) : 0))
+  for (let k = 1; k < K; k++)
+    T[k] = T[k - 1].map((x, i) => (i + (1 << (k - 1)) < n ? Math.max(x, T[k - 1][i + (1 << (k - 1))]) : 0))
   frame = 0
   q = null
 }
@@ -34,7 +37,9 @@ export default {
       for (let c = 0; c < L.cw - 1; c++) g.cell(L.c0 + i * L.cw + c, L.row(k), amt, hue)
     }
     frame++
-    let f = frame, k = 1, cursor = n
+    let f = frame,
+      k = 1,
+      cursor = n
     while (k < K && f > buildFrames(k)) {
       f -= buildFrames(k)
       k++
@@ -58,7 +63,8 @@ export default {
     if (!q || frame - q.at > 75) {
       let len = 5 + Math.floor(rand(0, 20))
       if ((len & (len - 1)) === 0) len++
-      const l = Math.floor(rand(0, n - len + 1)), r = l + len - 1
+      const l = Math.floor(rand(0, n - len + 1)),
+        r = l + len - 1
       const kk = Math.min(K - 1, Math.floor(Math.log2(r - l + 1)))
       q = { l, r, k: kk, a: l, b: r - (1 << kk) + 1, at: frame }
     }

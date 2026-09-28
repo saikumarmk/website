@@ -19,14 +19,14 @@ export default defineConfig({
     adapter: Object.keys(process.env).some(key => ['VERCEL', 'NETLIFY'].includes(key))
       ? adapterAuto()
       : process.env.ADAPTER === 'node'
-      ? adapterNode({ out: 'build' })
-      : adapterStatic({
-          pages: 'build',
-          assets: 'build',
-          fallback: undefined,
-          // growth/2026/[id] is dynamic (prerender = false); required for static export without platform env (e.g. local build, CI)
-          strict: false
-        }),
+        ? adapterNode({ out: 'build' })
+        : adapterStatic({
+            pages: 'build',
+            assets: 'build',
+            fallback: undefined,
+            // growth/2026/[id] is dynamic (prerender = false); required for static export without platform env (e.g. local build, CI)
+            strict: false
+          }),
     prerender: {
       handleMissingId: 'warn',
       // /og/ images are drawn after prerendering by scripts/og.mjs, which then checks every link resolves

@@ -19,7 +19,7 @@
   let p = $state(readPage())
   onMount(() => {
     try {
-      return page.subscribe((v) => (p = v))
+      return page.subscribe(v => (p = v))
     } catch {}
   })
 
@@ -63,9 +63,14 @@
       <p class="smallcaps">404 · a dropped stitch</p>
       <h1>Nothing's been sewn here yet.</h1>
       <p>
-        There's no page at <code>{path}</code>. If there were, that's the flower it would have grown; it didn't get finished. Pull the
-        thread back to <a href="/">the start</a>, browse <a href="/archive">the writing</a>, or
-        <button type="button" class="linkish" onclick={searchFor}>search</button> for it.
+        There's no page at <code>{path}</code>
+        . If there were, that's the flower it would have grown; it didn't get finished. Pull the thread back to
+        <a href="/">the start</a>
+        , browse
+        <a href="/archive">the writing</a>
+        , or
+        <button type="button" class="linkish" onclick={searchFor}>search</button>
+        for it.
       </p>
     </div>
   </div>
@@ -73,7 +78,11 @@
   <div class="col error-page">
     <p class="smallcaps">Error {status}</p>
     <h1>{errMsg}</h1>
-    <p><a href="/">Back to the front page</a> · <a href="/archive">All writing</a></p>
+    <p>
+      <a href="/">Back to the front page</a>
+      ·
+      <a href="/archive">All writing</a>
+    </p>
   </div>
 {/if}
 

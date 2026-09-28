@@ -7,7 +7,7 @@
 
   const trim = (path: string) => path.replace(/\/+$/, '')
   // a post's tab shows its own flower; those are drawn after the build, so dev keeps the site icon
-  let flower = $derived(dev ? undefined : $posts.find((p) => trim(p.path) === trim(page.url.pathname))?.path)
+  let flower = $derived(dev ? undefined : $posts.find(p => trim(p.path) === trim(page.url.pathname))?.path)
 </script>
 
 <svelte:head>

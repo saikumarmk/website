@@ -1,10 +1,5 @@
 <script lang="ts">
-  let {
-    title = undefined,
-    description = undefined,
-    status = undefined,
-    children
-  } = $props()
+  let { title = undefined, description = undefined, status = undefined, children } = $props()
 </script>
 
 <div

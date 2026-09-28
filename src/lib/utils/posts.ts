@@ -38,14 +38,11 @@ export const genPosts: GenPostsFunction = ({
       // Prefer <main> / <article> inner HTML (search-index strips tags later).
       // Old pattern `<main [^>]+>` failed for `<main>` with no attrs and could throw when .match() was null.
       const inner =
-        body.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ??
-        body.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1]
+        body.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? body.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1]
 
       const fragment = inner ?? body
 
-      return fragment
-        .replace(/( style=")(.*?)(")/gi, '')
-        .replace(/(<span>)(.*?)(<\/span>)/gi, '$2')
+      return fragment.replace(/( style=")(.*?)(")/gi, '').replace(/(<span>)(.*?)(<\/span>)/gi, '$2')
     } catch (e) {
       console.warn(`[genPosts] failed to render ${module.metadata?.slug ?? '?'}:`, (e as Error).message)
       return ''

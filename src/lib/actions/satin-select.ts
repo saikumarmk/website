@@ -26,7 +26,7 @@ export function satinSelect(node: HTMLElement, options: SatinSelectOptions) {
 
   function select(i: number) {
     const its = items()
-    its.forEach((el) => el.classList.remove('is-sel'))
+    its.forEach(el => el.classList.remove('is-sel'))
     idx = i
     const el = its[i]
     if (i < 0 || !el) {

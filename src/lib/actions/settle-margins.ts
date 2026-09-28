@@ -1,5 +1,4 @@
-const WIDE =
-  ':is(.post-prose, .slide-deck-viewport > .slide) > :is(.codewrap, pre.shiki, figure, .wide), figure.plate'
+const WIDE = ':is(.post-prose, .slide-deck-viewport > .slide) > :is(.codewrap, pre.shiki, figure, .wide), figure.plate'
 const NOTES = '.sn, aside.note'
 
 /**
@@ -12,10 +11,10 @@ export function settleMargins(node: HTMLElement) {
   function settle() {
     const wide = [...node.querySelectorAll<HTMLElement>(WIDE)]
     const notes = [...node.querySelectorAll<HTMLElement>(NOTES)]
-    wide.forEach((el) => (el.style.marginTop = ''))
-    notes.forEach((n) => (n.style.transform = ''))
+    wide.forEach(el => (el.style.marginTop = ''))
+    notes.forEach(n => (n.style.transform = ''))
     if (!matchMedia('(min-width: 60rem)').matches) return
-    const live = notes.filter((n) => n.offsetParent)
+    const live = notes.filter(n => n.offsetParent)
     for (const el of wide) {
       if (!el.offsetParent) continue
       let r = el.getBoundingClientRect()

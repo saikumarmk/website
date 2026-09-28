@@ -1,13 +1,4 @@
 <script lang="ts" module>
-  import {
-    Image,
-    table,
-    Mermaid,
-    PythonCode,
-    SlabTitle,
-    Patch,
-    Sidenote
-  } from '$lib/mdsvex/embed-registry'
   /**
    * mdsvex rewrites tags to `Components.Name` using **exported names**; HTML/rehype lowercases tag names,
    * so we export PascalCase + lowercase aliases (e.g. SlabTitle + slabtitle).
@@ -25,7 +16,7 @@
     Patch as patch,
     Sidenote,
     Sidenote as sidenote
-  }
+  } from '$lib/mdsvex/embed-registry'
 </script>
 
 <script lang="ts">

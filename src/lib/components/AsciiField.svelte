@@ -47,4 +47,5 @@
   role={label || describedby ? 'img' : undefined}
   aria-label={label || undefined}
   aria-describedby={describedby}
-  aria-hidden={label || describedby ? undefined : 'true'}></canvas>
+  aria-hidden={label || describedby ? undefined : 'true'}>
+</canvas>

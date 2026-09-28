@@ -14,17 +14,22 @@
   const series = $derived(seriesOf(key, $posts ?? []))
   const parts = $derived(series.parts)
   const read = $derived((p: Blog.Post) => isRead($readSlugs, p.path))
-  const next = $derived(parts.find((p) => !read(p.post)))
-  const nRead = $derived(parts.filter((p) => read(p.post)).length)
-  const faq = $derived(parts.find((p) => p.part === 0))
+  const next = $derived(parts.find(p => !read(p.post)))
+  const nRead = $derived(parts.filter(p => read(p.post)).length)
+  const faq = $derived(parts.find(p => p.part === 0))
   const showFaq = $derived(!!faq && !!next && next !== faq && !read(faq.post))
 
   const totalMins = $derived(Math.round(parts.reduce((a, p) => a + (p.post.words ?? 0), 0) / 230))
   const revised = $derived(
-    parts.map((p) => p.post.updated ?? p.post.published ?? p.post.created).sort((a, b) => Date.parse(a) - Date.parse(b)).pop()
+    parts
+      .map(p => p.post.updated ?? p.post.published ?? p.post.created)
+      .sort((a, b) => Date.parse(a) - Date.parse(b))
+      .pop()
   )
   const fmt = (d?: string, month: 'long' | 'short' = 'long') =>
-    d ? new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month, year: 'numeric', timeZone: 'Australia/Melbourne' }) : ''
+    d
+      ? new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month, year: 'numeric', timeZone: 'Australia/Melbourne' })
+      : ''
 </script>
 
 <svelte:head>
@@ -51,9 +56,12 @@
         <span>{nRead} of {parts.length} read</span>
       {:else}
         <span>You've read the whole series.</span>
-        <button class="pill" type="button" onclick={() => parts.forEach((p) => setRead(p.post.path, false))}>start over</button>
+        <button class="pill" type="button" onclick={() => parts.forEach(p => setRead(p.post.path, false))}>start over</button>
       {/if}
-      {#if showFaq && faq}<span>or <a class="plain" href={faq.post.path}>the FAQ</a> first</span>{/if}
+      {#if showFaq && faq}<span>
+          or <a class="plain" href={faq.post.path}>the FAQ</a>
+          first
+        </span>{/if}
     </div>
 
     <ol class="stem">
@@ -67,7 +75,9 @@
             aria-pressed={done}
             aria-label="{p.label} read"
             title={done ? 'Mark unread' : 'Mark read'}
-            onclick={() => setRead(p.post.path, !done)}>{p.mark}</button>
+            onclick={() => setRead(p.post.path, !done)}>
+            {p.mark}
+          </button>
           <div>
             <div class="pt">{[p.label, p.post.series_topic].filter(Boolean).join(' · ')}{p.side ? ', a side trip' : ''}</div>
             <h2><a href={p.post.path}>{p.short}</a></h2>
@@ -80,7 +90,10 @@
     </ol>
 
     {#each series.appendix as a (a.path)}
-      <p class="also">Appendix: <a href={a.path}>{a.title}</a>, {readMins(a.words)} min.</p>
+      <p class="also">
+        Appendix: <a href={a.path}>{a.title}</a>
+        , {readMins(a.words)} min.
+      </p>
     {/each}
   {/if}
 </div>

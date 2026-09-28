@@ -9,7 +9,7 @@
 
   const key = $derived(seriesKeyOf(post))
   const series = $derived(key ? seriesOf(key, $posts ?? []) : undefined)
-  const here = $derived(series?.parts.findIndex((p) => p.post.path === post.path) ?? -1)
+  const here = $derived(series?.parts.findIndex(p => p.post.path === post.path) ?? -1)
   const next = $derived(series && here >= 0 ? series.parts[here + 1] : undefined)
   const prev = $derived(series && here > 0 ? series.parts[here - 1] : undefined)
 </script>

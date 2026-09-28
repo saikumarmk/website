@@ -12,7 +12,7 @@ import { execSync } from 'node:child_process'
 const checkBuild = process.argv.includes('--build')
 const root = new URL('..', import.meta.url).pathname
 const assetsTs = readFileSync(join(root, 'src/lib/config/assets.ts'), 'utf8')
-const urls = [...assetsTs.matchAll(/'(\/assets\/[^']+)'/g)].map((m) => m[1])
+const urls = [...assetsTs.matchAll(/'(\/assets\/[^']+)'/g)].map(m => m[1])
 
 if (urls.length === 0) {
   console.error('verify-assets: no /assets/ URLs found in src/lib/config/assets.ts')
@@ -21,12 +21,7 @@ if (urls.length === 0) {
 
 let tracked = new Set()
 try {
-  tracked = new Set(
-    execSync('git ls-files static/assets', { cwd: root, encoding: 'utf8' })
-      .trim()
-      .split('\n')
-      .filter(Boolean)
-  )
+  tracked = new Set(execSync('git ls-files static/assets', { cwd: root, encoding: 'utf8' }).trim().split('\n').filter(Boolean))
 } catch {
   console.error('verify-assets: git ls-files failed — run from a git checkout')
   process.exit(1)

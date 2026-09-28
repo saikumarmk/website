@@ -33,8 +33,7 @@ export function injectMdsvexLayoutComponentImports() {
       })
       const extra = toAdd.length ? `${toAdd.join('\n')}\n` : ''
 
-      const layoutImport =
-        "import Layout_MDSVEX_DEFAULT, * as Components from '$lib/components/post_layout.svelte';"
+      const layoutImport = "import Layout_MDSVEX_DEFAULT, * as Components from '$lib/components/post_layout.svelte';"
 
       const replaced = content.replace(
         /import Layout_MDSVEX_DEFAULT, \* as Components from ['"][^'"]*post_layout\.svelte['"];?/,

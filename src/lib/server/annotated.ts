@@ -5,7 +5,7 @@ import { parsePythonToSections, type RenderedSection } from '$lib/components/pro
 
 let highlighter: ReturnType<typeof createShikiHighlighter> | undefined
 
-const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
+const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
 const marked = new Marked({
   renderer: {
@@ -30,19 +30,23 @@ export function renderDocs(src: string): string {
     return `\u0000${math.length - 1}\u0000`
   }
   const text = src
-    .replace(/\\begin\{align\}[\s\S]*?\\end\{align\}/g, (m) => keep(m, true))
+    .replace(/\\begin\{align\}[\s\S]*?\\end\{align\}/g, m => keep(m, true))
     .replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => keep(tex, true))
     .replace(/\$([^$\n]+?)\$/g, (_, tex) => keep(tex, false))
   const html = marked.parse(text, { async: false }) as string
+  // eslint-disable-next-line no-control-regex -- NUL marks where the TeX was set aside
   return html.replace(/\u0000(\d+)\u0000/g, (_, n) => math[Number(n)])
 }
 
 export async function renderAnnotated(source: string): Promise<RenderedSection[]> {
   const hl = await (highlighter ??= createShikiHighlighter({ theme: 'css-variables' }))
-  return parsePythonToSections(source).map((s) => ({
+  return parsePythonToSections(source).map(s => ({
     docs: renderDocs(s.docs),
     code: s.code.trim()
-      ? renderCodeToHTML(s.code, 'python', {}, { themeName: 'css-variables' }, hl).replace('<pre class="shiki', '<pre class="shiki no-copy')
+      ? renderCodeToHTML(s.code, 'python', {}, { themeName: 'css-variables' }, hl).replace(
+          '<pre class="shiki',
+          '<pre class="shiki no-copy'
+        )
       : ''
   }))
 }

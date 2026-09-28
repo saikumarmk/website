@@ -1,7 +1,8 @@
 import type { Page } from '@playwright/test'
 import { test, expect } from './fixtures'
 
-const shelfSlugs = (page: Page) => page.locator('#writing-shelves li[data-slug]').evaluateAll((els) => els.map((el) => el.getAttribute('data-slug')))
+const shelfSlugs = (page: Page) =>
+  page.locator('#writing-shelves li[data-slug]').evaluateAll(els => els.map(el => el.getAttribute('data-slug')))
 
 test.describe('writing index', () => {
   test('tabs switch shelves and keep the topic in the URL', async ({ page }) => {
@@ -19,7 +20,13 @@ test.describe('writing index', () => {
     await page.goto('/archive/?topic=playbook', { waitUntil: 'networkidle' })
     await expect(page.getByRole('tab', { name: /^The Playbook/ })).toHaveAttribute('aria-selected', 'true')
     const slugs = await shelfSlugs(page)
-    expect(slugs.slice(0, 5)).toEqual(['/guide-to-tech-1', '/guide-to-tech-2', '/guide-to-tech-2.5', '/guide-to-tech-3', '/guide-to-tech-faq'])
+    expect(slugs.slice(0, 5)).toEqual([
+      '/guide-to-tech-1',
+      '/guide-to-tech-2',
+      '/guide-to-tech-2.5',
+      '/guide-to-tech-3',
+      '/guide-to-tech-faq'
+    ])
   })
 
   test('?tag= filters the shelves and can be cleared', async ({ page }) => {
@@ -41,7 +48,7 @@ test.describe('search', () => {
       await expect(input).toBeFocused({ timeout: 250 })
     }).toPass({ timeout: 10_000 })
     await expect(input).toHaveAttribute('role', 'combobox')
-    expect(await page.locator('.page').evaluate((el) => (el as HTMLElement).inert)).toBe(true)
+    expect(await page.locator('.page').evaluate(el => (el as HTMLElement).inert)).toBe(true)
 
     await input.fill('elo')
     const first = page.getByRole('option').first()
@@ -55,7 +62,7 @@ test.describe('search', () => {
 
     await input.press('Escape')
     await expect(input).toHaveCount(0)
-    expect(await page.locator('.page').evaluate((el) => (el as HTMLElement).inert)).toBe(false)
+    expect(await page.locator('.page').evaluate(el => (el as HTMLElement).inert)).toBe(false)
   })
 
   test('Enter opens the highlighted post', async ({ page }) => {

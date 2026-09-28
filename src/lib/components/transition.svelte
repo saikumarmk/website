@@ -4,11 +4,7 @@
   import { fade } from 'svelte/transition'
   import { browser } from '$app/environment'
   import { prefersReducedMotion } from '$lib/utils/motion'
-  import {
-    getRouteTransitionPolicy,
-    shouldUseViewTransition,
-    shouldAnimateFade
-  } from '$lib/utils/transition-policy'
+  import { getRouteTransitionPolicy, shouldUseViewTransition, shouldAnimateFade } from '$lib/utils/transition-policy'
 
   let { path = '', children } = $props()
 
@@ -27,12 +23,12 @@
     syncPolicy()
   })
 
-  onNavigate((navigation) => {
+  onNavigate(navigation => {
     if (!browser) return
     syncPolicy()
     if (!useVt) return
 
-    return new Promise<void>((resolve) => {
+    return new Promise<void>(resolve => {
       document.startViewTransition(async () => {
         resolve()
         await navigation.complete
@@ -47,10 +43,7 @@
   </div>
 {:else if useFade}
   {#key path}
-    <div
-      class="layout-transition"
-      in:fade={{ duration: 220 }}
-    >
+    <div class="layout-transition" in:fade={{ duration: 220 }}>
       {@render children?.()}
     </div>
   {/key}

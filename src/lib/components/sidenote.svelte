@@ -10,6 +10,16 @@
   let open = $state(false)
 </script>
 
-<button class="sn-ref" type="button" aria-expanded={open} aria-controls="sn-{n}" aria-label="Note {n}" onclick={() => (open = !open)}
-  >{n}</button
-><span class="sn" class:open id="sn-{n}" role="note"><span class="n">{n}</span>{@render children?.()}</span>
+<button
+  class="sn-ref"
+  type="button"
+  aria-expanded={open}
+  aria-controls="sn-{n}"
+  aria-label="Note {n}"
+  onclick={() => (open = !open)}>
+  {n}
+</button>
+<span class="sn" class:open id="sn-{n}" role="note">
+  <span class="n">{n}</span>
+  {@render children?.()}
+</span>

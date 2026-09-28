@@ -12,5 +12,8 @@
 </svelte:head>
 
 <div class="col">
-  <p>Opening the deck… <a href="/cool-stuff/">or read it as an article</a>.</p>
+  <p>
+    Opening the deck… <a href="/cool-stuff/">or read it as an article</a>
+    .
+  </p>
 </div>

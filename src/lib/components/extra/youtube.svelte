@@ -11,16 +11,18 @@
     loop = false
   } = $props()
 
-  let src = $derived(`https://www.youtube.com/embed/${id}?${new URLSearchParams({
-    ...(list ? { listType: 'playlist', list: 'true' } : {}),
-    ...(playlist ? { playlist } : {}),
-    ...(start ? { start } : {}),
-    autoplay: autoplay ? '1' : '0',
-    disablekb: disablekb ? '1' : '0',
-    controls: controls ? '1' : '0',
-    fs: fs ? '1' : '0',
-    loop: loop ? '1' : '0'
-  }).toString()}`)
+  let src = $derived(
+    `https://www.youtube.com/embed/${id}?${new URLSearchParams({
+      ...(list ? { listType: 'playlist', list: 'true' } : {}),
+      ...(playlist ? { playlist } : {}),
+      ...(start ? { start } : {}),
+      autoplay: autoplay ? '1' : '0',
+      disablekb: disablekb ? '1' : '0',
+      controls: controls ? '1' : '0',
+      fs: fs ? '1' : '0',
+      loop: loop ? '1' : '0'
+    }).toString()}`
+  )
 </script>
 
 <div class="relative pb-[56.25%] mb-4">
@@ -31,5 +33,6 @@
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     loading="lazy"
-    allowfullscreen></iframe>
+    allowfullscreen>
+  </iframe>
 </div>

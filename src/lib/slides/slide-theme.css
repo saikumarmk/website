@@ -1,65 +1,201 @@
 /* Slide deck (SlideDeck.svelte). Reading: sections flow as an article. Presenting: one section at a time, full
    screen, over the article; the header, footer and vine are hidden by `body.deck-presentation-active` in app.pcss. */
 
-.deck-cue { font-family: var(--mono); font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin: 0 0 1.6rem; }
-.deck-cue[hidden] { display: none; }
+.deck-cue {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.6rem;
+}
+.deck-cue[hidden] {
+  display: none;
+}
 
 .slide-deck-viewport--presenting > section.slide {
-  position: fixed; inset: 0; z-index: 40; margin: 0; overflow: auto; overscroll-behavior: contain;
-  background: var(--bg); color: var(--fg);
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  margin: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  color: var(--fg);
   padding: clamp(2rem, 7vh, 5rem) clamp(1.5rem, 9vw, 9rem) 6rem;
   font-size: clamp(19px, 1.1rem + 0.6vw, 26px);
-  opacity: 0; visibility: hidden; transform: translateY(14px);
-  transition: opacity 0.35s, transform 0.45s cubic-bezier(0.2, 0.8, 0.25, 1), visibility 0s 0.45s;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  transition:
+    opacity 0.35s,
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.25, 1),
+    visibility 0s 0.45s;
 }
 .slide-deck-viewport--presenting > section.slide.active {
-  opacity: 1; visibility: visible; transform: none;
-  transition: opacity 0.35s, transform 0.45s cubic-bezier(0.2, 0.8, 0.25, 1);
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.35s,
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.25, 1);
 }
-.slide-deck-viewport--presenting > section.slide.gone { transform: translateY(-14px); }
+.slide-deck-viewport--presenting > section.slide.gone {
+  transform: translateY(-14px);
+}
 /* focus is moved here by the deck, so its own ring would only ever be noise */
-.slide-deck-viewport--presenting > section.slide:is(:focus, :focus-visible) { outline: none; }
-.slide-deck-viewport--presenting > section.slide > * { max-width: 62rem; margin-inline: auto; }
-.slide-deck-viewport--presenting > section.slide > :first-child { margin-top: 0; }
-.slide-deck-viewport--presenting > section.slide :is(h1, h2) { font-size: 2.2em; line-height: 1.1; margin-top: 0; }
-.slide-deck-viewport--presenting > section.slide .mermaid svg { max-height: 34vh; width: auto; }
-.slide-deck-viewport--presenting :is(.wide, .codewrap, pre.shiki, figure) { margin-right: 0; }
-.slide-deck-viewport--presenting .yk-stage { height: min(32rem, 52vh); }
+.slide-deck-viewport--presenting > section.slide:is(:focus, :focus-visible) {
+  outline: none;
+}
+.slide-deck-viewport--presenting > section.slide > * {
+  max-width: 62rem;
+  margin-inline: auto;
+}
+.slide-deck-viewport--presenting > section.slide > :first-child {
+  margin-top: 0;
+}
+.slide-deck-viewport--presenting > section.slide :is(h1, h2) {
+  font-size: 2.2em;
+  line-height: 1.1;
+  margin-top: 0;
+}
+.slide-deck-viewport--presenting > section.slide .mermaid svg {
+  max-height: 34vh;
+  width: auto;
+}
+.slide-deck-viewport--presenting :is(.wide, .codewrap, pre.shiki, figure) {
+  margin-right: 0;
+}
+.slide-deck-viewport--presenting .yk-stage {
+  height: min(32rem, 52vh);
+}
 
 .deck-ui {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 41;
-  display: flex; align-items: center; gap: 1rem;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 41;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   padding: 1.4rem clamp(1.5rem, 9vw, 9rem) 1rem;
   background: linear-gradient(to bottom, transparent, var(--bg) 45%);
 }
-.deck-ui[hidden] { display: none; }
-.deck-thread { flex: 1; height: 12px; position: relative; background: linear-gradient(90deg, var(--rule) 50%, transparent 50%) 0 50% / 8px 1.5px repeat-x; }
-.deck-thread b { position: absolute; left: 0; top: 50%; height: 1.5px; background: var(--g1); transition: width 0.4s; }
-.deck-thread i { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; border: 1.5px solid var(--g1); background: var(--bg); }
-.deck-thread i.on { background: var(--g1); }
-.deck-thread i.here { border-color: var(--r3); background: var(--r3); width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; }
-.deck-n { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-@media (max-width: 40rem) { .deck-x-more { display: none; } }
+.deck-ui[hidden] {
+  display: none;
+}
+.deck-thread {
+  flex: 1;
+  height: 12px;
+  position: relative;
+  background: linear-gradient(90deg, var(--rule) 50%, transparent 50%) 0 50% / 8px 1.5px repeat-x;
+}
+.deck-thread b {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 1.5px;
+  background: var(--g1);
+  transition: width 0.4s;
+}
+.deck-thread i {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  border: 1.5px solid var(--g1);
+  background: var(--bg);
+}
+.deck-thread i.on {
+  background: var(--g1);
+}
+.deck-thread i.here {
+  border-color: var(--r3);
+  background: var(--r3);
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+}
+.deck-n {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 40rem) {
+  .deck-x-more {
+    display: none;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .slide-deck-viewport--presenting > section.slide, .slide-deck-viewport--presenting > section.slide.active { transition: none; transform: none; }
-  .deck-thread b { transition: none; }
+  .slide-deck-viewport--presenting > section.slide,
+  .slide-deck-viewport--presenting > section.slide.active {
+    transition: none;
+    transform: none;
+  }
+  .deck-thread b {
+    transition: none;
+  }
 }
 
 /* stagger-1 … stagger-6: blocks that rise in one after another on the active slide */
-@keyframes slideDeckRise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes slideDeckRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
-  .slide-deck-viewport--presenting > section.slide.active .stagger-1 { animation: slideDeckRise 0.5s 0.1s both; }
-  .slide-deck-viewport--presenting > section.slide.active .stagger-2 { animation: slideDeckRise 0.5s 0.25s both; }
-  .slide-deck-viewport--presenting > section.slide.active .stagger-3 { animation: slideDeckRise 0.5s 0.4s both; }
-  .slide-deck-viewport--presenting > section.slide.active .stagger-4 { animation: slideDeckRise 0.5s 0.55s both; }
-  .slide-deck-viewport--presenting > section.slide.active .stagger-5 { animation: slideDeckRise 0.5s 0.7s both; }
-  .slide-deck-viewport--presenting > section.slide.active .stagger-6 { animation: slideDeckRise 0.5s 0.85s both; }
+  .slide-deck-viewport--presenting > section.slide.active .stagger-1 {
+    animation: slideDeckRise 0.5s 0.1s both;
+  }
+  .slide-deck-viewport--presenting > section.slide.active .stagger-2 {
+    animation: slideDeckRise 0.5s 0.25s both;
+  }
+  .slide-deck-viewport--presenting > section.slide.active .stagger-3 {
+    animation: slideDeckRise 0.5s 0.4s both;
+  }
+  .slide-deck-viewport--presenting > section.slide.active .stagger-4 {
+    animation: slideDeckRise 0.5s 0.55s both;
+  }
+  .slide-deck-viewport--presenting > section.slide.active .stagger-5 {
+    animation: slideDeckRise 0.5s 0.7s both;
+  }
+  .slide-deck-viewport--presenting > section.slide.active .stagger-6 {
+    animation: slideDeckRise 0.5s 0.85s both;
+  }
 }
 
 /* utilities for slide markdown */
-.slide-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
-.slide-two-col h3 { margin: 0 0 0.3rem; font-weight: 500; font-size: 1.1rem; }
-@media (max-width: 40rem) { .slide-two-col { grid-template-columns: 1fr; } }
-.slide-full-bleed { margin-inline: calc(-1 * var(--slide-bleed, 1.5rem)); }
-.slide-code-focus pre { font-size: 0.85em; }
+.slide-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+.slide-two-col h3 {
+  margin: 0 0 0.3rem;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+@media (max-width: 40rem) {
+  .slide-two-col {
+    grid-template-columns: 1fr;
+  }
+}
+.slide-full-bleed {
+  margin-inline: calc(-1 * var(--slide-bleed, 1.5rem));
+}
+.slide-code-focus pre {
+  font-size: 0.85em;
+}

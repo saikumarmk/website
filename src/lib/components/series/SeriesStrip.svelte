@@ -8,8 +8,8 @@
 
   const key = $derived(seriesKeyOf(post))
   const series = $derived(key ? seriesOf(key, $posts ?? []) : undefined)
-  const here = $derived(series?.parts.findIndex((p) => p.post.path === post.path) ?? -1)
-  const appendix = $derived(!!series?.appendix.some((p) => p.path === post.path))
+  const here = $derived(series?.parts.findIndex(p => p.post.path === post.path) ?? -1)
+  const appendix = $derived(!!series?.appendix.some(p => p.path === post.path))
 </script>
 
 {#if series && series.parts.length > 1 && (here >= 0 || appendix)}
@@ -23,7 +23,9 @@
             class="dot {state}"
             href={p.post.path}
             aria-current={i === here ? 'page' : undefined}
-            aria-label="{p.label}: {p.short}{state === 'read' ? ' (read)' : ''}"><span>{p.part === 0 ? 'FAQ' : p.part}</span></a>
+            aria-label="{p.label}: {p.short}{state === 'read' ? ' (read)' : ''}">
+            <span>{p.part === 0 ? 'FAQ' : p.part}</span>
+          </a>
         </li>
       {/each}
     </ol>

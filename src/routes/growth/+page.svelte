@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import { onMount } from 'svelte';
+  import { goto } from '$app/navigation'
+  import { onMount } from 'svelte'
 
   onMount(() => {
-    goto('/growth/2026', { replaceState: true });
-  });
+    goto('/growth/2026', { replaceState: true })
+  })
 </script>
 
 <svelte:head>
@@ -14,9 +14,8 @@
 
 <!-- Fallback if JS disabled -->
 <div class="container mx-auto px-4 py-8 text-center">
-  <p>Redirecting to <a href="/growth/2026" class="link link-primary">Yggdrasil 2026</a>...</p>
+  <p>
+    Redirecting to <a href="/growth/2026" class="link link-primary">Yggdrasil 2026</a>
+    ...
+  </p>
 </div>
-
-
-
-

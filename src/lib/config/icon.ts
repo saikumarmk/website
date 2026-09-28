@@ -1,6 +1,4 @@
 import type { Icon } from '$lib/types/icon'
-import { site } from '$lib/config/site'
-
 export const favicon: Icon = {
   src: '/assets/fatpika.png',
   sizes: '48x48',

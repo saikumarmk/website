@@ -16,14 +16,14 @@ function docstringBody(block: string): string {
     .replace(/^\n/, '')
     .replace(/^\s*---\n[\s\S]*?\n---\s*\n/, '')
   const lines = body.split('\n')
-  const indent = Math.min(...lines.filter((l) => l.trim()).map((l) => l.match(/^\s*/)![0].length), 99)
-  return lines.map((l) => l.slice(indent)).join('\n')
+  const indent = Math.min(...lines.filter(l => l.trim()).map(l => l.match(/^\s*/)![0].length), 99)
+  return lines.map(l => l.slice(indent)).join('\n')
 }
 
 function dedent(code: string): string {
   const lines = code.split('\n')
-  const pad = Math.min(...lines.filter((l) => l.trim()).map((l) => l.match(/^ */)![0].length))
-  return pad > 0 && pad < Infinity ? lines.map((l) => l.slice(pad)).join('\n') : code
+  const pad = Math.min(...lines.filter(l => l.trim()).map(l => l.match(/^ */)![0].length))
+  return pad > 0 && pad < Infinity ? lines.map(l => l.slice(pad)).join('\n') : code
 }
 
 /**
@@ -89,7 +89,7 @@ export function parsePythonToSections(src: string): AnnotatedSection[] {
     }
     code.push(line)
     // a triple-quoted value left open on this line runs on as code, so its closing quotes aren't a docstring
-    const open = ['"""', "'''"].find((mark) => line.split(mark).length % 2 === 0)
+    const open = ['"""', "'''"].find(mark => line.split(mark).length % 2 === 0)
     if (open) {
       while (++i < lines.length) {
         code.push(lines[i])
@@ -100,7 +100,7 @@ export function parsePythonToSections(src: string): AnnotatedSection[] {
   flush()
 
   return out
-    .map((s) => ({ docs: s.docs, code: dedent(s.code.replace(/^([ \t]*\n)+|\s+$/g, '')) }))
+    .map(s => ({ docs: s.docs, code: dedent(s.code.replace(/^([ \t]*\n)+|\s+$/g, '')) }))
     .reduce<AnnotatedSection[]>((acc, s) => {
       const prev = acc[acc.length - 1]
       if (!s.docs.trim() && prev) prev.code = prev.code ? `${prev.code}\n\n${s.code}` : s.code

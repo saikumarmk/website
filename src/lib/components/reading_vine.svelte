@@ -104,13 +104,17 @@
           class:sew={progress >= m.frac - 0.001}
           data-sew
           viewBox={m.last ? '0 0 80 80' : '0 0 60 44'}
-          style={m.art}>{@html m.html}</svg>
+          style={m.art}>
+          {@html m.html}
+        </svg>
       {/each}
     </div>
     <div class="vine-menu" use:satinSelect={{ items: 'a', selected: current }}>
       <div class="vine-labels">
         {#each marks as m (m.slug)}
-          <a href="#{m.slug}" style={m.label} class:reached={progress >= m.frac - 0.001} onclick={(e) => jump(e, m.slug)}>{m.title}</a>
+          <a href="#{m.slug}" style={m.label} class:reached={progress >= m.frac - 0.001} onclick={e => jump(e, m.slug)}>
+            {m.title}
+          </a>
         {/each}
       </div>
     </div>
