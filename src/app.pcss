@@ -121,10 +121,6 @@ html:has(body.deck-presentation-active) {
 body.deck-presentation-active :is(header.site, footer.site, .vine, .read-thread) {
   display: none !important;
 }
-body.deck-presentation-active .deck-presentation-shell {
-  min-height: 100dvh;
-}
-
 /* Route changes: View Transitions (Chrome/Edge/Safari); others get the fade in transition.svelte */
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root),

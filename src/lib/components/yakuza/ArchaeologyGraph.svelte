@@ -393,7 +393,7 @@
     background: none;
     border: 0;
     padding: 0;
-    cursor: pointer;
+    cursor: var(--pointer);
     text-decoration: underline;
     text-decoration-color: color-mix(in srgb, var(--link) 40%, transparent);
     text-underline-offset: 2px;
@@ -407,7 +407,7 @@
     background: none;
     border: 0;
     color: var(--muted);
-    cursor: pointer;
+    cursor: var(--pointer);
   }
   .yk-hint {
     position: absolute;

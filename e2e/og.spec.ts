@@ -21,7 +21,7 @@ test.describe('link previews and favicons', () => {
 
   test('other pages keep the site icon and share the site card', async ({ page, request }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
-    await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', '/assets/fatpika.png')
+    expect(new URL(await page.locator('link[rel="icon"]').getAttribute('href') ?? '', page.url()).pathname).toBe('/assets/fatpika.png')
     const og = await page.locator('meta[property="og:image"]').getAttribute('content')
     expect(og).toMatch(/\/og\/site\.png$/)
     expect((await request.get(new URL(og!).pathname)).ok()).toBeTruthy()

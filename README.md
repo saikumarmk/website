@@ -182,10 +182,10 @@ Side-by-side documentation and code display, inspired by literate programming.
 **Source:** `src/lib/components/prose/code.svelte`
 
 **Features:**
-- Fetches Python file from URL at runtime
+- Rendered at build time by `/annotations/<name>.json` from `static/annotations/<name>.py`, fetched when scrolled near
 - Parses docstrings and comments as documentation
-- Renders docs as markdown (via `mdsvex_processor.js`)
-- Syntax highlights code with highlight.js
+- Renders docs as Markdown with KaTeX maths (`src/lib/server/annotated.ts`)
+- Syntax highlights code with Shiki, sharing the site's code colours
 - Two-column layout: docs left, code right
 - Responsive: stacks vertically on mobile
 

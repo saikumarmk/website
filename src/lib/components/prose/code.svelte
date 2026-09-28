@@ -168,7 +168,7 @@
     background: none;
     border: 1px dashed var(--rule);
     border-radius: 8px;
-    cursor: pointer;
+    cursor: var(--pointer);
   }
   .an-more:hover {
     color: var(--fg);
