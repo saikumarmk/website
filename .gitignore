@@ -34,3 +34,6 @@ example.html
 # Unfinished posts: build locally, never committed
 src/routes/(drafts)/
 static/assets/tournament_agents.png
+
+# Local design explorations, kept out of the repo
+design-prototypes/
