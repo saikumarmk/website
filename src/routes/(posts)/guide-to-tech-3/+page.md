@@ -115,7 +115,7 @@ Not much can be said about these tests, and there's not much I can suggest to pr
 
 Zap-N thought it would be funny to turn [Cooking Mama](https://youtu.be/DtZtbDA1wSY?t=160) into an assessment that tests your reaction time. Or better yet, how about [that game where you can pump it as many times as you want, but you lose if it pops](https://www.youtube.com/watch?v=UcLrdhGBQ9M). In case you're completely lost on what I'm talking about, **Optiver**, [and some other companies](https://www.tiktok.com/@jamesleonidas2/video/7283692043765894442) use more esoteric assessments such as Grill Master and the Balloon Game to measure your reaction time, how you approach risk tolerance, and so on.
 
-![Fujiwara Chika pumping a balloon](/assets/guide-to-tech/chika.gif)
+![Fujiwara Chika pumping a balloon](/assets/guide-to-tech/chika.webp)
 
 To me, these assessments are similar to pymetrics assessments, which consist of vague tasks that seem to be easier the more you possess skills that are required for a variety of video games. [Trading Interview](https://www.tradinginterview.com/courses/company-preparations-course/lessons/optiver/topic/first-round-zap-n-test/) lists some strategies for the balloon popping game, where you should discern around when the balloon pops, and plan accordingly. Grill Master being compared to [Overcooked](https://store.steampowered.com/app/448510/Overcooked/) should tell you that playing some reaction-based video games would be a good idea. As an aside, these games are reminiscent of flash games, and would not be hard to recreate. A potential side-project could entail recreating these mini-games to practice on.
 
@@ -416,6 +416,5 @@ This was a MASSIVE undertaking, and I've basically poured away many hours of my 
 
 Thank you so much for reading till the end! My final words to anyone who doesn't feel they're ready for an internship would be the line from Spider-Man: Into the Spider-Verse. ["When will I know I'm ready? You won't, it's a leap of faith."](https://youtu.be/BmFbczWrVUw?t=184) Good luck with your journey.
 
-![](/assets/guide-to-tech/spiderman-when.gif)
-
+![](/assets/guide-to-tech/spiderman-when.webp)
 

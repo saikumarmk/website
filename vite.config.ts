@@ -112,15 +112,35 @@ export default defineConfig({
       scope: '/',
       kit: { trailingSlash: 'always' },
       workbox: {
-        // Increase precache limit for large chunks
-        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MB
-        // Don't precache large images/files
-        globPatterns: ['posts.json', '**/*.{js,css,html,svg,ico}'],
+        // Precache only the home page and entry scripts. Other pages and assets are
+        // cached when visited, so installing the worker does not fetch the whole site.
+        navigateFallback: undefined,
+        globPatterns: [
+          'prerendered/pages/index.html',
+          'prerendered/pages/manifest.webmanifest',
+          'client/_app/immutable/entry/*.js'
+        ],
         globIgnores: ['**/sw*', '**/workbox-*'],
-        // Never serve the SPA shell for PDFs under /assets/ (breaks ./_app relative URLs)
-        navigateFallbackDenylist: [/^\/assets\/.*\.pdf$/i],
-        // Runtime caching for images
         runtimeCaching: [
+          {
+            urlPattern: ({ request, url }) =>
+              request.mode === 'navigate' && url.origin === self.location.origin && !url.pathname.startsWith('/assets/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages',
+              expiration: { maxEntries: 30, maxAgeSeconds: 7 * 24 * 60 * 60 }
+            }
+          },
+          {
+            urlPattern: ({ url }) =>
+              url.origin === self.location.origin &&
+              (url.pathname.startsWith('/_app/immutable/') || url.pathname === '/search-index.json'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'app-assets',
+              expiration: { maxEntries: 200, maxAgeSeconds: 30 * 24 * 60 * 60 }
+            }
+          },
           {
             urlPattern: /\.(?:png|jpg|jpeg|webp|avif)$/,
             handler: 'CacheFirst',

@@ -2,7 +2,8 @@
   /* @see {@link https://github.com/sveltejs/kit/issues/241#issuecomment-1363621896} */
 
   /** srcset strings ("… 736w, … 1472w"), keyed by /static/… path */
-  const sources = import.meta.glob<string>('/static/assets/**/*.{jpg,jpeg,png,webp}', {
+  // WebP may be animated; converting it to AVIF here would keep only its first frame.
+  const sources = import.meta.glob<string>('/static/assets/**/*.{jpg,jpeg,png}', {
     query: { format: 'avif', quality: '80', w: '736;1472', withoutEnlargement: '', as: 'srcset' },
     import: 'default',
     eager: true
