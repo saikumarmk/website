@@ -4,6 +4,9 @@ author: Sai Kumar Murali Krishnan
 created: 2023-06-24
 tags: [university, career, playbook]
 topic: playbook
+summary: "Building skills, projects, and experience to stand out."
+series: playbook
+series_topic: Improving
 ---
 
 

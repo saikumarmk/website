@@ -4,6 +4,9 @@ author: Sai Kumar Murali Krishnan
 created: 2023-05-06 
 tags: [university, career, playbook]
 topic: playbook
+summary: "When to start applying and what to do at each stage of your degree."
+series: playbook
+series_topic: Timeline
 ---
 
 <script>

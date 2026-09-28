@@ -2,7 +2,7 @@ import { test, expect } from './fixtures'
 import { assets } from '../src/lib/config/assets'
 
 /** Core routes touched by recent config / dependency cleanup */
-const paths = ['/', '/about', '/portfolio', '/cv', '/archive', '/growth/2026', '/playbook', '/dex']
+const paths = ['/', '/about', '/portfolio', '/cv', '/archive', '/growth/2026', '/playbook', '/dex', '/garden']
 
 for (const path of paths) {
   test(`GET ${path} returns HTML`, async ({ page }) => {

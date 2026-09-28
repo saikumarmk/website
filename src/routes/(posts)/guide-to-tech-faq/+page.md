@@ -4,6 +4,9 @@ author: Sai kumar Murali Krishnan
 created: 2023-06-24
 tags: [university, career]
 topic: playbook
+summary: "Common questions about internships, grad roles, and the tech industry."
+series: playbook
+series_topic: Common questions
 ---
 
 I've received many questions on my article, so this page will act as an index for the most popular questions, and the answers to them.

@@ -19,6 +19,8 @@
   import CodeCopyButton from '$lib/components/code_copy_button.svelte'
   import ImageLightbox from '$lib/components/image_lightbox.svelte'
   import SearchModal from '$lib/components/search_modal.svelte'
+  import Sky from '$lib/components/Sky.svelte'
+  import HoverBloom from '$lib/components/HoverBloom.svelte'
 
   let { data, children }: LayoutProps = $props()
 
@@ -61,8 +63,10 @@
   </main>
 
   {#if !isApp}<Footer />{/if}
+  {#if !isApp}<HoverBloom />{/if}
 </div>
 
+{#if !isApp}<Sky />{/if}
 <CodeCopyButton />
 <ImageLightbox />
 <SearchModal bind:this={searchModal} />

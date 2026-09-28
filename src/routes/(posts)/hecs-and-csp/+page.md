@@ -4,6 +4,8 @@ author: Sai Kumar Murali Krishnan
 created: 2023-02-19 
 tags: [university]
 topic: playbook
+series: playbook
+series_appendix: true
 ---
 <script>
 import Patch from '$lib/components/prose/patch.svelte'

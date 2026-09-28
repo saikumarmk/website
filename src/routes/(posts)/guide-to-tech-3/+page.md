@@ -4,6 +4,9 @@ author: Sai kumar Murali Krishnan
 created: 2024-03-18
 tags: [university, career, playbook]
 topic: playbook
+summary: "Navigating applications, interviews, and offers."
+series: playbook
+series_topic: Applying
 ---
 
 
