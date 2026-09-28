@@ -10,7 +10,7 @@ import rehypeExternalLinks from 'rehype-external-links'
 import type { Node, Data } from 'unist'
 import { remarkSlideSplit } from './src/lib/slides/remark-slide-split.ts'
 import { hash } from './src/lib/thread/seed.ts'
-import { statSync } from 'fs'
+import { existsSync, readFileSync, statSync } from 'fs'
 import { execFileSync } from 'child_process'
 import { parse, join } from 'path'
 import { visit } from 'unist-util-visit'
@@ -37,19 +37,29 @@ const cleanHeadingText = (text: string): string => {
     .trim()
 }
 
-// Last commit that changed the file's content; pure renames (R100) don't count as edits.
+const ignoredRevs = new Set(
+  existsSync('.git-blame-ignore-revs')
+    ? readFileSync('.git-blame-ignore-revs', 'utf8')
+        .split('\n')
+        .map((line) => line.replace(/#.*/, '').trim())
+        .filter(Boolean)
+    : []
+)
+
+// Last commit that changed the file's content; pure renames (R100) and mechanical
+// commits listed in .git-blame-ignore-revs don't count as edits.
 const lastEdited = (file: string): string | undefined => {
   try {
-    const log = execFileSync('git', ['log', '--follow', '--format=%x00%aI', '--name-status', '--', file], {
+    const log = execFileSync('git', ['log', '--follow', '--format=%x00%H %aI', '--name-status', '--', file], {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore']
     })
     const edit = log
       .split('\0')
       .map((entry) => entry.trim().split('\n'))
-      .find(([date, , status]) => date && !status?.startsWith('R100'))
+      .find(([head, , status]) => head && !ignoredRevs.has(head.split(' ')[0]) && !status?.startsWith('R100'))
     if (!edit) return undefined
-    return execFileSync('git', ['status', '--porcelain', '--', file], { encoding: 'utf8' }).trim() ? undefined : edit[0]
+    return execFileSync('git', ['status', '--porcelain', '--', file], { encoding: 'utf8' }).trim() ? undefined : edit[0].split(' ')[1]
   } catch {
     return undefined
   }
