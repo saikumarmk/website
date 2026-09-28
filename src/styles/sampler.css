@@ -2,7 +2,7 @@
    DaisyUI's own variables for these two themes are generated from the same colours in tailwind.config.ts. */
 
 :root {
-  --serif: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+  --serif: 'Newsreader Variable', 'Newsreader', 'Times New Roman', Times, Georgia, serif;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
   /* fluid column (like Tufte): the text column sits left of centre and the margin takes what's left */
   --padl: clamp(1.25rem, 8vw, 9rem);

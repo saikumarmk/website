@@ -11,6 +11,7 @@
   import Transition from '$lib/components/transition.svelte'
   import '@fontsource-variable/newsreader/opsz.css'
   import '@fontsource-variable/newsreader/opsz-italic.css'
+  import newsreaderLatin from '@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url'
   import '@fontsource/ibm-plex-mono/400.css'
   import '@fontsource/ibm-plex-mono/500.css'
   import 'katex/dist/katex.min.css'
@@ -48,6 +49,10 @@
     })
   })
 </script>
+
+<svelte:head>
+  <link rel="preload" href={newsreaderLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+</svelte:head>
 
 <Head />
 
