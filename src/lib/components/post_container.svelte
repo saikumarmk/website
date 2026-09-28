@@ -1,9 +1,5 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
-  import { onMount } from 'svelte'
-  import { get } from 'svelte/store'
-  import { browser } from '$app/environment'
-  import { page } from '$app/stores'
   import { posts as storedPosts } from '$lib/stores/posts'
   import { title as storedTitle } from '$lib/stores/title'
   import { getSeriesInfo } from '$lib/utils/series'
@@ -48,26 +44,6 @@
 
   let article = $state<HTMLElement>()
 
-  /** Fullscreen deck: only on the client (`$page` is unavailable while genPosts renders posts for feeds). */
-  let deckPresentation = $state(false)
-  function syncDeckPresentation() {
-    if (!browser || !post) return (deckPresentation = false)
-    try {
-      deckPresentation = !!post.slides && get(page).url.searchParams.get('mode') === 'slides'
-    } catch {
-      deckPresentation = false
-    }
-    document.body.classList.toggle('deck-presentation-active', deckPresentation)
-  }
-  onMount(() => {
-    syncDeckPresentation()
-    const unsub = page.subscribe(syncDeckPresentation)
-    return () => {
-      unsub()
-      document.body.classList.remove('deck-presentation-active')
-    }
-  })
-
   $effect(() => {
     if (post) storedTitle.set(post.title ?? post.path.slice(1))
   })
@@ -76,9 +52,6 @@
 <Head {post} />
 
 {#if post}
-  {#if deckPresentation}
-    <div class="deck-presentation-shell">{@render children?.()}</div>
-  {:else}
     <ReadingVine toc={post.toc} {article} />
     <div class="with-vine">
       <div class="col with-notes h-entry" itemscope itemtype="https://schema.org/BlogPosting" itemprop="blogPost">
@@ -167,7 +140,6 @@
         {/if}
       </div>
     </div>
-  {/if}
 {/if}
 
 <style>

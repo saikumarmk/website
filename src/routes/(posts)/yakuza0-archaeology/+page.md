@@ -28,11 +28,9 @@ Roughly in order:
 Locale files are parallel, not merged: `_bin_c` English, `_bin_j` Japanese, `_bin_k` Korean. Gameplay IDs stay stable; names come from whichever locale column you're reading. In addition, Real Estate Royale is called Money Island.
 ## Graph explorer
 
-Blue nodes are Money Island. Pink is encounters, amber nawabari, green items. Gray blobs are decoded table families that haven't been promoted yet. Click a node to see the raw fields.
+Every knot is a decoded row, coloured by family (the legend is under the graph). Grey knots are table families that haven't been promoted yet. Click a knot, or search for one, to see its fields and what it links to.
 
-<div class="not-prose my-6 rounded-lg border border-base-300 overflow-hidden" style="height: 520px;">
-  <ArchaeologyGraph />
-</div>
+<ArchaeologyGraph />
 
 
 ## What's been cdecoded

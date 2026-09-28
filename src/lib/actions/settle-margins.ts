@@ -1,4 +1,5 @@
-const WIDE = '.post-prose > .codewrap, .post-prose > pre.shiki, .post-prose > figure, .post-prose > .wide, figure.plate'
+const WIDE =
+  ':is(.post-prose, .slide-deck-viewport > .slide) > :is(.codewrap, pre.shiki, figure, .wide), figure.plate'
 const NOTES = '.sn, aside.note'
 
 /**

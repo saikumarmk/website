@@ -1,292 +1,193 @@
+<!--
+  Annotated Python: the file's comments and docstrings are the prose, beside the code they explain.
+  `/annotations/<name>.json` is rendered at build time (Markdown, KaTeX and Shiki), so this only fetches HTML.
+-->
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { processMarkdown } from './mdsvex_processor.js'
-  import hljs from 'highlight.js'
-  import 'highlight.js/styles/github-dark.min.css'
-  import { parsePythonToSections, processDocstring } from './parse-python-sections'
+  import { whenNear } from '$lib/actions/when-near'
+  import type { RenderedSection } from './parse-python-sections'
 
-  type RenderedSection = {
-    docs: string
-    code: string
-    renderedDocs: string
-  }
+  let { sourceUrl = '', title = '' }: { sourceUrl?: string; title?: string } = $props()
 
-  let { sourceUrl = '', title = 'Annotated Code' } = $props()
+  const SHOW = 6
+  const uid = `an-${Math.random().toString(36).slice(2, 9)}`
 
-  let sections = $state<RenderedSection[]>([])
-  let loading = $state(true)
-  let error = $state<string | null>(null)
+  let host = $state<HTMLElement>()
+  let sections = $state<RenderedSection[] | null>(null)
+  let failed = $state(false)
+  let open = $state(false)
 
-  async function loadAndParseCode() {
+  let name = $derived(sourceUrl.match(/\/annotations\/([\w-]+)\.py$/)?.[1])
+  let label = $derived(title || (name ? `${name}.py` : 'Annotated code'))
+  let hidden = $derived(sections ? Math.max(0, sections.length - SHOW) : 0)
+
+  async function load() {
     try {
-      loading = true
-      error = null
-
-      const response = await fetch(sourceUrl)
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const pythonCode = await response.text()
-      const parsedSections = parsePythonToSections(pythonCode)
-
-      sections = await Promise.all(
-        parsedSections.map(async section => {
-          const processedDocs = processDocstring(section.docs)
-          const renderedDocs = await processMarkdown(processedDocs)
-
-          return {
-            docs: processedDocs,
-            code: section.code,
-            renderedDocs
-          }
-        })
-      )
-
-      loading = false
-
-      requestAnimationFrame(() => {
-        document.querySelectorAll('.annotated-code .code-panel pre code').forEach(block => {
-          if (block.textContent?.trim()) {
-            hljs.highlightElement(block as HTMLElement)
-          }
-        })
-      })
-    } catch (err) {
-      error = err instanceof Error ? err.message : String(err)
-      loading = false
-      console.error('Error loading annotated code:', err)
+      if (!name) throw new Error(`not an annotations file: ${sourceUrl}`)
+      const res = await fetch(`/annotations/${name}.json`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      sections = (await res.json()).sections
+    } catch (e) {
+      console.error('[annotated code]', e)
+      failed = true
     }
   }
 
-  onMount(() => {
-    if (sourceUrl) {
-      loadAndParseCode()
-    }
-  })
+  function toggle() {
+    open = !open
+    if (!open) host?.scrollIntoView({ block: 'nearest' })
+  }
+
+  onMount(() => whenNear(host!, load))
 </script>
 
-<div class="annotated-code not-prose">
-  <h2 class="renderer-title">{title}</h2>
-
-  <div class="renderer-container">
-    {#if loading}
-      <div class="loading-state">Loading content...</div>
-    {:else if error}
-      <div class="error-state">Error: {error}</div>
-    {:else}
-      {#each sections as section}
-        {#if section.docs.trim() || section.code.trim()}
-          <div class="code-section">
-            <div class="docs-panel">
-              {@html section.renderedDocs}
-            </div>
-            <div class="code-panel">
-              <pre><code class="language-python">{section.code}</code></pre>
-            </div>
-          </div>
-        {/if}
-      {/each}
-    {/if}
+{#snippet row(s: RenderedSection)}
+  <div class="an-sec">
+    <div class="an-docs">{@html s.docs}</div>
+    <div class="an-code">{@html s.code}</div>
   </div>
+{/snippet}
+
+<div class="annotated wide not-prose" bind:this={host}>
+  <div class="an-title">
+    <span>{label}</span>
+    <span>
+      {#if failed}couldn't load the source ·
+      {:else if sections}{sections.length} sections · python ·
+      {:else}loading… ·
+      {/if}
+      <a href={sourceUrl}>source</a>
+    </span>
+  </div>
+  {#if sections}
+    {#each sections.slice(0, SHOW) as s}{@render row(s)}{/each}
+    {#if hidden}
+      <div id="{uid}-rest" hidden={!open}>
+        {#each sections.slice(SHOW) as s}{@render row(s)}{/each}
+      </div>
+      <button class="an-more" type="button" aria-expanded={open} aria-controls="{uid}-rest" onclick={toggle}>
+        {open ? 'show fewer' : `show the other ${hidden} sections`}
+      </button>
+    {/if}
+  {/if}
 </div>
 
 <style>
-  .annotated-code {
-    width: 100%;
-    margin: 0 auto;
-    padding: 1rem;
+  .annotated {
+    margin-block: 1.8rem;
+    border-top: 1px solid var(--rule);
   }
-
-  .renderer-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: hsl(var(--bc));
+  .an-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c2);
+    padding: 0.7rem 0 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.2rem 1rem;
   }
-
-  .renderer-container {
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    border: 1px solid hsl(var(--bc) / 0.15);
+  .an-title span:last-child {
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: none;
+    white-space: nowrap;
   }
-
-  .loading-state,
-  .error-state {
-    padding: 2rem;
-    text-align: center;
-    font-size: 1rem;
-  }
-
-  .error-state {
-    color: hsl(var(--er));
-  }
-
-  .code-section {
+  .an-sec {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    border-bottom: 1px solid hsl(var(--bc) / 0.15);
-    min-height: 100px;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 0 1.4rem;
+    border-top: 1px dashed var(--rule);
   }
-
-  .code-section:last-child {
-    border-bottom: none;
-  }
-
-  @media (max-width: 768px) {
-    .code-section {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .docs-panel {
+  .an-docs {
+    padding: 0.9rem 0;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--fg2);
     min-width: 0;
-    padding: 1.5rem;
-    background-color: hsl(var(--b1));
-    border-right: 1px solid hsl(var(--bc) / 0.15);
-    color: hsl(var(--bc));
   }
-
-  .code-panel {
-    min-width: 0;
-    padding: 1.5rem;
-    background-color: hsl(var(--b2));
+  .an-docs > :global(:first-child) {
+    margin-top: 0;
   }
-
-  .code-panel pre {
-    margin: 0;
-    max-width: 100%;
-    background-color: var(--code-reveal-bg, #272822);
-    border-radius: 0.5rem;
-    padding: 1rem;
-    overflow-x: auto;
+  .an-docs > :global(:last-child) {
+    margin-bottom: 0;
   }
-
-  .code-panel pre code {
-    font-size: 0.875rem;
-    line-height: 1.5;
-    font-family: 'Fira Code', monospace;
-    background-color: transparent;
-    padding: 0;
-    color: var(--code-reveal-fg, #dddddd);
-    white-space: pre;
-  }
-
-  @media (max-width: 768px) {
-    .docs-panel {
-      border-right: none;
-      border-bottom: 1px solid hsl(var(--bc) / 0.15);
-    }
-
-    .annotated-code {
-      padding: 0.5rem;
-    }
-  }
-
-  .docs-panel :global(h1) {
-    font-size: 1.875rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: hsl(var(--bc));
-  }
-
-  .docs-panel :global(h2) {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-    border-bottom: 1px solid hsl(var(--bc) / 0.15);
-    padding-bottom: 0.5rem;
-    color: hsl(var(--bc));
-  }
-
-  .docs-panel :global(h3) {
-    font-size: 1.25rem;
+  .an-docs :global(:is(h3, h4)) {
+    font-size: 1.1rem;
     font-weight: 500;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    color: hsl(var(--bc) / 0.9);
+    margin: 0.2rem 0 0.5rem;
+    color: var(--fg);
   }
-
-  .docs-panel :global(p) {
-    margin-bottom: 1rem;
-    line-height: 1.625;
-    color: hsl(var(--bc) / 0.9);
+  .an-docs :global(:is(p, ul, ol)) {
+    margin: 0 0 0.7rem;
   }
-
-  .docs-panel :global(code) {
-    background-color: hsl(var(--b3));
-    padding: 0.125rem 0.375rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    font-family: 'Fira Code', monospace;
-    color: hsl(var(--bc));
+  .an-docs :global(:is(ul, ol)) {
+    padding-left: 1.2rem;
   }
-
-  .docs-panel :global(pre) {
-    background-color: hsl(var(--b3));
-    padding: 1rem;
-    border-radius: 0.5rem;
+  .an-docs :global(ul) {
+    list-style: disc;
+  }
+  .an-docs :global(ol) {
+    list-style: decimal;
+  }
+  .an-docs :global(:not(pre) > code) {
+    font-family: var(--mono);
+    font-size: 0.8em;
+    background: var(--panel);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+  .an-docs :global(.katex-display) {
     overflow-x: auto;
-    margin-bottom: 1rem;
+    overflow-y: hidden;
+    margin: 0.6rem 0;
   }
-
-  .docs-panel :global(pre code) {
-    background-color: transparent;
+  .an-code {
+    padding: 0.9rem 0;
+    min-width: 0;
+  }
+  .an-code:empty {
     padding: 0;
   }
-
-  .docs-panel :global(ul) {
-    list-style-type: disc;
-    padding-left: 1.5rem;
-    margin-bottom: 1rem;
+  .an-code :global(pre.shiki) {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.6;
+    padding: 0.8rem 1rem 0.8rem 1.2rem;
   }
-
-  .docs-panel :global(ol) {
-    list-style-type: decimal;
-    padding-left: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .docs-panel :global(li) {
-    margin-bottom: 0.5rem;
-    color: hsl(var(--bc) / 0.9);
-  }
-
-  .docs-panel :global(a) {
-    color: hsl(var(--p));
-    text-decoration: underline;
-  }
-
-  .docs-panel :global(a:hover) {
-    opacity: 0.85;
-  }
-
-  .docs-panel :global(blockquote) {
-    border-left: 4px solid hsl(var(--bc) / 0.2);
-    padding-left: 1rem;
-    margin: 1rem 0;
-    color: hsl(var(--bc) / 0.7);
-    font-style: italic;
-  }
-
-  .docs-panel :global(table) {
+  .an-more {
+    display: block;
     width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
+    margin-top: 0.4rem;
+    padding: 0.55rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    background: none;
+    border: 1px dashed var(--rule);
+    border-radius: 8px;
+    cursor: pointer;
   }
-
-  .docs-panel :global(th),
-  .docs-panel :global(td) {
-    border: 1px solid hsl(var(--bc) / 0.15);
-    padding: 0.5rem;
-    text-align: left;
+  .an-more:hover {
+    color: var(--fg);
+    border-color: var(--g1);
   }
-
-  .docs-panel :global(th) {
-    background-color: hsl(var(--b3));
-    font-weight: 600;
+  @media (min-width: 48rem) {
+    .an-code :global(pre.shiki) {
+      position: sticky;
+      top: 1rem;
+      max-height: calc(100vh - 2rem);
+      overflow: auto;
+    }
+  }
+  @media (max-width: 47.99rem) {
+    .an-sec {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .an-docs {
+      padding-bottom: 0.2rem;
+    }
   }
 </style>
