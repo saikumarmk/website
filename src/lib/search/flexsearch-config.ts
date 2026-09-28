@@ -20,7 +20,8 @@ export const STATIC_SEARCH_PAGES = [
     content: '',
     type: 'page'
   },
+  { title: 'Project Dex', path: '/dex', summary: 'Every project, one entry each', content: '', type: 'page' },
   { title: 'Yggdrasil', path: '/growth/2026', summary: 'The 2026 skill tree and learning roadmap', content: '', type: 'page' },
-  { title: 'About', path: '/about', summary: 'Who I am', content: '', type: 'page' },
-  { title: 'Experience', path: '/portfolio', summary: 'Roles and research', content: '', type: 'page' }
+  { title: 'About', path: '/#about', summary: 'Who I am', content: '', type: 'page' },
+  { title: 'Experience', path: '/#experience', summary: 'Roles and research', content: '', type: 'page' }
 ] as const

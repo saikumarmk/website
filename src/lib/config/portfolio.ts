@@ -1,190 +1,220 @@
 import type { Experience, Project } from '$lib/types/portfolio'
 import { assets } from '$lib/config/assets'
 
+/** In Dex order: roughly by how much of me went into each. */
 export const projects: Project[] = [
+    {
+        id: 'monash-handbook-plus',
+        name: "monash-handbook-plus",
+        tags: ['Data Vis', 'Web', 'Education'],
+        feature: '',
+        majorProject: true,
+        badges: ['React', 'TypeScript', 'D3.js'],
+        description: 'Unit search, cost calculator, areas of study browser, an interactive prerequisite graph, a degree planner with auto-scheduling, a pathway finder and shareable study plans.',
+        img: '/assets/monash-handbook-plus-logo.png',
+        link: 'https://github.com/saikumarmk/monash-handbook-plus',
+        buttons: [{ label: 'Website', href: 'https://saikumarmk.github.io/monash-handbook-plus/' }],
+        category: 'Planner',
+        partner: { name: 'xatu', reason: 'sees the past and future at once, like a degree planner' },
+        post: 'circles-clone-requirements'
+    },
+    {
+        id: 'saikumarmk-website',
+        name: "saikumarmk.com",
+        tags: ['Web', 'Portfolio'],
+        feature: '',
+        majorProject: true,
+        badges: ['SvelteKit', 'TypeScript', 'Tailwind', 'THREE.js'],
+        description: 'This site: writing, the Yggdrasil skill tree, the project dex and a few 3D visualisations.',
+        img: '/assets/sai_red.webp',
+        link: 'https://github.com/saikumarmk/saikumarmk.github.io',
+        buttons: [{ label: 'Website', href: 'https://saikumarmk.com' }],
+        category: 'Home',
+        partner: { name: 'smeargle', reason: 'paints its own territory' },
+        post: 'cool-stuff'
+    },
+    {
+        id: 'mini-melbourne-3d',
+        name: "mini-melbourne-3d",
+        tags: ['Data Vis', 'Web'],
+        feature: '',
+        majorProject: false,
+        badges: ['Mapbox GL JS'],
+        description: 'A new Mini Melbourne: buses, trams and V/Line in 3D.',
+        img: '/assets/projects/minimelbnew.webp',
+        link: 'https://github.com/saikumarmk/mini-melbourne-3d',
+        buttons: [{ label: 'Website', href: 'https://transit.saikumarmk.com/' }],
+        category: 'Transit',
+        partner: { name: 'porygon', reason: 'made entirely of polygons, like the city' }
+    },
     {
         id: 'pokered-tournament',
         name: 'pokered-trainer-tournament',
         tags: ['Simulation'],
         feature: '',
-        description:
-            'A recreation of the Pokemon Red ELO tournament using the PKMN engine.',
+        description: 'A recreation of the Pokémon Red Elo tournament on the pkmn engine.',
         majorProject: false,
         badges: ['Python', 'ASM'],
         img: '/assets/red.png',
-        link: 'https://github.com/saikumarmk/pokered-trainer-tournament'
+        link: 'https://github.com/saikumarmk/pokered-trainer-tournament',
+        category: 'Tournament',
+        partner: { name: 'pikachu', reason: "Red's partner, naturally" },
+        post: 'pokered-elo-1'
     },
     {
-        id: 'monash-handbook-scraper',
-        name: 'monash-handbook-scraper',
-        tags: ['Scraping'],
+        id: 'skirtor',
+        name: "skirtor",
+        tags: ['Data Vis', 'Astrophysics'],
         feature: '',
-        description:
-            'Scraper + Formatter for the Monash Handbook written in Go.',
         majorProject: false,
-        badges: ['Go'],
-        img: 'https://go.dev/blog/go-brand/Go-Logo/PNG/Go-Logo_Blue.png',
-        link: 'https://github.com/saikumarmk/monash-handbook-scraper'
-    },
-    {
-        id: 'unit-dashboard',
-        name: 'unit-scores-dashboard',
-        tags: ['Data Vis'],
-        feature: '',
-        description:
-            'A newer SETU visualisation tool built in React.',
-        majorProject: false,
-        badges: ['React'],
-        img: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
-        buttons: [{ label: 'Demo', href: 'https://saikumarmk.github.io/unit-scores-dashboard/' }],
-        link: 'https://github.com/saikumarmk/unit-scores-dashboard'
-    },
-    {
-        id: 'vicroads-transport-api',
-        name: 'vicroads-transport-api',
-        tags: ['Library'],
-        feature: '',
-        description:
-            'An async python wrapper for the VicRoads DataExchange API.',
-        majorProject: false,
-        badges: ['Python'],
-        img: '/assets/tram.png',
-        link: 'https://github.com/saikumarmk/vicroads-transport-api'
-    },
-    {
-        id: 'tungsten',
-        name: 'tungsten',
-        tags: ['Library'],
-        feature: '',
-        description:
-            'A Wolfram library written to assist with high school mathematics assessments.',
-        majorProject: false,
-        badges: ['Wolfram'],
-        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png',
-        link: 'https://github.com/saikumarmk/tungsten'
-    },
-    {
-        id: 'neochomp',
-        name: 'neochomp',
-        tags: ['Low Level'],
-        feature: '',
-        description:
-            'Software for rendering animations on a LED-Matrix.',
-        majorProject: false,
-        badges: ['Python', 'Hardware'],
-        img: '/assets/neochomp.png',
-        link: 'https://github.com/saikumarmk/neochomp'
-    },
-    {
-        id: 'maidenless',
-        name: 'project-maidenless',
-        tags: ['AI', 'Data Vis'],
-        feature: '',
-        description:
-            'A streamlit application which generates text from Love Letter pages and visualises information about them.',
-        majorProject: false,
-        badges: ['Python', 'GPT-2', 'Streamlit'],
-        img: '/assets/projects/maidenless.webp',
-        link: 'https://github.com/saikumarmk/project-maidenless'
-    },
-    {
-        id: 'uwucode',
-        name: 'uwucode',
-        tags: ['Low Level'],
-        feature: '',
-        description:
-            'A toy programming language designed in Rust. It features a custom lexer and parser built from scratch. The language supports variables, functions, and control flow. It was created as a learning project to understand compiler design. The syntax is intentionally playful and fun to write.',
-        majorProject: false,
-        badges: ['Rust'],
-        img: 'https://github.com/saikumarmk/uwucode/raw/main/images/uwucode_logo.png',
-        link: 'https://github.com/saikumarmk/uwucode'
-    },
-    {
-        id: 'setools',
-        name: 'SETools',
-        tags: ['Data Vis', 'Scraping'],
-        feature: '',
-        description:
-            'A visualisation tool for unit scores.',
-        majorProject: false,
-        badges: ['Python'],
-        img: 'https://github.com/saikumarmk/SETool/raw/main/assets/logo.png',
-        link: 'https://github.com/saikumarmk/SETool'
+        badges: ['Streamlit'],
+        description: 'Compressing the SKIRTOR model files and visualising them.',
+        img: '/assets/blackhole.png',
+        link: 'https://github.com/saikumarmk/skirtor',
+        buttons: [{ label: 'Website', href: 'https://skirtor.saikumarmk.com/' }],
+        category: 'Dust Torus',
+        partner: { name: 'lunatone', reason: 'fell from space' }
     },
     {
         id: 'voltchip',
         name: 'voltchip',
         tags: ['Low Level'],
         feature: '',
-        description:
-            'A CHIP-8 emulator designed in C that can be targetted for the web.',
+        description: 'A CHIP-8 emulator written in C that can target the web.',
         majorProject: false,
         badges: ['C', 'WASM'],
         img: 'https://github.com/saikumarmk/web-voltchip/raw/main/assets/logo.png',
-        link: 'https://github.com/saikumarmk/web-voltchip'
+        link: 'https://github.com/saikumarmk/web-voltchip',
+        category: 'Emulator',
+        partner: { name: 'rotom', reason: 'lives inside machines' },
+        post: 'emulation-wasm'
+    },
+    {
+        id: 'uwucode',
+        name: 'uwucode',
+        tags: ['Low Level'],
+        feature: '',
+        description: 'A toy language with a lexer and parser built from scratch, written to learn compiler design.',
+        majorProject: false,
+        badges: ['Rust'],
+        img: 'https://github.com/saikumarmk/uwucode/raw/main/images/uwucode_logo.png',
+        link: 'https://github.com/saikumarmk/uwucode',
+        category: 'Compiler',
+        partner: { name: 'unown', reason: 'a language made of glyphs' },
+        post: 'uwucode'
+    },
+    {
+        id: 'unit-scores-dashboard',
+        name: 'unit-scores-dashboard',
+        tags: ['Data Vis'],
+        feature: '',
+        description: 'A newer SETU visualisation tool.',
+        majorProject: false,
+        badges: ['React'],
+        img: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
+        buttons: [{ label: 'Demo', href: 'https://saikumarmk.github.io/unit-scores-dashboard/' }],
+        link: 'https://github.com/saikumarmk/unit-scores-dashboard',
+        category: 'Survey',
+        partner: { name: 'alakazam', reason: 'keeps score (IQ of 5,000)' },
+        post: 'unit-scores-dashboard'
+    },
+    {
+        id: 'setools',
+        name: 'SETools',
+        tags: ['Data Vis', 'Scraping'],
+        feature: '',
+        description: 'A visualisation tool for unit scores. Retired in favour of unit-scores-dashboard.',
+        majorProject: false,
+        badges: ['Python'],
+        img: 'https://github.com/saikumarmk/SETool/raw/main/assets/logo.png',
+        link: 'https://github.com/saikumarmk/SETool',
+        category: 'Survey',
+        partner: { name: 'natu', reason: 'stares at things until it understands them' },
+        post: 'the-story-of-setool',
+        retired: 'unit-scores-dashboard'
+    },
+    {
+        id: 'monash-handbook-scraper',
+        name: 'monash-handbook-scraper',
+        tags: ['Scraping'],
+        feature: '',
+        description: 'Scraper and formatter for the Monash Handbook.',
+        majorProject: false,
+        badges: ['Go'],
+        img: 'https://go.dev/blog/go-brand/Go-Logo/PNG/Go-Logo_Blue.png',
+        link: 'https://github.com/saikumarmk/monash-handbook-scraper',
+        category: 'Harvester',
+        partner: { name: 'sableye', reason: 'digs up gems in the dark' },
+        post: 'universe-of-units'
+    },
+    {
+        id: 'neochomp',
+        name: 'neochomp',
+        tags: ['Low Level'],
+        feature: '',
+        description: 'Software for rendering animations on an LED matrix.',
+        majorProject: false,
+        badges: ['Python', 'Hardware'],
+        img: '/assets/neochomp.png',
+        link: 'https://github.com/saikumarmk/neochomp',
+        category: 'Lantern',
+        partner: { name: 'lanturn', reason: 'lights up the dark' },
+        post: 'neochomp-blog-1'
+    },
+    {
+        id: 'maidenless',
+        name: 'project-maidenless',
+        tags: ['AI', 'Data Vis'],
+        feature: '',
+        description: 'Generates text from love-letter pages and visualises information about them.',
+        majorProject: false,
+        badges: ['Python', 'GPT-2', 'Streamlit'],
+        img: '/assets/projects/maidenless.webp',
+        link: 'https://github.com/saikumarmk/project-maidenless',
+        category: 'Love Letter',
+        partner: { name: 'luvdisc', reason: 'shaped like a love letter' }
+    },
+    {
+        id: 'vicroads-transport-api',
+        name: 'vicroads-transport-api',
+        tags: ['Library'],
+        feature: '',
+        description: 'An async Python wrapper for the VicRoads DataExchange API.',
+        majorProject: false,
+        badges: ['Python'],
+        img: '/assets/tram.png',
+        link: 'https://github.com/saikumarmk/vicroads-transport-api',
+        category: 'Wrapper',
+        partner: { name: 'klink', reason: 'gears that mesh with other gears' }
+    },
+    {
+        id: 'tungsten',
+        name: 'tungsten',
+        tags: ['Library'],
+        feature: '',
+        description: 'A Wolfram library to help with high school mathematics assessments.',
+        majorProject: false,
+        badges: ['Wolfram'],
+        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/888.png',
+        link: 'https://github.com/saikumarmk/tungsten',
+        category: 'Maths',
+        partner: { name: 'metagross', reason: 'four brains, all doing maths' }
     },
     {
         id: 'acmonaghan',
         name: "acmonaghan.github.io",
-        tags: ['THREE', 'web-dev'],
+        tags: ['Web'],
         feature: '',
         majorProject: false,
         badges: ['THREE.js'],
-        description: 'A CV site built on eldoraboo/portable-portfolio with THREE.js rendering the background.',
+        description: 'A CV site built on portable-portfolio, with THREE.js rendering the background.',
         img: '/assets/projects/acm.webp',
         link: 'https://github.com/acmonaghan/acmonaghan.github.io',
-        buttons: [{ label: 'Website', href: 'https://acmonaghan.github.io' }]
-    },
-    {
-        id: 'mini-melbourne-3d',
-        name: "mini-melbourne-3d",
-        tags: ['Data Vis', 'web-dev'],
-        feature: '',
-        majorProject: false,
-        badges: ['mapbox'],
-        description: 'A new version of Mini Melbourne with 3D rendering using Mapbox GL JS + bus, tram, and VLine data.',
-        img: '/assets/projects/minimelbnew.webp',
-        link: 'https://github.com/saikumarmk/mini-melbourne-3d',
-        buttons: [{ label: 'Website', href: 'https://transit.saikumarmk.com/' }]
-    },
-    {
-        id: 'skirtor',
-        name: "skirtor",
-        tags: ['Data Vis', 'web-dev', 'Astrophysics'],
-        feature: '',
-        majorProject: false,
-        badges: ['Streamlit'],
-        description: 'An effort to compress the SKIRTOR model files and visualise them through Streamlit.',
-        img: '/assets/blackhole.png',
-        link: 'https://github.com/saikumarmk/skirtor',
-        buttons: [{ label: 'Website', href: 'https://skirtor.saikumarmk.com/' }]
-    },
-    {
-        id: 'monash-handbook-plus',
-        name: "monash-handbook-plus",
-        tags: ['Data Vis', 'web-dev', 'Education'],
-        feature: '',
-        majorProject: true,
-        badges: ['React', 'TypeScript', 'D3.js'],
-        description: 'A comprehensive Monash University handbook tool with unit search, cost calculator, areas of study browser, interactive graph visualization, degree planner with auto-scheduling, pathway finder, and shareable study plans.',
-        img: '/assets/monash-handbook-plus-logo.png',
-        link: 'https://github.com/saikumarmk/monash-handbook-plus',
-        buttons: [{ label: 'Website', href: 'https://saikumarmk.github.io/monash-handbook-plus/' }]
-    },
-    {
-        id: 'saikumarmk-website',
-        name: "saikumarmk.com",
-        tags: ['web-dev', 'Portfolio'],
-        feature: '',
-        majorProject: true,
-        badges: ['SvelteKit', 'TypeScript', 'TailwindCSS', 'THREE.js'],
-        description: 'My personal website and blog built with SvelteKit. Features a Pokemon-themed aesthetic, interactive skill tree (Yggdrasil), blog posts about tech and university, project showcase, and 3D visualizations.',
-        img: '/assets/sai_red.webp',
-        link: 'https://github.com/saikumarmk/saikumarmk.github.io',
-        buttons: [{ label: 'Website', href: 'https://saikumarmk.com' }]
+        buttons: [{ label: 'Website', href: 'https://acmonaghan.github.io' }],
+        category: 'Portfolio',
+        partner: { name: 'ditto', reason: 'a copy of portable-portfolio, made its own' }
     }
 ]
-
 
 export const experience: Experience[] = [
     {

@@ -13,7 +13,7 @@
   const categoryMap: Record<string, string> = {
     'pokered-tournament': 'Tournament Simulator',
     'monash-handbook-scraper': 'Web Scraper',
-    'unit-dashboard': 'Data Visualization',
+    'unit-scores-dashboard': 'Data Visualization',
     'vicroads-transport-api': 'API Wrapper',
     'tungsten': 'Math Library',
     'neochomp': 'LED Matrix Renderer',
