@@ -10,7 +10,7 @@ test.describe('link previews and favicons', () => {
     expect(og).toMatch(/^https?:\/\/[^/]+\/og\/essence-associativity\.png$/)
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image')
 
-    const icons = await page.locator('link[rel="icon"]').evaluateAll(ls => ls.map(l => l.getAttribute('href')))
+    const icons = await page.locator('link[rel="icon"]').evaluateAll(ls => ls.map(l => new URL((l as HTMLLinkElement).href).pathname))
     expect(icons).toEqual(['/og/essence-associativity-32.png', '/og/essence-associativity-16.png'])
     for (const path of [new URL(og!).pathname, ...icons]) {
       const res = await request.get(path!)

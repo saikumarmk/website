@@ -232,7 +232,7 @@
     fill: transparent;
     stroke: none;
     pointer-events: all;
-    cursor: pointer;
+    cursor: var(--pointer);
   }
   .bed a:focus-visible .hit {
     stroke: var(--r3);

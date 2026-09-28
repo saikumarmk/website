@@ -240,16 +240,16 @@
     <div>
       <h2 class="smallcaps">Project dex · highlights</h2>
       <div class="dex">
-        {#each highlights as p, i (p.id)}
-          <a class="stitched" href={p.buttons?.[0]?.href ?? p.link}>
+        {#each highlights as p (p.id)}
+          <a class="stitched" href="/dex#{p.id}">
             <Specimen seed={p.name} width={60} height={60} R={20} cy={0.5} leaves={false} speed={2} class="bloom" />
-            <div class="no">No. {no(i)}</div>
+            <div class="no">No. {no(projects.indexOf(p))}</div>
             <div class="pn">{p.name}</div>
             <div class="pd">{p.description}</div>
           </a>
         {/each}
       </div>
-      <p class="dex-all"><a href="/portfolio/projects/">All {projects.length} entries →</a></p>
+      <p class="dex-all"><a href="/dex">All {projects.length} entries →</a></p>
     </div>
   </section>
 
@@ -290,7 +290,7 @@
   .home { position: relative; display: flow-root; overflow-x: clip; }
 
   /* the spray sits in the margin column and off the right edge, never over the reading column */
-  .spray { position: absolute; top: 1rem; left: calc(var(--measure) + var(--gap) - 3rem); width: 26rem; height: 16.5rem; z-index: 1; cursor: pointer; }
+  .spray { position: absolute; top: 1rem; left: calc(var(--measure) + var(--gap) - 3rem); width: 26rem; height: 16.5rem; z-index: 1; cursor: var(--pointer); }
   .spray :global(svg) { width: 100%; height: 100%; }
   @media (max-width: 59.99rem) { .spray { left: auto; right: -2rem; top: 0; width: 15rem; height: 9.5rem; } }
   @media (max-width: 34rem) { .spray { width: 11rem; height: 7rem; right: -2.5rem; top: 2.5rem; } }
@@ -314,7 +314,7 @@
   section.block > h2, section.block > div > h2 { margin: 0 0 0.6rem; }
   .all { margin-top: 1rem; }
   .status { font-style: italic; color: var(--muted); margin: 2.5rem 0; font-size: 17px; }
-  .status button { font-style: normal; font-family: var(--mono); font-size: 12px; color: var(--c2); background: none; border: 0; cursor: pointer; }
+  .status button { font-style: normal; font-family: var(--mono); font-size: 12px; color: var(--c2); background: none; border: 0; cursor: var(--pointer); }
 
   /* ---------- trainer card + dex highlights ---------- */
   .stitched { position: relative; }
@@ -334,7 +334,7 @@
   .tc-window :global(canvas) { width: 100%; height: 100%; display: block;
     -webkit-mask-image: radial-gradient(120% 95% at 50% 30%, #000 45%, transparent 88%); mask-image: radial-gradient(120% 95% at 50% 30%, #000 45%, transparent 88%); }
   :global([data-theme='ivory']) .tc-window :global(canvas) { --c1: var(--r3); --c2: var(--g2); }
-  .tc-pause { position: absolute; right: 1.2rem; top: 0.2rem; font-family: var(--mono); font-size: 10.5px; color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; }
+  .tc-pause { position: absolute; right: 1.2rem; top: 0.2rem; font-family: var(--mono); font-size: 10.5px; color: var(--muted); background: none; border: 0; padding: 0; cursor: var(--pointer); }
   .tc-pause:hover { color: var(--fg); }
   .tc-body { display: grid; grid-template-columns: 84px 1fr; gap: 1rem; padding: 0 1.2rem; position: relative; z-index: 1; margin-top: -64px; align-items: end; }
   .tc-body h3, .tc-body p { text-shadow: 0 0 6px var(--panel), 0 0 12px var(--panel), 0 0 2px var(--panel); }
@@ -352,7 +352,7 @@
   .tc-foot { display: grid; grid-template-columns: 1fr 150px; align-items: end; }
   .tc-foot :global(.tc-flower) { width: 150px; height: 128px; display: block; margin: 0 0.2rem 0.2rem 0; }
   .badges { display: flex; gap: 0.45rem; padding: 0.9rem 1.2rem 0.4rem; flex-wrap: wrap; }
-  .badge { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--fg2); background: var(--bg); display: grid; place-items: center; font-family: var(--mono); font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--fg2); cursor: pointer; padding: 0; }
+  .badge { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--fg2); background: var(--bg); display: grid; place-items: center; font-family: var(--mono); font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--fg2); cursor: var(--pointer); padding: 0; }
   .badge.stitched::after { inset: 4px; border-radius: 50%; }
   .badge.on { background: var(--r3); color: var(--sel-ink); border-color: var(--r3); }
   .tc-detail { padding: 0.2rem 1.2rem 1.1rem; font-size: 15px; line-height: 1.45; color: var(--fg2); min-height: 4.4rem; }
@@ -374,7 +374,7 @@
   .exp-lede b { font-weight: 500; color: var(--fg); }
   .rec { margin: 0 -0.9rem; }
   .rec-head { display: flex; flex-wrap: wrap; row-gap: 0; align-items: baseline; gap: 0 0.7rem; padding: 0.45rem 0.9rem; width: 100%; text-align: left; font: inherit; color: inherit; background: none; border: 0; }
-  button.rec-head { cursor: pointer; }
+  button.rec-head { cursor: var(--pointer); }
   .rec-head .yr { font-family: var(--mono); font-size: 12px; color: var(--muted); width: 6.2rem; flex: none; }
   .rec-head .role { color: var(--fg); }
   .rec-head .leader { flex: 1; border-bottom: 1px dotted color-mix(in srgb, var(--muted) 60%, transparent); transform: translateY(-0.3em); min-width: 1rem; }

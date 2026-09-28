@@ -223,7 +223,7 @@
     font-family: var(--mono);
     font-size: 12.5px;
     color: var(--muted);
-    cursor: pointer;
+    cursor: var(--pointer);
     white-space: nowrap;
   }
   .tabs button[aria-selected='true'] {

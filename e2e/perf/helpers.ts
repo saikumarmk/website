@@ -167,7 +167,7 @@ export async function measureSearchModalReady(page: Page): Promise<{ openMs: num
 
   const resultStart = Date.now()
   await input.fill('About')
-  await page.locator('[role="dialog"][aria-modal="true"] a[href="/about"]').waitFor({ state: 'visible', timeout: 10_000 })
+  await page.locator('[role="dialog"][aria-modal="true"] a[href="/#about"]').waitFor({ state: 'visible', timeout: 10_000 })
   const resultMs = Date.now() - resultStart
 
   return { openMs, indexReadyMs, resultMs }

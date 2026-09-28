@@ -158,7 +158,7 @@
     font-family: var(--mono);
     font-size: 10.5px;
     color: var(--g2);
-    cursor: pointer;
+    cursor: var(--pointer);
     padding: 0;
     position: relative;
     z-index: 1;

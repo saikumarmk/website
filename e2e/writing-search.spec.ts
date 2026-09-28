@@ -62,7 +62,7 @@ test.describe('search', () => {
     await page.goto('/', { waitUntil: 'networkidle' })
     const input = page.locator('#search-title')
     await expect(async () => {
-      await page.getByRole('button', { name: 'search' }).click()
+      await page.getByRole('button', { name: /^Search/ }).click()
       await expect(input).toBeVisible({ timeout: 250 })
     }).toPass({ timeout: 10_000 })
     await input.fill('Essence of Recursion')

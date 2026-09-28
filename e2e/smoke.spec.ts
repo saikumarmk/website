@@ -78,7 +78,7 @@ test('search modal finishes loading and returns a result', async ({ page }) => {
   }).toPass({ timeout: 10000 })
   await expect(input).not.toBeDisabled({ timeout: 20000 })
   await input.fill('About')
-  await expect(page.locator('[role="dialog"][aria-modal="true"] a[href="/about"]')).toBeVisible({
+  await expect(page.locator('[role="dialog"][aria-modal="true"] a[href="/#about"]')).toBeVisible({
     timeout: 5000
   })
 })

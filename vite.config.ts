@@ -107,7 +107,10 @@ export default defineConfig({
     SvelteKitPWA({
       registerType: 'autoUpdate',
       manifest: false,
+      // Vite's base is './' (SvelteKit's relative paths), which registered ./sw.js relative to each page
+      base: '/',
       scope: '/',
+      kit: { trailingSlash: 'always' },
       workbox: {
         // Increase precache limit for large chunks
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MB

@@ -38,7 +38,10 @@
 
   let nearby = $derived.by(() => {
     if (!post) return []
-    const listed = ($storedPosts ?? []).filter((p) => p.path !== post.path && !p.flags?.includes('unlisted') && p.type === 'article')
+    const isNode = (p: Blog.Post) => p.path.startsWith('/growth/')
+    const listed = ($storedPosts ?? []).filter(
+      (p) => p.path !== post.path && !p.flags?.includes('unlisted') && p.type === 'article' && isNode(p) === isNode(post)
+    )
     const same = topic ? listed.filter((p) => topicOf(p) === topic) : []
     return (same.length ? same : listed).slice(0, 3)
   })

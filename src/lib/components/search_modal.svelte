@@ -367,7 +367,7 @@
     align-items: center;
     padding: 0.35rem 0.9rem;
     margin: 0 -0.9rem;
-    cursor: pointer;
+    cursor: var(--pointer);
     text-decoration: none;
     color: var(--fg);
   }

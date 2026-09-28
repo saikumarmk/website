@@ -215,7 +215,7 @@
   .dex-count .kn { width: 7px; height: 7px; margin-right: 0.35rem; vertical-align: 0.05em; }
 
   .tabs { display: flex; flex-wrap: wrap; gap: 0.1rem; margin: 0 0 2.2rem -1rem; }
-  .tabs button { background: none; border: 0; padding: 0.3rem 1rem; font-family: var(--mono); font-size: 12.5px; color: var(--muted); cursor: pointer; }
+  .tabs button { background: none; border: 0; padding: 0.3rem 1rem; font-family: var(--mono); font-size: 12.5px; color: var(--muted); cursor: var(--pointer); }
   .tabs button[aria-selected='true'] { color: var(--fg); text-decoration: underline dashed var(--g1); text-underline-offset: 4px; }
   .tabs sup { font-size: 9.5px; margin-left: 0.2rem; opacity: 0.75; }
 
@@ -243,17 +243,17 @@
   .dex-stats dt { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding-top: 0.2rem; }
   .dex-stats dd { margin: 0; color: var(--fg2); }
   .dex-stats dd i { color: var(--muted); }
-  .evolve { font: inherit; color: var(--r3); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline dotted; text-underline-offset: 3px; }
+  .evolve { font: inherit; color: var(--r3); background: none; border: 0; padding: 0; cursor: var(--pointer); text-decoration: underline dotted; text-underline-offset: 3px; }
   .flavour { margin: 0 0 0.9rem; font-size: 16px; line-height: 1.5; color: var(--fg); }
   .links { display: flex; gap: 1rem; font-family: var(--mono); font-size: 12px; flex-wrap: wrap; }
   .links a { color: var(--link); }
   .scr-nav { display: flex; justify-content: space-between; margin-top: 1rem; }
-  .scr-nav button { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 0; font-family: var(--mono); font-size: 11.5px; }
+  .scr-nav button { background: none; border: 0; color: var(--muted); cursor: var(--pointer); padding: 0; font-family: var(--mono); font-size: 11.5px; }
   .scr-nav button:hover { color: var(--fg); }
 
   .dex-list { list-style: none; padding: 0; margin: 0; }
   .dex-list li { margin: 0 -0.9rem; }
-  .dex-list button { display: grid; grid-template-columns: 30px 3.2rem 1fr auto; align-items: center; gap: 0.5rem; width: 100%; padding: 0.32rem 0.9rem; background: none; border: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+  .dex-list button { display: grid; grid-template-columns: 30px 3.2rem 1fr auto; align-items: center; gap: 0.5rem; width: 100%; padding: 0.32rem 0.9rem; background: none; border: 0; font: inherit; color: inherit; text-align: left; cursor: var(--pointer); }
   .dex-list :global(.mini) { width: 30px; height: 30px; }
   .dn { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
   .nm { font-family: var(--mono); font-size: 13.5px; color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
