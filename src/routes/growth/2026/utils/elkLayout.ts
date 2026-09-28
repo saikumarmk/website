@@ -1,10 +1,16 @@
 import type { GraphNode, GraphLink } from '../types'
+import elkWorkerUrl from 'elkjs/lib/elk-worker.min.js?url'
+
+let elkInstance: Promise<InstanceType<typeof import('elkjs/lib/elk-api.js').default>> | undefined
+
+function getElk() {
+  return (elkInstance ??= import('elkjs/lib/elk-api.js').then(({ default: ELK }) => new ELK({ workerUrl: elkWorkerUrl })))
+}
 
 // ELK layout configuration and computation
 export async function computeElkLayout(nodes: GraphNode[], links: GraphLink[]): Promise<GraphNode[]> {
-  // Dynamic import for SSR safety
-  const ELK = await import('elkjs/lib/elk.bundled.js')
-  const elk = new ELK.default()
+  // Keep the layout engine off the main thread and reuse its worker between filter changes.
+  const elk = await getElk()
 
   const NODE_WIDTH = 180
   const NODE_HEIGHT = 80

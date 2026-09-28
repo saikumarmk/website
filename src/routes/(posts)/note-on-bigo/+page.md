@@ -116,12 +116,14 @@ $$
 From here, you may use the Master theorem (if you remember it), or telescope the recurrence relation to solve it:
 
 $$
-T(n)=T(n/2)+O(1) =(T(n/4)+a)+a = ((T(n/8)+a)+a)+a = \cdots \\
+T(n)=T(n/2)+O(1) =(T(n/4)+a)+a = ((T(n/8)+a)+a)+a = \cdots
+$$
 
+$$
 T(n) = T(n/2^k)+ak
 $$
 
-We hit the base case when $n/2^k =1 \iff n=2^k$ which yields $k = \log_2 n$. Substituting this back in gives us $T(n) = T(1) + a \log_2 n  = c + a\log_2 n$. That is, $T(n) \in O(\log n)$. Note that the base is irrelevant here due to the change in the base formula. You can also see that it would be very easy to convert the iterative binary search into a recursive binary search because the problem reduces to binary searching on a list half the size of the original list repeatedly till you hit a base case. 
+We hit the base case when $n/2^k =1 \iff n=2^k$ which yields $k = \log_2 n$. Substituting this back in gives us $T(n) = T(1) + a \log_2 n = c + a\log_2 n$. That is, $T(n) \in O(\log n)$. Note that the base is irrelevant here due to the change in the base formula. You can also see that it would be very easy to convert the iterative binary search into a recursive binary search because the problem reduces to binary searching on a list half the size of the original list repeatedly till you hit a base case.
 
 
 ```

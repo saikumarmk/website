@@ -1,7 +1,3 @@
-<script module lang="ts">
-  export const prerender = false
-</script>
-
 <script lang="ts">
   import { page } from '$app/stores'
   import growthData from '$lib/../resources/growth2026.json'
