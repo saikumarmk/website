@@ -9,11 +9,10 @@ test.describe('posts feed', () => {
     expect(data.length).toBeGreaterThan(0)
   })
 
-  test('archive lists posts (feed applied after client load)', async ({ page }) => {
+  test('writing index lists posts on topic shelves', async ({ page }) => {
     await page.goto('/archive/', { waitUntil: 'networkidle' })
-    await expect(page.getByRole('heading', { name: 'Archive', exact: true })).toBeVisible()
-    // Default tab is Blog; if every post is a learning note, that view is empty. "All" includes everything.
-    await page.getByRole('button', { name: /^All \(\d+\)$/ }).click()
-    await expect(page.getByRole('heading', { name: 'No posts found' })).toHaveCount(0)
+    await expect(page.getByRole('heading', { name: 'Writing', level: 1 })).toBeVisible()
+    await expect(page.getByRole('tab', { name: /^Everything/ })).toHaveAttribute('aria-selected', 'true')
+    await expect(page.locator('#writing-shelves li[data-slug]').first()).toBeVisible()
   })
 })
