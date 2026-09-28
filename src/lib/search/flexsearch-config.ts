@@ -12,6 +12,7 @@ export const FLEXSEARCH_DOCUMENT_OPTIONS = {
 export const STATIC_SEARCH_PAGES = [
   { title: 'Home', path: '/', summary: 'The front page: recent writing and what I work on', content: '', type: 'page' },
   { title: 'Writing', path: '/archive', summary: 'Everything, by topic', content: '', type: 'page' },
+  { title: 'The garden', path: '/garden', summary: "Every post's flower, sewn onto one cloth", content: '', type: 'page' },
   {
     title: 'The Playbook',
     path: '/playbook',
