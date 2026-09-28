@@ -280,6 +280,7 @@ Configuration in `svelte.config.ts` automatically selects adapter based on envir
 - **The header is not fixed.** It scrolls with the page, so content needs no top offset. Full-screen apps (`/growth/2026`) get the header plus the rest of the viewport via `.app-frame` in `+layout.svelte`.
 - **Measure:** text columns use `.col` (`max-width: var(--measure)`); margin notes use `.with-notes` and `<Sidenote>`. The fluid variables (`--padl`, `--measure`, `--gap`, `--margin`, `--rail`) live in `src/styles/sampler.css`.
 - **Colours:** use the Sampler tokens (`--bg`, `--fg`, `--muted`, `--rule`, `--r1…--r4`, `--g1/--g2`, `--c1…--c3`) rather than DaisyUI classes. Themes are `ivory` and `ink` via `data-theme` on `<html>`; `--g1` gold is decoration only, never text.
+- **Cursor:** the site uses the fat Pikachu cursor (`src/app.pcss`). For clickable things write `cursor: var(--pointer)`, never plain `cursor: pointer`, or the Pikachu disappears on hover.
 - **Menus:** lists, tabs and contents highlight with `use:satinSelect` (`$lib/actions/satin-select.ts`); articles run `use:settleMargins` so margin notes avoid wide blocks.
 - **Embroidery:** `$lib/thread` (pure, SSR-safe) with `Embroidery.svelte` / `Specimen.svelte`; posts carry `seed` and `words` from `mdsvex.config.ts`.
 

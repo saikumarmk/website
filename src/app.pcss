@@ -33,6 +33,19 @@
   box-sizing: border-box;
 }
 
+:root {
+  --pointer: url('/assets/fatpika-cursor.png'), pointer;
+}
+
+html,
+* {
+  cursor: url('/assets/fatpika-cursor.png'), auto;
+}
+
+a, button, [role="button"], input[type="submit"], input[type="button"] {
+  cursor: var(--pointer);
+}
+
 /*
  * The older editorial pages (and anything not yet ported) read these names; they now point at the
  * Sampler tokens in styles/sampler.css so every page follows ivory / ink.

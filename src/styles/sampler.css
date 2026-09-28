@@ -75,9 +75,9 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -0.01em; line-height: 1.15; }
 kbd { font-family: var(--mono); font-size: 0.72em; border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 4px; padding: 0.05em 0.4em; background: var(--bg); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .smallcaps { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
-.pill { font-family: var(--mono); font-size: 12px; background: none; border: 1px solid var(--rule); color: var(--muted); border-radius: 99px; padding: 0.15rem 0.7rem; cursor: pointer; white-space: nowrap; }
+.pill { font-family: var(--mono); font-size: 12px; background: none; border: 1px solid var(--rule); color: var(--muted); border-radius: 99px; padding: 0.15rem 0.7rem; cursor: var(--pointer); white-space: nowrap; }
 .pill:hover { color: var(--fg); border-color: var(--g1); }
-.linkish { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); text-underline-offset: 3px; cursor: pointer; }
+.linkish { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent); text-underline-offset: 3px; cursor: var(--pointer); }
 
 .page { max-width: 92rem; margin: 0 auto; padding: 0 1.5rem 0 var(--padl); position: relative; }
 @media (max-width: 59.99rem) { .page { padding: 0 1.25rem; } }
@@ -116,7 +116,7 @@ header.site nav { display: flex; gap: 1.5rem; align-items: baseline; }
 header.site nav a { text-decoration: none; color: var(--muted); }
 header.site nav a[aria-current='page'], header.site nav a:hover { color: var(--fg); }
 header.site nav a[aria-current='page']::before { content: '§ '; color: var(--c3); }
-.theme-btn, .search-btn { background: none; border: 0; color: var(--muted); cursor: pointer; padding: 0; font-family: var(--mono); font-size: 13px; }
+.theme-btn, .search-btn { background: none; border: 0; color: var(--muted); cursor: var(--pointer); padding: 0; font-family: var(--mono); font-size: 13px; }
 .theme-btn:hover, .search-btn:hover { color: var(--fg); }
 .search-btn kbd { font-size: 10.5px; padding: 0 0.3rem; color: var(--fg2); }
 .narrow-only { display: none; }
@@ -143,7 +143,7 @@ footer.site .set-in { margin-left: auto; }
 
 /* ---------- sidenotes ($lib/components/sidenote.svelte) ---------- */
 .with-notes { position: relative; }
-.sn-ref { font-family: var(--mono); font-size: 0.62em; vertical-align: super; line-height: 0; color: var(--c3); cursor: pointer; padding: 0 1px; border: 0; background: none; }
+.sn-ref { font-family: var(--mono); font-size: 0.62em; vertical-align: super; line-height: 0; color: var(--c3); cursor: var(--pointer); padding: 0 1px; border: 0; background: none; }
 .sn { display: block; font-size: 15px; line-height: 1.5; color: var(--muted); font-style: normal; }
 .sn b, .sn strong { color: var(--fg2); font-weight: 500; }
 .sn .n { font-family: var(--mono); font-size: 11px; color: var(--c3); margin-right: 0.35em; }
@@ -170,7 +170,7 @@ footer.site .set-in { margin-left: auto; }
 .art-head .meta a { text-decoration: none; }
 
 .contents-inline { margin: -1.5rem 0 2.5rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 0.55rem 0; }
-.contents-inline summary { cursor: pointer; list-style: none; display: flex; gap: 0.6rem; align-items: baseline; }
+.contents-inline summary { cursor: var(--pointer); list-style: none; display: flex; gap: 0.6rem; align-items: baseline; }
 .contents-inline summary::-webkit-details-marker { display: none; }
 .contents-inline summary::after { content: '+'; margin-left: auto; font-family: var(--mono); color: var(--c3); }
 .contents-inline[open] summary::after { content: '−'; }
@@ -257,7 +257,7 @@ footer.site .set-in { margin-left: auto; }
 @media (min-width: 60rem) { .post-prose > .codewrap, .post-prose > pre.shiki { margin-right: calc(-1 * (var(--gap) + var(--margin) / 2)); } }
 .code-tab { position: absolute; right: 0.6rem; top: 0.85rem; display: flex; gap: 0.35rem; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; z-index: 1; }
 .code-tab span, .code-tab button { background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 0.05rem 0.45rem; color: var(--muted); }
-.code-tab button { cursor: pointer; font: inherit; letter-spacing: inherit; text-transform: inherit; }
+.code-tab button { cursor: var(--pointer); font: inherit; letter-spacing: inherit; text-transform: inherit; }
 .code-tab button:hover { color: var(--fg); border-color: var(--g1); }
 
 /* ---------- reading vine ($lib/components/reading_vine.svelte) ---------- */
