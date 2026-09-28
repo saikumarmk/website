@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit'
 import type { PageLoad } from './$types'
 
-/** Legacy URL: deck + kitchen sink now live on `/cool-stuff`. No `?` in Location — static hosts reject those paths. */
+/** Old URL for the example deck. No `?` in Location: static hosts can't write that path, so `/cool-stuff/deck/` adds `?present`. */
 export const load: PageLoad = () => {
-  throw redirect(307, '/cool-stuff/deck/')
+  redirect(307, '/cool-stuff/deck/')
 }

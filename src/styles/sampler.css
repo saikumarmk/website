@@ -232,7 +232,7 @@ footer.site .set-in { margin-left: auto; }
 @media (min-width: 60rem) { .post-prose aside.note { position: absolute; left: calc(var(--measure) + var(--gap)); width: var(--margin); } }
 @media (max-width: 59.99rem) { .post-prose aside.note { border-left: 1.5px dashed var(--g1); padding-left: 0.9rem; margin: 0 0 1.2rem; } }
 /* wide figures bleed half-way into the margin */
-@media (min-width: 60rem) { .post-prose > :is(figure, .wide) { margin-right: calc(-1 * (var(--gap) + var(--margin) / 2)); } }
+@media (min-width: 60rem) { .post-prose > :is(figure, .wide), .slide-deck-viewport:not(.slide-deck-viewport--presenting) > .slide > :is(figure, .wide) { margin-right: calc(-1 * (var(--gap) + var(--margin) / 2)); } }
 
 /* ---------- code: a panel with a running-stitch hem on the left ---------- */
 .post-prose pre.shiki, .post-prose pre:not(.not-prose *) {
@@ -254,7 +254,7 @@ footer.site .set-in { margin-left: auto; }
 .post-prose pre.twoslash:hover data-lsp { border-bottom-color: color-mix(in srgb, var(--c2) 50%, transparent); }
 .post-prose pre.twoslash data-lsp:hover::before { content: attr(lsp); position: absolute; transform: translateY(1.4rem); white-space: pre-wrap; padding: 0.25rem 0.5rem; z-index: 50; border-radius: 4px; background: var(--panel); color: var(--fg); border: 1px solid var(--rule); }
 .codewrap { position: relative; }
-@media (min-width: 60rem) { .post-prose > .codewrap, .post-prose > pre.shiki { margin-right: calc(-1 * (var(--gap) + var(--margin) / 2)); } }
+@media (min-width: 60rem) { .post-prose > .codewrap, .post-prose > pre.shiki, .slide-deck-viewport:not(.slide-deck-viewport--presenting) > .slide > :is(.codewrap, pre.shiki) { margin-right: calc(-1 * (var(--gap) + var(--margin) / 2)); } }
 .code-tab { position: absolute; right: 0.6rem; top: 0.85rem; display: flex; gap: 0.35rem; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; z-index: 1; }
 .code-tab span, .code-tab button { background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 0.05rem 0.45rem; color: var(--muted); }
 .code-tab button { cursor: pointer; font: inherit; letter-spacing: inherit; text-transform: inherit; }
