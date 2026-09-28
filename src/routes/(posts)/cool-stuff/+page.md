@@ -12,7 +12,7 @@ topic: journal
 
 # This site in one deck
 
-**Article** at this URL · **present** with [**Present Slides** on this page](/cool-stuff/deck/) (or the button above) for fullscreen. **Mermaid**, **PythonCode**, **SlabTitle** and **Patch** come from `post_layout.svelte` (mdsvex layout exports)—works in **split slides** and **SSR**.
+**Article** at this URL · **present** fullscreen by pressing `p`, the present button, or opening [`?present`](/cool-stuff/?present). **Mermaid**, **PythonCode**, **SlabTitle** and **Patch** come from `post_layout.svelte` (mdsvex layout exports)—works in **split slides** and **SSR**.
 
 ---
 
@@ -29,17 +29,16 @@ topic: journal
 - **Portfolio** — [`/portfolio`](/portfolio) · **Project Dex** — [`/dex`](/dex)
 - **Archive** — [`/archive`](/archive) (all posts)
 - **Playbook** — [`/playbook`](/playbook) → FAQ, timeline, résumé, interviews (`guide-to-tech-*`)
-- **Documents** (header) — résumé PDF, thesis
-- **Monash handbook graph** — external link in the nav
+- **CV** — [`/cv`](/cv), printable · **Garden** — [`/garden`](/garden), every post's flower
 
 ---
 
 ## Features
 
 - **⌘K / Ctrl+K** — full-text search (posts + static pages)
-- **Theme** — palette picker in the header (DaisyUI)
-- **Atom** / **Sitemap** — footer
-- **Slides** — `slides: true` in frontmatter + **Present Slides** or [`/cool-stuff/deck/`](/cool-stuff/deck/) for deck mode (this page)
+- **Theme** — ivory / ink toggle in the header
+- **RSS** — footer
+- **Slides** — `slides: true` in frontmatter, then `p` or `?present` for deck mode (this page)
 
 ---
 
@@ -147,4 +146,4 @@ Wrap content in `class="slide-full-bleed"` for edge-to-edge (theme variable `--s
 
 - **Browse** [Portfolio](/portfolio) and [Archive](/archive)
 - **Search** with ⌘K — try company names, tags, or post titles
-- **Deck mode**: use **Present Slides**, or open [`/cool-stuff/deck/`](/cool-stuff/deck/) for fullscreen slides
+- **Deck mode**: press `p`, or open [`?present`](/cool-stuff/?present) for fullscreen slides
