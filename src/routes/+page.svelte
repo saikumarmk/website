@@ -707,8 +707,8 @@
     grid-row: 1;
     align-self: stretch;
     display: flex;
-    align-items: end;
-    justify-content: end;
+    align-items: flex-end;
+    justify-content: flex-end;
   }
   .tc-foot :global(.tc-flower) {
     width: 120px;
