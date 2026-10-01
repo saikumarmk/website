@@ -42,11 +42,27 @@
 
   onMount(() => {
     if (dev || !browser || !('serviceWorker' in navigator)) return
+    let registration: ServiceWorkerRegistration | undefined
+    const checkForUpdate = () => {
+      if (!registration || !navigator.onLine || document.visibilityState === 'hidden') return
+      void registration.update().catch(error => console.error('Service worker update failed:', error))
+    }
     registerSW({
       immediate: true,
-      onRegistered: r => r && setInterval(async () => await r.update(), 198964),
+      onRegisteredSW: (_url, r) => {
+        registration = r
+        checkForUpdate()
+      },
       onRegisterError: error => console.error(error)
     })
+    const interval = setInterval(checkForUpdate, 5 * 60 * 1000)
+    document.addEventListener('visibilitychange', checkForUpdate)
+    window.addEventListener('online', checkForUpdate)
+    return () => {
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', checkForUpdate)
+      window.removeEventListener('online', checkForUpdate)
+    }
   })
 </script>
 

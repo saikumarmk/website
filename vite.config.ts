@@ -110,14 +110,10 @@ export default defineConfig({
       scope: '/',
       kit: { trailingSlash: 'always' },
       workbox: {
-        // Precache only the home page and entry scripts. Other pages and assets are
-        // cached when visited, so installing the worker does not fetch the whole site.
+        // HTML must reach the network on each visit. Keep an explicit prerendered
+        // pattern so the SvelteKit PWA plugin does not add all HTML/JSON by default.
         navigateFallback: undefined,
-        globPatterns: [
-          'prerendered/pages/index.html',
-          'prerendered/pages/manifest.webmanifest',
-          'client/_app/immutable/entry/*.js'
-        ],
+        globPatterns: ['prerendered/pages/manifest.webmanifest', 'client/_app/immutable/entry/*.js'],
         globIgnores: ['**/sw*', '**/workbox-*'],
         runtimeCaching: [
           {
@@ -130,9 +126,15 @@ export default defineConfig({
             }
           },
           {
-            urlPattern: ({ url }) =>
-              url.origin === self.location.origin &&
-              (url.pathname.startsWith('/_app/immutable/') || url.pathname === '/search-index.json'),
+            urlPattern: ({ url }) => url.origin === self.location.origin && url.pathname === '/search-index.json',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'search-index',
+              expiration: { maxEntries: 1, maxAgeSeconds: 7 * 24 * 60 * 60 }
+            }
+          },
+          {
+            urlPattern: ({ url }) => url.origin === self.location.origin && url.pathname.startsWith('/_app/immutable/'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'app-assets',
@@ -140,8 +142,8 @@ export default defineConfig({
             }
           },
           {
-            urlPattern: /\.(?:png|jpg|jpeg|webp|avif)$/,
-            handler: 'CacheFirst',
+            urlPattern: ({ url }) => url.origin === self.location.origin && /\.(?:png|jpg|jpeg|webp|avif)$/.test(url.pathname),
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'images',
               expiration: {
