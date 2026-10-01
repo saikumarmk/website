@@ -4,6 +4,8 @@
   import Sidenote from '$lib/components/sidenote.svelte'
   import AsciiField from '$lib/components/AsciiField.svelte'
   import Embroidery from '$lib/components/thread/Embroidery.svelte'
+  import AsciiFlower from '$lib/components/thread/AsciiFlower.svelte'
+  import TrainerPatch from '$lib/components/thread/TrainerPatch.svelte'
   import Specimen from '$lib/components/thread/Specimen.svelte'
   import { satinSelect } from '$lib/actions/satin-select'
   import { settleMargins } from '$lib/actions/settle-margins'
@@ -259,42 +261,34 @@
           </div>
         </dl>
         <div class="tc-foot">
-          <div>
+          <div class="tc-badge-collection">
+            <p class="tc-badge-label">
+              Badges <span>Select to explore</span>
+            </p>
             <div class="badges" role="group" aria-label="Badges">
               {#each trainerCard.badges as b (b.id)}
-                <button
-                  class="badge stitched"
-                  class:on={badgeId === b.id}
-                  type="button"
-                  aria-pressed={badgeId === b.id}
-                  onclick={() => pickBadge(b.id)}>
-                  {b.id}
-                </button>
+                <TrainerPatch id={b.id} selected={badgeId === b.id} onclick={() => pickBadge(b.id)} />
               {/each}
             </div>
-            <div class="tc-detail" aria-live="polite">
-              {#if badge}
-                <b>{badge.role}</b>
-                · {badge.period}
-                <br />
-                {badge.blurb}
-                {#if badge.link}<a href={badge.link.href}>{badge.link.label}</a>
-                  .{/if}
-                {#if badge.org && rows.some(r => r.org === badge.org)}<a href="#experience">In Experience ↓</a>{/if}
-              {:else}
-                Pick a badge.
-              {/if}
-            </div>
           </div>
-          <Embroidery
-            class="tc-flower"
-            width={150}
-            height={128}
-            speed={1.4}
-            compose={(b, W, H) => {
-              b.leaf(W * 0.1, H * 0.95, W * 0.45, H * 0.5, 16, 0.2)
-              b.rose(W * 0.62, H * 0.6, Math.min(W, H) * 0.34, { petals: 13, turn: 0.8 })
-            }} />
+          <div class="tc-detail" class:expanded={!!badge} id="trainer-badge-story" aria-live="polite">
+            {#if badge}
+              <p class="tc-detail-meta">
+                <span>{badge.id}</span>
+                <span>{badge.period}</span>
+              </p>
+              <h4>{badge.role}</h4>
+              <p>{badge.blurb}</p>
+              {#if badge.link || (badge.org && rows.some(r => r.org === badge.org))}
+                <p class="tc-detail-links">
+                  {#if badge.link}<a href={badge.link.href}>{badge.link.label}</a>{/if}
+                  {#if badge.org && rows.some(r => r.org === badge.org)}<a href="#experience">In Experience ↓</a>{/if}
+                </p>
+              {/if}
+            {/if}
+          </div>
+          <div class="tc-flower-corner"><AsciiFlower class="tc-flower" /></div>
+          <pre class="tc-vine" aria-hidden="true">{"__.,--'<--.,__..--'>--.,".repeat(6)}</pre>
         </div>
       </div>
     </div>
@@ -517,7 +511,6 @@
     transition: opacity 0.2s;
   }
   .stitched:hover::after,
-  .stitched.on::after,
   .stitched:focus-visible::after {
     opacity: 1;
   }
@@ -529,7 +522,7 @@
     grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr);
     gap: var(--gap);
     align-items: start;
-    scroll-margin-top: 4rem;
+    scroll-margin-top: 5rem;
   }
   @media (max-width: 59.99rem) {
     .about-grid {
@@ -539,22 +532,31 @@
 
   /* a woven card (twill texture); the attractors are sewn into its cloth and thin out toward the name */
   .tcard {
-    border: 1px solid color-mix(in srgb, var(--fg2) 70%, transparent);
-    border-radius: 14px;
+    border: 1px solid color-mix(in srgb, var(--fg2) 45%, var(--rule));
+    border-radius: 18px;
     overflow: hidden;
     position: relative;
     background:
-      repeating-linear-gradient(45deg, transparent 0 3px, color-mix(in srgb, var(--fg) 3.5%, transparent) 3px 4px),
-      repeating-linear-gradient(-45deg, transparent 0 3px, color-mix(in srgb, var(--fg) 2.5%, transparent) 3px 4px),
+      repeating-linear-gradient(45deg, transparent 0 3px, color-mix(in srgb, var(--fg) 2%, transparent) 3px 4px),
+      repeating-linear-gradient(-45deg, transparent 0 3px, color-mix(in srgb, var(--fg) 1.5%, transparent) 3px 4px),
       var(--panel);
     box-shadow:
       0 1px 0 var(--rule),
-      0 14px 30px -22px color-mix(in srgb, var(--fg) 40%, transparent);
+      0 18px 36px -24px color-mix(in srgb, var(--fg) 35%, transparent);
+  }
+  .tcard::after {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border: 1px dashed color-mix(in srgb, var(--g2) 35%, transparent);
+    border-radius: 11px;
+    pointer-events: none;
   }
   .tc-top {
     display: flex;
     justify-content: space-between;
-    padding: 0.9rem 1.2rem 0.6rem;
+    align-items: center;
+    padding: 1.1rem 1.4rem 0.6rem;
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.16em;
@@ -564,18 +566,22 @@
   .tc-top b {
     color: var(--r3);
     font-weight: 500;
+    border: 1px solid color-mix(in srgb, var(--r3) 25%, transparent);
+    border-radius: 5px;
+    padding: 0.18rem 0.4rem;
+    background: color-mix(in srgb, var(--bg) 60%, transparent);
   }
   .tc-window {
     position: relative;
-    height: 170px;
+    height: 114px;
     margin: -0.4rem 0 0;
   }
   .tc-window :global(canvas) {
     width: 100%;
     height: 100%;
     display: block;
-    -webkit-mask-image: radial-gradient(120% 95% at 50% 30%, #000 45%, transparent 88%);
-    mask-image: radial-gradient(120% 95% at 50% 30%, #000 45%, transparent 88%);
+    -webkit-mask-image: linear-gradient(#000 20%, transparent 92%);
+    mask-image: linear-gradient(#000 20%, transparent 92%);
   }
   :global([data-theme='ivory']) .tc-window :global(canvas) {
     --c1: var(--r3);
@@ -583,28 +589,31 @@
   }
   .tc-pause {
     position: absolute;
-    right: 1.2rem;
+    right: 1.4rem;
     top: 0.2rem;
     font-family: var(--mono);
     font-size: 10.5px;
     color: var(--muted);
     background: none;
     border: 0;
-    padding: 0;
+    padding: 0.35rem 0.45rem;
+    min-height: 32px;
+    border-radius: 5px;
     cursor: var(--pointer);
   }
   .tc-pause:hover {
     color: var(--fg);
+    background: color-mix(in srgb, var(--bg) 65%, transparent);
   }
   .tc-body {
     display: grid;
-    grid-template-columns: 84px 1fr;
-    gap: 1rem;
-    padding: 0 1.2rem;
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 1.1rem;
+    padding: 0 1.4rem;
     position: relative;
     z-index: 1;
-    margin-top: -64px;
-    align-items: end;
+    margin-top: -38px;
+    align-items: center;
   }
   .tc-body h3,
   .tc-body p {
@@ -614,30 +623,32 @@
       0 0 2px var(--panel);
   }
   .tc-body img {
-    width: 84px;
-    height: 84px;
+    width: 88px;
+    height: 88px;
     object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid var(--panel);
+    border-radius: 10px;
+    border: 4px solid var(--bg);
     background: var(--bg);
-    box-shadow: 0 0 0 1px var(--rule);
+    outline: 1px dashed color-mix(in srgb, var(--g2) 50%, transparent);
+    outline-offset: 3px;
+    box-shadow: 0 3px 8px color-mix(in srgb, var(--fg) 8%, transparent);
   }
   .tc-body h3 {
     font-weight: 400;
-    font-size: 1.55rem;
+    font-size: clamp(1.55rem, 2.3vw, 1.85rem);
     margin: 0;
     line-height: 1.05;
   }
   .tc-body p {
-    margin: 0.15rem 0 0.2rem;
+    margin: 0.4rem 0 0;
     font-size: 15px;
     color: var(--fg2);
   }
   .tc-types {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem;
-    padding: 0.8rem 1.2rem 0;
+    gap: 0.4rem;
+    padding: 0.8rem 1.4rem 0;
   }
   .tc-types span {
     font-family: var(--mono);
@@ -645,22 +656,26 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     border-radius: 4px;
-    padding: 0.1rem 0.5rem;
-    color: var(--sel-ink);
-    background: var(--r3);
+    padding: 0.18rem 0.5rem;
+    color: var(--r4);
+    border: 1px solid color-mix(in srgb, var(--r3) 25%, transparent);
+    background: color-mix(in srgb, var(--r3) 6%, var(--bg));
   }
   .tc-types span:nth-child(2n) {
-    background: var(--g2);
+    color: var(--c2);
+    border-color: color-mix(in srgb, var(--c2) 25%, transparent);
+    background: color-mix(in srgb, var(--c2) 6%, var(--bg));
   }
   .tc-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    margin: 0.9rem 1.2rem 0;
+    margin: 0.8rem 1.4rem 0;
     border-top: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--bg) 35%, transparent);
   }
   .tc-stats div {
-    padding: 0.5rem 0 0.45rem;
+    padding: 0.45rem 0.5rem;
   }
   .tc-stats div + div {
     border-left: 1px solid var(--rule);
@@ -675,61 +690,112 @@
   }
   .tc-stats dd {
     margin: 0;
-    font-size: 1.15rem;
-    line-height: 1.2;
+    font-size: 1.5rem;
+    line-height: 1.15;
+    margin-top: 0.15rem;
   }
   .tc-foot {
+    position: relative;
     display: grid;
-    grid-template-columns: 1fr 150px;
+    grid-template-columns: minmax(0, 1fr) 100px;
+    align-items: center;
+    gap: 0.35rem 0.7rem;
+    padding: 0.8rem 1.4rem 1.6rem;
+  }
+  .tc-flower-corner {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: stretch;
+    display: flex;
     align-items: end;
+    justify-content: end;
   }
   .tc-foot :global(.tc-flower) {
-    width: 150px;
-    height: 128px;
+    width: 120px;
+    height: 90px;
     display: block;
-    margin: 0 0.2rem 0.2rem 0;
+    margin: 0;
+  }
+  .tc-vine {
+    position: absolute;
+    left: 1.4rem;
+    right: 100px;
+    top: 6.6rem;
+    margin: 0;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1;
+    color: var(--r4);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .tc-badge-label {
+    margin: 0 0 0.3rem;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tc-badge-label span {
+    margin-left: 0.7rem;
+    font-size: 9px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .tc-badge-collection {
+    grid-column: 1;
   }
   .badges {
-    display: flex;
-    gap: 0.45rem;
-    padding: 0.9rem 1.2rem 0.4rem;
-    flex-wrap: wrap;
-  }
-  .badge {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 1px solid var(--fg2);
-    background: var(--bg);
     display: grid;
-    place-items: center;
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--fg2);
-    cursor: var(--pointer);
+    grid-template-columns: repeat(4, minmax(0, 3.75rem));
+    gap: 0.5rem;
     padding: 0;
   }
-  .badge.stitched::after {
-    inset: 4px;
-    border-radius: 50%;
-  }
-  .badge.on {
-    background: var(--r3);
-    color: var(--sel-ink);
-    border-color: var(--r3);
-  }
   .tc-detail {
-    padding: 0.2rem 1.2rem 1.1rem;
+    display: none;
+    grid-column: 1;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--fg2);
+  }
+  .tc-detail.expanded {
+    display: block;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: 1rem;
+    padding: 0.7rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--bg) 60%, transparent);
+    align-self: stretch;
     font-size: 15px;
     line-height: 1.45;
     color: var(--fg2);
-    min-height: 4.4rem;
   }
-  .tc-detail b {
+  .tc-detail p {
+    margin: 0;
+  }
+  .tc-detail h4 {
     font-weight: 500;
+    font-size: 1.05rem;
+    line-height: 1.25;
     color: var(--fg);
+    margin: 0.4rem 0 0.5rem;
+  }
+  .tc-detail .tc-detail-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .tc-detail .tc-detail-links {
+    margin-top: 0.6rem;
+    font-size: 14px;
   }
 
   .dex {
@@ -785,7 +851,7 @@
 
   /* ---------- experience: the old portfolio page, rows open like drawers ---------- */
   #experience {
-    scroll-margin-top: 4rem;
+    scroll-margin-top: 5rem;
   }
   .exp-h {
     font-size: 1.9rem;
@@ -903,6 +969,10 @@
     color: var(--sel);
   }
   @media (max-width: 40rem) {
+    .about-grid,
+    #experience {
+      scroll-margin-top: 8.5rem;
+    }
     .rec-head .yr {
       width: 100%;
     }
@@ -923,28 +993,56 @@
   }
 
   @media (max-width: 40rem) {
+    .tc-top,
+    .tc-body {
+      padding-inline: 1.1rem;
+    }
+    .tc-types {
+      padding-inline: 1.1rem;
+    }
+    .tc-stats {
+      margin-inline: 1.1rem;
+    }
     .tc-foot {
-      grid-template-columns: 1fr 96px;
+      grid-template-columns: minmax(0, 1fr) 80px;
+      gap: 0.4rem;
+      padding-inline: 1.1rem;
     }
     .tc-foot :global(.tc-flower) {
-      width: 92px;
-      height: 92px;
-      margin: 0 0.5rem 0.5rem 0;
+      width: 96px;
+      height: 84px;
+      margin: 0;
+    }
+    .tc-vine {
+      left: 1.1rem;
+      right: 80px;
+      top: 6.2rem;
     }
     .badges {
-      gap: 0.35rem;
-    }
-    .badge {
-      width: 44px;
-      height: 44px;
-      font-size: 8px;
-      letter-spacing: 0;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.25rem;
     }
     .tc-stats dd {
-      font-size: 1rem;
+      font-size: 1.35rem;
     }
     .tc-stats div + div {
       padding-left: 0.5rem;
+    }
+  }
+  @media (max-width: 23rem) {
+    .tc-foot {
+      grid-template-columns: minmax(0, 1fr) 54px;
+      padding-inline: 0.8rem;
+    }
+    .badges {
+      gap: 0.25rem;
+    }
+    .tc-foot :global(.tc-flower) {
+      width: 70px;
+      height: 78px;
+    }
+    .tc-badge-label span {
+      display: none;
     }
   }
 </style>
